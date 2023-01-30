@@ -16,7 +16,7 @@ class OpenAI extends OpenAIClientBase {
 
   /// The singleton instance of [OpenAI], make sure to call the [OpenAI.initialize] method before accessing [instance], otherwise it will throw an [Exception].
   static OpenAI get instance {
-    if (_instance._internalApiKey == null) {
+    if (_internalApiKey == null) {
       throw MissingApiKeyException("""
       You must call the initialize method before accessing the instance of this class.
       Example:
@@ -28,15 +28,13 @@ class OpenAI extends OpenAIClientBase {
   }
 
   /// The API key used to authenticate the requests.
-  String? _internalApiKey;
+  static String? _internalApiKey;
 
   /// This method is used to initialize the [OpenAI] instance, by providing the API key.
   /// ```dart
   /// OpenAI.initialize(dotenv.env['OPENAI_API_KEY']);
   /// ```
-  ///
-  @override
-  void initialize(String apiKey) {
+  static void initialize(String apiKey) {
     _internalApiKey = apiKey;
   }
 
