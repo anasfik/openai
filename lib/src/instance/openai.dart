@@ -1,0 +1,3 @@
+class OpenAI {
+  OpenAI._();
+}
