@@ -14,9 +14,9 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 - [ ] ChatGPT ( as soon as possible when it's released )
 - [x] Authentication
 - [x] Models
-- [ ] Completions
-- [ ] Edit
-- [ ] Mars
+- [x] Completions
+- [ ] Edits
+- [ ] Images
 - [ ] Embeddings
 - [ ] Files
 - [ ] Fine-tunes
@@ -29,14 +29,14 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 ## API key
 ```dart
 void main() {
-  OpenAI.apiKey = dotenv.env["OPEN_AI_KEY"]!;
-  // ..
+ OpenAI.apiKey = dotenv.env["OPEN_AI_KEY"]!;
+ // ..
 }
 ```
 
 ## Requesting organization
 ```dart
-  OpenAI.organization = "ORGANIZATION ID";
+ OpenAI.organization = "ORGANIZATION ID";
 ```
 
 <br>
@@ -56,4 +56,18 @@ Retrieves a model instance, providing basic information about the model such as 
 ```dart
  final model = await OpenAI.instance.model.one("MODEL ID");
  print(model.id)
+```
+
+
+<br>
+
+# Completions
+## Create completion
+
+```dart
+ OpenAICompletionModel completion = await OpenAI.instance.completion.create(
+   model: "text-davinci-003",
+   prompt: "Dart is a ",
+   temperature: 0.8,
+ );
 ```
