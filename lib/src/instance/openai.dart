@@ -18,9 +18,6 @@ class OpenAI extends OpenAIClientBase {
   /// The API key used to authenticate the requests.
   static String? _internalApiKey;
 
-  /// This is the organization ID used in the requests.
-  static String? _internalOrganization;
-
   /// The singleton instance of [OpenAI], make sure to call the [OpenAI.initialize] method before accessing [instance], otherwise it will throw an [Exception].
   static OpenAI get instance {
     if (_internalApiKey == null) {
@@ -50,10 +47,9 @@ class OpenAI extends OpenAIClientBase {
   /// ```
   static set organization(String organizationId) {
     HeadersBuilder.organization = organizationId;
-    _internalOrganization = organizationId;
   }
 
-  final OpenAIModel model = OpenAIModel();
+  OpenAIModel get model => OpenAIModel();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();
