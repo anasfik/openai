@@ -1,10 +1,27 @@
-import 'package:openai/src/core/builder/base_api_url.dart';
+import 'package:openai/src/core/base/model/base.dart';
+import 'package:openai/src/core/models/model.dart';
+import 'package:openai/src/core/utils/logger.dart';
+import '../../core/builder/base_api_url.dart';
+import '../../core/networking/client.dart';
 
-import '../../core/base/entity/base.dart';
-
-
-
-class OpenAIModel implements OpenAIEntityBase {
+class OpenAIModel implements OpenAIModelBase {
   @override
   String get endpoint => "/models";
+
+  @override
+  Future<List<OpenAIModelModel>> list() async {
+    return await OpenAINetworkingClient<List<OpenAIModelModel>>().get(
+      from: BaseApiUrlBuilder.build(endpoint),
+      onSuccess: (Map<String, dynamic> response) {
+        final List<dynamic> data = response['data'];
+        return data
+            .map((dynamic model) => OpenAIModelModel.fromJson(model))
+            .toList();
+      },
+    );
+  }
+
+  OpenAIModel() {
+    OpenAILogger.logEndpoint(endpoint);
+  }
 }

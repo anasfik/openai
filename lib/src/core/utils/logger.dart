@@ -9,4 +9,8 @@ abstract class OpenAILogger {
       name: OpenAIStrings.openai,
     );
   }
+
+  static void logEndpoint(String endpoint) {
+    log("accessing endpoint: $endpoint");
+  }
 }

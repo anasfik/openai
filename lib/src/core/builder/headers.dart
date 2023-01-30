@@ -1,18 +1,21 @@
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
+import 'package:openai/src/core/utils/logger.dart';
 
 @immutable
 class HeadersBuilder {
   static String? _organization;
   static String? get organization => _organization;
   static set organization(String? organizationId) {
+    OpenAILogger.log("setting organization id");
     _organization = organizationId;
   }
 
   static String? _apiKey;
   static String? get apiKey => _apiKey;
-  static set apiKey(String? organizationId) {
-    _organization = organizationId;
+  static set apiKey(String? apiKey) {
+    OpenAILogger.log("setting API key");
+    _apiKey = apiKey;
   }
 
   static Map<String, String> build() {
