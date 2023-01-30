@@ -39,7 +39,7 @@ class OpenAIImages implements OpenAIImagesBase {
   @override
   Future<OpenAiImageEditModel> edit({
     required File image,
-    String? mask,
+    File? mask,
     required String prompt,
     int? n,
     String? size,
@@ -49,6 +49,7 @@ class OpenAIImages implements OpenAIImagesBase {
     final edit = "/edits";
     return await OpenAINetworkingClient.form<OpenAiImageEditModel>(
       image: image,
+      mask: mask,
       body: {
         "prompt": prompt,
         if (n != null) "n": n.toString(),

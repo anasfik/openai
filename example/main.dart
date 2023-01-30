@@ -40,10 +40,15 @@ void main() async {
     return file;
   }
 
-  final a = await getFileFromUrl("https://ico.cppng.com/download/2020-06/51744-3-desktop-computer-download-image-download-hq-png.png");
+  final a = await getFileFromUrl(
+      "https://ico.cppng.com/download/2020-06/51744-3-desktop-computer-download-image-download-hq-png.png");
+
+  final b = await getFileFromUrl(
+      "https://in.portal-pokemon.com/play/resources/pokedex/img/pm/997f32e3b38169eab2b431bc2ead3c8217674f6a.png");
 
   final result = await OpenAI.instance.image.edit(
     image: a,
+    mask: b,
     prompt: "change color to green",
     n: 1,
   );

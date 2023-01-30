@@ -77,6 +77,7 @@ class OpenAINetworkingClient {
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
     required File image,
+    required File? mask,
     required Map<String, String> body,
   }) async {
     OpenAILogger.log("starting request to $to");
@@ -86,7 +87,13 @@ class OpenAINetworkingClient {
     );
     request.headers.addAll(HeadersBuilder.build());
     final file = await http.MultipartFile.fromPath("image", image.path);
+
+    final maskFile = mask != null
+        ? await http.MultipartFile.fromPath("mask", mask.path)
+        : null;
+
     request.files.add(file);
+    if (maskFile != null) request.files.add(maskFile);
     request.fields.addAll(body);
     final response = await request.send();
     OpenAILogger.log(
