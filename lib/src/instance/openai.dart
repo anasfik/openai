@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:openai/src/instance/edits/edits.dart';
 
 import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
@@ -55,6 +56,9 @@ class OpenAI extends OpenAIClientBase {
 
   /// The [OpenAICompletion] instance, used to access the completion endpoints.
   OpenAICompletion get completion => OpenAICompletion();
+
+  ///
+  OpenAIEdits get edit => OpenAIEdits();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();
