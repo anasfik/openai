@@ -1,10 +1,11 @@
 import 'package:openai/src/core/models/completion.dart';
 import 'package:openai/src/core/models/edit.dart';
+import 'package:openai/src/core/models/image.dart';
 import 'package:openai/src/instance/edits/edits.dart';
 import 'package:openai/src/instance/openai.dart';
 
 void main() async {
-  OpenAI.apiKey = "Your Key";
+  OpenAI.apiKey = "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";
   // OpenAI.organization = "YOUR ORGANIZATION ID";
   // final models = await OpenAI.instance.model.list();
   // final model = await OpenAI.instance.model.one(models.first.id);
@@ -18,11 +19,18 @@ void main() async {
 
   // print(completion.choices.first.text);
 
-  OpenAIEditModel a = await OpenAI.instance.edit.create(
-    model: "text-davinci-edit-001",
-    input: " Hi!, I am a bot!!!!,",
-    instruction: "remove all ! the input ",
+  // OpenAIEditModel a = await OpenAI.instance.edit.create(
+  //   model: "text-davinci-edit-001",
+  //   input: " Hi!, I am a bot!!!!,",
+  //   instruction: "remove all ! the input ",
+  // );
+
+  // print(a.choices.first.text);
+
+  OpenAIImageModel image = await OpenAI.instance.image.create(
+    prompt: "A dog",
+    n: 1,
   );
 
-  print(a.choices.first.text);
+  print(image.data.first.url);
 }

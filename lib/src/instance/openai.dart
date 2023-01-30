@@ -5,6 +5,7 @@ import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
 import '../core/exceptions/api_key_not_set.dart';
 import 'completion/completion.dart';
+import 'images/images.dart';
 import 'model/model.dart';
 
 /// The main class of the package. It is a singleton class, so you can only have one instance of it.
@@ -57,8 +58,11 @@ class OpenAI extends OpenAIClientBase {
   /// The [OpenAICompletion] instance, used to access the completion endpoints.
   OpenAICompletion get completion => OpenAICompletion();
 
-  ///
+  /// The [OpenAIEdits] instance, used to access the edits endpoints.
   OpenAIEdits get edit => OpenAIEdits();
+
+  /// The [OpenAIImages] instance, used to access the images endpoints.
+  OpenAIImages get image => OpenAIImages();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();
