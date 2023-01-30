@@ -1,4 +1,6 @@
 import '../entity/base.dart';
 import 'interfaces/list.dart';
+import 'interfaces/one.dart';
 
-abstract class OpenAIModelBase implements OpenAIEntityBase, ListInterface {}
+abstract class OpenAIModelBase
+    implements OpenAIEntityBase, ListInterface, OneInterface {}

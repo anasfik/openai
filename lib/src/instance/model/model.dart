@@ -11,7 +11,9 @@ class OpenAIModel implements OpenAIModelBase {
   @override
   Future<List<OpenAIModelModel>> list() async {
     return await OpenAINetworkingClient<List<OpenAIModelModel>>().get(
-      from: BaseApiUrlBuilder.build(endpoint),
+      from: BaseApiUrlBuilder.build(
+        endpoint,
+      ),
       onSuccess: (Map<String, dynamic> response) {
         final List<dynamic> data = response['data'];
         return data
@@ -23,5 +25,15 @@ class OpenAIModel implements OpenAIModelBase {
 
   OpenAIModel() {
     OpenAILogger.logEndpoint(endpoint);
+  }
+
+  @override
+  Future<OpenAIModelModel> one(String modelId) async {
+    return await OpenAINetworkingClient<OpenAIModelModel>().get(
+      from: BaseApiUrlBuilder.build(endpoint, modelId),
+      onSuccess: (Map<String, dynamic> response) {
+        return OpenAIModelModel.fromJson(response);
+      },
+    );
   }
 }
