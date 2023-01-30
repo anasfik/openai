@@ -1,11 +1,10 @@
-import 'package:openai/src/core/models/completion.dart';
-import 'package:openai/src/core/models/edit.dart';
-import 'package:openai/src/core/models/image.dart';
-import 'package:openai/src/instance/edits/edits.dart';
+import 'dart:async';
+import 'dart:io';
 import 'package:openai/src/instance/openai.dart';
+import 'package:http/http.dart' as http;
 
 void main() async {
-  OpenAI.apiKey = "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";
+  OpenAI.apiKey = "Your API Key";
   // OpenAI.organization = "YOUR ORGANIZATION ID";
   // final models = await OpenAI.instance.model.list();
   // final model = await OpenAI.instance.model.one(models.first.id);
@@ -27,10 +26,27 @@ void main() async {
 
   // print(a.choices.first.text);
 
-  OpenAIImageModel image = await OpenAI.instance.image.create(
-    prompt: "A dog",
+  // OpenAIImageModel image = await OpenAI.instance.image.create(
+  //   prompt: "A dog",
+  //   n: 1,
+  // );
+
+  // print(image.data.first.url);
+
+  Future<File> getFileFromUrl(String networkUrl) async {
+    final response = await http.get(Uri.parse(networkUrl));
+    final file = File("image.png");
+    await file.writeAsBytes(response.bodyBytes);
+    return file;
+  }
+
+  final a = await getFileFromUrl("https://ico.cppng.com/download/2020-06/51744-3-desktop-computer-download-image-download-hq-png.png");
+
+  final result = await OpenAI.instance.image.edit(
+    image: a,
+    prompt: "change color to green",
     n: 1,
   );
 
-  print(image.data.first.url);
+  print(result.data.first.url);
 }
