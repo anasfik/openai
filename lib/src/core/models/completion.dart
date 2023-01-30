@@ -1,4 +1,5 @@
 class OpenAICompletionModel {
+  /// 
   String id;
   DateTime created;
   String model;

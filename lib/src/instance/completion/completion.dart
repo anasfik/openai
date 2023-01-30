@@ -1,6 +1,7 @@
 import 'package:openai/src/core/builder/base_api_url.dart';
 import 'package:openai/src/core/networking/client.dart';
-import 'package:openai/src/instance/model/completion.dart';
+import 'package:openai/src/core/utils/logger.dart';
+import 'package:openai/src/core/models/completion.dart';
 
 import '../../core/base/completion.dart';
 
@@ -8,6 +9,14 @@ class OpenAICompletion implements OpenAICompletionBase {
   @override
   String get endpoint => "/completions";
 
+  /// Given a prompt, the model will return one or more predicted completions, and can also return the probabilities of alternative tokens at each position.
+  /// Example:
+  /// ```dart
+  /// OpenAICompletionModel completion = await OpenAI.instance.completion.create(
+  ///  model: "text-davinci-003",
+  ///  prompt: "Dart is ",
+  /// );
+  /// ```
   @override
   Future<OpenAICompletionModel> create({
     required String model,
@@ -20,7 +29,7 @@ class OpenAICompletion implements OpenAICompletionBase {
     bool? stream,
     int? logprobs,
     int? echo,
-    String? stop,
+    dynamic stop,
     double? presencePenalty,
     double? frequencyPenalty,
     int? bestOf,
@@ -29,8 +38,14 @@ class OpenAICompletion implements OpenAICompletionBase {
   }) async {
     assert(
       prompt is String || prompt is List<String>,
-      "Prompt must be a String or List<String>",
+      "prompt field must be a String or List<String>",
     );
+
+    assert(
+      stop is String || stop is List<String>,
+      "stop field must be a String or List<String>",
+    );
+
     return await OpenAINetworkingClient.post<OpenAICompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
@@ -55,5 +70,9 @@ class OpenAICompletion implements OpenAICompletionBase {
         return OpenAICompletionModel.fromJson(response);
       },
     );
+  }
+
+  OpenAICompletion() {
+    OpenAILogger.logEndpoint(endpoint);
   }
 }

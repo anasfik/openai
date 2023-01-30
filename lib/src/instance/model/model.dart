@@ -23,10 +23,6 @@ class OpenAIModel implements OpenAIModelBase {
     );
   }
 
-  OpenAIModel() {
-    OpenAILogger.logEndpoint(endpoint);
-  }
-
   @override
   Future<OpenAIModelModel> one(String modelId) async {
     return await OpenAINetworkingClient.get<OpenAIModelModel>(
@@ -35,5 +31,9 @@ class OpenAIModel implements OpenAIModelBase {
         return OpenAIModelModel.fromJson(response);
       },
     );
+  }
+
+  OpenAIModel() {
+    OpenAILogger.logEndpoint(endpoint);
   }
 }
