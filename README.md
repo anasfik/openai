@@ -16,7 +16,7 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 - [x] Models
 - [x] Completions
 - [x] Edits
-- [x] Images
+- [ ] Images
 - [ ] Embeddings
 - [ ] Files
 - [ ] Fine-tunes
