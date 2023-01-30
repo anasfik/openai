@@ -92,3 +92,14 @@ Retrieves a model instance, providing basic information about the model such as 
    n: 1,
  );
 ```
+
+## Create image edit
+```dart
+ final result = await OpenAI.instance.image.edit(
+   image: File(/* image file path*/),
+   mask: File(/* mask file path*/),
+   prompt: "change color to green",
+   n: 1,
+ );
+
+```
