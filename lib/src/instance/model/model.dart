@@ -35,11 +35,11 @@ class OpenAIModel implements OpenAIModelBase {
   /// This function fetches for a single model and get its informations based on it's id
   /// Example:
   /// ```dart
-  ///  OpenAIModelModel model = await OpenAI.instance.model.one("MODEL ID");
+  ///  OpenAIModelModel model = await OpenAI.instance.model.retrieve("MODEL ID");
   ///  print(model.id)
   /// ```
   @override
-  Future<OpenAIModelModel> one(String modelId) async {
+  Future<OpenAIModelModel> retrieve(String modelId) async {
     return await OpenAINetworkingClient.get<OpenAIModelModel>(
       from: BaseApiUrlBuilder.build(endpoint, modelId),
       onSuccess: (Map<String, dynamic> response) {

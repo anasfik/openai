@@ -1,5 +1,5 @@
 import 'package:openai/src/core/models/model.dart';
 
-abstract class OneInterface {
-  Future<OpenAIModelModel> one(String modelId);
+abstract class RetrieveInterface {
+  Future<OpenAIModelModel> retrieve(String modelId);
 }

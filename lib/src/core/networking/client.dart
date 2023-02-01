@@ -14,7 +14,7 @@ class OpenAINetworkingClient {
   }) async {
     OpenAILogger.log("starting request to $from");
 
-    final response = await http.get(
+    final http.Response response = await http.get(
       Uri.parse(from),
       headers: HeadersBuilder.build(),
     );
@@ -23,12 +23,14 @@ class OpenAINetworkingClient {
         "request to $from finished with status code ${response.statusCode}");
 
     OpenAILogger.log("starting decoding response body");
-    final decodedBody = jsonDecode(response.body) as Map<String, dynamic>;
+    final Map<String, dynamic> decodedBody =
+        jsonDecode(response.body) as Map<String, dynamic>;
+
     OpenAILogger.log("response body decoded successfully");
 
     if (decodedBody['error'] != null) {
       OpenAILogger.log("an error occurred, throwing exception");
-      final error = decodedBody['error'];
+      final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
@@ -46,7 +48,7 @@ class OpenAINetworkingClient {
   }) async {
     OpenAILogger.log("starting request to $to");
 
-    final response = await http.post(
+    final http.Response response = await http.post(
       Uri.parse(to),
       headers: HeadersBuilder.build(),
       body: body != null ? jsonEncode(body) : null,
@@ -56,12 +58,13 @@ class OpenAINetworkingClient {
         "request to $to finished with status code ${response.statusCode}");
 
     OpenAILogger.log("starting decoding response body");
-    final decodedBody = jsonDecode(response.body) as Map<String, dynamic>;
+    final Map<String, dynamic> decodedBody =
+        jsonDecode(response.body) as Map<String, dynamic>;
     OpenAILogger.log("response body decoded successfully");
 
     if (decodedBody['error'] != null) {
       OpenAILogger.log("an error occurred, throwing exception");
-      final error = decodedBody['error'];
+      final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
@@ -80,31 +83,33 @@ class OpenAINetworkingClient {
     required Map<String, String> body,
   }) async {
     OpenAILogger.log("starting request to $to");
-    final request = http.MultipartRequest(
+    final http.MultipartRequest request = http.MultipartRequest(
       "POST",
       Uri.parse(to),
     );
     request.headers.addAll(HeadersBuilder.build());
-    final file = await http.MultipartFile.fromPath("image", image.path);
+    final http.MultipartFile file =
+        await http.MultipartFile.fromPath("image", image.path);
 
-    final maskFile = mask != null
+    final http.MultipartFile? maskFile = mask != null
         ? await http.MultipartFile.fromPath("mask", mask.path)
         : null;
 
     request.files.add(file);
     if (maskFile != null) request.files.add(maskFile);
     request.fields.addAll(body);
-    final response = await request.send();
+    final http.StreamedResponse response = await request.send();
     OpenAILogger.log(
         "request to $to finished with status code ${response.statusCode}");
 
     OpenAILogger.log("starting decoding response body");
-    final encodedBody = await response.stream.bytesToString();
-    final decodedBody = jsonDecode(encodedBody) as Map<String, dynamic>;
+    final String encodedBody = await response.stream.bytesToString();
+    final Map<String, dynamic> decodedBody =
+        jsonDecode(encodedBody) as Map<String, dynamic>;
     OpenAILogger.log("response body decoded successfully");
     if (decodedBody['error'] != null) {
       OpenAILogger.log("an error occurred, throwing exception");
-      final error = decodedBody['error'];
+      final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
@@ -122,24 +127,26 @@ class OpenAINetworkingClient {
     required File image,
   }) async {
     OpenAILogger.log("starting request to $to");
-    http.MultipartRequest request = http.MultipartRequest(
+    final http.MultipartRequest request = http.MultipartRequest(
       "POST",
       Uri.parse(to),
     );
     request.headers.addAll(HeadersBuilder.build());
-    final imageFile = await http.MultipartFile.fromPath("image", image.path);
+    final http.MultipartFile imageFile =
+        await http.MultipartFile.fromPath("image", image.path);
     request.files.add(imageFile);
-    final response = await request.send();
+    final http.StreamedResponse response = await request.send();
     OpenAILogger.log(
         "request to $to finished with status code ${response.statusCode},");
 
     OpenAILogger.log("starting decoding response body");
-    final encodedBody = await response.stream.bytesToString();
-    final decodedBody = jsonDecode(encodedBody) as Map<String, dynamic>;
+    final String encodedBody = await response.stream.bytesToString();
+    final Map<String, dynamic> decodedBody =
+        jsonDecode(encodedBody) as Map<String, dynamic>;
     OpenAILogger.log("response body decoded successfully");
     if (decodedBody['error'] != null) {
       OpenAILogger.log("an error occurred, throwing exception");
-      final error = decodedBody['error'];
+      final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
@@ -157,30 +164,32 @@ class OpenAINetworkingClient {
     required File file,
   }) async {
     OpenAILogger.log("starting request to $to");
-    http.MultipartRequest request = http.MultipartRequest(
+    final http.MultipartRequest request = http.MultipartRequest(
       "POST",
       Uri.parse(to),
     );
     request.headers.addAll(HeadersBuilder.build());
 
-    final multiPartFile = await http.MultipartFile.fromPath("image", file.path);
+    final http.MultipartFile multiPartFile =
+        await http.MultipartFile.fromPath("image", file.path);
 
     request.files.add(multiPartFile);
 
-    final response = await request.send();
+    final http.StreamedResponse response = await request.send();
 
     OpenAILogger.log(
         "request to $to finished with status code ${response.statusCode},");
 
     OpenAILogger.log("starting decoding response body");
 
-    final encodedBody = await response.stream.bytesToString();
-    final decodedBody = jsonDecode(encodedBody) as Map<String, dynamic>;
+    final String encodedBody = await response.stream.bytesToString();
+    final Map<String, dynamic> decodedBody =
+        jsonDecode(encodedBody) as Map<String, dynamic>;
 
     OpenAILogger.log("response body decoded successfully");
     if (decodedBody['error'] != null) {
       OpenAILogger.log("an error occurred, throwing exception");
-      final error = decodedBody['error'];
+      final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
@@ -206,11 +215,12 @@ class OpenAINetworkingClient {
         "request to $from finished with status code ${response.statusCode}");
 
     OpenAILogger.log("starting decoding response body");
-    final decodedBody = jsonDecode(response.body) as Map<String, dynamic>;
+    final Map<String, dynamic> decodedBody =
+        jsonDecode(response.body) as Map<String, dynamic>;
     OpenAILogger.log("response body decoded successfully");
     if (decodedBody['error'] != null) {
       OpenAILogger.log("an error occurred, throwing exception");
-      final error = decodedBody['error'];
+      final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
