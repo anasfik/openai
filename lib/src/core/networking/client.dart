@@ -6,7 +6,6 @@ import 'package:openai/src/core/builder/headers.dart';
 import 'package:openai/src/core/utils/logger.dart';
 
 import '../exceptions/request_failure.dart';
-import '../models/image_edit.dart';
 
 class OpenAINetworkingClient {
   static Future<T> get<T>({

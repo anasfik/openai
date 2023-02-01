@@ -5,6 +5,7 @@ import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
 import '../core/exceptions/api_key_not_set.dart';
 import 'completion/completion.dart';
+import 'embedding/embedding.dart';
 import 'images/images.dart';
 import 'model/model.dart';
 
@@ -63,6 +64,9 @@ class OpenAI extends OpenAIClientBase {
 
   /// The [OpenAIImages] instance, used to access the images endpoints.
   OpenAIImages get image => OpenAIImages();
+
+  /// The [OpenAIEmbedding] instance, used to access the embeddings endpoints.
+  OpenAIEmbedding get embedding => OpenAIEmbedding();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();
