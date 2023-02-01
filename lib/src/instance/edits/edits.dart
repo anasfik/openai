@@ -3,6 +3,7 @@ import 'package:openai/src/core/models/edit.dart';
 import '../../core/base/edits/edits.dart';
 import '../../core/builder/base_api_url.dart';
 import '../../core/networking/client.dart';
+import '../../core/utils/logger.dart';
 
 class OpenAIEdits implements OpenAIEditsBase {
   @override
@@ -31,5 +32,9 @@ class OpenAIEdits implements OpenAIEditsBase {
         return OpenAIEditModel.fromJson(response);
       },
     );
+  }
+
+  OpenAIEdits() {
+    OpenAILogger.logEndpoint(endpoint);
   }
 }

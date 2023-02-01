@@ -11,6 +11,7 @@ import '../../core/models/image_edit.dart';
 import 'package:http/http.dart' as http;
 
 import '../../core/models/variation.dart';
+import '../../core/utils/logger.dart';
 
 class OpenAIImages implements OpenAIImagesBase {
   @override
@@ -88,5 +89,9 @@ class OpenAIImages implements OpenAIImagesBase {
       },
       to: BaseApiUrlBuilder.build(endpoint + variations),
     );
+  }
+
+  OpenAIImages() {
+    OpenAILogger.logEndpoint(endpoint);
   }
 }

@@ -3,6 +3,7 @@ import 'package:openai/src/core/models/embedding.dart';
 
 import '../../core/base/embeddings/base.dart';
 import '../../core/networking/client.dart';
+import '../../core/utils/logger.dart';
 
 class OpenAIEmbedding implements OpenAIEmbeddingBase {
   @override
@@ -30,5 +31,9 @@ class OpenAIEmbedding implements OpenAIEmbeddingBase {
         if (user != null) "user": user,
       },
     );
+  }
+
+  OpenAIEmbedding() {
+    OpenAILogger.logEndpoint(endpoint);
   }
 }

@@ -26,9 +26,9 @@ class OpenAI extends OpenAIClientBase {
   static OpenAI get instance {
     if (_internalApiKey == null) {
       throw MissingApiKeyException("""
-      You must call the initialize method before accessing the instance of this class.
+      You must set the api key before accessing the instance of this class.
       Example:
-      OpenAI.initialize("YOUR_API_KEY"");
+      OpenAI.apiKey = "Your API Key";
       """);
     }
 
@@ -69,5 +69,7 @@ class OpenAI extends OpenAIClientBase {
   OpenAIEmbedding get embedding => OpenAIEmbedding();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
+
+  // internal constructor, to prevent instantiating new instances many times, since one singleton instance is enough!
   OpenAI._();
 }
