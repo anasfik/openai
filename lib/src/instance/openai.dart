@@ -54,6 +54,7 @@ class OpenAI extends OpenAIClientBase {
   }
 
   /// The [OpenAIModel] instance, used to access the model endpoints.
+  /// Please, refer to the Models page from the official OpenAI documentation website in order to know what models are available and what's the use case of every model.
   OpenAIModel get model => OpenAIModel();
 
   /// The [OpenAICompletion] instance, used to access the completion endpoints.
@@ -69,7 +70,5 @@ class OpenAI extends OpenAIClientBase {
   OpenAIEmbedding get embedding => OpenAIEmbedding();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
-
-  // internal constructor, to prevent instantiating new instances many times, since one singleton instance is enough!
   OpenAI._();
 }

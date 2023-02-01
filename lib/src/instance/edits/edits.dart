@@ -9,6 +9,11 @@ class OpenAIEdits implements OpenAIEditsBase {
   @override
   String get endpoint => "/edits";
 
+  /// This function creates an edit based on a specific instruction you need to give.
+  /// Example:
+  ///```dart
+  ///
+  ///```
   @override
   Future<OpenAIEditModel> create({
     required String model,

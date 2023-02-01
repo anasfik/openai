@@ -8,6 +8,11 @@ class OpenAIModel implements OpenAIModelBase {
   @override
   String get endpoint => "/models";
 
+  /// This function fetches for models and provide their informations..
+  /// Example:
+  ///```dart
+  ///
+  ///```
   @override
   Future<List<OpenAIModelModel>> list() async {
     return await OpenAINetworkingClient.get<List<OpenAIModelModel>>(
@@ -23,6 +28,11 @@ class OpenAIModel implements OpenAIModelBase {
     );
   }
 
+  /// This function fetches for a single model and get its informations based on it's id
+  /// Example:
+  ///```dart
+  ///
+  ///```
   @override
   Future<OpenAIModelModel> one(String modelId) async {
     return await OpenAINetworkingClient.get<OpenAIModelModel>(

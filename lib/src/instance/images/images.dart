@@ -17,6 +17,11 @@ class OpenAIImages implements OpenAIImagesBase {
   @override
   String get endpoint => "/images";
 
+  /// This function creates an image based on a given prompt.
+  /// Example:
+  ///```dart
+  ///
+  ///```
   @override
   Future<OpenAIImageModel> create({
     required String prompt,
@@ -39,6 +44,11 @@ class OpenAIImages implements OpenAIImagesBase {
     );
   }
 
+  /// This function takes an existent file image, and edit it based on a prompt.
+  /// Example:
+  ///```dart
+  ///
+  ///```
   @override
   Future<OpenAiImageEditModel> edit({
     required File image,
@@ -67,6 +77,11 @@ class OpenAIImages implements OpenAIImagesBase {
     );
   }
 
+  /// This function creates a variations of an existent image File.
+  /// Example:
+  ///```dart
+  ///
+  ///```
   Future<OpenAIVariationModel> variation({
     required File image,
     int? n,

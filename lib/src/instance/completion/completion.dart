@@ -9,6 +9,7 @@ class OpenAICompletion implements OpenAICompletionBase {
   @override
   String get endpoint => "/completions";
 
+  /// This function creates a completion.
   /// Given a prompt, the model will return one or more predicted completions, and can also return the probabilities of alternative tokens at each position.
   /// Example:
   /// ```dart

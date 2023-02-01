@@ -9,6 +9,11 @@ class OpenAIEmbedding implements OpenAIEmbeddingBase {
   @override
   String get endpoint => "/embeddings";
 
+  /// This function creates an embeddings based on a model and input
+  /// Example:
+  ///```dart
+  ///
+  ///```
   @override
   Future<OpenAIEmbeddingsModel> create({
     required String model,
