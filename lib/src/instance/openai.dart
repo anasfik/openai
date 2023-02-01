@@ -4,6 +4,7 @@ import 'package:openai/src/instance/edits/edits.dart';
 import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
 import '../core/exceptions/api_key_not_set.dart';
+import '../core/utils/logger.dart';
 import 'completion/completion.dart';
 import 'embedding/embedding.dart';
 import 'files/files.dart';
@@ -52,6 +53,17 @@ class OpenAI extends OpenAIClientBase {
   /// ```
   static set organization(String organizationId) {
     HeadersBuilder.organization = organizationId;
+  }
+
+  /// This controls whether to log steps inside the process of making a request, this helps debugging and pointing where something went wrong.
+  /// This uses  [dart:developer] internally, so it will show anyway only while debugging code.
+  /// By default it is set to [true].
+  /// Example:
+  /// ```dart
+  /// OpenAI.instance.showProcessLogs = false;
+  /// ```
+  static set showProcessLogs(bool newValue) {
+    OpenAILogger.isActive = newValue;
   }
 
   /// The [OpenAIModel] instance, used to access the model endpoints.
