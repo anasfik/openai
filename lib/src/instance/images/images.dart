@@ -10,6 +10,8 @@ import '../../core/models/image_edit.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../../core/models/variation.dart';
+
 class OpenAIImages implements OpenAIImagesBase {
   @override
   String get endpoint => "/images";
@@ -22,7 +24,7 @@ class OpenAIImages implements OpenAIImagesBase {
     String? responseFormat,
     String? user,
   }) async {
-    final generations = "/generations";
+    final String generations = "/generations";
     return await OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.build(endpoint + generations),
       onSuccess: (json) => OpenAIImageModel.fromJson(json),
@@ -46,8 +48,8 @@ class OpenAIImages implements OpenAIImagesBase {
     String? responseFormat,
     String? user,
   }) async {
-    final edit = "/edits";
-    return await OpenAINetworkingClient.form<OpenAiImageEditModel>(
+    final String edit = "/edits";
+    return await OpenAINetworkingClient.imageEditForm<OpenAiImageEditModel>(
       image: image,
       mask: mask,
       body: {
@@ -57,10 +59,34 @@ class OpenAIImages implements OpenAIImagesBase {
         if (responseFormat != null) "response_format": responseFormat,
         if (user != null) "user": user,
       },
-      onSuccess: (Map<String, dynamic> response)  {
-return OpenAiImageEditModel.fromJson(response);
+      onSuccess: (Map<String, dynamic> response) {
+        return OpenAiImageEditModel.fromJson(response);
       },
       to: BaseApiUrlBuilder.build(endpoint + edit),
+    );
+  }
+
+  Future<OpenAIVariationModel> variation({
+    required File image,
+    int? n,
+    String? size,
+    String? responseFormat,
+    String? user,
+  }) async {
+    final String variations = "/variations";
+    return await OpenAINetworkingClient.imageVariationForm<
+        OpenAIVariationModel>(
+      image: image,
+      body: {
+        if (n != null) "n": n.toString(),
+        if (size != null) "size": size,
+        if (responseFormat != null) "response_format": responseFormat,
+        if (user != null) "user": user,
+      },
+      onSuccess: (Map<String, dynamic> response) {
+        return OpenAIVariationModel.fromJson(response);
+      },
+      to: BaseApiUrlBuilder.build(endpoint + variations),
     );
   }
 }
