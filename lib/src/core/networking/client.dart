@@ -149,4 +149,75 @@ class OpenAINetworkingClient {
       return onSuccess(decodedBody);
     }
   }
+
+  static Future<T> fileUpload<T>({
+    required String to,
+    required T Function(Map<String, dynamic>) onSuccess,
+    required Map<String, dynamic> body,
+    required File file,
+  }) async {
+    OpenAILogger.log("starting request to $to");
+    http.MultipartRequest request = http.MultipartRequest(
+      "POST",
+      Uri.parse(to),
+    );
+    request.headers.addAll(HeadersBuilder.build());
+
+    final multiPartFile = await http.MultipartFile.fromPath("image", file.path);
+
+    request.files.add(multiPartFile);
+
+    final response = await request.send();
+
+    OpenAILogger.log(
+        "request to $to finished with status code ${response.statusCode},");
+
+    OpenAILogger.log("starting decoding response body");
+
+    final encodedBody = await response.stream.bytesToString();
+    final decodedBody = jsonDecode(encodedBody) as Map<String, dynamic>;
+
+    OpenAILogger.log("response body decoded successfully");
+    if (decodedBody['error'] != null) {
+      OpenAILogger.log("an error occurred, throwing exception");
+      final error = decodedBody['error'];
+      throw RequestFailedException(
+        error["message"],
+        response.statusCode,
+      );
+    } else {
+      OpenAILogger.log("request finished successfully");
+      return onSuccess(decodedBody);
+    }
+  }
+
+  static Future<T> deleteFile<T>({
+    required String from,
+    required T Function(Map<String, dynamic> response) onSuccess,
+  }) async {
+    OpenAILogger.log("starting request to $from");
+
+    final http.Response response = await http.delete(
+      Uri.parse(from),
+      headers: HeadersBuilder.build(),
+    );
+
+    OpenAILogger.log(
+        "request to $from finished with status code ${response.statusCode}");
+
+    OpenAILogger.log("starting decoding response body");
+    final decodedBody = jsonDecode(response.body) as Map<String, dynamic>;
+    OpenAILogger.log("response body decoded successfully");
+    if (decodedBody['error'] != null) {
+      OpenAILogger.log("an error occurred, throwing exception");
+      final error = decodedBody['error'];
+      throw RequestFailedException(
+        error["message"],
+        response.statusCode,
+      );
+    } else {
+      OpenAILogger.log("request finished successfully");
+      return onSuccess(decodedBody);
+    }
+  }
 }
