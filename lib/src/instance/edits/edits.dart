@@ -12,7 +12,11 @@ class OpenAIEdits implements OpenAIEditsBase {
   /// This function creates an edit based on a specific instruction you need to give.
   /// Example:
   ///```dart
-  ///
+  /// OpenAIEditModel edit = await OpenAI.instance.edit.create(
+  ///   model: "text-davinci-edit-001";
+  ///   instruction: "remote all '!'from input text",
+  ///   input: "Hello!!, I! need to be ! somethi!ng"
+  /// );
   ///```
   @override
   Future<OpenAIEditModel> create({

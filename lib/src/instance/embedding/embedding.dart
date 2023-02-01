@@ -12,7 +12,10 @@ class OpenAIEmbedding implements OpenAIEmbeddingBase {
   /// This function creates an embeddings based on a model and input
   /// Example:
   ///```dart
-  ///
+  /// OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
+  ///  model: "test-embedding-ada-002",
+  ///  input: "This is a text input just to test",
+  /// );
   ///```
   @override
   Future<OpenAIEmbeddingsModel> create({

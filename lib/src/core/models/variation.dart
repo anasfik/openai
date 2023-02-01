@@ -1,11 +1,11 @@
-class OpenAIVariationModel {
+class OpenAIImageVariationModel {
   final DateTime created;
   final List<OpenAIVariationData> data;
 
-  OpenAIVariationModel({required this.created, required this.data});
+  OpenAIImageVariationModel({required this.created, required this.data});
 
-  factory OpenAIVariationModel.fromJson(Map<String, dynamic> json) {
-    return OpenAIVariationModel(
+  factory OpenAIImageVariationModel.fromJson(Map<String, dynamic> json) {
+    return OpenAIImageVariationModel(
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
       data: (json['data'] as List)
           .map((e) => OpenAIVariationData.fromJson(e))

@@ -71,7 +71,7 @@ class OpenAI extends OpenAIClientBase {
   OpenAIEmbedding get embedding => OpenAIEmbedding();
 
   /// The [OpenAIFiles] instance, used to access the files endpoints.
-  OpenAIFiles get files => OpenAIFiles();
+  OpenAIFiles get file => OpenAIFiles();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();

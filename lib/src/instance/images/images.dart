@@ -20,7 +20,9 @@ class OpenAIImages implements OpenAIImagesBase {
   /// This function creates an image based on a given prompt.
   /// Example:
   ///```dart
-  ///
+  /// OpenAIImageModel image = await OpenAI.instance.image.create(
+  ///  prompt: 'create an image about the sea',
+  /// );
   ///```
   @override
   Future<OpenAIImageModel> create({
@@ -47,7 +49,11 @@ class OpenAIImages implements OpenAIImagesBase {
   /// This function takes an existent file image, and edit it based on a prompt.
   /// Example:
   ///```dart
-  ///
+  /// OpenAiImageEditModel imageEdit = await OpenAI.instance.image.edit(
+  ///  file: File(/*IMAGE PATH HERE*/),
+  ///  mask: File(/*MASK PATH HERE*/),
+  ///  prompt: "mask the image with a dinosaur in the image",
+  /// );
   ///```
   @override
   Future<OpenAiImageEditModel> edit({
@@ -80,9 +86,11 @@ class OpenAIImages implements OpenAIImagesBase {
   /// This function creates a variations of an existent image File.
   /// Example:
   ///```dart
-  ///
+  /// OpenAIImageVariationModel vatiation = await OpenAI.instance.image.variation(
+  ///  image: File(/*YOUR IMAGE FILE PATH*/),
+  /// );
   ///```
-  Future<OpenAIVariationModel> variation({
+  Future<OpenAIImageVariationModel> variation({
     required File image,
     int? n,
     String? size,
@@ -91,7 +99,7 @@ class OpenAIImages implements OpenAIImagesBase {
   }) async {
     final String variations = "/variations";
     return await OpenAINetworkingClient.imageVariationForm<
-        OpenAIVariationModel>(
+        OpenAIImageVariationModel>(
       image: image,
       body: {
         if (n != null) "n": n.toString(),
@@ -100,7 +108,7 @@ class OpenAIImages implements OpenAIImagesBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIVariationModel.fromJson(response);
+        return OpenAIImageVariationModel.fromJson(response);
       },
       to: BaseApiUrlBuilder.build(endpoint + variations),
     );

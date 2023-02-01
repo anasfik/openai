@@ -13,7 +13,8 @@ class OpenAIFiles implements OpenAIFilesBase {
   /// This method fetches for your files list that exists in your account
   /// Example:
   ///```dart
-  ///
+  /// List<OpenAIFileModel> files = await OpenAI.instance.file.list();
+  /// print(files);
   ///```
   @override
   Future<List<OpenAIFileModel>> list() async {
@@ -28,7 +29,8 @@ class OpenAIFiles implements OpenAIFilesBase {
 
   /// This method fetch for a single file based on it's id.
   ///```dart
-  ///
+  /// OpenAIFileModel file = await OpenAI.instance.file.retrieve("FILE ID");
+  ///  print(file);
   ///```
   @override
   Future<OpenAIFileModel> retrieve(String fileId) async {
@@ -42,6 +44,11 @@ class OpenAIFiles implements OpenAIFilesBase {
     );
   }
 
+  /// This method fetches for the actual content of an uploaded file in your account.
+  /// Example:
+  /// ```dart
+  /// dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
+  /// ```
   @override
   Future<dynamic> retrieveContent(String fileId) async {
     final String fileIdEndpoint = "/$fileId";
@@ -54,6 +61,14 @@ class OpenAIFiles implements OpenAIFilesBase {
     );
   }
 
+  /// This method uploads a file to your account directly
+  /// Example:
+  /// ```dart
+  /// OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
+  /// file: File("FILE PATH HERE"),
+  /// purpose: "fine-tuning",
+  /// );
+  /// ```
   @override
   Future<OpenAIFileModel> upload({
     required File file,
@@ -71,13 +86,17 @@ class OpenAIFiles implements OpenAIFilesBase {
     );
   }
 
+  /// This method deleted an existent fil from your account used it's id.
+  /// ```dart
+  /// bool isFileDeleted = await OpenAI.instance.file.delete("FILE ID");
+  /// ```
   @override
   Future<bool> delete(String fileId) async {
     final String fileIdEndpoint = "/$fileId";
     return await OpenAINetworkingClient.deleteFile(
       from: fileIdEndpoint,
       onSuccess: (Map<String, dynamic> response) {
-        final isDeleted = response["deleted"] as bool;
+        final bool isDeleted = response["deleted"] as bool;
 
         return isDeleted;
       },
