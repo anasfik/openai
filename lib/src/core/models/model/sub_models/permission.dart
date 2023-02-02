@@ -49,11 +49,10 @@ class OpenAIModelModelPermission {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(covariant OpenAIModelModelPermission other) {
     if (identical(this, other)) return true;
 
-    return other is OpenAIModelModelPermission &&
-        other.id == id &&
+    return other.id == id &&
         other.object == object &&
         other.created == created &&
         other.allowCreateEngine == allowCreateEngine &&

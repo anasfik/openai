@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'sub_models/choice.dart';
 import 'sub_models/usage.dart';
 
@@ -26,5 +27,26 @@ class OpenAICompletionModel {
           .toList(),
       usage: OpenAICompletionModelUsage.fromJson(json['usage']),
     );
+  }
+
+  @override
+  String toString() {
+    return 'OpenAICompletionModel(id: $id, created: $created, model: $model, choices: $choices)';
+  }
+
+  @override
+  bool operator ==(covariant OpenAICompletionModel other) {
+    if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
+
+    return other.id == id &&
+        other.created == created &&
+        other.model == model &&
+        listEquals(other.choices, choices);
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^ created.hashCode ^ model.hashCode ^ choices.hashCode;
   }
 }

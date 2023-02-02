@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'sub_models/data.dart';
 
 class OpenAiImageEditModel {
@@ -19,4 +20,20 @@ class OpenAiImageEditModel {
       ),
     );
   }
+
+  @override
+  bool operator ==(covariant OpenAiImageEditModel other) {
+    if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
+  
+    return 
+      other.created == created &&
+      listEquals(other.data, data);
+  }
+
+  @override
+  int get hashCode => created.hashCode ^ data.hashCode;
+
+  @override
+  String toString() => 'OpenAiImageEditModel(created: $created, data: $data)';
 }

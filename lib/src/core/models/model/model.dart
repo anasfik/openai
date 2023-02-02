@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-
 import 'sub_models/permission.dart';
 
 class OpenAIModelModel {

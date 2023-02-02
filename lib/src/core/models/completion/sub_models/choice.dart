@@ -19,4 +19,27 @@ class OpenAICompletionModelChoice {
       finishReason: json['finish_reason'],
     );
   }
+
+  @override
+  bool operator ==(covariant OpenAICompletionModelChoice other) {
+    if (identical(this, other)) return true;
+
+    return other.text == text &&
+        other.index == index &&
+        other.logprobs == logprobs &&
+        other.finishReason == finishReason;
+  }
+
+  @override
+  int get hashCode {
+    return text.hashCode ^
+        index.hashCode ^
+        logprobs.hashCode ^
+        finishReason.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'OpenAICompletionModelChoice(text: $text, index: $index, logprobs: $logprobs, finishReason: $finishReason)';
+  }
 }

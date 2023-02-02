@@ -10,7 +10,7 @@ import '../../core/models/image/edit/image_edit.dart';
 
 import 'package:http/http.dart' as http;
 
-import '../../core/models/variation/variation.dart';
+import '../../core/models/image/variation/variation.dart';
 import '../../core/utils/logger.dart';
 
 class OpenAIImages implements OpenAIImagesBase {

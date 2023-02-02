@@ -13,4 +13,19 @@ class OpenAIEditModelChoice {
       index: json['index'],
     );
   }
+
+  @override
+  bool operator ==(covariant OpenAIEditModelChoice other) {
+    if (identical(this, other)) return true;
+  
+    return 
+      other.text == text &&
+      other.index == index;
+  }
+
+  @override
+  int get hashCode => text.hashCode ^ index.hashCode;
+
+  @override
+  String toString() => 'OpenAIEditModelChoice(text: $text, index: $index)';
 }

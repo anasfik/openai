@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'sub_models/choice.dart';
 import 'sub_models/usage.dart';
 
@@ -21,4 +22,21 @@ class OpenAIEditModel {
       usage: OpenAIEditModelUsage.fromJson(json['usage']),
     );
   }
+
+  @override
+  String toString() =>
+      'OpenAIEditModel(created: $created, choices: $choices, usage: $usage)';
+
+  @override
+  bool operator ==(covariant OpenAIEditModel other) {
+    if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
+
+    return other.created == created &&
+        listEquals(other.choices, choices) &&
+        other.usage == usage;
+  }
+
+  @override
+  int get hashCode => created.hashCode ^ choices.hashCode ^ usage.hashCode;
 }

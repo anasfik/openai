@@ -6,4 +6,4 @@ export 'file/file.dart';
 export 'image/image/image.dart';
 export 'image/edit/image_edit.dart';
 export 'model/model.dart';
-export 'variation/variation.dart';
+export 'image/variation/variation.dart';
