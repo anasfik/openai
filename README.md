@@ -21,7 +21,7 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 - [x] [Embeddings](#embeddings)
 - [x] [Files](#files)
 - [x] [Fine-tunes](#fine-tunes)
-- [ ] [Moderation](#moderations)
+- [x] [Moderation](#moderations)
 
 </br>
 
