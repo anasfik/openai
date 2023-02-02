@@ -16,12 +16,11 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 - [x] Models
 - [x] Completions
 - [x] Edits
-- [ ] Images
-- [ ] Embeddings
-- [ ] Files
+- [x] Images
+- [x] Embeddings
+- [x] Files
 - [ ] Fine-tunes
 - [ ] Moderation
-- [ ] Rate limit support
 
 <br>
 
@@ -102,4 +101,45 @@ Retrieves a model instance, providing basic information about the model such as 
    n: 1,
  );
 
+```
+
+## create image variation
+```dart
+OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
+ image: File(/*YOUR IMAGE FILE PATH*/),
+);
+```
+
+# Embeddings
+## create
+```dart
+OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
+  model: "text-embedding-ada-002",
+  input: "This is a text input just to test",
+);;
+```
+
+# Files
+## list files
+```dart
+List<OpenAIFileModel> files = await OpenAI.instance.file.list();
+```
+## Upload file
+```dart
+OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
+ file: File("FILE PATH HERE"),
+ purpose: "fine-tuning",
+);
+```
+## Delete file
+```dart
+bool isFileDeleted = await OpenAI.instance.file.delete("FILE ID");
+```
+## Retrieve file
+```dart
+OpenAIFileModel file = await OpenAI.instance.file.retrieve("FILE ID");
+```
+## Retrive file content
+```dart
+dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
 ```
