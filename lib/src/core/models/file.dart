@@ -19,8 +19,8 @@ class OpenAIFileModel {
     return OpenAIFileModel(
       id: map['id'] as String,
       bytes: map['bytes'] as int,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-      fileName: map['fileName'] as String,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
+      fileName: map['filename'] as String,
       purpose: map['purpose'] as String,
     );
   }
