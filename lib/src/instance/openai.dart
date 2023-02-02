@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:openai/src/instance/edits/edits.dart';
+import 'package:openai/src/instance/moderations/moderations.dart';
 
 import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
@@ -88,6 +89,9 @@ class OpenAI extends OpenAIClientBase {
 
   /// The [OpenAIFineTunes] instance, used to access the fine-tunes endpoints.
   OpenAIFineTunes get fineTune => OpenAIFineTunes();
+
+  /// The [OpenAIModerations] instance, used to access the moderation endpoints.
+  OpenAIModeration get moderation => OpenAIModeration();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();

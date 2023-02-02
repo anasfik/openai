@@ -1,7 +1,7 @@
 import 'package:openai/openai.dart';
 
 void main() async {
-  OpenAI.apiKey = "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";
+  OpenAI.apiKey = "KEY";
   // OpenAI.organization = "YOUR ORGANIZATION ID";
   // final models = await OpenAI.instance.model.list();
   // final model = await OpenAI.instance.model.one(models.first.id);
@@ -98,6 +98,11 @@ void main() async {
   //   print(events);
   // }
   // final canceledFineTune = await OpenAI.instance.fineTune.cancel(newCreatedTune.id);
-  bool isTuneDeleted = await OpenAI.instance.fineTune.delete("curie:ft-personal-2023-02-02-17-17-47");
-  print(isTuneDeleted);
+  // bool isTuneDeleted = await OpenAI.instance.fineTune.delete("curie:ft-personal-2023-02-02-17-17-47");
+  // print(isTuneDeleted);
+
+  final moderationResult = await OpenAI.instance.moderation.create(
+    input: "I want to kill him",
+  );
+  print(moderationResult.results.first.categories);
 }
