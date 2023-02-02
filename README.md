@@ -1,14 +1,17 @@
 # Dart SDK for openAI Apis (GPT-3 & DALL-E)
 
-An open-source package that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart applications. This library provides simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
+An open-source SDK  that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart applications. This library provides simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
 
-The package is designed to be lightweight and easy to use, so you can focus on building your application, rather than worrying about the complexities of the underlying API.
+The package is designed to be lightweight and easy to use, so you can focus on building your application, rather than worrying about the complexities and error caused by dealing with http requests.
 </br>
 </br>
 
 <i>Unofficial</i>
 </br>
 <i>OpenAI does not have any official Dart library.</I>
+
+#### Note:
+Please note that this client SDK connects directly to openAI APIs using http requests, all requests fields from direct method are just derivations from the openAI Apis, so if you want to use this SDK, please refer first and have a look over [here](https://platform.openai.com/docs/introduction/overview) 
 
 ## Progress
 
@@ -23,7 +26,16 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 - [x] [Fine-tunes](#fine-tunes)
 - [x] [Moderation](#moderations)
 
-</br>
+## Test
+- [x] [Authentication](#authentication)
+- [ ] [Models](#models)
+- [ ] [Completions](#completions)
+- [ ] [Edits](#edits)
+- [ ] [Images](#images)
+- [ ] [Embeddings](#embeddings)
+- [ ] [Files](#files)
+- [ ] [Fine-tunes](#fine-tunes)
+- [ ] [Moderation](#moderations)</br>
 
 # Authentication
 
@@ -215,4 +227,14 @@ OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE 
 
 ```dart
  bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
+```
+
+</br>
+ 
+# Moderations
+## Create moderation
+```dart
+OpenAIModerationModel moderationResult = await OpenAI.instance.moderation.create(
+  input: "I want to kill him",
+);
 ```
