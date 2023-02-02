@@ -15,7 +15,7 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 - [x] Authentication
 - [x] Models
 - [x] Completions
-- [ ] Edits
+- [x] Edits
 - [ ] Images
 - [ ] Embeddings
 - [ ] Files
@@ -70,4 +70,36 @@ Retrieves a model instance, providing basic information about the model such as 
    prompt: "Dart is a ",
    temperature: 0.8,
  );
+```
+<br>
+
+# Edits
+## Create edit
+
+```dart
+ OpenAIEditModel a = await OpenAI.instance.edit.create(
+   model: "text-davinci-edit-001",
+   input: " Hi!, I am a bot!!!!,",
+   instruction: "remove all ! the input ",
+ );
+```
+
+# Images
+## Create image
+```dart
+ OpenAIImageModel image = await OpenAI.instance.image.create(
+   prompt: "A dog",
+   n: 1,
+ );
+```
+
+## Create image edit
+```dart
+ final result = await OpenAI.instance.image.edit(
+   image: File(/* image file path*/),
+   mask: File(/* mask file path*/),
+   prompt: "change color to green",
+   n: 1,
+ );
+
 ```
