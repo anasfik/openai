@@ -1,9 +1,9 @@
-export './completion.dart';
-export './edit.dart';
-export './embedding.dart';
+export 'completion/completion.dart';
+export 'edit/edit.dart';
+export 'embedding/embedding.dart';
 export './export.dart';
-export './file.dart';
-export './image.dart';
-export './image_edit.dart';
-export './model.dart';
-export './variation.dart';
+export 'file/file.dart';
+export 'image/image/image.dart';
+export 'image/edit/image_edit.dart';
+export 'model/model.dart';
+export 'variation/variation.dart';

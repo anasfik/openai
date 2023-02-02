@@ -1,3 +1,5 @@
+import 'sub_models/data.dart';
+
 class OpenAIImageVariationModel {
   final DateTime created;
   final List<OpenAIVariationData> data;
@@ -11,17 +13,5 @@ class OpenAIImageVariationModel {
           .map((e) => OpenAIVariationData.fromJson(e))
           .toList(),
     );
-  }
-}
-
-class OpenAIVariationData {
-  final String url;
-
-  OpenAIVariationData({
-    required this.url,
-  });
-
-  factory OpenAIVariationData.fromJson(Map<String, dynamic> json) {
-    return OpenAIVariationData(url: json['url']);
   }
 }

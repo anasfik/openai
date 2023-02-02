@@ -1,3 +1,5 @@
+import 'sub_models/data.dart';
+
 class OpenAIImageModel {
   final DateTime created;
   final List<OpenAIImageData> data;
@@ -11,17 +13,5 @@ class OpenAIImageModel {
           .map((e) => OpenAIImageData.fromJson(e))
           .toList(),
     );
-  }
-}
-
-class OpenAIImageData {
-  final String url;
-
-  OpenAIImageData({
-    required this.url,
-  });
-
-  factory OpenAIImageData.fromJson(Map<String, dynamic> json) {
-    return OpenAIImageData(url: json['url']);
   }
 }

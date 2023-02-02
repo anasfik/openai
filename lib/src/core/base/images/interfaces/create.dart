@@ -1,4 +1,4 @@
-import '../../../models/image.dart';
+import '../../../models/image/image/image.dart';
 
 abstract class CreateInterface {
   Future<OpenAIImageModel> create(

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../../models/file.dart';
+import '../../../models/file/file.dart';
 
 abstract class UploadInterface {
   Future<OpenAIFileModel> upload({

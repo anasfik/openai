@@ -1,5 +1,5 @@
 import 'package:openai/src/core/base/model/base.dart';
-import 'package:openai/src/core/models/model.dart';
+import 'package:openai/src/core/models/model/model.dart';
 import 'package:openai/src/core/utils/logger.dart';
 import '../../core/builder/base_api_url.dart';
 import '../../core/networking/client.dart';

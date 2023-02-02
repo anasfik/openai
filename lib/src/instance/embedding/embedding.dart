@@ -1,5 +1,5 @@
 import 'package:openai/src/core/builder/base_api_url.dart';
-import 'package:openai/src/core/models/embedding.dart';
+import 'package:openai/src/core/models/embedding/embedding.dart';
 
 import '../../core/base/embeddings/base.dart';
 import '../../core/networking/client.dart';

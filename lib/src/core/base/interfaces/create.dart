@@ -1,4 +1,4 @@
-import '../../models/completion.dart';
+import '../../models/completion/completion.dart';
 
 abstract class CreateInterface {
   Future<OpenAICompletionModel> create({

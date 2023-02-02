@@ -1,4 +1,4 @@
-import '../../../models/embedding.dart';
+import '../../../models/embedding/embedding.dart';
 
 abstract class CreateInterface {
   Future<OpenAIEmbeddingsModel> create({

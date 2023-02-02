@@ -1,6 +1,6 @@
 
 
-import '../../../models/edit.dart';
+import '../../../models/edit/edit.dart';
 
 abstract class CreateInterface {
   Future<OpenAIEditModel> create({
