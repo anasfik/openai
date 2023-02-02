@@ -1,16 +1,17 @@
 # Dart SDK for openAI Apis (GPT-3 & DALL-E)
 
-An open-source package that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart applications. This library provides a simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
-
+An open-source package that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart applications. This library provides simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
 
 The package is designed to be lightweight and easy to use, so you can focus on building your application, rather than worrying about the complexities of the underlying API.
-<br>
-<br>
+</br>
+</br>
 
-<i>Unofficial</i><br>
-<i>openAI don't have any official Dart library.</I>
+<i>Unofficial</i>
+</br>
+<i>OpenAI does not have any official Dart library.</I>
 
 ## Progress
+
 - [ ] ChatGPT ( as soon as possible when it's released )
 - [x] Authentication
 - [x] Models
@@ -19,13 +20,15 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 - [x] Images
 - [x] Embeddings
 - [x] Files
-- [ ] Fine-tunes
+- [x] Fine-tunes
 - [ ] Moderation
 
-<br>
+</br>
 
 # Authentication
+
 ## API key
+
 ```dart
 void main() {
  OpenAI.apiKey = dotenv.env["OPEN_AI_KEY"]!;
@@ -34,6 +37,7 @@ void main() {
 ```
 
 ## Requesting organization
+
 ```dart
  OpenAI.organization = "ORGANIZATION ID";
 ```
@@ -41,7 +45,9 @@ void main() {
 <br>
 
 # Models
+
 ## List Models
+
 Lists the currently available models, and provides basic information about each one such as the owner and availability.
 
 ```dart
@@ -50,6 +56,7 @@ Lists the currently available models, and provides basic information about each 
 ```
 
 ## Retrieve model
+
 Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
 
 ```dart
@@ -57,10 +64,10 @@ Retrieves a model instance, providing basic information about the model such as 
  print(model.id)
 ```
 
-
 <br>
 
 # Completions
+
 ## Create completion
 
 ```dart
@@ -74,6 +81,7 @@ Retrieves a model instance, providing basic information about the model such as 
 <br>
 
 # Edits
+
 ## Create edit
 
 ```dart
@@ -87,7 +95,9 @@ Retrieves a model instance, providing basic information about the model such as 
 <br>
 
 # Images
+
 ## Create image
+
 ```dart
  OpenAIImageModel image = await OpenAI.instance.image.create(
    prompt: "A dog",
@@ -96,6 +106,7 @@ Retrieves a model instance, providing basic information about the model such as 
 ```
 
 ## Create image edit
+
 ```dart
  final result = await OpenAI.instance.image.edit(
    image: File(/* image file path*/),
@@ -107,44 +118,99 @@ Retrieves a model instance, providing basic information about the model such as 
 ```
 
 ## Create image variation
+
 ```dart
 OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
  image: File(/*YOUR IMAGE FILE PATH*/),
 );
 ```
+
 <br>
 
 # Embeddings
+
 ## Create embeddings
+
 ```dart
 OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
   model: "text-embedding-ada-002",
   input: "This is a text input just to test",
 );;
 ```
+
 <br>
 
 # Files
+
 ## List files
+
 ```dart
 List<OpenAIFileModel> files = await OpenAI.instance.file.list();
 ```
+
 ## Upload file
+
 ```dart
 OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
  file: File("FILE PATH HERE"),
  purpose: "fine-tuning",
 );
 ```
+
 ## Delete file
+
 ```dart
 bool isFileDeleted = await OpenAI.instance.file.delete("FILE ID");
 ```
+
 ## Retrieve file
+
 ```dart
 OpenAIFileModel file = await OpenAI.instance.file.retrieve("FILE ID");
 ```
-## Retrive file content
+
+## Retrieve file content
+
 ```dart
 dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
+```
+
+# Fine Tunes
+
+## Create fine-tune
+
+```dart
+OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.create(
+ trainingFile: "FILE ID",
+);
+```
+
+## List fine-tunes
+
+```dart
+List<OpenAIFineTuneModel> fineTunes = await OpenAI.instance.fineTune.list();
+```
+
+## Retrieve fine-tune
+
+```dart
+OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.retrieve("FINE TUNE ID");
+```
+
+## Cancel fine-tune
+
+```dart
+OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE ID");
+```
+
+## List fine-tune events
+
+```dart
+ List<OpenAIFineTuneEventModel> events = await OpenAI.instance.fineTune.listEvents("FINE TUNE ID");
+```
+
+## Delete fine-tune
+
+```dart
+ bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
 ```

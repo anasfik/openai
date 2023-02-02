@@ -1,7 +1,7 @@
 import 'package:openai/openai.dart';
 
 void main() async {
-  OpenAI.apiKey = "Key";
+  OpenAI.apiKey = "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";
   // OpenAI.organization = "YOUR ORGANIZATION ID";
   // final models = await OpenAI.instance.model.list();
   // final model = await OpenAI.instance.model.one(models.first.id);
@@ -87,17 +87,17 @@ void main() async {
   // final events = await OpenAI.instance.fineTune.listEvents(fineTuneRetrieve.id);
   // print(events);
 
-  final newCreatedTune = await OpenAI.instance.fineTune.create(
-    trainingFile: "file-wJR4HjdfmPm3BwuEpnxYhmfH",
-  );
+  // final newCreatedTune = await OpenAI.instance.fineTune.create(
+  //   trainingFile: "file-wJR4HjdfmPm3BwuEpnxYhmfH",
+  // );
 
-  print(newCreatedTune);
+  // print(newCreatedTune);
 
   // for (int index = 0; index < 10; index++) {
   //   final events = await OpenAI.instance.fineTune.listEvents(newCreatedTune.id);
   //   print(events);
   // }
-  final canceledFineTune = await OpenAI.instance.fineTune.cancel(newCreatedTune.id);
-  // bool isTuneDeleted = await OpenAI.instance.fineTune.delete(newCreatedTune.id);
-  // print(isTuneDeleted);
+  // final canceledFineTune = await OpenAI.instance.fineTune.cancel(newCreatedTune.id);
+  bool isTuneDeleted = await OpenAI.instance.fineTune.delete("curie:ft-personal-2023-02-02-17-17-47");
+  print(isTuneDeleted);
 }

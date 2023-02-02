@@ -17,6 +17,7 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.create(
   ///  trainingFile: "FILE ID",
   /// );
+  /// ```
   @override
   Future<OpenAIFineTuneModel> create({
     required String trainingFile,
