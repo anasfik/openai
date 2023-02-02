@@ -4,7 +4,7 @@ import 'package:openai/openai.dart';
 import 'package:http/http.dart' as http;
 
 void main() async {
-  OpenAI.apiKey = "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";
+  OpenAI.apiKey = "key";
   // OpenAI.organization = "YOUR ORGANIZATION ID";
   // final models = await OpenAI.instance.model.list();
   // final model = await OpenAI.instance.model.one(models.first.id);
@@ -75,4 +75,7 @@ void main() async {
   final fileContentExample =
       await OpenAI.instance.file.retrieveContent(fileExample.id);
   print(fileContentExample);
+
+  final didDeletedFile = await OpenAI.instance.file.delete(fileExample.id);
+  print(didDeletedFile);
 }
