@@ -48,6 +48,22 @@ class OpenAIModel implements OpenAIModelBase {
     );
   }
 
+  /// delete a fine tune model, returns true if deleted
+  /// Example:
+  /// ```dart
+  /// bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
+  /// ```
+  Future<bool> delete(String fineTuneId) async {
+    final String fineTuneModelDelete = "$endpoint/$fineTuneId";
+
+    return await OpenAINetworkingClient.delete(
+      from: BaseApiUrlBuilder.build(fineTuneModelDelete),
+      onSuccess: (Map<String, dynamic> response) {
+        return response['deleted'];
+      },
+    );
+  }
+
   OpenAIModel() {
     OpenAILogger.logEndpoint(endpoint);
   }

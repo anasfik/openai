@@ -1,7 +1,7 @@
 import 'package:openai/openai.dart';
 
 void main() async {
-  OpenAI.apiKey = "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";
+  OpenAI.apiKey = "Key";
   // OpenAI.organization = "YOUR ORGANIZATION ID";
   // final models = await OpenAI.instance.model.list();
   // final model = await OpenAI.instance.model.one(models.first.id);
@@ -73,22 +73,31 @@ void main() async {
   //     await OpenAI.instance.file.retrieveContent(fileExample.id);
   // print(fileContentExample);
 
-  final fineTune = await OpenAI.instance.fineTune
-      .create(trainingFile: "file-wJR4HjdfmPm3BwuEpnxYhmfH");
-  print(fineTune);
+  // final fineTune = await OpenAI.instance.fineTune
+  //     .create(trainingFile: "file-wJR4HjdfmPm3BwuEpnxYhmfH");
+  // print(fineTune);
 
-  final fineTuneList = await OpenAI.instance.fineTune.list();
-  print(fineTuneList);
+  // final fineTuneList = await OpenAI.instance.fineTune.list();
+  // print(fineTuneList);
 
-  final fineTuneRetrieve =
-      await OpenAI.instance.fineTune.retrieve(fineTuneList.first.id);
-  print(fineTuneRetrieve);
+  // final fineTuneRetrieve =
+  //     await OpenAI.instance.fineTune.retrieve(fineTuneList.first.id);
+  // print(fineTuneRetrieve);
 
-  final events = await OpenAI.instance.fineTune.listEvents(fineTuneRetrieve.id);
-  print(events);
+  // final events = await OpenAI.instance.fineTune.listEvents(fineTuneRetrieve.id);
+  // print(events);
 
   final newCreatedTune = await OpenAI.instance.fineTune.create(
     trainingFile: "file-wJR4HjdfmPm3BwuEpnxYhmfH",
   );
+
   print(newCreatedTune);
+
+  // for (int index = 0; index < 10; index++) {
+  //   final events = await OpenAI.instance.fineTune.listEvents(newCreatedTune.id);
+  //   print(events);
+  // }
+  final canceledFineTune = await OpenAI.instance.fineTune.cancel(newCreatedTune.id);
+  // bool isTuneDeleted = await OpenAI.instance.fineTune.delete(newCreatedTune.id);
+  // print(isTuneDeleted);
 }

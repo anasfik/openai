@@ -2,6 +2,8 @@ import 'package:openai/src/core/builder/base_api_url.dart';
 import 'package:openai/src/core/models/fine_tune/fine_tune.dart';
 import 'package:openai/src/core/models/fine_tune/sub_models/event.dart';
 import 'package:openai/src/core/networking/client.dart';
+import 'package:openai/src/instance/model/model.dart';
+import 'package:openai/src/instance/openai.dart';
 
 import '../../core/base/fine_tunes/base.dart';
 
@@ -97,14 +99,7 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// ```
   @override
   Future<bool> delete(String fineTuneId) async {
-    final String fineTuneModelDelete = "$endpoint/models/$fineTuneId";
-
-    return await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.build(fineTuneModelDelete),
-      onSuccess: (Map<String, dynamic> response) {
-        return response['deleted'];
-      },
-    );
+    return await OpenAIModel().delete(fineTuneId);
   }
 
   /// This function lists all events of a fine-tune job by its id.
