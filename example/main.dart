@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:openai/src/instance/openai.dart';
+import 'package:openai/openai.dart';
 import 'package:http/http.dart' as http;
 
 void main() async {
-  OpenAI.apiKey = "Your API Key";
+  OpenAI.apiKey = "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";
   // OpenAI.organization = "YOUR ORGANIZATION ID";
   // final models = await OpenAI.instance.model.list();
   // final model = await OpenAI.instance.model.one(models.first.id);
@@ -43,15 +43,26 @@ void main() async {
   final a = await getFileFromUrl(
       "https://ico.cppng.com/download/2020-06/51744-3-desktop-computer-download-image-download-hq-png.png");
 
-  final b = await getFileFromUrl(
-      "https://in.portal-pokemon.com/play/resources/pokedex/img/pm/997f32e3b38169eab2b431bc2ead3c8217674f6a.png");
+  // final b = await getFileFromUrl(
+  //     "https://in.portal-pokemon.com/play/resources/pokedex/img/pm/997f32e3b38169eab2b431bc2ead3c8217674f6a.png");
 
-  final result = await OpenAI.instance.image.edit(
-    image: a,
-    mask: b,
-    prompt: "change color to green",
-    n: 1,
+  // final result = await OpenAI.instance.image.edit(
+  //   image: a,
+  //   mask: b,
+  //   prompt: "change color to green",
+  //   n: 1,
+  // );
+
+  // print(result.data.first.url);
+
+  // OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
+  //   image: a,
+  // );
+  // print(variation.data.first.url);
+
+  OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
+    model: "text-embedding-ada-002",
+    input: "This is a text input just to test",
   );
-
-  print(result.data.first.url);
+  print(embeddings.data.first.embeddings);
 }

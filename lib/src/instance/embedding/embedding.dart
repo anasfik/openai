@@ -13,7 +13,7 @@ class OpenAIEmbedding implements OpenAIEmbeddingBase {
   /// Example:
   ///```dart
   /// OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
-  ///  model: "test-embedding-ada-002",
+  ///  model: "text-embedding-ada-002",
   ///  input: "This is a text input just to test",
   /// );
   ///```

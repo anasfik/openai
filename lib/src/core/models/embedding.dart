@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 class OpenAIEmbeddingsModel {
   List<OpenAIEmbeddingsDataModel> data;
   String model;
@@ -14,7 +11,7 @@ class OpenAIEmbeddingsModel {
   factory OpenAIEmbeddingsModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsModel(
       data: List<OpenAIEmbeddingsDataModel>.from(
-        (map['data'] as List<int>).map<OpenAIEmbeddingsDataModel>(
+        map['data'].map<OpenAIEmbeddingsDataModel>(
           (x) => OpenAIEmbeddingsDataModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -36,7 +33,11 @@ class OpenAIEmbeddingsDataModel {
 
   factory OpenAIEmbeddingsDataModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsDataModel(
-      embeddings: List<double>.from((map['embeddings'] as List<double>)),
+      embeddings: List<double>.from(
+        (map['embedding'] as List).map(
+          (e) => e as double,
+        ),
+      ),
       index: map['index'] as int,
     );
   }
@@ -52,8 +53,8 @@ class OpenAIEmbeddingsUsageModel {
 
   factory OpenAIEmbeddingsUsageModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsUsageModel(
-      promptTokens: map['promptTokens'] as int,
-      totalTokens: map['totalTokens'] as int,
+      promptTokens: map['prompt_tokens'] as int,
+      totalTokens: map['total_tokens'] as int,
     );
   }
 }
