@@ -10,7 +10,8 @@ import '../exceptions/request_failure.dart';
 class OpenAINetworkingClient {
   static Future<T> get<T>({
     required String from,
-    required T Function(Map<String, dynamic>) onSuccess,
+    bool returnRawResponse = false,
+    T Function(Map<String, dynamic>)? onSuccess,
   }) async {
     OpenAILogger.log("starting request to $from");
 
@@ -19,6 +20,9 @@ class OpenAINetworkingClient {
       headers: HeadersBuilder.build(),
     );
 
+    if (returnRawResponse) {
+      return response.body as T;
+    }
     OpenAILogger.log(
         "request to $from finished with status code ${response.statusCode}");
 
@@ -37,7 +41,7 @@ class OpenAINetworkingClient {
       );
     } else {
       OpenAILogger.log("request finished successfully");
-      return onSuccess(decodedBody);
+      return onSuccess!(decodedBody);
     }
   }
 

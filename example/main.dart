@@ -4,7 +4,7 @@ import 'package:openai/openai.dart';
 import 'package:http/http.dart' as http;
 
 void main() async {
-  OpenAI.apiKey = "KEY";
+  OpenAI.apiKey = "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";
   // OpenAI.organization = "YOUR ORGANIZATION ID";
   // final models = await OpenAI.instance.model.list();
   // final model = await OpenAI.instance.model.one(models.first.id);
@@ -67,5 +67,12 @@ void main() async {
   // print(embeddings.data.first.embeddings);
   final List<OpenAIFileModel> file = await OpenAI.instance.file.list();
   print(file);
-  
+
+  final OpenAIFileModel fileExample =
+      await OpenAI.instance.file.retrieve(file.first.id);
+  print(fileExample.fileName);
+
+  final fileContentExample =
+      await OpenAI.instance.file.retrieveContent(fileExample.id);
+  print(fileContentExample);
 }

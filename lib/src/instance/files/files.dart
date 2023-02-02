@@ -51,13 +51,11 @@ class OpenAIFiles implements OpenAIFilesBase {
   /// ```
   @override
   Future<dynamic> retrieveContent(String fileId) async {
-    final String fileIdEndpoint = "/$fileId";
+    final String fileIdEndpoint = "/$fileId/content";
 
     return await OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.build(endpoint + fileIdEndpoint),
-      onSuccess: (response) {
-        return response;
-      },
+      returnRawResponse: true,
     );
   }
 
