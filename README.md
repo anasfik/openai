@@ -42,7 +42,7 @@ void main() {
  OpenAI.organization = "ORGANIZATION ID";
 ```
 
-<br>
+</br>
 
 # Models
 
@@ -64,7 +64,7 @@ Retrieves a model instance, providing basic information about the model such as 
  print(model.id)
 ```
 
-<br>
+</br>
 
 # Completions
 
@@ -78,7 +78,7 @@ Retrieves a model instance, providing basic information about the model such as 
  );
 ```
 
-<br>
+</br>
 
 # Edits
 
@@ -92,7 +92,7 @@ Retrieves a model instance, providing basic information about the model such as 
  );
 ```
 
-<br>
+</br>
 
 # Images
 
@@ -125,7 +125,7 @@ OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
 );
 ```
 
-<br>
+</br>
 
 # Embeddings
 
@@ -138,7 +138,7 @@ OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
 );;
 ```
 
-<br>
+</br>
 
 # Files
 
@@ -174,6 +174,8 @@ OpenAIFileModel file = await OpenAI.instance.file.retrieve("FILE ID");
 ```dart
 dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
 ```
+
+</br>
 
 # Fine Tunes
 
