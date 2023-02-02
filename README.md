@@ -13,15 +13,15 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 ## Progress
 
 - [ ] ChatGPT ( as soon as possible when it's released )
-- [x] Authentication
-- [x] Models
-- [x] Completions
-- [x] Edits
-- [x] Images
-- [x] Embeddings
-- [x] Files
-- [x] Fine-tunes
-- [ ] Moderation
+- [x] [Authentication](#authentication)
+- [x] [Models](#models)
+- [x] [Completions](#completions)
+- [x] [Edits](#edits)
+- [x] [Images](#images)
+- [x] [Embeddings](#embeddings)
+- [x] [Files](#files)
+- [x] [Fine-tunes](#fine-tunes)
+- [ ] [Moderation](#moderations)
 
 </br>
 
