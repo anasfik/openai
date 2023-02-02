@@ -204,7 +204,7 @@ class OpenAINetworkingClient {
     }
   }
 
-  static Future<T> deleteFile<T>({
+  static Future<T> delete<T>({
     required String from,
     required T Function(Map<String, dynamic> response) onSuccess,
   }) async {

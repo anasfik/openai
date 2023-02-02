@@ -1,10 +1,7 @@
-import 'dart:async';
-import 'dart:io';
 import 'package:openai/openai.dart';
-import 'package:http/http.dart' as http;
 
 void main() async {
-  OpenAI.apiKey = "key";
+  OpenAI.apiKey = "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";
   // OpenAI.organization = "YOUR ORGANIZATION ID";
   // final models = await OpenAI.instance.model.list();
   // final model = await OpenAI.instance.model.one(models.first.id);
@@ -33,15 +30,15 @@ void main() async {
 
   // print(image.data.first.url);
 
-  Future<File> getFileFromUrl(String networkUrl) async {
-    final response = await http.get(Uri.parse(networkUrl));
-    final file = File("image.json");
-    await file.writeAsBytes(response.bodyBytes);
-    return file;
-  }
+  // Future<File> getFileFromUrl(String networkUrl) async {
+  //   final response = await http.get(Uri.parse(networkUrl));
+  //   final file = File("image.json");
+  //   await file.writeAsBytes(response.bodyBytes);
+  //   return file;
+  // }
 
-  final a = await getFileFromUrl(
-      "https://ico.cppng.com/download/2020-06/51744-3-desktop-computer-download-image-download-hq-png.png");
+  // final a = await getFileFromUrl(
+  //     "https://ico.cppng.com/download/2020-06/51744-3-desktop-computer-download-image-download-hq-png.png");
 
   // final b = await getFileFromUrl(
   //     "https://in.portal-pokemon.com/play/resources/pokedex/img/pm/997f32e3b38169eab2b431bc2ead3c8217674f6a.png");
@@ -65,17 +62,33 @@ void main() async {
   //   input: "This is a text input just to test",
   // );
   // print(embeddings.data.first.embeddings);
-  final List<OpenAIFileModel> file = await OpenAI.instance.file.list();
-  print(file);
+  // final List<OpenAIFileModel> file = await OpenAI.instance.file.list();
+  // print(file);
 
-  final OpenAIFileModel fileExample =
-      await OpenAI.instance.file.retrieve(file.first.id);
-  print(fileExample.fileName);
+  // final OpenAIFileModel fileExample =
+  //     await OpenAI.instance.file.retrieve(file.first.id);
+  // print(fileExample.fileName);
 
-  final fileContentExample =
-      await OpenAI.instance.file.retrieveContent(fileExample.id);
-  print(fileContentExample);
+  // final fileContentExample =
+  //     await OpenAI.instance.file.retrieveContent(fileExample.id);
+  // print(fileContentExample);
 
-  final didDeletedFile = await OpenAI.instance.file.delete(fileExample.id);
-  print(didDeletedFile);
+  final fineTune = await OpenAI.instance.fineTune
+      .create(trainingFile: "file-wJR4HjdfmPm3BwuEpnxYhmfH");
+  print(fineTune);
+
+  final fineTuneList = await OpenAI.instance.fineTune.list();
+  print(fineTuneList);
+
+  final fineTuneRetrieve =
+      await OpenAI.instance.fineTune.retrieve(fineTuneList.first.id);
+  print(fineTuneRetrieve);
+
+  final events = await OpenAI.instance.fineTune.listEvents(fineTuneRetrieve.id);
+  print(events);
+
+  final newCreatedTune = await OpenAI.instance.fineTune.create(
+    trainingFile: "file-wJR4HjdfmPm3BwuEpnxYhmfH",
+  );
+  print(newCreatedTune);
 }

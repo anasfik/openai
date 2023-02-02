@@ -91,7 +91,7 @@ class OpenAIFiles implements OpenAIFilesBase {
   @override
   Future<bool> delete(String fileId) async {
     final String fileIdEndpoint = "/$fileId";
-    return await OpenAINetworkingClient.deleteFile(
+    return await OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.build(endpoint + fileIdEndpoint),
       onSuccess: (Map<String, dynamic> response) {
         final bool isDeleted = response["deleted"] as bool;

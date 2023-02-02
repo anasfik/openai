@@ -8,6 +8,7 @@ import '../core/utils/logger.dart';
 import 'completion/completion.dart';
 import 'embedding/embedding.dart';
 import 'files/files.dart';
+import 'fine_tunes/fine_tunes.dart';
 import 'images/images.dart';
 import 'model/model.dart';
 
@@ -84,6 +85,9 @@ class OpenAI extends OpenAIClientBase {
 
   /// The [OpenAIFiles] instance, used to access the files endpoints.
   OpenAIFiles get file => OpenAIFiles();
+
+  /// The [OpenAIFineTunes] instance, used to access the fine-tunes endpoints.
+  OpenAIFineTunes get fineTune => OpenAIFineTunes();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();

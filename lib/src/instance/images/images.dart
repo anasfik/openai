@@ -86,7 +86,7 @@ class OpenAIImages implements OpenAIImagesBase {
   /// This function creates a variations of an existent image File.
   /// Example:
   ///```dart
-  /// OpenAIImageVariationModel vatiation = await OpenAI.instance.image.variation(
+  /// OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
   ///  image: File(/*YOUR IMAGE FILE PATH*/),
   /// );
   ///```
