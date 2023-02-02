@@ -8,6 +8,13 @@ class OpenAIModeration implements OpenAIModerationBase {
   @override
   String get endpoint => "/moderations";
 
+  /// Creates a moderation request.
+  /// Example:
+  /// ```dart
+  /// final moderation = await openai.moderation.create(
+  ///  input: "I will kill your mates before I will cut your head off",
+  /// );
+  /// ```
   @override
   Future<OpenAIModerationModel> create({
     required String input,
