@@ -70,6 +70,7 @@ Retrieves a model instance, providing basic information about the model such as 
    temperature: 0.8,
  );
 ```
+
 <br>
 
 # Edits
@@ -82,6 +83,8 @@ Retrieves a model instance, providing basic information about the model such as 
    instruction: "remove all ! the input ",
  );
 ```
+
+<br>
 
 # Images
 ## Create image
@@ -103,24 +106,26 @@ Retrieves a model instance, providing basic information about the model such as 
 
 ```
 
-## create image variation
+## Create image variation
 ```dart
 OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
  image: File(/*YOUR IMAGE FILE PATH*/),
 );
 ```
+<br>
 
 # Embeddings
-## create
+## Create embeddings
 ```dart
 OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
   model: "text-embedding-ada-002",
   input: "This is a text input just to test",
 );;
 ```
+<br>
 
 # Files
-## list files
+## List files
 ```dart
 List<OpenAIFileModel> files = await OpenAI.instance.file.list();
 ```
