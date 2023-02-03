@@ -53,9 +53,10 @@ class OpenAI extends OpenAIClientBase {
   /// ```dart
   /// OpenAI.organization = "YOUR_ORGANIZATION_ID";
   /// ```
-  static set organization(String organizationId) {
+  static set organization(String? organizationId) {
     HeadersBuilder.organization = organizationId;
   }
+  static String? get organization => HeadersBuilder.organization;
 
   /// This controls whether to log steps inside the process of making a request, this helps debugging and pointing where something went wrong.
   /// This uses  [dart:developer] internally, so it will show anyway only while debugging code.
