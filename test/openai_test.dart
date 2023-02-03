@@ -5,10 +5,10 @@ import 'package:openai/openai.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  final imageFileExample =
-      await getFileFromUrl("https://via.placeholder.com/150");
-  final maskFileExample =
-      await getFileFromUrl("https://via.placeholder.com/30");
+  final imageFileExample = await getFileFromUrl(
+      "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png");
+  final maskFileExample = await getFileFromUrl(
+      "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png");
   String? modelExampleId;
 
   group('authentication', () {
@@ -20,7 +20,7 @@ void main() async {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "YOUR KEY FROM ENVIRONMENT VARIABLE";
+      OpenAI.apiKey = "YOUR API KEY FROM ENVIRONMENT VARIABLE";
       expect(OpenAI.instance, isA<OpenAI>());
     });
 
@@ -89,7 +89,7 @@ void main() async {
   group('edits', () {
     test('create', () async {
       final OpenAIEditModel edit = await OpenAI.instance.edit.create(
-        model: modelExampleId ?? "text-davinci-003",
+        model: "text-davinci-edit-001",
         instruction: "remove the word 'made' from the text",
         input: "I made something, idk man",
       );
@@ -109,15 +109,12 @@ void main() async {
       expect(image.data.first.url, isA<String>());
     });
     test("edits", () async {
-      final OpenAIImageModel image = await OpenAI.instance.image.create(
-        prompt: "A dog is walking down the street.",
-      );
       final OpenAiImageEditModel imageEdited = await OpenAI.instance.image.edit(
         prompt: 'mask the image with color red',
         image: imageFileExample,
         mask: maskFileExample,
       );
-      expect(imageEdited, isA<OpenAIImageModel>());
+      expect(imageEdited, isA<OpenAiImageEditModel>());
       expect(imageEdited.data.first.url, isA<String>());
     });
     test("variation", () async {
@@ -131,11 +128,11 @@ void main() async {
     });
   });
 
-  group('embeddings', () async {
+  group('embeddings', () {
     test('create', () async {
       final OpenAIEmbeddingsModel embedding =
           await OpenAI.instance.embedding.create(
-        model: modelExampleId ?? "text-davinci-003",
+        model: "text-embedding-ada-002",
         input: "This is a sample text",
       );
       expect(embedding, isA<OpenAIEmbeddingsModel>());
@@ -147,7 +144,8 @@ void main() async {
 
 Future<File> getFileFromUrl(String networkUrl) async {
   final response = await http.get(Uri.parse(networkUrl));
-  final file = File(networkUrl.split('/').last);
+  final uniqueImageName = DateTime.now().microsecondsSinceEpoch;
+  final file = File("$uniqueImageName.png");
   await file.writeAsBytes(response.bodyBytes);
   return file;
 }
