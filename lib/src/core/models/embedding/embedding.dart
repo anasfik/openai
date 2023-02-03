@@ -2,6 +2,9 @@ import 'package:collection/collection.dart';
 import 'sub-models/data.dart';
 import 'sub-models/usage.dart';
 
+export 'sub-models/data.dart';
+export 'sub-models/usage.dart';
+
 class OpenAIEmbeddingsModel {
   List<OpenAIEmbeddingsDataModel> data;
   String model;

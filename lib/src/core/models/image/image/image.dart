@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'sub_models/data.dart';
 
+export 'sub_models/data.dart';
+
 class OpenAIImageModel {
   final DateTime created;
   final List<OpenAIImageData> data;
@@ -23,10 +25,8 @@ class OpenAIImageModel {
   bool operator ==(covariant OpenAIImageModel other) {
     if (identical(this, other)) return true;
     final listEquals = const DeepCollectionEquality().equals;
-  
-    return 
-      other.created == created &&
-      listEquals(other.data, data);
+
+    return other.created == created && listEquals(other.data, data);
   }
 
   @override

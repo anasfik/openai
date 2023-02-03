@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:openai/openai.dart';
 import 'package:test/test.dart';
 
@@ -79,4 +81,68 @@ void main() {
       expect(completion.choices.first.text, isA<String>());
     });
   });
+  group('edits', () {
+    test('create', () async {
+      final OpenAIEditModel edit = await OpenAI.instance.edit.create(
+        model: modelExampleId ?? "text-davinci-003",
+        instruction: "remove the word 'made' from the text",
+        input: "I made something, idk man",
+      );
+      expect(edit, isA<OpenAIEditModel>());
+      expect(edit.choices.first, isA<OpenAIEditModelChoice>());
+      expect(edit.choices.first.text, isNotNull);
+      expect(edit.choices.first.text, isA<String>());
+    });
+  });
+  group('images', () {
+    test('create', () async {
+      final OpenAIImageModel image = await OpenAI.instance.image.create(
+        prompt: "A dog is walking down the street.",
+      );
+
+      expect(image, isA<OpenAIImageModel>());
+      expect(image.data.first.url, isA<String>());
+    });
+    test(
+      "edits",
+      () async {
+        final OpenAIImageModel image = await OpenAI.instance.image.create(
+          prompt: "A dog is walking down the street.",
+        );
+        final OpenAiImageEditModel imageEdited =
+            await OpenAI.instance.image.edit(
+          prompt: 'mask the image with color red',
+          image: File("YOUR IMAGE PATH"),
+          mask: File("YOUR MASK PATH"),
+        );
+        expect(imageEdited, isA<OpenAIImageModel>());
+        expect(imageEdited.data.first.url, isA<String>());
+      },
+    );
+    test("variation", () async {
+      final OpenAIImageVariationModel variation =
+          await OpenAI.instance.image.variation(
+        image: File("YOUR IMAGE PATH"),
+      );
+
+      expect(variation, isA<OpenAIImageVariationModel>());
+      expect(variation.data.first.url, isA<String>());
+    });
+  });
+
+  group(
+    'embeddings',
+    () async {
+      test('create', () async {
+        final OpenAIEmbeddingsModel embedding =
+            await OpenAI.instance.embedding.create(
+          model: modelExampleId ?? "text-davinci-003",
+          input: "This is a sample text",
+        );
+        expect(embedding, isA<OpenAIEmbeddingsModel>());
+        expect(embedding.data.first, isA<OpenAIEmbeddingsDataModel>());
+        expect(embedding.data.first.embeddings, isA<List<double>>());
+      });
+    },
+  );
 }
