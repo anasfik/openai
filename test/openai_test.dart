@@ -140,6 +140,17 @@ void main() async {
       expect(embedding.data.first.embeddings, isA<List<double>>());
     });
   });
+  group('moderations', () {
+    test('create', () async {
+      final OpenAIModerationModel moderation =
+          await OpenAI.instance.moderation.create(
+        input: "I hate you",
+      );
+
+      expect(moderation, isA<OpenAIModerationModel>());
+      expect(moderation.results.first.categories.hate, isA<bool>());
+    });
+  });
 }
 
 Future<File> getFileFromUrl(String networkUrl) async {
