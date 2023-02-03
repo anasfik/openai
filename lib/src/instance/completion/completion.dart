@@ -38,12 +38,12 @@ class OpenAICompletion implements OpenAICompletionBase {
     String? user,
   }) async {
     assert(
-      prompt is String || prompt is List<String>,
+      prompt is String || prompt is List<String> || prompt == null,
       "prompt field must be a String or List<String>",
     );
 
     assert(
-      stop is String || stop is List<String>,
+      stop is String || stop is List<String> || stop == null,
       "stop field must be a String or List<String>",
     );
 

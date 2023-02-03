@@ -13,7 +13,7 @@ void main() {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "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";
+      OpenAI.apiKey = "YOUR KEY FROM ENVIRONMENT VARIABLE";
       expect(OpenAI.instance, isA<OpenAI>());
     });
 
@@ -23,7 +23,6 @@ void main() {
 
       // I don't have an actual organization, so I will make it null again.
       // ! If you have a real organization, comment the following line.
-
       OpenAI.organization = null;
     });
   });
