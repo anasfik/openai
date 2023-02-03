@@ -2,6 +2,8 @@ import 'package:openai/openai.dart';
 import 'package:test/test.dart';
 
 void main() {
+  String? modelExampleId;
+
   group('authentication', () {
     test('without setting a key', () {
       try {
@@ -11,27 +13,39 @@ void main() {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "YOUR KEY LOADED FROM ENVIRONMENT VARIABLE";
+      OpenAI.apiKey = "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";
       expect(OpenAI.instance, isA<OpenAI>());
     });
 
     test('test setting organization', () {
       OpenAI.organization = "YOUR ORGANIZATION";
       expect(OpenAI.organization, "YOUR ORGANIZATION");
+
+      // I don't have an actual organization, so I will make it null again.
+      // ! If you have a real organization, comment the following line.
+
+      OpenAI.organization = null;
     });
   });
   group('models', () {
-    String? modelExampleId;
-    test('list models', () async {
-      final List<OpenAIModelModel> models = await OpenAI.instance.model.list();
-      expect(models, isA<List<OpenAIModelModel>>());
-      if (models.isNotEmpty) {
-        expect(models.first, isA<OpenAIModelModel>());
-        expect(models.first.id, isNotNull);
-        expect(models.first.id, isA<String>());
-        modelExampleId = models.first.id;
-      }
-    });
+    test(
+      'list models',
+      () async {
+        final List<OpenAIModelModel> models =
+            await OpenAI.instance.model.list();
+        expect(models, isA<List<OpenAIModelModel>>());
+        if (models.isNotEmpty) {
+          expect(models.first, isA<OpenAIModelModel>());
+          expect(models.first.id, isNotNull);
+          expect(models.first.id, isA<String>());
+
+          // trying to get the "text-davinci-003" model id.
+          modelExampleId = models
+              .firstWhere((element) => element.id.contains("davinci-003"))
+              .id;
+        }
+      },
+    );
 
     test('retrieve a model', () async {
       assert(
@@ -48,7 +62,8 @@ void main() {
     test('create', () async {
       final OpenAICompletionModel completion =
           await OpenAI.instance.completion.create(
-        model: "davinci-text-003",
+        // in case the previous test didn't run, we will use a default model id.
+        model: modelExampleId ?? "text-davinci-003",
         prompt: "Dart tests are made to ensure that a function w",
         maxTokens: 5,
         temperature: 0.9,
@@ -58,7 +73,6 @@ void main() {
         bestOf: 1,
         n: 1,
         stream: false,
-        stop: [""],
       );
       expect(completion, isA<OpenAICompletionModel>());
       expect(completion.choices.first, isA<OpenAICompletionModelChoice>());
