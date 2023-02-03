@@ -2,6 +2,9 @@ import 'package:collection/collection.dart';
 import 'sub_models/choice.dart';
 import 'sub_models/usage.dart';
 
+export 'sub_models/choice.dart';
+export 'sub_models/usage.dart';
+
 class OpenAICompletionModel {
   String id;
   DateTime created;
