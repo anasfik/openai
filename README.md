@@ -1,6 +1,6 @@
 # Dart SDK for openAI Apis (GPT-3 & DALL-E)
 
-An open-source SDK  that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart applications. This library provides simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
+An open-source SDK that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart applications. This library provides simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
 
 The package is designed to be lightweight and easy to use, so you can focus on building your application, rather than worrying about the complexities and error caused by dealing with http requests.
 </br>
@@ -11,7 +11,8 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 <i>OpenAI does not have any official Dart library.</I>
 
 #### Note:
-Please note that this client SDK connects directly to openAI APIs using http requests, all requests fields from direct method are just derivations from the openAI Apis, so if you want to use this SDK, please refer first and have a look over [here](https://platform.openai.com/docs/introduction/overview) 
+
+Please note that this client SDK connects directly to openAI APIs using http requests, all requests fields from direct method are just derivations from the openAI Apis, so if you want to use this SDK, please refer first and have a look over [here](https://platform.openai.com/docs/introduction/overview)
 
 ## Progress
 
@@ -27,9 +28,10 @@ Please note that this client SDK connects directly to openAI APIs using http req
 - [x] [Moderation](#moderations)
 
 ## Test
+
 - [x] [Authentication](#authentication)
-- [ ] [Models](#models)
-- [ ] [Completions](#completions)
+- [x] [Models](#models)
+- [x] [Completions](#completions)
 - [ ] [Edits](#edits)
 - [ ] [Images](#images)
 - [ ] [Embeddings](#embeddings)
