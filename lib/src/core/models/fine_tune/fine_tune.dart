@@ -3,6 +3,10 @@ import 'sub_models/event.dart';
 import 'sub_models/hyper_params.dart';
 import 'sub_models/training_files.dart';
 
+export 'sub_models/event.dart';
+export 'sub_models/hyper_params.dart';
+export 'sub_models/training_files.dart';
+
 class OpenAIFineTuneModel {
   final String id;
   final String model;

@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'sub_models/data.dart';
 
+export 'sub_models/data.dart';
+
 class OpenAIImageVariationModel {
   final DateTime created;
   final List<OpenAIVariationData> data;
@@ -20,15 +22,14 @@ class OpenAIImageVariationModel {
   bool operator ==(covariant OpenAIImageVariationModel other) {
     if (identical(this, other)) return true;
     final listEquals = const DeepCollectionEquality().equals;
-  
-    return 
-      other.created == created &&
-      listEquals(other.data, data);
+
+    return other.created == created && listEquals(other.data, data);
   }
 
   @override
   int get hashCode => created.hashCode ^ data.hashCode;
 
   @override
-  String toString() => 'OpenAIImageVariationModel(created: $created, data: $data)';
+  String toString() =>
+      'OpenAIImageVariationModel(created: $created, data: $data)';
 }

@@ -1,5 +1,8 @@
-import 'sub_models/catgeories.dart';
-import 'sub_models/catgeories_scores.dart';
+import 'catgeories.dart';
+import 'catgeories_scores.dart';
+
+export 'catgeories.dart';
+export 'catgeories_scores.dart';
 
 class OpenAIModerationResultModel {
   final OpenAIModerationResultCategoriesModel categories;
@@ -25,18 +28,19 @@ class OpenAIModerationResultModel {
   }
 
   @override
-  String toString() => 'OpenAIModerationResultModel(categories: $categories, categoryScores: $categoryScores, flagged: $flagged)';
+  String toString() =>
+      'OpenAIModerationResultModel(categories: $categories, categoryScores: $categoryScores, flagged: $flagged)';
 
   @override
   bool operator ==(covariant OpenAIModerationResultModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.categories == categories &&
-      other.categoryScores == categoryScores &&
-      other.flagged == flagged;
+
+    return other.categories == categories &&
+        other.categoryScores == categoryScores &&
+        other.flagged == flagged;
   }
 
   @override
-  int get hashCode => categories.hashCode ^ categoryScores.hashCode ^ flagged.hashCode;
+  int get hashCode =>
+      categories.hashCode ^ categoryScores.hashCode ^ flagged.hashCode;
 }

@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'sub_models/permission.dart';
 
+export 'sub_models/permission.dart';
+
 class OpenAIModelModel {
   final String id;
   final String ownedBy;
@@ -40,4 +42,3 @@ class OpenAIModelModel {
   @override
   int get hashCode => id.hashCode ^ ownedBy.hashCode ^ permission.hashCode;
 }
-

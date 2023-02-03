@@ -1,4 +1,6 @@
-import 'sub-models/result/result.dart';
+import 'sub_models/result.dart';
+
+export 'sub_models/result.dart';
 
 class OpenAIModerationModel {
   final String id;
