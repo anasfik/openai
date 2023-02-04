@@ -37,7 +37,7 @@ Please note that this client SDK connects directly to openAI APIs using http req
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
-- [ ] [Files](#files)
+- [x] [Files](#files)
 - [ ] [Fine-tunes](#fine-tunes)
 - [x] [Moderation](#moderations)</br>
 
