@@ -78,7 +78,6 @@ void main() async {
         frequencyPenalty: 0,
         bestOf: 1,
         n: 1,
-        stream: false,
       );
       expect(completion, isA<OpenAICompletionModel>());
       expect(completion.choices.first, isA<OpenAICompletionModelChoice>());
