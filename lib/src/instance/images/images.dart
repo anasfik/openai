@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:http/http.dart';
-import 'package:openai/src/core/builder/base_api_url.dart';
-import 'package:openai/src/core/models/image/image/image.dart';
-import 'package:openai/src/core/networking/client.dart';
+import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/models/image/image/image.dart';
+import 'package:dart_openai/src/core/networking/client.dart';
 
 import '../../core/base/images/base.dart';
 import '../../core/models/image/edit/image_edit.dart';

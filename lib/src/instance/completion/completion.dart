@@ -1,7 +1,7 @@
-import 'package:openai/src/core/builder/base_api_url.dart';
-import 'package:openai/src/core/networking/client.dart';
-import 'package:openai/src/core/utils/logger.dart';
-import 'package:openai/src/core/models/completion/completion.dart';
+import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/networking/client.dart';
+import 'package:dart_openai/src/core/utils/logger.dart';
+import 'package:dart_openai/src/core/models/completion/completion.dart';
 
 import '../../core/base/completion.dart';
 

@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:openai/src/core/builder/headers.dart';
-import 'package:openai/src/core/utils/logger.dart';
+import 'package:dart_openai/src/core/builder/headers.dart';
+import 'package:dart_openai/src/core/utils/logger.dart';
 
 import '../exceptions/request_failure.dart';
 

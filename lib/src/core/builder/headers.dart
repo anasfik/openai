@@ -1,6 +1,6 @@
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
-import 'package:openai/src/core/utils/logger.dart';
+import 'package:dart_openai/src/core/utils/logger.dart';
 
 @immutable
 class HeadersBuilder {

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:openai/openai.dart';
+import 'package:dart_openai/openai.dart';
 import 'package:test/test.dart';
 
 void main() async {

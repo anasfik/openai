@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:openai/src/instance/edits/edits.dart';
-import 'package:openai/src/instance/moderations/moderations.dart';
+import 'package:dart_openai/src/instance/edits/edits.dart';
+import 'package:dart_openai/src/instance/moderations/moderations.dart';
 
 import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
@@ -56,6 +56,7 @@ class OpenAI extends OpenAIClientBase {
   static set organization(String? organizationId) {
     HeadersBuilder.organization = organizationId;
   }
+
   static String? get organization => HeadersBuilder.organization;
 
   /// This controls whether to log steps inside the process of making a request, this helps debugging and pointing where something went wrong.

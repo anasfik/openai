@@ -1,8 +1,9 @@
-name: openai
+name: dart_openai
 description: Dart SDK for openAI Apis (GPT-3 & DALL-E)
 version: 1.0.0
 homepage: https://github.com/anasfik/openai
 repository: https://github.com/anasfik/openai
+documentation: https://github.com/anasfik/openai/blob/main/README.md
 
 environment:
   sdk: ">=2.18.5 <3.0.0"
@@ -10,6 +11,9 @@ environment:
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
+
 dependencies:
   http: ^0.13.5
   path: ^1.8.0
+  meta: ^1.9.0
+  collection: ^1.17.1

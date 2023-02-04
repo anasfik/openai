@@ -1,6 +1,6 @@
-import 'package:openai/src/core/builder/base_api_url.dart';
-import 'package:openai/src/core/models/moderation/moderation.dart';
-import 'package:openai/src/core/networking/client.dart';
+import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/models/moderation/moderation.dart';
+import 'package:dart_openai/src/core/networking/client.dart';
 
 import '../../core/base/moderations/base.dart';
 
