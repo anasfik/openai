@@ -29,7 +29,7 @@ Please note that this client SDK connects directly to openAI APIs using http req
   - [ ] With events `Stream` responses
 - [x] [Moderation](#moderations)
 
-## Test
+## Testing Progress
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
