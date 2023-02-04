@@ -4,6 +4,7 @@ import 'sub_models/usage.dart';
 
 export 'sub_models/choice.dart';
 export 'sub_models/usage.dart';
+export 'stream/completion.dart';
 
 class OpenAICompletionModel {
   String id;

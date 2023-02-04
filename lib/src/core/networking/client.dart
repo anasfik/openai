@@ -79,6 +79,39 @@ class OpenAINetworkingClient {
     }
   }
 
+  static Stream<T> postStream<T>({
+    required String to,
+    required T Function(Map<String, dynamic>) onSuccess,
+    required Map<String, dynamic> body,
+  }) async* {
+    final http.Client client = http.Client();
+    final clientRequest = client.post(
+      Uri.parse(to),
+      headers: HeadersBuilder.build(),
+      body: jsonEncode(body),
+    );
+    final response = clientRequest.asStream();
+
+    await for (var chunk in response) {
+      String eventData = utf8.decode(chunk.bodyBytes);
+
+      List<String> dataLines = eventData.split("\n");
+
+      for (var line in dataLines) {
+        if (line.startsWith("data: ")) {
+          String data = line.substring(6);
+          if (data.startsWith("[DONE]")) {
+            client.close();
+            return;
+          }
+          final decoded = jsonDecode(data) as Map<String, dynamic>;
+
+          yield onSuccess(decoded);
+        }
+      }
+    }
+  }
+
   static Future imageEditForm<T>({
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
