@@ -197,7 +197,7 @@ class OpenAINetworkingClient {
   static Future<T> fileUpload<T>({
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
-    required Map<String, dynamic> body,
+    required Map<String, String> body,
     required File file,
   }) async {
     OpenAILogger.log("starting request to $to");
@@ -208,10 +208,10 @@ class OpenAINetworkingClient {
     request.headers.addAll(HeadersBuilder.build());
 
     final http.MultipartFile multiPartFile =
-        await http.MultipartFile.fromPath("image", file.path);
+        await http.MultipartFile.fromPath("file", file.path);
 
     request.files.add(multiPartFile);
-
+    request.fields.addAll(body);
     final http.StreamedResponse response = await request.send();
 
     OpenAILogger.log(

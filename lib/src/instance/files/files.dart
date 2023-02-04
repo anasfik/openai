@@ -73,7 +73,7 @@ class OpenAIFiles implements OpenAIFilesBase {
     required String purpose,
   }) async {
     return await OpenAINetworkingClient.fileUpload(
-      to: endpoint,
+      to: BaseApiUrlBuilder.build(endpoint),
       body: {
         "purpose": purpose,
       },

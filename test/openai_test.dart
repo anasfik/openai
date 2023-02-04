@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -7,9 +8,13 @@ import 'package:test/test.dart';
 void main() async {
   final imageFileExample = await getFileFromUrl(
       "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png");
+
   final maskFileExample = await getFileFromUrl(
       "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png");
+
   String? modelExampleId;
+
+  String? fileIdFromFilesApi;
 
   group('authentication', () {
     test('without setting a key', () {
@@ -20,7 +25,7 @@ void main() async {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "YOUR ENVIRONMENT KEY";
+      OpenAI.apiKey = "YOUR API KEY FROM ENVIRONMENT VARIABLE";
       expect(OpenAI.instance, isA<OpenAI>());
     });
 
@@ -156,6 +161,59 @@ void main() async {
     });
   });
 
+  group("files", () {
+    test("upload", () async {
+      final OpenAIFileModel file = await OpenAI.instance.file.upload(
+        file: jsonLFileExample(),
+        purpose: "fine-tune",
+      );
+
+      expect(file, isA<OpenAIFileModel>());
+      expect(file.id, isA<String>());
+      expect(file.id, isNotNull);
+    });
+    test("list", () async {
+      final List<OpenAIFileModel> files = await OpenAI.instance.file.list();
+      expect(files, isA<List<OpenAIFileModel>>());
+      if (files.isNotEmpty) {
+        expect(files.first, isA<OpenAIFileModel>());
+        expect(files.first.id, isNotNull);
+        expect(files.first.id, isA<String>());
+
+        // get the id of the file that we uploaded in the previous test.
+        fileIdFromFilesApi = files
+            .firstWhere((element) => element.fileName.contains("example.jsonl"))
+            .id;
+      }
+    });
+
+    test("retrive", () async {
+      assert(
+        fileIdFromFilesApi != null,
+        "please set a file id that is not null, or let the previous test run first to get a file id example (if it does exists)",
+      );
+
+      final OpenAIFileModel file =
+          await OpenAI.instance.file.retrieve(fileIdFromFilesApi!);
+
+      expect(file, isA<OpenAIFileModel>());
+      expect(file.id, isA<String>());
+      expect(file.id, isNotNull);
+    });
+    test("retrieve content", () async {
+      final dynamic content =
+          await OpenAI.instance.file.retrieveContent(fileIdFromFilesApi!);
+      expect(content, isNotNull);
+    });
+
+    test("delete", () async {
+      final bool file = await OpenAI.instance.file.delete(fileIdFromFilesApi!);
+      expect(file, isA<bool>());
+      // we are trying to delete the file that we uploaded in the previous test.
+      // so it should return true.
+      expect(file, isTrue);
+    });
+  });
   group('moderations', () {
     test('create', () async {
       final OpenAIModerationModel moderation =
@@ -167,6 +225,15 @@ void main() async {
       expect(moderation.results.first.categories.hate, isA<bool>());
     });
   });
+}
+
+File jsonLFileExample() {
+  final file = File("example.jsonl");
+  file.writeAsStringSync(
+    jsonEncode(
+        {"prompt": "<prompt text>", "completion": "<ideal generated text>"}),
+  );
+  return file;
 }
 
 Future<File> getFileFromUrl(String networkUrl) async {
