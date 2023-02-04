@@ -20,7 +20,7 @@ void main() async {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "YOUR API KEY FROM ENVIRONMENT VARIABLE";
+      OpenAI.apiKey = "YOUR ENVIRONMENT KEY";
       expect(OpenAI.instance, isA<OpenAI>());
     });
 
@@ -84,6 +84,22 @@ void main() async {
       expect(completion.choices.first.text, isNotNull);
       expect(completion.choices.first.text, isA<String>());
     });
+    test('create with a stream', () async {
+      final Stream<OpenAIStreamCompletionModel> completion =
+          OpenAI.instance.completion.createStream(
+        // in case the previous test didn't run, we will use a default model id.
+        model: modelExampleId ?? "text-davinci-003",
+        prompt: "Dart tests are made to ensure that a function w",
+        maxTokens: 5,
+        temperature: 0.9,
+        topP: 1,
+        presencePenalty: 0,
+        frequencyPenalty: 0,
+        bestOf: 1,
+        n: 1,
+      );
+      expect(completion, isA<Stream<OpenAIStreamCompletionModel>>());
+    });
   });
   group('edits', () {
     test('create', () async {
@@ -139,6 +155,7 @@ void main() async {
       expect(embedding.data.first.embeddings, isA<List<double>>());
     });
   });
+
   group('moderations', () {
     test('create', () async {
       final OpenAIModerationModel moderation =
