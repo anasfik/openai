@@ -20,11 +20,13 @@ Please note that this client SDK connects directly to openAI APIs using http req
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
 - [x] [Completions](#completions)
+  - [x] With `Stream` responses
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
 - [x] [Files](#files)
 - [x] [Fine-tunes](#fine-tunes)
+  - [ ] With events `Stream` responses
 - [x] [Moderation](#moderations)
 
 ## Test
