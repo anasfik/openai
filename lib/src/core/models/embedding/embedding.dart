@@ -6,15 +6,23 @@ export 'sub-models/data.dart';
 export 'sub-models/usage.dart';
 
 class OpenAIEmbeddingsModel {
+  /// The data returned by the embeddings request.
   List<OpenAIEmbeddingsDataModel> data;
+
+  /// The model used to generate the embeddings.
   String model;
-  OpenAIEmbeddingsUsageModel usage;
+
+  /// The usage of the embeddings, if any.
+  OpenAIEmbeddingsUsageModel? usage;
+
+  /// This class is used to represent an OpenAI embeddings request.
   OpenAIEmbeddingsModel({
     required this.data,
     required this.model,
     required this.usage,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEmbeddingsModel] object.
   factory OpenAIEmbeddingsModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsModel(
       data: List<OpenAIEmbeddingsDataModel>.from(
