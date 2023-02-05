@@ -1,12 +1,26 @@
 class OpenAIModerationResultCategoriesModel {
+  /// The hate category.
   final bool hate;
+
+  /// The hate and threatening category.
   final bool hateAndThreatening;
+
+  /// The self harm category.
   final bool selfHarm;
+
+  /// The sexual category.
   final bool sexual;
+
+  /// The sexual and minors category.
   final bool sexualAndMinors;
+
+  /// The violence category.
   final bool violence;
+
+  /// The violence and graphic category.
   final bool violenceAndGraphic;
 
+  /// This class is used to represent an OpenAI moderation job result categories.
   OpenAIModerationResultCategoriesModel({
     required this.hate,
     required this.hateAndThreatening,
@@ -17,6 +31,7 @@ class OpenAIModerationResultCategoriesModel {
     required this.violenceAndGraphic,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModerationResultCategoriesModel] object.
   factory OpenAIModerationResultCategoriesModel.fromJson(
       Map<String, dynamic> json) {
     return OpenAIModerationResultCategoriesModel(

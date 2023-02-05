@@ -1,12 +1,26 @@
 class OpenAIModerationResultScoresModel {
+  /// The hate score of the moderation job.
   final double hate;
+
+  /// The hate and threatening score of the moderation job.
   final double hateAndThreatening;
+
+  /// The self harm score of the moderation job.
   final double selfHarm;
+
+  /// The sexual score of the moderation job.
   final double sexual;
+
+  /// The sexual and minors score of the moderation job.
   final double sexualAndMinors;
+
+  /// The violence score of the moderation job.
   final double violence;
+
+  /// The violence and graphic score of the moderation job.
   final double violenceAndGraphic;
 
+  /// This class is used to represent an OpenAI moderation job result scores.
   OpenAIModerationResultScoresModel({
     required this.hate,
     required this.hateAndThreatening,
@@ -17,6 +31,7 @@ class OpenAIModerationResultScoresModel {
     required this.violenceAndGraphic,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModerationResultScoresModel] object.
   factory OpenAIModerationResultScoresModel.fromJson(
       Map<String, dynamic> json) {
     return OpenAIModerationResultScoresModel(

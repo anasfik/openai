@@ -5,16 +5,23 @@ export 'catgeories.dart';
 export 'catgeories_scores.dart';
 
 class OpenAIModerationResultModel {
+  /// The categories of the moderation job.
   final OpenAIModerationResultCategoriesModel categories;
+
+  /// The category scores of the moderation job.
   final OpenAIModerationResultScoresModel categoryScores;
+
+  /// The flagged status of the moderation job.
   final bool flagged;
 
+  /// This class is used to represent an OpenAI moderation job result.
   OpenAIModerationResultModel({
     required this.categories,
     required this.categoryScores,
     required this.flagged,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModerationResultModel] object.
   factory OpenAIModerationResultModel.fromJson(Map<String, dynamic> json) {
     return OpenAIModerationResultModel(
       categories: OpenAIModerationResultCategoriesModel.fromJson(
