@@ -16,6 +16,8 @@ void main() async {
 
   String? fileIdFromFilesApi;
 
+  String? fineTuneExampleId;
+
   group('authentication', () {
     test('without setting a key', () {
       try {
@@ -25,7 +27,9 @@ void main() async {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "YOUR API KEY FROM ENVIRONMENT VARIABLE";
+      // OpenAI.apiKey = "YOUR API KEY FROM ENVIRONMENT VARIABLE";
+      OpenAI.apiKey = "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";
+
       expect(OpenAI.instance, isA<OpenAI>());
     });
 
@@ -206,8 +210,11 @@ void main() async {
       expect(content, isNotNull);
     });
 
+    // ! this will throw an error if you try ti delete the new uploaded file from the upload() method because it will be still processing, so please, wait a few seconds before running this test, otherwise get a file id from the list() method and set it to the fileIdFromFilesApi variable.
     test("delete", () async {
-      final bool file = await OpenAI.instance.file.delete(fileIdFromFilesApi!);
+      final bool file = await OpenAI.instance.file
+          .delete("READ THE COMMENT ABOVE" // fileIdFromFilesApi!,
+              );
       expect(file, isA<bool>());
       // we are trying to delete the file that we uploaded in the previous test.
       // so it should return true.
@@ -215,9 +222,42 @@ void main() async {
     });
   });
 
-// group("fine-tune", () {
+  group("fine-tune", () {
+    test('create', () async {
+      final OpenAIFineTuneModel fineTune =
+          await OpenAI.instance.fineTune.create(
+        trainingFile: fileIdFromFilesApi!,
+      );
+      expect(fineTune, isA<OpenAIFineTuneModel>());
+      expect(fineTune.id, isA<String>());
+      expect(fineTune.id, isNotNull);
+      fineTuneExampleId = fineTune.id;
+    });
+    test('list', () async {
+      final List<OpenAIFineTuneModel> fineTunes =
+          await OpenAI.instance.fineTune.list();
+      expect(fineTunes, isA<List<OpenAIFineTuneModel>>());
+      if (fineTunes.isNotEmpty) {
+        expect(fineTunes.first, isA<OpenAIFineTuneModel>());
+        expect(fineTunes.first.id, isNotNull);
+      }
+    });
+    test('retrieve', () async {
+      final OpenAIFineTuneModel fineTune =
+          await OpenAI.instance.fineTune.retrieve(fineTuneExampleId!);
 
-// });
+      expect(fineTune, isA<OpenAIFineTuneModel>());
+      expect(fineTune.id, isA<String>());
+      expect(fineTune.id, equals(fineTuneExampleId!));
+    });
+    test("cancel", () async {
+      OpenAIFineTuneModel cancelledFineTune =
+          await OpenAI.instance.fineTune.cancel(fineTuneExampleId!);
+      expect(cancelledFineTune, isA<OpenAIFineTuneModel>());
+      expect(cancelledFineTune.id, isA<String>());
+      expect(cancelledFineTune.id, equals(fineTuneExampleId!));
+    });
+  });
   group('moderations', () {
     test('create', () async {
       final OpenAIModerationModel moderation =

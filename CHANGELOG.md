@@ -1,3 +1,7 @@
+## 1.0.5
+
+- Added error handling explanation, example in the README.md
+
 ## 1.0.4
 
 - Added clarifications in READMe.md

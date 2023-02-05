@@ -64,8 +64,8 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// List<OpenAIFineTuneModel> fineTunes = await OpenAI.instance.fineTune.list();
   /// ```
   @override
-  Future<List> list() async {
-    return await OpenAINetworkingClient.get(
+  Future<List<OpenAIFineTuneModel>> list() async {
+    return await OpenAINetworkingClient.get<List<OpenAIFineTuneModel>>(
       from: BaseApiUrlBuilder.build(endpoint),
       onSuccess: (Map<String, dynamic> response) {
         final dataList = response['data'] as List;
@@ -125,10 +125,10 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.retrieve("FINE TUNE ID");
   /// ```
   @override
-  Future retrieve(String fineTuneId) async {
+  Future<OpenAIFineTuneModel> retrieve(String fineTuneId) async {
     final String fineTuneRetrieve = "$endpoint/$fineTuneId";
 
-    return await OpenAINetworkingClient.get(
+    return await OpenAINetworkingClient.get<OpenAIFineTuneModel>(
       from: BaseApiUrlBuilder.build(fineTuneRetrieve),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFineTuneModel.fromJson(response);
