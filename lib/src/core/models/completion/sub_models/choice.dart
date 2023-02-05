@@ -16,7 +16,7 @@ class OpenAICompletionModelChoice {
       text: json['text'],
       index: json['index'],
       logprobs: json['logprobs'],
-      finishReason: json['finish_reason'],
+      finishReason: json['finishReason'],
     );
   }
 

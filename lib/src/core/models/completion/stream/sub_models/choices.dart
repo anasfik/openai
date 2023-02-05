@@ -2,13 +2,13 @@ class OpenAIStreamCompletionModelChoice {
   String text;
   int index;
   dynamic logprobs;
-  dynamic finish_reason;
+  dynamic finishReason;
 
   OpenAIStreamCompletionModelChoice({
     required this.text,
     required this.index,
     required this.logprobs,
-    required this.finish_reason,
+    required this.finishReason,
   });
 
   factory OpenAIStreamCompletionModelChoice.fromJson(
@@ -17,7 +17,7 @@ class OpenAIStreamCompletionModelChoice {
       text: json['text'],
       index: json['index'],
       logprobs: json['logprobs'],
-      finish_reason: json['finish_reason'],
+      finishReason: json['finishReason'],
     );
   }
 }
