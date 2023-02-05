@@ -12,7 +12,7 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 
 #### Note:
 
-Please note that this client SDK connects directly to openAI APIs using http requests, all requests fields from direct method are just derivations from the openAI Apis, so if you want to use this SDK, please refer first and have a look over [here](https://platform.openai.com/docs/introduction/overview)
+Please note that this client SDK connects directly to openAI APIs using http requests, it don't provide any additional APIs than what exists [here](https://platform.openai.com/docs/introduction/overview).
 
 ## Progress
 
