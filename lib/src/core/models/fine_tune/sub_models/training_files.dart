@@ -1,10 +1,20 @@
 class OpenAiFineTuneTrainingFilesModel {
+  /// The id of the file.
   final String id;
+
+  /// The number of bytes in the file.
   final int bytes;
+
+  /// The time the file was created.
   final DateTime createdAt;
+
+  /// The name of the file.
   final String filename;
+
+  /// The purpose of the file.
   final String? purpose;
 
+  /// This class is used to represent an OpenAI fine-tune training file.
   OpenAiFineTuneTrainingFilesModel({
     required this.id,
     required this.bytes,
@@ -13,6 +23,7 @@ class OpenAiFineTuneTrainingFilesModel {
     required this.purpose,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAiFineTuneTrainingFilesModel] object.
   factory OpenAiFineTuneTrainingFilesModel.fromJson(Map<String, dynamic> json) {
     return OpenAiFineTuneTrainingFilesModel(
       id: json['id'],

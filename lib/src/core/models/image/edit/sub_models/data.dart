@@ -1,11 +1,13 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class OpenAiImageEditDataModel {
+  /// The url of the image.
   final String url;
 
+  /// This class is used to represent an OpenAI image edit data.
   OpenAiImageEditDataModel({
     required this.url,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAiImageEditDataModel] object.
   factory OpenAiImageEditDataModel.fromJson(Map<String, dynamic> json) {
     return OpenAiImageEditDataModel(
       url: json['url'],
@@ -18,9 +20,8 @@ class OpenAiImageEditDataModel {
   @override
   bool operator ==(covariant OpenAiImageEditDataModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.url == url;
+
+    return other.url == url;
   }
 
   @override

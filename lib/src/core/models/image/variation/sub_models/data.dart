@@ -1,10 +1,13 @@
 class OpenAIVariationData {
+  /// The url of the image.
   final String url;
 
+  /// This class is used to represent an OpenAI image variation data.
   OpenAIVariationData({
     required this.url,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIVariationData] object.
   factory OpenAIVariationData.fromJson(Map<String, dynamic> json) {
     return OpenAIVariationData(url: json['url']);
   }
