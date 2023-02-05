@@ -101,7 +101,7 @@ Retrieves a model instance, providing basic information about the model such as 
 ## Create edit
 
 ```dart
- OpenAIEditModel a = await OpenAI.instance.edit.create(
+ OpenAIEditModel edit = await OpenAI.instance.edit.create(
    model: "text-davinci-edit-001",
    input: " Hi!, I am a bot!!!!,",
    instruction: "remove all ! the input ",
