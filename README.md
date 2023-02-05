@@ -244,3 +244,20 @@ OpenAIModerationModel moderationResult = await OpenAI.instance.moderation.create
   input: "I want to kill him",
 );
 ```
+
+# Error Handling
+
+Any time an error happens from the OpenAI ends (As Example: when you try to create an image variation from a non-image file ), a `RequestFailedException` will be thrown automatically inside your Flutter / Dart app, you can use a `try-catch` in order to catch that error, and make an action based on it:
+
+```dart
+try {
+
+// This will throw an error.
+ final errorVariation = await OpenAI.instance.image.variation(
+  image: File(/*PATH OF NON-IMAGE FILE*/),
+ );
+} on RequestFailedException catch(e) {
+ print(e.message);
+ print(e.statusCode)
+}
+```

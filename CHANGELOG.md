@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Added clarifications in READMe.md
+
 ## 1.0.3
 
 - Fixed issues
