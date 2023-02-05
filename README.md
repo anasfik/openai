@@ -2,7 +2,7 @@
 
 An open-source SDK that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart applications. This library provides simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
 
-The package is designed to be lightweight and easy to use, so you can focus on building your application, rather than worrying about the complexities and error caused by dealing with http requests.
+The package is designed to be lightweight and easy to use, so you can focus on building your application, rather than worrying about the complexities and error caused by dealing with HTTP requests.
 </br>
 </br>
 
@@ -14,7 +14,7 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 
 Please note that this client SDK connects directly to openAI APIs using http requests, it doesn't provide any additional APIs than what exists [here](https://platform.openai.com/docs/introduction/overview).
 
-## Progress
+## Code Progress
 
 - [ ] ChatGPT ( as soon as possible when it's released )
 - [x] [Authentication](#authentication)
@@ -60,6 +60,8 @@ void main() {
  OpenAI.organization = "ORGANIZATION ID";
 ```
 
+[Learn More From Here.](https://platform.openai.com/docs/api-reference/authentication)
+
 </br>
 
 # Models
@@ -82,6 +84,8 @@ Retrieves a model instance, providing basic information about the model such as 
  print(model.id)
 ```
 
+[Learn More From Here.](https://platform.openai.com/docs/api-reference/models)
+
 </br>
 
 # Completions
@@ -96,6 +100,8 @@ Retrieves a model instance, providing basic information about the model such as 
  );
 ```
 
+[Learn More From Here.](https://platform.openai.com/docs/api-reference/completions)
+
 </br>
 
 # Edits
@@ -109,6 +115,8 @@ Retrieves a model instance, providing basic information about the model such as 
    instruction: "remove all ! the input ",
  );
 ```
+
+[Learn More From Here.](https://platform.openai.com/docs/api-reference/edits)
 
 </br>
 
@@ -143,6 +151,8 @@ OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
 );
 ```
 
+[Learn More From Here.](https://platform.openai.com/docs/api-reference/images)
+
 </br>
 
 # Embeddings
@@ -155,6 +165,8 @@ OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
   input: "This is a text input just to test",
 );;
 ```
+
+[Learn More From Here.](https://platform.openai.com/docs/api-reference/embeddings)
 
 </br>
 
@@ -192,6 +204,8 @@ OpenAIFileModel file = await OpenAI.instance.file.retrieve("FILE ID");
 ```dart
 dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
 ```
+
+[Learn More From Here.](https://platform.openai.com/docs/api-reference/files)
 
 </br>
 
@@ -235,6 +249,8 @@ OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE 
  bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
 ```
 
+[Learn More From Here.](https://platform.openai.com/docs/api-reference/fine-tunes)
+
 </br>
  
 # Moderations
@@ -244,6 +260,9 @@ OpenAIModerationModel moderationResult = await OpenAI.instance.moderation.create
   input: "I want to kill him",
 );
 ```
+[Learn More From Here.](https://platform.openai.com/docs/api-reference/moderations)
+
+<br>
 
 # Error Handling
 
