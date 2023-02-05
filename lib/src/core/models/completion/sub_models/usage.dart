@@ -1,14 +1,21 @@
 class OpenAICompletionModelUsage {
-  int promptTokens;
-  int completionTokens;
-  int totalTokens;
+  /// The number of tokens in the prompt.
+  int? promptTokens;
 
+  /// The number of tokens in the completion.
+  int? completionTokens;
+
+  /// The total number of tokens in the prompt and completion.
+  int? totalTokens;
+
+  /// This class is used to represent the usage of an OpenAI completion.
   OpenAICompletionModelUsage({
     required this.promptTokens,
     required this.completionTokens,
     required this.totalTokens,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAICompletionModelUsage] object.
   factory OpenAICompletionModelUsage.fromJson(Map<String, dynamic> json) {
     return OpenAICompletionModelUsage(
       promptTokens: json['prompt_tokens'],
