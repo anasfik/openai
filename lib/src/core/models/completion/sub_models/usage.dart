@@ -1,12 +1,12 @@
 class OpenAICompletionModelUsage {
   /// The number of tokens in the prompt.
-  int? promptTokens;
+  final int? promptTokens;
 
   /// The number of tokens in the completion.
-  int? completionTokens;
+  final int? completionTokens;
 
   /// The total number of tokens in the prompt and completion.
-  int? totalTokens;
+  final int? totalTokens;
 
   /// This class is used to represent the usage of an OpenAI completion.
   OpenAICompletionModelUsage({

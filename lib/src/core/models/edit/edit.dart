@@ -6,6 +6,7 @@ export 'sub_models/choice.dart';
 export 'sub_models/usage.dart';
 
 class OpenAIEditModel {
+  
   final DateTime created;
   final List<OpenAIEditModelChoice> choices;
   final OpenAIEditModelUsage usage;
