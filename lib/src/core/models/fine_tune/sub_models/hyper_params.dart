@@ -1,9 +1,17 @@
 class OpenAiFineTuneHyperParamsModel {
+  /// The batch size used for fine-tuning.
   final int? batchSize;
+
+  /// The learning rate multiplier used for fine-tuning.
   final double? learningRateMultiplier;
+
+  /// The number of epochs used for fine-tuning.
   final int? nEpochs;
+
+  /// The prompt loss weight used for fine-tuning.
   final double? promptLossWeight;
 
+  /// This class is used to represent the hyper-parameters used for fine-tuning.
   OpenAiFineTuneHyperParamsModel({
     required this.batchSize,
     required this.learningRateMultiplier,
@@ -11,6 +19,7 @@ class OpenAiFineTuneHyperParamsModel {
     required this.promptLossWeight,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAiFineTuneHyperParamsModel] object.
   factory OpenAiFineTuneHyperParamsModel.fromJson(Map<String, dynamic> json) {
     return OpenAiFineTuneHyperParamsModel(
       batchSize: json['batch_size'],

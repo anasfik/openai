@@ -1,17 +1,24 @@
 class OpenAIFineTuneEventModel {
-  final int createdAt;
+  /// The date the event was created.
+  final DateTime createdAt;
+
+  /// The level of the event.
   final String? level;
+
+  /// The message of the event.
   final String? message;
 
+  /// This class is used to represent an OpenAI fine-tune event.
   OpenAIFineTuneEventModel({
     required this.createdAt,
     required this.level,
     required this.message,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFineTuneEventModel] object.
   factory OpenAIFineTuneEventModel.fromJson(Map<String, dynamic> json) {
     return OpenAIFineTuneEventModel(
-      createdAt: json['created_at'],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(json['created_at'] * 1000),
       level: json['level'],
       message: json['message'],
     );
