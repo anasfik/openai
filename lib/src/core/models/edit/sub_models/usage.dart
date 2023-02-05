@@ -1,14 +1,21 @@
 class OpenAIEditModelUsage {
+  /// The number of tokens in the prompt.
   final int promptTokens;
+
+  /// The number of tokens in the completion.
   final int completionTokens;
+
+  /// The total number of tokens in the prompt and completion.
   final int totalTokens;
 
+  /// This class is used to represent the usage of an OpenAI completion.
   OpenAIEditModelUsage({
     required this.promptTokens,
     required this.completionTokens,
     required this.totalTokens,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEditModelUsage] object.
   factory OpenAIEditModelUsage.fromJson(Map<String, dynamic> json) {
     return OpenAIEditModelUsage(
       promptTokens: json['prompt_tokens'],
