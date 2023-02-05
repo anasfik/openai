@@ -1,11 +1,15 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/models/file/file.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
+import 'package:meta/meta.dart';
 
 import 'dart:io';
 
 import '../../core/base/files/base.dart';
+import '../../core/utils/logger.dart';
 
+@immutable
+@protected
 class OpenAIFiles implements OpenAIFilesBase {
   @override
   String get endpoint => "/files";
@@ -99,5 +103,9 @@ class OpenAIFiles implements OpenAIFilesBase {
         return isDeleted;
       },
     );
+  }
+
+  OpenAIFiles() {
+    OpenAILogger.logEndpoint(endpoint);
   }
 }

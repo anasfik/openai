@@ -1,10 +1,13 @@
 import 'package:dart_openai/src/core/models/edit/edit.dart';
+import 'package:meta/meta.dart';
 
 import '../../core/base/edits/edits.dart';
 import '../../core/builder/base_api_url.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
+@immutable
+@protected
 class OpenAIEdits implements OpenAIEditsBase {
   @override
   String get endpoint => "/edits";

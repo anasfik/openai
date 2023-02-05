@@ -2,9 +2,12 @@ import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:dart_openai/src/core/models/completion/completion.dart';
+import 'package:meta/meta.dart';
 
 import '../../core/base/completion.dart';
 
+@immutable
+@protected
 class OpenAICompletion implements OpenAICompletionBase {
   @override
   String get endpoint => "/completions";

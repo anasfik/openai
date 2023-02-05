@@ -1,10 +1,13 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/models/embedding/embedding.dart';
+import 'package:meta/meta.dart';
 
 import '../../core/base/embeddings/base.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
+@immutable
+@protected
 class OpenAIEmbedding implements OpenAIEmbeddingBase {
   @override
   String get endpoint => "/embeddings";

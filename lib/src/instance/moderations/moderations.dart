@@ -3,7 +3,12 @@ import 'package:dart_openai/src/core/models/moderation/moderation.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 
 import '../../core/base/moderations/base.dart';
+import 'package:meta/meta.dart';
 
+import '../../core/utils/logger.dart';
+
+@immutable
+@protected
 class OpenAIModeration implements OpenAIModerationBase {
   @override
   String get endpoint => "/moderations";
@@ -30,5 +35,9 @@ class OpenAIModeration implements OpenAIModerationBase {
       },
       to: BaseApiUrlBuilder.build(endpoint),
     );
+  }
+
+  OpenAIModeration() {
+    OpenAILogger.logEndpoint(endpoint);
   }
 }
