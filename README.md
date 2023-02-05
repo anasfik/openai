@@ -49,12 +49,12 @@ We highly recommend loading your secret key at runtime using an `.env` file, you
 
 ```dart
 void main() {
- OpenAI.apiKey = dotenv.env["OPEN_AI_KEY"]!;
+ OpenAI.apiKey = dotenv.env["OPEN_AI_API_KEY"]!;
  // ..
 }
 ```
 
-## Requesting organization
+## Setting an organization
 
 ```dart
  OpenAI.organization = "ORGANIZATION ID";
