@@ -4,16 +4,23 @@ import 'sub_models/permission.dart';
 export 'sub_models/permission.dart';
 
 class OpenAIModelModel {
+  /// The ID of the model.
   final String id;
+
+  /// The name of the organization that owns the model.
   final String ownedBy;
+
+  /// The permissions of the model.
   final List<OpenAIModelModelPermission> permission;
 
+  /// This class is used to represent an OpenAI model.
   OpenAIModelModel({
     required this.id,
     required this.ownedBy,
     required this.permission,
   });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModelModel] object.
   factory OpenAIModelModel.fromJson(Map<String, dynamic> json) {
     return OpenAIModelModel(
       id: json['id'],

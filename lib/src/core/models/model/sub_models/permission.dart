@@ -1,36 +1,58 @@
 class OpenAIModelModelPermission {
+  /// The ID of the permission.
   final String? id;
-  final String? object;
-  final int? created;
+
+  /// The time the permission was created.
+  final DateTime? created;
+
+  /// Whether the permission allows the user to create engines.
   final bool? allowCreateEngine;
+
+  /// Whether the permission allows the user to sample from the model.
   final bool? allowSampling;
+
+  /// Whether the permission allows the user to view logprobs.
   final bool? allowLogprobs;
+
+  /// Whether the permission allows the user to search indices.
   final bool? allowSearchIndices;
+
+  /// Whether the permission allows the user to view the model.
   final bool? allowView;
+
+  /// Whether the permission allows the user to fine-tune the model.
   final bool? allowFineTuning;
+
+  /// The organization of the permission.
   final String? organization;
+
+  /// The group of the permission.
   final String? group;
+
+  /// Whether the permission is blocking.
   final bool? isBlocking;
 
-  OpenAIModelModelPermission(
-      {this.id,
-      this.object,
-      this.created,
-      this.allowCreateEngine,
-      this.allowSampling,
-      this.allowLogprobs,
-      this.allowSearchIndices,
-      this.allowView,
-      this.allowFineTuning,
-      this.organization,
-      this.group,
-      this.isBlocking});
+  /// This class is used to represent an OpenAI model permission, it's used in [OpenAIModelModel].
+  OpenAIModelModelPermission({
+    this.id,
+    this.created,
+    this.allowCreateEngine,
+    this.allowSampling,
+    this.allowLogprobs,
+    this.allowSearchIndices,
+    this.allowView,
+    this.allowFineTuning,
+    this.organization,
+    this.group,
+    this.isBlocking,
+  });
 
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModelModelPermission] object.
   factory OpenAIModelModelPermission.fromJson(Map<String, dynamic> json) {
     return OpenAIModelModelPermission(
       id: json['id'],
-      object: json['object'],
-      created: json['created'],
+      created:
+          DateTime.fromMillisecondsSinceEpoch((json['created'] ?? 0) * 1000),
       allowCreateEngine: json['allow_create_engine'],
       allowSampling: json['allow_sampling'],
       allowLogprobs: json['allow_logprobs'],
@@ -45,7 +67,7 @@ class OpenAIModelModelPermission {
 
   @override
   String toString() {
-    return 'OpenAIModelModelPermission(id: $id, object: $object, created: $created, allowCreateEngine: $allowCreateEngine, allowSampling: $allowSampling, allowLogprobs: $allowLogprobs, allowSearchIndices: $allowSearchIndices, allowView: $allowView, allowFineTuning: $allowFineTuning, organization: $organization, group: $group, isBlocking: $isBlocking)';
+    return 'OpenAIModelModelPermission(id: $id, created: $created, allowCreateEngine: $allowCreateEngine, allowSampling: $allowSampling, allowLogprobs: $allowLogprobs, allowSearchIndices: $allowSearchIndices, allowView: $allowView, allowFineTuning: $allowFineTuning, organization: $organization, group: $group, isBlocking: $isBlocking)';
   }
 
   @override
@@ -53,7 +75,6 @@ class OpenAIModelModelPermission {
     if (identical(this, other)) return true;
 
     return other.id == id &&
-        other.object == object &&
         other.created == created &&
         other.allowCreateEngine == allowCreateEngine &&
         other.allowSampling == allowSampling &&
@@ -69,7 +90,6 @@ class OpenAIModelModelPermission {
   @override
   int get hashCode {
     return id.hashCode ^
-        object.hashCode ^
         created.hashCode ^
         allowCreateEngine.hashCode ^
         allowSampling.hashCode ^

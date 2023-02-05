@@ -92,7 +92,7 @@ class OpenAI extends OpenAIClientBase {
   /// The [OpenAIFineTunes] instance, used to access the fine-tunes endpoints.
   OpenAIFineTunes get fineTune => OpenAIFineTunes();
 
-  /// The [OpenAIModerations] instance, used to access the moderation endpoints.
+  /// The [OpenAIModeration] instance, used to access the moderation endpoints.
   OpenAIModeration get moderation => OpenAIModeration();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
