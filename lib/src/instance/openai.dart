@@ -39,7 +39,7 @@ class OpenAI extends OpenAIClientBase {
     return _instance;
   }
 
-  /// This method is used to initialize the [OpenAI] instance, by providing the API key.
+  /// This  is used to initialize the [OpenAI] instance, by providing the API key.
   /// ```dart
   /// OpenAI.apiKey = "YOUR_API_KEY";
   /// ```
@@ -64,9 +64,9 @@ class OpenAI extends OpenAIClientBase {
   /// By default it is set to [true].
   /// Example:
   /// ```dart
-  /// OpenAI.instance.showProcessLogs = false;
+  /// OpenAI.instance.showLogs = false;
   /// ```
-  static set showProcessLogs(bool newValue) {
+  static set showLogs(bool newValue) {
     OpenAILogger.isActive = newValue;
   }
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dart_openai/openai.dart';
 import 'package:http/http.dart' as http;
 import 'package:dart_openai/src/core/builder/headers.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
@@ -84,13 +85,17 @@ class OpenAINetworkingClient {
     required T Function(Map<String, dynamic>) onSuccess,
     required Map<String, dynamic> body,
   }) async* {
+    OpenAILogger.log("starting request to $to");
+
     final http.Client client = http.Client();
     final clientRequest = client.post(
       Uri.parse(to),
       headers: HeadersBuilder.build(),
       body: jsonEncode(body),
     );
+
     final response = clientRequest.asStream();
+    OpenAILogger.log("Starting to reading stream response");
 
     await for (var chunk in response) {
       String eventData = utf8.decode(chunk.bodyBytes);
@@ -101,6 +106,7 @@ class OpenAINetworkingClient {
         if (line.startsWith("data: ")) {
           String data = line.substring(6);
           if (data.startsWith("[DONE]")) {
+            OpenAILogger.log("stream response is done");
             client.close();
             return;
           }

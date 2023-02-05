@@ -3,7 +3,7 @@ import 'dart:developer' as dev;
 import '../constants/strings.dart';
 
 abstract class OpenAILogger {
-  static bool _isActive = false;
+  static bool _isActive = true;
 
   static set isActive(bool newValue) {
     _isActive = newValue;
