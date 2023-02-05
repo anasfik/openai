@@ -45,6 +45,8 @@ Please note that this client SDK connects directly to openAI APIs using http req
 
 ## API key
 
+We highly recommend loading your secret key at runtime using an `.env` file, you can use the [dotenv](https://pub.dev/packages/flutter_dotenv) package.
+
 ```dart
 void main() {
  OpenAI.apiKey = dotenv.env["OPEN_AI_KEY"]!;

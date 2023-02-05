@@ -5,4 +5,4 @@ abstract class CreateInterface {
     required String input,
     String? model,
   });
-} 
+}
