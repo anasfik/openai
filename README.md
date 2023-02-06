@@ -45,8 +45,6 @@ Please note that this client SDK connects directly to openAI APIs using http req
 
 ## API key
 
-We highly recommend loading your secret key at runtime using an `.env` file, you can use the [dotenv](https://pub.dev/packages/flutter_dotenv) package.
-
 ```dart
 void main() {
  OpenAI.apiKey = dotenv.env["OPEN_AI_API_KEY"]!;
@@ -80,7 +78,7 @@ Lists the currently available models, and provides basic information about each 
 Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
 
 ```dart
- final model = await OpenAI.instance.model.one("MODEL ID");
+ final model = await OpenAI.instance.model.retrieve("MODEL ID");
  print(model.id)
 ```
 
@@ -89,6 +87,8 @@ Retrieves a model instance, providing basic information about the model such as 
 </br>
 
 # Completions
+
+Creates
 
 ## Create completion
 

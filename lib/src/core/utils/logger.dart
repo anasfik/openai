@@ -1,7 +1,12 @@
 import 'dart:developer' as dev;
 
+import 'package:meta/meta.dart';
+
 import '../constants/strings.dart';
 
+@protected
+@immutable
+@internal
 abstract class OpenAILogger {
   static bool _isActive = true;
 
