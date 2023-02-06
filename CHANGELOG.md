@@ -1,7 +1,14 @@
+## 1.0.7
+
+- Informed about using the dotenv package unstead of flutter_dotenv since not all dart applications are flutter's.
+- Fixed issues
+
 ## 1.0.6
+
 - added tests for fine-tunes
 - fixed type system issues
-- 
+-
+
 ## 1.0.5
 
 - Added error handling explanation, example in the README.md
