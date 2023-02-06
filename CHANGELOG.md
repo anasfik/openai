@@ -1,3 +1,8 @@
+# 1.0.8
+
+- Made improvements
+- Added example to showcase how to use.
+
 ## 1.0.7
 
 - Informed about using the dotenv package unstead of flutter_dotenv since not all dart applications are flutter's.

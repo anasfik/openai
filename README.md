@@ -45,7 +45,7 @@ Please note that this client SDK connects directly to openAI APIs using http req
 
 ## API key
 
-We highly recommend loading your secret key at runtime from an `.env` file, you can use the [dotenv](https://pub.dev/packages/dotenv) package.
+We highly recommend loading your secret key at runtime from a `.env` file, you can use the [dotenv](https://pub.dev/packages/dotenv) package.
 
 ```dart
 void main() {
