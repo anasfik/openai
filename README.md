@@ -41,6 +41,13 @@ Please note that this client SDK connects directly to openAI APIs using http req
 - [x] [Fine-tunes](#fine-tunes)
 - [x] [Moderation](#moderations)</br>
 
+</br>
+
+### Articles:
+
+- [How to generate AI images using Dall-e inside a Flutter/Dart application.
+  ](https://medium.com/@ffikhi.aanas/how-to-generate-ai-images-using-dall-e-inside-a-flutter-dart-application-fd66aa031b14)
+
 # Authentication
 
 ## API key

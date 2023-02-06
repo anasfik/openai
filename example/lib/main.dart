@@ -19,8 +19,8 @@ Future<void> main() async {
 
   // Generate an image from a prompt.
   final image = await OpenAI.instance.image.create(
-    prompt: "Dart is",
-    n: 4,
+    prompt: "dog",
+    n: 1,
   );
 
   // Printing the output to the console.
