@@ -1,3 +1,7 @@
+# 1.0.9
+
+- Downgraded internal meta package version to 1.8.0
+
 # 1.0.8
 
 - Made improvements
@@ -5,7 +9,7 @@
 
 ## 1.0.7
 
-- Informed about using the dotenv package unstead of flutter_dotenv since not all dart applications are flutter's.
+- Informed about using the dotenv package instead of flutter_dotenv since not all dart applications are flutter's.
 - Fixed issues
 
 ## 1.0.6
