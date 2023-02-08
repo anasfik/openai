@@ -38,10 +38,12 @@ class OpenAIModel implements OpenAIModelBase {
 
   /// Retrieves a model by it's id and returns a [OpenAIModelModel] object, if the model is not found, it will throw a [RequestFailedException].
   ///
+  /// [id] is the id of the model to use for this request.
+  ///
   /// Example:
   /// ```dart
-  ///  OpenAIModelModel model = await OpenAI.instance.model.retrieve("MODEL ID");
-  ///  print(model.id)
+  /// OpenAIModelModel model = await OpenAI.instance.model.retrieve("text-davinci-003");
+  /// print(model.id)
   /// ```
   @override
   Future<OpenAIModelModel> retrieve(String id) async {
@@ -54,9 +56,12 @@ class OpenAIModel implements OpenAIModelBase {
   }
 
   /// Deletes a fine-tuned model, returns [true] if the model did been deleted successfully, if the model is not found, it will throw a [RequestFailedException].
+  ///
+  /// [fineTuneId] is the id of the fine-tuned model to delete.
+  ///
   /// Example:
   /// ```dart
-  /// bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
+  /// bool deleted = await OpenAI.instance.fineTune.delete("fine-tune-id");
   /// ```
   Future<bool> delete(String fineTuneId) async {
     final String fineTuneModelDelete = "$endpoint/$fineTuneId";
