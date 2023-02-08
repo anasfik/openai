@@ -72,7 +72,12 @@ class OpenAICompletion implements OpenAICompletionBase {
   /// ```dart
   /// OpenAICompletionModel completion = await OpenAI.instance.completion.create(
   ///  model: "text-davinci-003",
-  ///  prompt: "Dart is ",
+  ///  prompt: "Dart is a progr",
+  ///  maxTokens: 20,
+  ///  temperature: 0.5,
+  ///  n: 1,
+  ///  stop: ["\n"],
+  ///  echo: true,
   /// );
   /// ```
   @override

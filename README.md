@@ -1,8 +1,11 @@
-# Dart SDK for openAI Apis (GPT-3 & DALL-E)
+# Dart Client For OpenAI (GPT-3 & DALL-E..)
 
-An open-source SDK that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart applications. This library provides simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
+An open-source Client package that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart/Flutter applications.
 
-The package is designed to be lightweight and easy to use, so you can focus on building your application, rather than worrying about the complexities and error caused by dealing with HTTP requests.
+This library provides simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
+
+The package is designed to be lightweight and easy to use, so you can focus on building your application, rather than worrying about the complexities and errors caused by dealing with HTTP requests.
+
 </br>
 </br>
 
@@ -12,11 +15,18 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 
 #### Note:
 
-Please note that this client SDK connects directly to openAI APIs using http requests, it doesn't provide any additional APIs than what exists [here](https://platform.openai.com/docs/introduction/overview).
+Please note that this client SDK connects directly to [OpenAI APIs](https://platform.openai.com/docs/introduction/overview) using HTTP requests.
 
-## Code Progress
+## Key Features
 
-- [ ] ChatGPT ( as soon as possible when it's released )
+- Easy to use methods that reflect exactly the OpenAI documentation, with additional functionalities that make it better to use with Dart Programming Language.
+- Authorize just once, use it anywhere and at any time in your application
+- Developer-friendly.
+- `Stream` functionality for completions API.
+-
+
+## Code Progress (100 %)
+
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
 - [x] [Completions](#completions)
@@ -28,8 +38,9 @@ Please note that this client SDK connects directly to openAI APIs using http req
 - [x] [Fine-tunes](#fine-tunes)
   - [ ] With events `Stream` responses
 - [x] [Moderation](#moderations)
+- [ ] ChatGPT ( as soon as possible when it's released )
 
-## Testing Progress
+## Testing Progress (100 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
@@ -43,84 +54,101 @@ Please note that this client SDK connects directly to openAI APIs using http req
 
 </br>
 
-### Articles:
-
-- [How to generate AI images using Dall-e inside a Flutter/Dart application.
-  ](https://medium.com/@ffikhi.aanas/how-to-generate-ai-images-using-dall-e-inside-a-flutter-dart-application-fd66aa031b14)
-
 # Full Documentation:
 
 For the full documentation about all members this library offers, [check here](https://pub.dev/documentation/dart_openai/latest/).
 
-# Authentication
+</br>
 
-## API key
+# Usage
 
-We highly recommend loading your secret key at runtime from a `.env` file, you can use the [dotenv](https://pub.dev/packages/dotenv) package.
+## Authentication
+
+#### API key
+
+The OpenAI API uses API keys for authentication. you can get your account APU key by visiting [API keys](https://platform.openai.com/account/api-keys) of your account.
+
+We highly recommend loading your secret key at runtime from a `.env` file, you can use the [dotenv](https://pub.dev/packages/dotenv) package for Dart applications or [flutter_dotenv](https://pub.dev/packages/flutter_dotenv)](https://pub.dev/packages/flutter_dotenv) for Flutter's.
 
 ```dart
 void main() {
- DotEnv env = DotEnv()..load([".env"]);
- OpenAI.apiKey = env['OPEN_AI_API_KEY'];
+ DotEnv env = DotEnv()..load([".env"]); // Loads our .env file.
+ OpenAI.apiKey = env['OPEN_AI_API_KEY']; // Initialize the package with that API key
  // ..
 }
 ```
 
-## Setting an organization
+if no `apiKey` is set, and you tried to access [OpenAI.instance], a `MissingApiKeyException` will be thrown even before making the actual request.
+
+if the `apiKey` is set, but it is invalid when making requests, a `RequestFailedException` will be thrown in your app, check the [error handling](#error-handling) section for more info.
+
+#### Setting an organization
+
+if you belong to a specific organization, you can pass the its id to `OpenAI.organization` like this:
 
 ```dart
  OpenAI.organization = "ORGANIZATION ID";
 ```
 
+If you don't belong actually to any organization, you can just ignore this section, or set it to `null`.
+
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/authentication)
 
 </br>
 
-# Models
+## Models
 
-## List Models
+#### List Models
 
 Lists the currently available models, and provides basic information about each one such as the owner and availability.
 
 ```dart
- final models = await OpenAI.instance.model.list();
- print(models.first.id);
+ List<OpenAIModelModel> models = await OpenAI.instance.model.list();
+ OpenAIModelModel firstModel = models.first;
+
+ print(firstModel.id); // ...
 ```
 
-## Retrieve model
+#### Retrieve model.
 
-Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
+Retrieves a single model by its id and get additional pieces of information about it.
 
 ```dart
- final model = await OpenAI.instance.model.retrieve("MODEL ID");
+ final model = await OpenAI.instance.model.retrieve("text-davinci-003");
  print(model.id)
 ```
+
+If the model id does not exists, a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/models)
 
 </br>
 
-# Completions
+## Completions
 
-Creates
+#### Create completion
 
-## Create completion
+Creates a Completion based on the provided properties :
 
 ```dart
- OpenAICompletionModel completion = await OpenAI.instance.completion.create(
-   model: "text-davinci-003",
-   prompt: "Dart is a ",
-   temperature: 0.8,
- );
+OpenAICompletionModel completion = await OpenAI.instance.completion.create(
+  model: "text-davinci-003",
+  prompt: "Dart is a progr",
+  maxTokens: 20,
+  temperature: 0.5,
+  n: 1,
+  stop: ["\n"],
+  echo: true,
+);
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/completions)
 
 </br>
 
-# Edits
+## Edits
 
-## Create edit
+#### Create edit
 
 ```dart
  OpenAIEditModel edit = await OpenAI.instance.edit.create(
@@ -134,9 +162,9 @@ Creates
 
 </br>
 
-# Images
+## Images
 
-## Create image
+#### Create image
 
 ```dart
  OpenAIImageModel image = await OpenAI.instance.image.create(
@@ -145,7 +173,7 @@ Creates
  );
 ```
 
-## Create image edit
+#### Create image edit
 
 ```dart
  final result = await OpenAI.instance.image.edit(
@@ -157,7 +185,7 @@ Creates
 
 ```
 
-## Create image variation
+#### Create image variation
 
 ```dart
 OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
@@ -169,9 +197,9 @@ OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
 
 </br>
 
-# Embeddings
+## Embeddings
 
-## Create embeddings
+#### Create embeddings
 
 ```dart
 OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
@@ -184,15 +212,15 @@ OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
 
 </br>
 
-# Files
+## Files
 
-## List files
+#### List files
 
 ```dart
 List<OpenAIFileModel> files = await OpenAI.instance.file.list();
 ```
 
-## Upload file
+#### Upload file
 
 ```dart
 OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
@@ -201,19 +229,19 @@ OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
 );
 ```
 
-## Delete file
+#### Delete file
 
 ```dart
 bool isFileDeleted = await OpenAI.instance.file.delete("FILE ID");
 ```
 
-## Retrieve file
+#### Retrieve file
 
 ```dart
 OpenAIFileModel file = await OpenAI.instance.file.retrieve("FILE ID");
 ```
 
-## Retrieve file content
+#### Retrieve file content
 
 ```dart
 dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
@@ -223,9 +251,9 @@ dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
 
 </br>
 
-# Fine Tunes
+## Fine Tunes
 
-## Create fine-tune
+#### Create fine-tune
 
 ```dart
 OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.create(
@@ -233,31 +261,31 @@ OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.create(
 );
 ```
 
-## List fine-tunes
+#### List fine-tunes
 
 ```dart
 List<OpenAIFineTuneModel> fineTunes = await OpenAI.instance.fineTune.list();
 ```
 
-## Retrieve fine-tune
+#### Retrieve fine-tune
 
 ```dart
 OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.retrieve("FINE TUNE ID");
 ```
 
-## Cancel fine-tune
+#### Cancel fine-tune
 
 ```dart
 OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE ID");
 ```
 
-## List fine-tune events
+#### List fine-tune events
 
 ```dart
  List<OpenAIFineTuneEventModel> events = await OpenAI.instance.fineTune.listEvents("FINE TUNE ID");
 ```
 
-## Delete fine-tune
+#### Delete fine-tune
 
 ```dart
  bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
@@ -267,8 +295,8 @@ OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE 
 
 </br>
  
-# Moderations
-## Create moderation
+## Moderations
+#### Create moderation
 ```dart
 OpenAIModerationModel moderationResult = await OpenAI.instance.moderation.create(
   input: "I want to kill him",
@@ -278,7 +306,7 @@ OpenAIModerationModel moderationResult = await OpenAI.instance.moderation.create
 
 <br>
 
-# Error Handling
+## Error Handling
 
 Any time an error happens from the OpenAI API ends (As Example: when you try to create an image variation from a non-image file ), a `RequestFailedException` will be thrown automatically inside your Flutter / Dart app, you can use a `try-catch` to catch that error, and make an action based on it:
 
@@ -294,3 +322,8 @@ try {
  print(e.statusCode)
 }
 ```
+
+###### Articles:
+
+- [How to generate AI images using Dall-e inside a Flutter/Dart application.
+  ](https://medium.com/@ffikhi.aanas/how-to-generate-ai-images-using-dall-e-inside-a-flutter-dart-application-fd66aa031b14)
