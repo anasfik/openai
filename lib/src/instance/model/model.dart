@@ -5,13 +5,17 @@ import '../../core/builder/base_api_url.dart';
 import '../../core/networking/client.dart';
 import 'package:meta/meta.dart';
 
+/// The class that handles all the requests related to the models in the OpenAI API.
+/// it provides methods to list all the models, retrieve a model by it's id, and delete a fine-tuned model that you did made.
 @immutable
 @protected
 class OpenAIModel implements OpenAIModelBase {
   @override
   String get endpoint => "/models";
 
-  /// This function fetches for models and provide their informations..
+  /// Lists all the models available in the OpenAI API and returns a list of [OpenAIModelModel] objects.
+  /// Refer to [Models](https://platform.openai.com/docs/models/models) for more information about the available models.
+  ///
   /// Example:
   /// ```dart
   ///  List<OpenAIModelModel> models = await OpenAI.instance.model.list();
@@ -32,23 +36,24 @@ class OpenAIModel implements OpenAIModelBase {
     );
   }
 
-  /// This function fetches for a single model and get its informations based on it's id
+  /// Retrieves a model by it's id and returns a [OpenAIModelModel] object, if the model is not found, it will throw a [RequestFailedException].
+  ///
   /// Example:
   /// ```dart
   ///  OpenAIModelModel model = await OpenAI.instance.model.retrieve("MODEL ID");
   ///  print(model.id)
   /// ```
   @override
-  Future<OpenAIModelModel> retrieve(String modelId) async {
+  Future<OpenAIModelModel> retrieve(String id) async {
     return await OpenAINetworkingClient.get<OpenAIModelModel>(
-      from: BaseApiUrlBuilder.build(endpoint, modelId),
+      from: BaseApiUrlBuilder.build(endpoint, id),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIModelModel.fromJson(response);
       },
     );
   }
 
-  /// delete a fine tune model, returns true if deleted
+  /// Deletes a fine-tuned model, returns [true] if the model did been deleted successfully, if the model is not found, it will throw a [RequestFailedException].
   /// Example:
   /// ```dart
   /// bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");

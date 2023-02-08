@@ -1,3 +1,7 @@
+# 1.1.0
+
+- Set internal packages version to any
+
 # 1.0.9
 
 - Downgraded internal meta package version to 1.8.0

@@ -27,6 +27,7 @@ class OpenAI extends OpenAIClientBase {
   static String? _internalApiKey;
 
   /// The singleton instance of [OpenAI], make sure to call the [OpenAI.initialize] method before accessing [instance], otherwise it will throw an [Exception].
+  /// A [MissingApiKeyException] will be thrown, if the API key is not set.
   static OpenAI get instance {
     if (_internalApiKey == null) {
       throw MissingApiKeyException("""
@@ -39,7 +40,8 @@ class OpenAI extends OpenAIClientBase {
     return _instance;
   }
 
-  /// This  is used to initialize the [OpenAI] instance, by providing the API key.
+  /// This is used to initialize the [OpenAI] instance, by providing the API key.
+  /// All the requests will be authenticated using this API key.
   /// ```dart
   /// OpenAI.apiKey = "YOUR_API_KEY";
   /// ```
@@ -48,7 +50,8 @@ class OpenAI extends OpenAIClientBase {
     _internalApiKey = apiKey;
   }
 
-  /// If you have multiple organizations, you can set it's id with this
+  /// If you have multiple organizations, you can set it's id with this.
+  /// once this is set, it will be used in all the requests to the OpenAI API.
   /// Example:
   /// ```dart
   /// OpenAI.organization = "YOUR_ORGANIZATION_ID";
@@ -61,7 +64,9 @@ class OpenAI extends OpenAIClientBase {
 
   /// This controls whether to log steps inside the process of making a request, this helps debugging and pointing where something went wrong.
   /// This uses  [dart:developer] internally, so it will show anyway only while debugging code.
+  ///
   /// By default it is set to [true].
+  ///
   /// Example:
   /// ```dart
   /// OpenAI.instance.showLogs = false;
