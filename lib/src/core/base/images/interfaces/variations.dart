@@ -1,12 +1,11 @@
 import 'dart:io';
 
+import '../../../../../openai.dart';
 import '../base.dart';
 
-abstract class EditInterface {
-  Future<void> edit({
+abstract class VariationInterface {
+  Future<OpenAIImageVariationModel> variation({
     required File image,
-    File? mask,
-    required String prompt,
     int? n,
     OpenAIImageSize? size,
     OpenAIResponseFormat? responseFormat,
