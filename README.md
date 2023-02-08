@@ -13,7 +13,7 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 </br>
 <i>OpenAI does not have any official Dart library.</I>
 
-#### Note:
+### Note:
 
 Please note that this client SDK connects directly to [OpenAI APIs](https://platform.openai.com/docs/introduction/overview) using HTTP requests.
 
@@ -64,7 +64,7 @@ For the full documentation about all members this library offers, [check here](h
 
 ## Authentication
 
-#### API key
+### API key
 
 The OpenAI API uses API keys for authentication. you can get your account APU key by visiting [API keys](https://platform.openai.com/account/api-keys) of your account.
 
@@ -78,11 +78,11 @@ void main() {
 }
 ```
 
-if no `apiKey` is set, and you tried to access [OpenAI.instance], a `MissingApiKeyException` will be thrown even before making the actual request.
+if no `apiKey` is set, and you tried to access `OpenAI.instance`, a `MissingApiKeyException` will be thrown even before making the actual request.
 
 if the `apiKey` is set, but it is invalid when making requests, a `RequestFailedException` will be thrown in your app, check the [error handling](#error-handling) section for more info.
 
-#### Setting an organization
+### Setting an organization
 
 if you belong to a specific organization, you can pass the its id to `OpenAI.organization` like this:
 
@@ -98,7 +98,7 @@ If you don't belong actually to any organization, you can just ignore this secti
 
 ## Models
 
-#### List Models
+### List Models
 
 Lists the currently available models, and provides basic information about each one such as the owner and availability.
 
@@ -109,16 +109,16 @@ Lists the currently available models, and provides basic information about each 
  print(firstModel.id); // ...
 ```
 
-#### Retrieve model.
+### Retrieve model.
 
 Retrieves a single model by its id and get additional pieces of information about it.
 
 ```dart
- final model = await OpenAI.instance.model.retrieve("text-davinci-003");
+ OpenAIModelModel model = await OpenAI.instance.model.retrieve("text-davinci-003");
  print(model.id)
 ```
 
-If the model id does not exists, a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section
+If the model id does not exists, a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/models)
 
@@ -126,9 +126,9 @@ If the model id does not exists, a `RequestFailedException` will be thrown, chec
 
 ## Completions
 
-#### Create completion
+### Create completion
 
-Creates a Completion based on the provided properties :
+Creates a Completion based on the provided properties `model`, `prompt` & other properties.
 
 ```dart
 OpenAICompletionModel completion = await OpenAI.instance.completion.create(
@@ -142,13 +142,15 @@ OpenAICompletionModel completion = await OpenAI.instance.completion.create(
 );
 ```
 
+if the request failed (as an example, if you did pass an invalid model id...), a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
+
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/completions)
 
 </br>
 
 ## Edits
 
-#### Create edit
+### Create edit
 
 ```dart
  OpenAIEditModel edit = await OpenAI.instance.edit.create(
@@ -164,7 +166,7 @@ OpenAICompletionModel completion = await OpenAI.instance.completion.create(
 
 ## Images
 
-#### Create image
+### Create image
 
 ```dart
  OpenAIImageModel image = await OpenAI.instance.image.create(
@@ -173,7 +175,7 @@ OpenAICompletionModel completion = await OpenAI.instance.completion.create(
  );
 ```
 
-#### Create image edit
+### Create image edit
 
 ```dart
  final result = await OpenAI.instance.image.edit(
@@ -185,7 +187,7 @@ OpenAICompletionModel completion = await OpenAI.instance.completion.create(
 
 ```
 
-#### Create image variation
+### Create image variation
 
 ```dart
 OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
@@ -199,7 +201,7 @@ OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
 
 ## Embeddings
 
-#### Create embeddings
+### Create embeddings
 
 ```dart
 OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
@@ -214,13 +216,13 @@ OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
 
 ## Files
 
-#### List files
+### List files
 
 ```dart
 List<OpenAIFileModel> files = await OpenAI.instance.file.list();
 ```
 
-#### Upload file
+### Upload file
 
 ```dart
 OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
@@ -229,19 +231,19 @@ OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
 );
 ```
 
-#### Delete file
+### Delete file
 
 ```dart
 bool isFileDeleted = await OpenAI.instance.file.delete("FILE ID");
 ```
 
-#### Retrieve file
+### Retrieve file
 
 ```dart
 OpenAIFileModel file = await OpenAI.instance.file.retrieve("FILE ID");
 ```
 
-#### Retrieve file content
+### Retrieve file content
 
 ```dart
 dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
@@ -253,7 +255,7 @@ dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
 
 ## Fine Tunes
 
-#### Create fine-tune
+### Create fine-tune
 
 ```dart
 OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.create(
@@ -261,31 +263,31 @@ OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.create(
 );
 ```
 
-#### List fine-tunes
+### List fine-tunes
 
 ```dart
 List<OpenAIFineTuneModel> fineTunes = await OpenAI.instance.fineTune.list();
 ```
 
-#### Retrieve fine-tune
+### Retrieve fine-tune
 
 ```dart
 OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.retrieve("FINE TUNE ID");
 ```
 
-#### Cancel fine-tune
+### Cancel fine-tune
 
 ```dart
 OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE ID");
 ```
 
-#### List fine-tune events
+### List fine-tune events
 
 ```dart
  List<OpenAIFineTuneEventModel> events = await OpenAI.instance.fineTune.listEvents("FINE TUNE ID");
 ```
 
-#### Delete fine-tune
+### Delete fine-tune
 
 ```dart
  bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
@@ -296,7 +298,7 @@ OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE 
 </br>
  
 ## Moderations
-#### Create moderation
+### Create moderation
 ```dart
 OpenAIModerationModel moderationResult = await OpenAI.instance.moderation.create(
   input: "I want to kill him",
@@ -323,7 +325,7 @@ try {
 }
 ```
 
-###### Articles:
+##### Articles:
 
 - [How to generate AI images using Dall-e inside a Flutter/Dart application.
   ](https://medium.com/@ffikhi.aanas/how-to-generate-ai-images-using-dall-e-inside-a-flutter-dart-application-fd66aa031b14)
