@@ -107,7 +107,7 @@ class OpenAICompletion implements OpenAICompletionBase {
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
         "model": model,
-        if (prompt != null) "prompt": prompt.toString(),
+        if (prompt != null) "prompt": prompt,
         if (suffix != null) "suffix": suffix,
         if (maxTokens != null) "max_tokens": maxTokens,
         if (temperature != null) "temperature": temperature,
