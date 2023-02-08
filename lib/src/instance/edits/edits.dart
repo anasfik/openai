@@ -6,13 +6,28 @@ import '../../core/builder/base_api_url.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
+/// The class that handles all the requests related to the edits in the OpenAI API.
 @immutable
 @protected
 class OpenAIEdits implements OpenAIEditsBase {
   @override
   String get endpoint => "/edits";
 
-  /// This function creates an edit based on a specific instruction you need to give.
+  /// Given a [prompt] and an instruction, this method will return an edited version of the prompt.
+  ///
+  /// [model] is id of the model to use. You can use the `text-davinci-edit-001` or `code-davinci-edit-001` model with this method.
+  ///
+  /// [input] is the input text to use as a starting point for the edit.
+  ///
+  /// [instruction] is the instruction that tells the model how to edit the prompt.
+  ///
+  /// [n] defines how many edits to generate for the input and instruction.
+  ///
+  /// [temperature] defines what sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
+  ///
+  /// [topP] defines an alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+  ///
+  ///
   /// Example:
   ///```dart
   /// OpenAIEditModel edit = await OpenAI.instance.edit.create(
