@@ -190,9 +190,19 @@ class OpenAICompletion implements OpenAICompletionBase {
   /// ```dart
   /// Stream<OpenAIStreamCompletionModel> completionStream = OpenAI.instance.completion.createStream(
   ///  model: "text-davinci-003",
-  ///  prompt: "Dart is ",
+  ///  prompt: "Github is ",
+  ///  maxTokens: 100,
+  ///  temperature: 0.5,
+  ///  topP: 1,
   /// );
+  ///
+  /// completionStream.listen((event) {
+  ///  final firstCompletionChoice = event.choices.first;
+  /// print(firstCompletionChoice.text); // ...
+  /// });
   /// ```
+
+
   @override
   Stream<OpenAIStreamCompletionModel> createStream({
     required String model,

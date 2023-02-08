@@ -144,6 +144,25 @@ OpenAICompletionModel completion = await OpenAI.instance.completion.create(
 
 if the request failed (as an example, if you did pass an invalid model id...), a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
 
+### Create Completion Stream
+
+In addition to calling the `OpenAI.instance.completion.create()` which is a `Future` and will not return an actual value until the completion is ended, you can get a `Stream` of values as they are generated:
+
+```dart
+Stream<OpenAIStreamCompletionModel> completionStream = OpenAI.instance.completion.createStream(
+  model: "text-davinci-003",
+  prompt: "Github is ",
+  maxTokens: 100,
+  temperature: 0.5,
+  topP: 1,
+ );
+
+completionStream.listen((event) {
+ final firstCompletionChoice = event.choices.first;
+ print(firstCompletionChoice.text); // ...
+});
+```
+
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/completions)
 
 </br>
