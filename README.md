@@ -48,6 +48,10 @@ Please note that this client SDK connects directly to openAI APIs using http req
 - [How to generate AI images using Dall-e inside a Flutter/Dart application.
   ](https://medium.com/@ffikhi.aanas/how-to-generate-ai-images-using-dall-e-inside-a-flutter-dart-application-fd66aa031b14)
 
+# Full Documentation:
+
+For the full documentation about all members this library offers, [check here](https://pub.dev/documentation/dart_openai/latest/).
+
 # Authentication
 
 ## API key
