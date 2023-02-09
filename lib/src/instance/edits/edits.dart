@@ -34,6 +34,8 @@ class OpenAIEdits implements OpenAIEditsBase {
   ///   model: "text-davinci-edit-001";
   ///   instruction: "remote all '!'from input text",
   ///   input: "Hello!!, I! need to be ! somethi!ng"
+  ///   n: 1,
+  ///   temperature: 0.8,
   /// );
   ///```
   @override

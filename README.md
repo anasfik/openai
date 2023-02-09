@@ -84,7 +84,7 @@ if the `apiKey` is set, but it is invalid when making requests, a `RequestFailed
 
 ### Setting an organization
 
-if you belong to a specific organization, you can pass the its id to `OpenAI.organization` like this:
+if you belong to a specific organization, you can pass its id to `OpenAI.organization` like this:
 
 ```dart
  OpenAI.organization = "ORGANIZATION ID";
@@ -111,7 +111,7 @@ Lists the currently available models, and provides basic information about each 
 
 ### Retrieve model.
 
-Retrieves a single model by its id and get additional pieces of information about it.
+Retrieves a single model by its id and gets additional pieces of information about it.
 
 ```dart
  OpenAIModelModel model = await OpenAI.instance.model.retrieve("text-davinci-003");
@@ -169,14 +169,18 @@ completionStream.listen((event) {
 
 ## Edits
 
+Creates an edited version of the given prompt based on the used model.
+
 ### Create edit
 
 ```dart
- OpenAIEditModel edit = await OpenAI.instance.edit.create(
-   model: "text-davinci-edit-001",
-   input: " Hi!, I am a bot!!!!,",
-   instruction: "remove all ! the input ",
- );
+OpenAIEditModel edit = await OpenAI.instance.edit.create(
+  model: "text-davinci-edit-001";
+  instruction: "remote all '!'from input text",
+  input: "Hello!!, I! need to be ! somethi!ng"
+  n: 1,
+  temperature: 0.8,
+);
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/edits)
@@ -187,30 +191,42 @@ completionStream.listen((event) {
 
 ### Create image
 
+Generates a new image based on a prompt given.
+
 ```dart
  OpenAIImageModel image = await OpenAI.instance.image.create(
-   prompt: "A dog",
-   n: 1,
- );
+  prompt: 'an astronaut on the sea',
+  n: 1,
+  size: OpenAIImageSize.size1024,
+  responseFormat: OpenAIResponseFormat.url,
+);
 ```
 
 ### Create image edit
 
-```dart
- final result = await OpenAI.instance.image.edit(
-   image: File(/* image file path*/),
-   mask: File(/* mask file path*/),
-   prompt: "change color to green",
-   n: 1,
- );
+Creates an edited or extended image given an original image and a prompt.
 
+```dart
+OpenAiImageEditModel imageEdit = await OpenAI.instance.image.edit(
+ file: File(/* IMAGE PATH HERE */),
+ mask: File(/* MASK PATH HERE */),
+ prompt: "mask the image with a dinosaur",
+ n: 1,
+ size: OpenAIImageSize.size1024,
+ responseFormat: OpenAIResponseFormat.url,
+);
 ```
 
 ### Create image variation
 
+Creates a variation of a given image.
+
 ```dart
-OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
- image: File(/*YOUR IMAGE FILE PATH*/),
+OpenAIImageVariationModel imageVariation = await OpenAI.instance.image.variation(
+ image: File(/* IMAGE PATH HERE */),
+ n: 1,
+ size: OpenAIImageSize.size1024,
+ responseFormat: OpenAIResponseFormat.url,
 );
 ```
 
@@ -220,13 +236,15 @@ OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
 
 ## Embeddings
 
+Get a vector representation of a given input that can be easily consumed by machine learning models and algorithms.
+
 ### Create embeddings
 
 ```dart
 OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
-  model: "text-embedding-ada-002",
-  input: "This is a text input just to test",
-);;
+ model: "text-embedding-ada-002",
+ input: "This is a text input just to test",
+);
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/embeddings)
