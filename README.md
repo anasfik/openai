@@ -383,18 +383,25 @@ print(deleted); // ...
 ## Moderations
 
 ### Create moderation
+
+Classifies if text violates OpenAI's Content Policy
+
 ```dart
-OpenAIModerationModel moderationResult = await OpenAI.instance.moderation.create(
+OpenAIModerationModel moderation = await OpenAI.instance.moderation.create(
   input: "I want to kill him",
 );
+
+print(moderation.results); // ...
+print(moderation.results.first.categories.hate); // ...
 ```
+
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/moderations)
 
 <br>
 
 ## Error Handling
 
-Any time an error happens from the OpenAI API ends (As Example: when you try to create an image variation from a non-image file ), a `RequestFailedException` will be thrown automatically inside your Flutter / Dart app, you can use a `try-catch` to catch that error, and make an action based on it:
+Any time an error happens from the OpenAI API ends (As Example: when you try to create an image variation from a non-image file.. , a `RequestFailedException` will be thrown automatically inside your Flutter / Dart app, you can use a `try-catch` to catch that error, and make an action based on it:
 
 ```dart
 try {
