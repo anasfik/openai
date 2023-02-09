@@ -253,37 +253,59 @@ OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
 
 ## Files
 
+Files are used to upload documents that can be used with features like [Fine-tuning](#fine-tunes).
+
 ### List files
+
+Get a list of all the uploaded files o-to your OpenAI account.
 
 ```dart
 List<OpenAIFileModel> files = await OpenAI.instance.file.list();
+
+print(files.first.fileName); // ...
+print(files.first.id); // ...
 ```
 
 ### Upload file
 
+Upload a file that contains document(s) to be used across various endpoints/features. Currently, the size of all the files uploaded by one organization can be up to 1 GB. Please contact us if you need to increase the storage limit.
+
 ```dart
 OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
- file: File("FILE PATH HERE"),
+ file: File("/* FILE PATH HERE */"),
  purpose: "fine-tuning",
 );
+
+print(uploadedFile.id); // ...
 ```
 
 ### Delete file
 
+Deletes an existent file by it's id.
+
 ```dart
-bool isFileDeleted = await OpenAI.instance.file.delete("FILE ID");
+bool isFileDeleted = await OpenAI.instance.file.delete("/* FILE ID */");
+
+print(isFileDeleted);
 ```
 
 ### Retrieve file
 
+Fetches for a single file by it's id and returns informations about it.
+
 ```dart
 OpenAIFileModel file = await OpenAI.instance.file.retrieve("FILE ID");
+print(file.id);
 ```
 
 ### Retrieve file content
 
+Fetches for a single file content by it's id.
+
 ```dart
 dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
+
+print(fileContent);
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/files)

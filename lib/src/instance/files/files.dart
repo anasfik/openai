@@ -14,11 +14,12 @@ class OpenAIFiles implements OpenAIFilesBase {
   @override
   String get endpoint => "/files";
 
-  /// This method fetches for your files list that exists in your account
+  /// This method fetches for your files list that exists in your OPenAI account.
+  ///
   /// Example:
   ///```dart
   /// List<OpenAIFileModel> files = await OpenAI.instance.file.list();
-  /// print(files);
+  /// print(files.first.id);
   ///```
   @override
   Future<List<OpenAIFileModel>> list() async {
@@ -31,10 +32,13 @@ class OpenAIFiles implements OpenAIFilesBase {
     );
   }
 
-  /// This method fetch for a single file based on it's id.
+  /// Fetches for a single file by it's id and returns informations about it.
+  ///
+  /// Example:
   ///```dart
   /// OpenAIFileModel file = await OpenAI.instance.file.retrieve("FILE ID");
-  ///  print(file);
+  ///
+  /// print(file);
   ///```
   @override
   Future<OpenAIFileModel> retrieve(String fileId) async {
@@ -48,10 +52,13 @@ class OpenAIFiles implements OpenAIFilesBase {
     );
   }
 
-  /// This method fetches for the actual content of an uploaded file in your account.
+  /// Fetches for a single file content by it's id.
+  ///
   /// Example:
   /// ```dart
   /// dynamic fileContent  = await OpenAI.instance.file.retrieveContent("FILE ID");
+  ///
+  /// print(fileContent);
   /// ```
   @override
   Future<dynamic> retrieveContent(String fileId) async {
@@ -63,11 +70,19 @@ class OpenAIFiles implements OpenAIFilesBase {
     );
   }
 
-  /// This method uploads a file to your account directly
+  /// Upload a file that contains document(s) to be used across various endpoints/
+  /// features. Currently, the size of all the files uploaded by one organization can be
+  /// up to 1 GB. Please contact us if you need to increase the storage limit.
+  ///
+  /// [file] is the `jsonl` file to be uploaded, If the [purpose] is set to "fine-tune", each line is a JSON record with "prompt" and "completion.
+  ///
+  /// [purpose] Use "fine-tune" for Fine-tuning. This allows us to validate the format of the uploaded file.
+  ///
+  ///
   /// Example:
   /// ```dart
   /// OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
-  /// file: File("FILE PATH HERE"),
+  /// file: File("/* FILE PATH HERE */"),
   /// purpose: "fine-tuning",
   /// );
   /// ```
@@ -88,9 +103,13 @@ class OpenAIFiles implements OpenAIFilesBase {
     );
   }
 
-  /// This method deleted an existent fil from your account used it's id.
+  /// This method deleted an existent file from your account used it's id.
+  ///
+  ///
   /// ```dart
-  /// bool isFileDeleted = await OpenAI.instance.file.delete("FILE ID");
+  /// bool isFileDeleted = await OpenAI.instance.file.delete("/* FILE ID */");
+  ///
+  /// print(isFileDeleted);
   /// ```
   @override
   Future<bool> delete(String fileId) async {
