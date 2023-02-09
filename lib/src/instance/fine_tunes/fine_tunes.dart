@@ -13,12 +13,49 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
   @override
   String get endpoint => "/fine-tunes";
 
-  /// This function creates a fine-tune job.
+  /// [trainingFile] is The ID of an uploaded file that contains training data. The file must be formatted as a JSONL file and uploaded with the purpose of fine-tuning.
+  ///
+  ///
+  /// [validationFile] is the ID of an uploaded file that contains validation data. This data is used to generate validation metrics during fine-tuning.
+  ///
+  ///
+  /// [model] is the name of the base model to fine-tune. The default is "curie" but you can choose from "ada", "babbage", "curie", "davinci", or a fine-tuned model created after 2022-04-21.
+  ///
+  ///
+  /// [nEpoches] is the number of epochs to train the model for. The default is 4.
+  ///
+  ///
+  /// [batchSize] is the batch size to use for training. The default is dynamically configured to be ~0.2% of the number of examples in the training set, capped at 256.
+  ///
+  ///
+  /// [learningRateMultiplier] is the learning rate multiplier to use for training. The default is 0.05, 0.1, or 0.2 depending on the batch size.
+  ///
+  ///
+  /// [promptLossWeight] is the weight to use for loss on the prompt tokens. The default is 0.01.
+  ///
+  ///
+  /// If [computeClassificationMetrics] is set, classification-specific metrics such as accuracy and F-1 score are calculated using the validation set at the end of every epoch.
+  ///
+  ///
+  /// [classificationNClass] is The number of classes in a classification task. This parameter is required for multiclass classification.
+  ///
+  ///
+  /// [classificationPositiveClass] is The positive class in binary classification. This parameter is needed to generate precision, recall, and F1 metrics when doing binary classification.
+  ///
+  ///
+  /// [classificationBetas] is If provided, F-beta scores are calculated at the specified beta values. This is only used for binary classification.
+  ///
+  ///
+  /// [suffix] is A string of up to 40 characters that will be added to the fine-tuned model name.
+  ///
+  ///
   /// Example:
   /// ```dart
   /// OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.create(
   ///  trainingFile: "FILE ID",
   /// );
+  ///
+  /// print(fineTune.status); // ...
   /// ```
   @override
   Future<OpenAIFineTuneModel> create({
@@ -62,10 +99,13 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
     );
   }
 
-  /// This function lists all fine-tune jobs.
+  /// List your organization's fine-tuning jobs.
+  ///
   /// Example:
   /// ```dart
   /// List<OpenAIFineTuneModel> fineTunes = await OpenAI.instance.fineTune.list();
+  ///
+  /// print(fineTunes.first.id);
   /// ```
   @override
   Future<List<OpenAIFineTuneModel>> list() async {
@@ -79,9 +119,13 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
   }
 
   /// This function cancels a fine-tune job by its id.
+  ///
+  ///
   /// Example:
   /// ```dart
-  ///  OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE ID");
+  ///  OpenAIFineTuneModel cancelledFineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE ID");
+  ///
+  /// print(cancelledFineTune.status); // ...
   /// ```
   @override
   Future<OpenAIFineTuneModel> cancel(String fineTuneId) async {
@@ -95,10 +139,13 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
     );
   }
 
-  /// This function retrieves a fine-tune job by its id.
+  /// This function deleted a fine-tune job by its id.
+  ///
   /// Example:
   /// ```dart
-  ///  bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
+  /// bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
+  ///
+  /// print(deleted); // ...
   /// ```
   @override
   Future<bool> delete(String fineTuneId) async {
@@ -106,9 +153,13 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
   }
 
   /// This function lists all events of a fine-tune job by its id.
+  ///
+  ///
   /// Example:
   /// ```dart
   /// List<OpenAIFineTuneEventModel> events = await OpenAI.instance.fineTune.listEvents("FINE TUNE ID");
+  ///
+  /// print(events.first.message); // ...
   /// ```
   @override
   Future<List<OpenAIFineTuneEventModel>> listEvents(String fineTuneId) async {
@@ -124,9 +175,13 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
   }
 
   /// This function retrieves a fine-tune job by its id.
+  ///
+  ///
   /// Example:
   /// ```dart
   /// OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.retrieve("FINE TUNE ID");
+  ///
+  /// print(fineTune.id); // ...
   /// ```
   @override
   Future<OpenAIFineTuneModel> retrieve(String fineTuneId) async {

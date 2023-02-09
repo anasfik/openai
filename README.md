@@ -316,40 +316,64 @@ print(fileContent);
 
 ### Create fine-tune
 
+Creates a job that fine-tunes a specified model from a given dataset, and returns a fine-tuned object about the enqueued job.
+
 ```dart
 OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.create(
  trainingFile: "FILE ID",
 );
+
+print(fineTune.status); // ...
 ```
 
 ### List fine-tunes
 
+List your organization's fine-tuning jobs.
+
 ```dart
 List<OpenAIFineTuneModel> fineTunes = await OpenAI.instance.fineTune.list();
+
+print(fineTunes.first); // ...
 ```
 
 ### Retrieve fine-tune
 
+Retrieves a fine-tune by its id.
+
 ```dart
 OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.retrieve("FINE TUNE ID");
+
+print(fineTune.id); // ...
 ```
 
 ### Cancel fine-tune
 
+Cancels a fine-tune job by its id, and returns it.
+
 ```dart
-OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE ID");
+OpenAIFineTuneModel cancelledFineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE ID");
+
+print(cancelledFineTune.status); // ...
 ```
 
 ### List fine-tune events
 
+Lists a single fine-tune progress events by it's id.
+
 ```dart
  List<OpenAIFineTuneEventModel> events = await OpenAI.instance.fineTune.listEvents("FINE TUNE ID");
+
+ print(events.first.message); // ...
 ```
 
 ### Delete fine-tune
 
+deletes a fine-tune job by its id.
+
 ```dart
  bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
+
+print(deleted); // ...
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/fine-tunes)
@@ -357,6 +381,7 @@ OpenAIFineTuneModel fineTune = await OpenAI.instance.fineTune.cancel("FINE TUNE 
 </br>
  
 ## Moderations
+
 ### Create moderation
 ```dart
 OpenAIModerationModel moderationResult = await OpenAI.instance.moderation.create(
