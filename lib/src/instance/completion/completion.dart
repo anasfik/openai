@@ -202,7 +202,6 @@ class OpenAICompletion implements OpenAICompletionBase {
   /// });
   /// ```
 
-
   @override
   Stream<OpenAIStreamCompletionModel> createStream({
     required String model,
