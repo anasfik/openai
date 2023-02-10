@@ -1,3 +1,7 @@
+import 'package:meta/meta.dart';
+
+@internal
+@immutable
 abstract class OpenAIStrings {
-  static const openai = 'OpenAI';
+  static const String openai = 'OpenAI';
 }
