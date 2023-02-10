@@ -70,7 +70,7 @@ packages:
       name: dart_openai
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.7"
+    version: "1.2.3"
   dotenv:
     dependency: "direct main"
     description:

@@ -1,3 +1,18 @@
+# 1.2.3
+
+- Exposed image size and url enums to be used externally
+
+# 1.2.1
+
+- formatted some dart files
+
+# 1.2.0
+
+- Added more detailed documentation that reflects OpenAI's.
+- Added more helper methods, enums for making it more easy to manipulate properties and decrease error chances
+- More Examples, explanations for README.md.
+- Code Improvments.
+
 # 1.1.2
 
 - Added more detailed documentation that reflects OpenAI's.
