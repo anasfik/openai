@@ -20,10 +20,9 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 ## Key Features
 
 - Easy to use methods that reflect exactly the OpenAI documentation, with additional functionalities that make it better to use with Dart Programming Language.
-- Authorize just once, use it anywhere and at any time in your application
+- Authorize just once, use it anywhere and at any time in your application.
 - Developer-friendly.
-- `Stream` functionality for completions API.
--
+- `Stream` functionality for completions API & fine-tune events API.
 
 ## Code Progress (100 %)
 
