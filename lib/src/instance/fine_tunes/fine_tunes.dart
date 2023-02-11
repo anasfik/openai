@@ -174,6 +174,17 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
     );
   }
 
+  Stream<OpenAIFineTuneEventStreamModel> listEventsStream(String fineTuneId) {
+    final String fineTuneEvents = "$endpoint/$fineTuneId/events";
+
+    return OpenAINetworkingClient.getStream<OpenAIFineTuneEventStreamModel>(
+      from: BaseApiUrlBuilder.build(fineTuneEvents, null, "stream=true"),
+      onSuccess: (Map<String, dynamic> response) {
+        return OpenAIFineTuneEventStreamModel.fromJson(response);
+      },
+    );
+  }
+
   /// This function retrieves a fine-tune job by its id.
   ///
   ///

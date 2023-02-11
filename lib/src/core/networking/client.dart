@@ -47,6 +47,50 @@ class OpenAINetworkingClient {
     }
   }
 
+  static Stream<T> getStream<T>({
+    required String from,
+    required T Function(Map<String, dynamic>) onSuccess,
+  }) {
+    final controller = StreamController<T>();
+    final http.Client client = http.Client();
+
+    final request = http.Request("GET", Uri.parse(from));
+    request.headers.addAll(HeadersBuilder.build());
+
+    void close() {
+      client.close();
+      controller.close();
+    }
+
+    client.send(request).then((streamedResponse) {
+      streamedResponse.stream.listen((value) {
+        final String data = utf8.decode(value);
+
+        final List<String> dataLines = data.split("\n");
+
+        for (String line in dataLines) {
+          if (line.startsWith("data: ")) {
+            final String data = line.substring(6);
+            if (data.startsWith("[DONE]")) {
+              OpenAILogger.log("stream response is done");
+
+              return;
+            }
+
+            final decoded = jsonDecode(data) as Map<String, dynamic>;
+            controller.add(onSuccess(decoded));
+          }
+        }
+      }, onDone: () {
+        close();
+      }, onError: (err) {
+        controller.addError(err);
+      });
+    });
+
+    return controller.stream;
+  }
+
   static Future<T> post<T>({
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,

@@ -4,3 +4,6 @@
 
 build/
 example/.env
+
+*.jsonl
+*.png

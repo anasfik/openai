@@ -6,6 +6,7 @@ import 'sub_models/training_files.dart';
 export 'sub_models/event.dart';
 export 'sub_models/hyper_params.dart';
 export 'sub_models/training_files.dart';
+export 'stream/fine_tun_event.dart';
 
 class OpenAIFineTuneModel {
   /// The ID of the fine-tuning job.
