@@ -36,7 +36,7 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Embeddings](#embeddings)
 - [x] [Files](#files)
 - [x] [Fine-tunes](#fine-tunes)
-  - [ ] With events `Stream` responses
+  - [x] With events `Stream` responses
 - [x] [Moderation](#moderations)
 - [ ] ChatGPT ( as soon as possible when it's released )
 
