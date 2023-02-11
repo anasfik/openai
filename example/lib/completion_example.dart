@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:dart_openai/openai.dart';
 import 'package:dotenv/dotenv.dart';

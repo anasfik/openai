@@ -1,6 +1,5 @@
 import '../../../models/image/enum.dart';
 import '../../../models/image/image/image.dart';
-import '../base.dart';
 
 abstract class CreateInterface {
   Future<OpenAIImageModel> create({

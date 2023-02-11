@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import '../../../models/image/enum.dart';
-import '../base.dart';
 
 abstract class EditInterface {
   Future<void> edit({
