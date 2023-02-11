@@ -365,7 +365,7 @@ Lists a single fine-tune progress events by it's id.
  print(events.first.message); // ...
 ```
 
-### Listen to dine-tune events `Stream`
+### Listen to fine-tune events `Stream`
 
 Streams all events of a fine-tune job by its id, as they happen.
 
