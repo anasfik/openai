@@ -1,3 +1,7 @@
+# 1.4.2
+
+- UTF-8 Support fix for responses.
+
 # 1.4.0
 
 - Added implementation of fine-tune events Stream.
