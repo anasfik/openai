@@ -1,3 +1,9 @@
+# 1.4.0
+
+- Added implementation of fine-tune events Stream.
+- Added more documentation.
+- Fixed issues.
+
 # 1.3.0
 
 - Fixed the Stream based mechanism for completion stream.
