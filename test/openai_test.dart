@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:dart_openai/openai.dart';
@@ -249,6 +250,29 @@ void main() async {
       expect(fineTune.id, isA<String>());
       expect(fineTune.id, equals(fineTuneExampleId!));
     });
+
+    test("events", () async {
+      final List<OpenAIFineTuneEventModel> events =
+          await OpenAI.instance.fineTune.listEvents(fineTuneExampleId!);
+      expect(events, isA<List<OpenAIFineTuneEventModel>>());
+      if (events.isNotEmpty) {
+        expect(events.first, isA<OpenAIFineTuneEventModel>());
+        expect(events.first.level, isA<String>());
+      }
+    });
+
+    test("events stream", () {
+      final Stream<OpenAIFineTuneEventStreamModel> events =
+          OpenAI.instance.fineTune.listEventsStream(fineTuneExampleId!);
+      expect(events, isA<Stream<OpenAIFineTuneEventStreamModel>>());
+      events.listen((event) {
+        expect(event, isA<OpenAIFineTuneEventStreamModel>());
+        expect(event.level, isA<String>());
+      }, onError: (err) {
+        expect(err, isA<RequestFailedException>());
+      });
+    });
+
     test("cancel", () async {
       OpenAIFineTuneModel cancelledFineTune =
           await OpenAI.instance.fineTune.cancel(fineTuneExampleId!);

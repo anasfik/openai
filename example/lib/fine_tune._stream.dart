@@ -24,13 +24,23 @@ void main() async {
   );
 
   // Get a stream of events for a fine-tune job.
-  Stream fineTuneEventStream =
+  Stream<OpenAIFineTuneEventStreamModel> fineTuneEventStream =
       OpenAI.instance.fineTune.listEventsStream(fineTuneModel.id);
 
   // Listen to the stream.
   fineTuneEventStream.listen((event) {
     print(event);
   });
+
+  // Wait for 5 seconds.
+  await Future.delayed(Duration(seconds: 5));
+
+  // cancel the fine-tune job.
+  final cancelledFineTune =
+      await OpenAI.instance.fineTune.cancel(fineTuneModel.id);
+
+  // print the cancelled fine-tune job.
+  print("Cancelled fine-tune job: ${cancelledFineTune.id}");
 }
 
 File jsonLFileExample() {
