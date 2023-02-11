@@ -67,9 +67,9 @@ packages:
   dart_openai:
     dependency: "direct main"
     description:
-      name: dart_openai
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: ".."
+      relative: true
+    source: path
     version: "1.2.3"
   dotenv:
     dependency: "direct main"
