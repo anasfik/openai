@@ -29,8 +29,9 @@ class OpenAINetworkingClient {
         "request to $from finished with status code ${response.statusCode}");
 
     OpenAILogger.log("starting decoding response body");
+    Utf8Decoder utf8decoder = Utf8Decoder();
     final Map<String, dynamic> decodedBody =
-        jsonDecode(response.body) as Map<String, dynamic>;
+        jsonDecode(utf8decoder.convert(response.bodyBytes)) as Map<String, dynamic>;
 
     OpenAILogger.log("response body decoded successfully");
 
@@ -108,8 +109,9 @@ class OpenAINetworkingClient {
         "request to $to finished with status code ${response.statusCode}");
 
     OpenAILogger.log("starting decoding response body");
+    Utf8Decoder utf8decoder = Utf8Decoder();
     final Map<String, dynamic> decodedBody =
-        jsonDecode(response.body) as Map<String, dynamic>;
+        jsonDecode(utf8decoder.convert(response.bodyBytes)) as Map<String, dynamic>;
     OpenAILogger.log("response body decoded successfully");
 
     if (decodedBody['error'] != null) {
