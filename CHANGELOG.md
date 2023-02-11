@@ -1,3 +1,7 @@
+# 1.3.0
+
+- Fixed the Stream based mechanism for completion stream.
+
 # 1.2.3
 
 - Exposed image size and url enums to be used externally

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -80,42 +81,94 @@ class OpenAINetworkingClient {
     }
   }
 
+  // static Stream<T> postStream<T>({
+  //   required String to,
+  //   required T Function(Map<String, dynamic>) onSuccess,
+  //   required Map<String, dynamic> body,
+  // }) async* {
+  //   OpenAILogger.log("starting request to $to");
+
+  //   final http.Client client = http.Client();
+  //   final clientRequest = client.post(
+  //     Uri.parse(to),
+  //     headers: HeadersBuilder.build(),
+  //     body: jsonEncode(body),
+  //   );
+
+  //   final response = clientRequest.asStream();
+  //   OpenAILogger.log("Starting to reading stream response");
+
+  //   await for (var chunk in response) {
+  //     String eventData = utf8.decode(chunk.bodyBytes);
+
+  //     List<String> dataLines = eventData.split("\n");
+
+  //     for (var line in dataLines) {
+  //       if (line.startsWith("data: ")) {
+  //         String data = line.substring(6);
+  //         if (data.startsWith("[DONE]")) {
+  //           OpenAILogger.log("stream response is done");
+  //           client.close();
+  //           return;
+  //         }
+  //         final decoded = jsonDecode(data) as Map<String, dynamic>;
+
+  //         yield onSuccess(decoded);
+  //       }
+  //     }
+  //   }
+  // }
+
   static Stream<T> postStream<T>({
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
     required Map<String, dynamic> body,
-  }) async* {
-    OpenAILogger.log("starting request to $to");
+  }) {
+    StreamController<T> controller = StreamController<T>();
 
     final http.Client client = http.Client();
-    final clientRequest = client.post(
+    http.Request request = http.Request(
+      "POST",
       Uri.parse(to),
-      headers: HeadersBuilder.build(),
-      body: jsonEncode(body),
+    );
+    request.headers.addAll(HeadersBuilder.build());
+    request.body = jsonEncode(body);
+
+    void close() {
+      client.close();
+      controller.close();
+    }
+
+    OpenAILogger.log("starting request to $to");
+    client.send(request).then(
+      (respond) {
+        OpenAILogger.log("Starting to reading stream response");
+        respond.stream.listen((value) {
+          final String data = utf8.decode(value);
+
+          final List<String> dataLines = data.split("\n");
+
+          for (String line in dataLines) {
+            if (line.startsWith("data: ")) {
+              final String data = line.substring(6);
+              if (data.startsWith("[DONE]")) {
+                OpenAILogger.log("stream response is done");
+                return;
+              }
+
+              final decoded = jsonDecode(data) as Map<String, dynamic>;
+              controller.add(onSuccess(decoded));
+            }
+          }
+        }, onDone: () {
+          close();
+        }, onError: (error) {
+          controller.addError(error);
+        });
+      },
     );
 
-    final response = clientRequest.asStream();
-    OpenAILogger.log("Starting to reading stream response");
-
-    await for (var chunk in response) {
-      String eventData = utf8.decode(chunk.bodyBytes);
-
-      List<String> dataLines = eventData.split("\n");
-
-      for (var line in dataLines) {
-        if (line.startsWith("data: ")) {
-          String data = line.substring(6);
-          if (data.startsWith("[DONE]")) {
-            OpenAILogger.log("stream response is done");
-            client.close();
-            return;
-          }
-          final decoded = jsonDecode(data) as Map<String, dynamic>;
-
-          yield onSuccess(decoded);
-        }
-      }
-    }
+    return controller.stream;
   }
 
   static Future imageEditForm<T>({
