@@ -1,3 +1,4 @@
+import 'package:dart_openai/openai.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/models/fine_tune/fine_tune.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
@@ -174,6 +175,26 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
     );
   }
 
+  /// Streams all events of a fine-tune job by its id, as they happen.
+  /// 
+  /// 
+  /// This is a long-running operation that will not return until the fine-tune job is terminated.
+  /// The stream will emit an event every time a new event is available.
+  /// The stream will emit an [RequestFailedException] if the fine-tune job is terminated with an error.
+  ///
+  ///
+  /// [fineTuneId] The id of the fine-tune job to stream events for.
+  ///
+  ///
+  /// Example:
+  /// ```dart
+  /// final eventsStream = OpenAI.instance.fineTune.listEventsStream("FINE TUNE ID");
+  ///
+  /// eventsStream.listen((event) {
+  ///  print(event.message);
+  /// });
+  ///
+  /// ```
   Stream<OpenAIFineTuneEventStreamModel> listEventsStream(String fineTuneId) {
     final String fineTuneEvents = "$endpoint/$fineTuneId/events";
 

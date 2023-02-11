@@ -366,9 +366,25 @@ Lists a single fine-tune progress events by it's id.
  print(events.first.message); // ...
 ```
 
+### Listen to dine-tune events `Stream`
+
+Streams all events of a fine-tune job by its id, as they happen.
+
+This is a long-running operation that will not return until the fine-tune job is terminated.
+
+The stream will emit an event every time a new event is available.
+
+```dart
+Stream<OpenAIFineTuneEventStreamModel> eventsStream = OpenAI.instance.fineTune.listEventsStream("FINE TUNE ID");
+
+eventsStream.listen((event) {
+ print(event.message);
+});
+```
+
 ### Delete fine-tune
 
-deletes a fine-tune job by its id.
+Deletes a fine-tune job by its id.
 
 ```dart
  bool deleted = await OpenAI.instance.fineTune.delete("FINE TUNE ID");
