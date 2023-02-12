@@ -33,7 +33,7 @@ jobs:
           version: ${{ env.version }}
 
         with:
-          tag_name: "$version"
-          release_name: "Release $version"
+          tag_name: $version
+          release_name: Release $version
           draft: false
           prerelease: false
