@@ -39,7 +39,7 @@ jobs:
 
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
       - name: Publish
-        uses: sakebook/actions-flutter-pub-publisher@v1.4.
+        uses: sakebook/actions-flutter-pub-publisher@v1.4.1
         with:
           credential: ${{ secrets.CREDENTIAL_JSON }}
           flutter_package: false
