@@ -39,8 +39,9 @@ jobs:
 
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
       - name: Publish
-        uses: k-paxian/dart-package-publisher@v1.5.1
+        uses: sakebook/actions-flutter-pub-publisher@v1.4.
         with:
-          credentialJson: ${{ secrets.CREDENTIAL_JSON }}
-          flutter: false
-          skipTests: true
+          credential: ${{ secrets.CREDENTIAL_JSON }}
+          flutter_package: false
+          skip_test: true
+          dry_run: false
