@@ -1,3 +1,7 @@
+# 1.4.4
+
+- Fixed echo property type misleading.
+
 # 1.4.2
 
 - UTF-8 Support fix for responses.
