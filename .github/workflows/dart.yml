@@ -25,8 +25,12 @@ jobs:
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
 
       - name: Install dependencies
+        env:
+          OPEN_AI_API_KEY: ${{ secrets.OPEN_AI_API_KEY }}
+
         run: |
           dart pub get
+          sed -i -E "s/OpenAI.apiKey = \".*\";/OpenAI.apiKey = \"$MY_API_KEY\";/g" test/openai_test.dart
           cd example/
           dart pub get
           cd ..
