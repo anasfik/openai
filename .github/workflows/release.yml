@@ -36,3 +36,12 @@ jobs:
           release_name: Release ${{ env.VERSION }}
           draft: false
           prerelease: false
+
+      - name: Check Publish Warnings
+        run: dart pub publish --dry-run
+      - name: Publish
+        uses: k-paxian/dart-package-publisher@v1.5.1
+        with:
+          credentialJson: ${{ secrets.CREDENTIAL_JSON }}
+          flutter: false
+          skipTests: true
