@@ -30,7 +30,7 @@ jobs:
 
         run: |
           dart pub get
-          sed -i -E "s/OpenAI.apiKey = \".*\";/OpenAI.apiKey = \"$MY_API_KEY\";/g" test/openai_test.dart
+          sed -i -E "s/OpenAI.apiKey = \".*\";/OpenAI.apiKey = \"OPEN_AI_API_KEY\";/g" test/openai_test.dart
           cd example/
           dart pub get
           cd ..
