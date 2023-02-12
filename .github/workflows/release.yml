@@ -30,10 +30,10 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          version: ${{ env.version }}
+          VERSION: ${{ env.version }}
 
         with:
-          tag_name: $version
-          release_name: Release $version
+          tag_name: $VERSION
+          release_name: Release $VERSION
           draft: false
           prerelease: false
