@@ -25,12 +25,13 @@ jobs:
         run: |
           version=$(grep -oP "version:\s*\K.*" pubspec.yaml)
           echo "version: V$version detected"
+        env:
+          VERSION: ${{ env.version }}
 
       - name: Creating New Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ env.version }}
 
         with:
           tag_name: $VERSION
