@@ -1,0 +1,37 @@
+name: Release Workflow.
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Checking commit message
+        run: |
+          if grep -iq "release" "$GITHUB_EVENT_PATH"; then
+            echo "This commit contains the word 'release'. Creating a release..."
+          else
+            echo "This commit does not contain the word 'release'. Exiting workflow."
+            exit 78
+          fi
+
+      - name: Extracting Version Number Of The Current Release
+        run: |
+          version=$(grep -oP "version:\s*\K.*" pubspec.yaml)
+          echo "version: $version detected"
+
+      - name: Creating New Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: $version
+          release_name: Release $version
+          draft: false
+          prerelease: false
