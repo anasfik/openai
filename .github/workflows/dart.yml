@@ -27,7 +27,6 @@ jobs:
       - name: Install dependencies
         env:
           OPEN_AI_API_KEY: ${{ secrets.OPEN_AI_API_KEY }}
-
         run: |
           dart pub get
           sed -i -E "s/OpenAI.apiKey = \".*\";/OpenAI.apiKey = \"$OPEN_AI_API_KEY\";/g" test/openai_test.dart
