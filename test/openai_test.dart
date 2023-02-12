@@ -27,7 +27,7 @@ void main() async {
       } catch (e) {
         expect(e, isA<MissingApiKeyException>());
       }
-    });
+    }); 
     test('with setting a key', () {
       OpenAI.apiKey = "YOUR API KEY FROM ENVIRONMENT VARIABLE";
 
