@@ -18,6 +18,8 @@ void main() async {
 
   String? fineTuneExampleId;
 
+  String? fileToDelete;
+
   group('authentication', () {
     test('without setting a key', () {
       try {
@@ -187,6 +189,7 @@ void main() async {
         fileIdFromFilesApi = files
             .firstWhere((element) => element.fileName.contains("example.jsonl"))
             .id;
+        fileToDelete = files.last.id;
       }
     });
 
@@ -211,9 +214,10 @@ void main() async {
 
     // ! this will throw an error if you try ti delete the new uploaded file from the upload() method because it will be still processing, so please, wait a few seconds before running this test, otherwise get a file id from the list() method and set it to the fileIdFromFilesApi variable.
     test("delete", () async {
-      final bool file = await OpenAI.instance.file
-          .delete("READ THE COMMENT ABOVE" // fileIdFromFilesApi!,
-              );
+      final bool file = await OpenAI.instance.file.delete(
+        // "READ THE COMMENT ABOVE"
+        fileToDelete!,
+      );
       expect(file, isA<bool>());
       // we are trying to delete the file that we uploaded in the previous test.
       // so it should return true.
