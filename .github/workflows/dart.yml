@@ -27,6 +27,7 @@ jobs:
           sed -i -E "s/OpenAI.apiKey = \".*\";/OpenAI.apiKey = \"$OPEN_AI_API_KEY\";/g" test/openai_test.dart
           cd example/
           dart pub get
+          dart run build_runner build
           cd ..
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
