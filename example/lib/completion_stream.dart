@@ -1,12 +1,10 @@
 import 'package:dart_openai/openai.dart';
-import 'package:dotenv/dotenv.dart';
+
+import 'env/env.dart';
 
 void main() {
-  // Load the .env file
-  DotEnv env = DotEnv()..load([".env"]);
-
   // Set the OpenAI API key from the .env file.
-  OpenAI.apiKey = env['OPEN_AI_API_KEY']!;
+  OpenAI.apiKey = Env.apiKey;
 
   // Creates A Stream Of Completions text.
   Stream<OpenAIStreamCompletionModel> stream =
@@ -17,6 +15,7 @@ void main() {
     temperature: 0.8,
   );
 
+  // listen to the stream and print the text.
   stream.listen((event) {
     print(event.choices.first.text);
   });

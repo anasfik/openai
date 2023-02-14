@@ -3,6 +3,7 @@
 .packages
 
 .env
+env.g.dart
 
 # Conventional directory for build output.
 build/

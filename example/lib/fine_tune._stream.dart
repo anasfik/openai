@@ -2,14 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dart_openai/openai.dart';
-import 'package:dotenv/dotenv.dart';
+
+import 'env/env.dart';
 
 void main() async {
-  // Load the .env file
-  DotEnv env = DotEnv()..load([".env"]);
-
   // Set the OpenAI API key from the .env file.
-  OpenAI.apiKey = env['OPEN_AI_API_KEY']!;
+  OpenAI.apiKey = Env.apiKey;
 
 // Upload an example File
   OpenAIFileModel file = await OpenAI.instance.file.upload(

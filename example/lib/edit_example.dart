@@ -1,12 +1,10 @@
 import 'package:dart_openai/openai.dart';
-import 'package:dotenv/dotenv.dart';
+
+import 'env/env.dart';
 
 Future<void> main() async {
-  // Load the .env file
-  DotEnv env = DotEnv()..load([".env"]);
-
   // Set the OpenAI API key from the .env file.
-  OpenAI.apiKey = env['OPEN_AI_API_KEY']!;
+  OpenAI.apiKey = Env.apiKey;
 
   // Creates the Edit
   OpenAIEditModel edit = await OpenAI.instance.edit.create(
