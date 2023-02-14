@@ -67,12 +67,29 @@ For the full documentation about all members this library offers, [check here](h
 
 The OpenAI API uses API keys for authentication. you can get your account APU key by visiting [API keys](https://platform.openai.com/account/api-keys) of your account.
 
-We highly recommend loading your secret key at runtime from a `.env` file, you can use the [dotenv](https://pub.dev/packages/dotenv) package for Dart applications or [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) for Flutter's.
+We highly recommend loading your secret key at runtime from a `.env` file, you can use the [envied](https://pub.dev/packages/envied) package.
+
+```
+// .env
+OPEN_AI_API_KEY=<REPLACE WITH YOUR API KEY>
+```
 
 ```dart
+// lib/env/env.dart
+import 'package:envied/envied.dart';
+part 'env.g.dart';
+
+@Envied(path: ".env")
+abstract class Env {
+  @EnviedField(varName: 'OPEN_AI_API_KEY') // the .env variable.
+  static const apiKey = _Env.apiKey;
+}
+```
+
+```dart
+// lib/main.dart
 void main() {
- DotEnv env = DotEnv()..load([".env"]); // Loads our .env file.
- OpenAI.apiKey = env['OPEN_AI_API_KEY']; // Initialize the package with that API key
+ OpenAI.apiKey = Env.apiKey; // Initializes the package with that API key
  // ..
 }
 ```
@@ -435,4 +452,3 @@ try {
 
 - [How to generate AI images using Dall-e inside a Flutter/Dart application.
   ](https://medium.com/@ffikhi.aanas/how-to-generate-ai-images-using-dall-e-inside-a-flutter-dart-application-fd66aa031b14)
-
