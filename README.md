@@ -15,7 +15,7 @@
 
 </p>
 
-<br>
+</br>
 
 An open-source Client package that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart/Flutter applications.
 
