@@ -1,5 +1,22 @@
 # Dart Client For OpenAI (GPT-3 & DALL-E..)
 
+<br>
+<p align="center">
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/anasfik/openai">
+<img alt="GitHub contributors" src="https://img.shields.io/github/contributors/anasfik/openai">
+<img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/anasfik/openai?style=social">
+<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/anasfik/openai/dart.yml?label=tests">
+<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/anasfik/openai/release.yml?label=build">
+<img alt="GitHub" src="https://img.shields.io/github/license/anasfik/openai">
+<img alt="Pub Version" src="https://img.shields.io/pub/v/dart_openai">
+<img alt="Pub Likes" src="https://img.shields.io/pub/likes/dart_openai">
+<img alt="Pub Points" src="https://img.shields.io/pub/points/dart_openai">
+<img alt="Pub Popularity" src="https://img.shields.io/pub/popularity/dart_openai">
+
+</p>
+
+<br>
+
 An open-source Client package that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart/Flutter applications.
 
 This library provides simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
