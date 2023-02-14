@@ -1,3 +1,7 @@
+# 1.4.6
+
+- Changed the use of dotenv to envied package.
+
 # 1.4.4
 
 - Fixed echo property type misleading.
