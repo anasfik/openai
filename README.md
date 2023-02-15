@@ -1,4 +1,4 @@
-# Dart Client For OpenAI (GPT-3 & DALL-E..)
+# Dart library For OpenAI APIs (GPT-3 & DALL-E..)
 
 <br>
 <p align="center">
