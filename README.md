@@ -39,14 +39,14 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 
 Please note that this client SDK connects directly to [OpenAI APIs](https://platform.openai.com/docs/introduction/overview) using HTTP requests.
 
-## Key Features
+## ✨ Key Features
 
 - Easy to use methods that reflect exactly the OpenAI documentation, with additional functionalities that make it better to use with Dart Programming Language.
 - Authorize just once, use it anywhere and at any time in your application.
 - Developer-friendly.
 - `Stream` functionality for completions API & fine-tune events API.
 
-## Code Progress (100 %)
+## 👑 Code Progress (100 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
@@ -61,7 +61,7 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Moderation](#moderations)
 - [ ] ChatGPT ( as soon as possible when it's released )
 
-## Testing Progress (100 %)
+## 💫 Testing Progress (100 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
@@ -75,13 +75,13 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 
 </br>
 
-# Full Documentation:
+# 📜 Full Documentation:
 
 For the full documentation about all members this library offers, [check here](https://pub.dev/documentation/dart_openai/latest/).
 
 </br>
 
-# Usage
+# 🟢 Usage
 
 ## Authentication
 
