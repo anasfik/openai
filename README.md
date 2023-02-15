@@ -17,6 +17,11 @@
 
 </br>
 
+<h3>Help this grow and get discovered by other devs with a ⭐ star.</h3>
+
+</br>
+</br>
+
 An open-source Client package that allows developers to easily integrate the power of OpenAI's state-of-the-art AI models into their Dart/Flutter applications.
 
 This library provides simple and intuitive methods for making requests to OpenAI's various APIs, including the GPT-3 language model, DALL-E image generation, and more.
