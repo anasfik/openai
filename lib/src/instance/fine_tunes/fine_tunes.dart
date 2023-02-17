@@ -175,8 +175,8 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
   }
 
   /// Streams all events of a fine-tune job by its id, as they happen.
-  /// 
-  /// 
+  ///
+  ///
   /// This is a long-running operation that will not return until the fine-tune job is terminated.
   /// The stream will emit an event every time a new event is available.
   /// The stream will emit an [RequestFailedException] if the fine-tune job is terminated with an error.

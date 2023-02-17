@@ -3,7 +3,6 @@ import 'package:dart_openai/openai.dart';
 import 'env/env.dart';
 
 Future<void> main() async {
-
   // Set the OpenAI API key from the .env file.
   OpenAI.apiKey = Env.apiKey;
 
