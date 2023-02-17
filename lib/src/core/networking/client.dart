@@ -31,7 +31,8 @@ class OpenAINetworkingClient {
     OpenAILogger.log("starting decoding response body");
     Utf8Decoder utf8decoder = Utf8Decoder();
     final Map<String, dynamic> decodedBody =
-        jsonDecode(utf8decoder.convert(response.bodyBytes)) as Map<String, dynamic>;
+        jsonDecode(utf8decoder.convert(response.bodyBytes))
+            as Map<String, dynamic>;
 
     OpenAILogger.log("response body decoded successfully");
 
@@ -67,7 +68,8 @@ class OpenAINetworkingClient {
       streamedResponse.stream.listen((value) {
         final String data = utf8.decode(value);
 
-        final List<String> dataLines = data.split("\n");
+        final List<String> dataLines =
+            data.split("\n").where((element) => element.isNotEmpty).toList();
 
         for (String line in dataLines) {
           if (line.startsWith("data: ")) {
@@ -111,7 +113,8 @@ class OpenAINetworkingClient {
     OpenAILogger.log("starting decoding response body");
     Utf8Decoder utf8decoder = Utf8Decoder();
     final Map<String, dynamic> decodedBody =
-        jsonDecode(utf8decoder.convert(response.bodyBytes)) as Map<String, dynamic>;
+        jsonDecode(utf8decoder.convert(response.bodyBytes))
+            as Map<String, dynamic>;
     OpenAILogger.log("response body decoded successfully");
 
     if (decodedBody['error'] != null) {
@@ -192,7 +195,8 @@ class OpenAINetworkingClient {
         respond.stream.listen((value) {
           final String data = utf8.decode(value);
 
-          final List<String> dataLines = data.split("\n");
+          final List<String> dataLines =
+              data.split("\n").where((element) => element.isNotEmpty).toList();
 
           for (String line in dataLines) {
             if (line.startsWith("data: ")) {
@@ -203,6 +207,7 @@ class OpenAINetworkingClient {
               }
 
               final decoded = jsonDecode(data) as Map<String, dynamic>;
+
               controller.add(onSuccess(decoded));
             }
           }

@@ -1,3 +1,8 @@
+# 1.4.8
+
+- Fix issues
+- Fix doubled stream snapshots than expected.
+
 # 1.4.6
 
 - Changed the use of dotenv to envied package.
