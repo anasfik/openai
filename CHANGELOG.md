@@ -1,3 +1,8 @@
+# 1.4.9
+
+- Ensured immutability of results from requests.
+- Exposed more equality for sdk models
+
 # 1.4.8
 
 - Fix issues
