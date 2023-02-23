@@ -1,9 +1,15 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class OpenAIVariationData {
   /// The url of the image.
   final String url;
 
+  @override
+  int get hashCode => url.hashCode;
+
   /// This class is used to represent an OpenAI image variation data.
-  OpenAIVariationData({
+  const OpenAIVariationData({
     required this.url,
   });
 
@@ -21,7 +27,4 @@ class OpenAIVariationData {
 
     return other.url == url;
   }
-
-  @override
-  int get hashCode => url.hashCode;
 }

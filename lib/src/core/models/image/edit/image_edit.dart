@@ -1,17 +1,22 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 import 'sub_models/data.dart';
 
 export 'sub_models/data.dart';
 
+@immutable
 class OpenAiImageEditModel {
   /// The time the image was created.
   final DateTime created;
 
   /// The data of the image.
-  final List<OpenAiImageEditDataModel> data;
+  final List<OpenAIImageEditDataModel> data;
+
+  @override
+  int get hashCode => created.hashCode ^ data.hashCode;
 
   /// This class is used to represent an OpenAI image edit.
-  OpenAiImageEditModel({
+  const OpenAiImageEditModel({
     required this.created,
     required this.data,
   });
@@ -20,9 +25,9 @@ class OpenAiImageEditModel {
   factory OpenAiImageEditModel.fromJson(Map<String, dynamic> json) {
     return OpenAiImageEditModel(
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
-      data: List<OpenAiImageEditDataModel>.from(
+      data: List<OpenAIImageEditDataModel>.from(
         json['data'].map(
-          (x) => OpenAiImageEditDataModel.fromJson(x),
+          (x) => OpenAIImageEditDataModel.fromJson(x),
         ),
       ),
     );
@@ -35,9 +40,6 @@ class OpenAiImageEditModel {
 
     return other.created == created && listEquals(other.data, data);
   }
-
-  @override
-  int get hashCode => created.hashCode ^ data.hashCode;
 
   @override
   String toString() => 'OpenAiImageEditModel(created: $created, data: $data)';

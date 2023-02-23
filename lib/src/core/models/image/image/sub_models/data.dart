@@ -1,9 +1,15 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class OpenAIImageData {
   /// The URL of the image.
   final String url;
 
+  @override
+  int get hashCode => url.hashCode;
+
   /// This class is used to represent an OpenAI image data.
-  OpenAIImageData({
+  const OpenAIImageData({
     required this.url,
   });
 
@@ -18,9 +24,6 @@ class OpenAIImageData {
 
     return other.url == url;
   }
-
-  @override
-  int get hashCode => url.hashCode;
 
   @override
   String toString() => 'OpenAIImageData(url: $url)';

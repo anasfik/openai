@@ -1,29 +1,32 @@
-class OpenAiImageEditDataModel {
+import 'package:meta/meta.dart';
+
+@immutable
+class OpenAIImageEditDataModel {
   /// The url of the image.
   final String url;
 
+  @override
+  int get hashCode => url.hashCode;
+
   /// This class is used to represent an OpenAI image edit data.
-  OpenAiImageEditDataModel({
+  const OpenAIImageEditDataModel({
     required this.url,
   });
 
-  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAiImageEditDataModel] object.
-  factory OpenAiImageEditDataModel.fromJson(Map<String, dynamic> json) {
-    return OpenAiImageEditDataModel(
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIImageEditDataModel] object.
+  factory OpenAIImageEditDataModel.fromJson(Map<String, dynamic> json) {
+    return OpenAIImageEditDataModel(
       url: json['url'],
     );
   }
 
   @override
-  String toString() => 'OpenAiImageEditDataModel(url: $url)';
+  String toString() => 'OpenAIImageEditDataModel(url: $url)';
 
   @override
-  bool operator ==(covariant OpenAiImageEditDataModel other) {
+  bool operator ==(covariant OpenAIImageEditDataModel other) {
     if (identical(this, other)) return true;
 
     return other.url == url;
   }
-
-  @override
-  int get hashCode => url.hashCode;
 }
