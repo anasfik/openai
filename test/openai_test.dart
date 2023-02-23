@@ -6,11 +6,12 @@ import 'package:dart_openai/openai.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  final imageFileExample = await getFileFromUrl(
-      "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png");
+  final exampleImageFile = getFileFromUrl(
+    "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png",
+  );
 
-  final maskFileExample = await getFileFromUrl(
-      "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png");
+  final imageFileExample = await exampleImageFile;
+  final maskFileExample = await exampleImageFile;
 
   String? modelExampleId;
 
@@ -94,7 +95,7 @@ void main() async {
       expect(completion.choices.first.text, isNotNull);
       expect(completion.choices.first.text, isA<String>());
     });
-    test('create with a stream', () async {
+    test('create with a stream', () {
       final Stream<OpenAIStreamCompletionModel> completion =
           OpenAI.instance.completion.createStream(
         // in case the previous test didn't run, we will use a default model id.
@@ -207,7 +208,7 @@ void main() async {
       expect(file.id, isNotNull);
     });
     test("retrieve content", () async {
-      final dynamic content =
+      final content =
           await OpenAI.instance.file.retrieveContent(fileIdFromFilesApi!);
       expect(content, isNotNull);
     });
@@ -268,12 +269,15 @@ void main() async {
       final Stream<OpenAIFineTuneEventStreamModel> events =
           OpenAI.instance.fineTune.listEventsStream(fineTuneExampleId!);
       expect(events, isA<Stream<OpenAIFineTuneEventStreamModel>>());
-      events.listen((event) {
-        expect(event, isA<OpenAIFineTuneEventStreamModel>());
-        expect(event.level, isA<String>());
-      }, onError: (err) {
-        expect(err, isA<RequestFailedException>());
-      });
+      events.listen(
+        (event) {
+          expect(event, isA<OpenAIFineTuneEventStreamModel>());
+          expect(event.level, isA<String>());
+        },
+        onError: (err) {
+          expect(err, isA<RequestFailedException>());
+        },
+      );
     });
 
     test("cancel", () async {

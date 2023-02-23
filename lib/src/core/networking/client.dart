@@ -270,6 +270,7 @@ class OpenAINetworkingClient {
   static Future<T> imageVariationForm<T>({
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
+    // ignore: avoid-unused-parameters
     required Map<String, dynamic> body,
     required File image,
   }) async {
