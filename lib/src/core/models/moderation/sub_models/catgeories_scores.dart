@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class OpenAIModerationResultScoresModel {
   /// The hate score of the moderation job.
   final double hate;
@@ -20,8 +23,19 @@ class OpenAIModerationResultScoresModel {
   /// The violence and graphic score of the moderation job.
   final double violenceAndGraphic;
 
+  @override
+  int get hashCode {
+    return hate.hashCode ^
+        hateAndThreatening.hashCode ^
+        selfHarm.hashCode ^
+        sexual.hashCode ^
+        sexualAndMinors.hashCode ^
+        violence.hashCode ^
+        violenceAndGraphic.hashCode;
+  }
+
   /// This class is used to represent an OpenAI moderation job result scores.
-  OpenAIModerationResultScoresModel({
+  const OpenAIModerationResultScoresModel({
     required this.hate,
     required this.hateAndThreatening,
     required this.selfHarm,
@@ -33,7 +47,8 @@ class OpenAIModerationResultScoresModel {
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModerationResultScoresModel] object.
   factory OpenAIModerationResultScoresModel.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     return OpenAIModerationResultScoresModel(
       hate: json['hate'],
       hateAndThreatening: json['hate/threatening'],
@@ -61,16 +76,5 @@ class OpenAIModerationResultScoresModel {
         other.sexualAndMinors == sexualAndMinors &&
         other.violence == violence &&
         other.violenceAndGraphic == violenceAndGraphic;
-  }
-
-  @override
-  int get hashCode {
-    return hate.hashCode ^
-        hateAndThreatening.hashCode ^
-        selfHarm.hashCode ^
-        sexual.hashCode ^
-        sexualAndMinors.hashCode ^
-        violence.hashCode ^
-        violenceAndGraphic.hashCode;
   }
 }

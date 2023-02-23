@@ -1,9 +1,12 @@
+import 'package:meta/meta.dart';
+
 import 'catgeories.dart';
 import 'catgeories_scores.dart';
 
 export 'catgeories.dart';
 export 'catgeories_scores.dart';
 
+@immutable
 class OpenAIModerationResultModel {
   /// The categories of the moderation job.
   final OpenAIModerationResultCategoriesModel categories;
@@ -14,8 +17,12 @@ class OpenAIModerationResultModel {
   /// The flagged status of the moderation job.
   final bool flagged;
 
+  @override
+  int get hashCode =>
+      categories.hashCode ^ categoryScores.hashCode ^ flagged.hashCode;
+
   /// This class is used to represent an OpenAI moderation job result.
-  OpenAIModerationResultModel({
+  const OpenAIModerationResultModel({
     required this.categories,
     required this.categoryScores,
     required this.flagged,
@@ -46,8 +53,4 @@ class OpenAIModerationResultModel {
         other.categoryScores == categoryScores &&
         other.flagged == flagged;
   }
-
-  @override
-  int get hashCode =>
-      categories.hashCode ^ categoryScores.hashCode ^ flagged.hashCode;
 }
