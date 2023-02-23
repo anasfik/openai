@@ -28,10 +28,8 @@ class OpenAIModel implements OpenAIModelBase {
         endpoint,
       ),
       onSuccess: (Map<String, dynamic> response) {
-        final List<dynamic> data = response['data'];
-        return data
-            .map((dynamic model) => OpenAIModelModel.fromJson(model))
-            .toList();
+        final List data = response['data'];
+        return data.map((model) => OpenAIModelModel.fromJson(model)).toList();
       },
     );
   }

@@ -36,7 +36,7 @@ class OpenAIEmbedding implements OpenAIEmbeddingBase {
   @override
   Future<OpenAIEmbeddingsModel> create({
     required String model,
-    required dynamic input,
+    required input,
     String? user,
   }) async {
     assert(

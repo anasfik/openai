@@ -83,7 +83,7 @@ class OpenAICompletion implements OpenAICompletionBase {
   @override
   Future<OpenAICompletionModel> create({
     required String model,
-    dynamic prompt,
+    prompt,
     String? suffix,
     int? maxTokens,
     double? temperature,
@@ -91,7 +91,7 @@ class OpenAICompletion implements OpenAICompletionBase {
     int? n,
     int? logprobs,
     bool? echo,
-    dynamic stop,
+    stop,
     double? presencePenalty,
     double? frequencyPenalty,
     int? bestOf,

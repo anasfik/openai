@@ -26,7 +26,7 @@ class OpenAIFiles implements OpenAIFilesBase {
     return await OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.build(endpoint),
       onSuccess: (Map<String, dynamic> response) {
-        final List<dynamic> filesList = response["data"];
+        final List filesList = response["data"];
         return filesList.map((e) => OpenAIFileModel.fromMap(e)).toList();
       },
     );
@@ -61,7 +61,7 @@ class OpenAIFiles implements OpenAIFilesBase {
   /// print(fileContent);
   /// ```
   @override
-  Future<dynamic> retrieveContent(String fileId) async {
+  Future retrieveContent(String fileId) async {
     final String fileIdEndpoint = "/$fileId/content";
 
     return await OpenAINetworkingClient.get(
