@@ -1,22 +1,27 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 import 'sub-models/data.dart';
 import 'sub-models/usage.dart';
 
 export 'sub-models/data.dart';
 export 'sub-models/usage.dart';
 
+@immutable
 class OpenAIEmbeddingsModel {
   /// The data returned by the embeddings request.
-  List<OpenAIEmbeddingsDataModel> data;
+  final List<OpenAIEmbeddingsDataModel> data;
 
   /// The model used to generate the embeddings.
-  String model;
+  final String model;
 
   /// The usage of the embeddings, if any.
-  OpenAIEmbeddingsUsageModel? usage;
+  final OpenAIEmbeddingsUsageModel? usage;
+
+  @override
+  int get hashCode => data.hashCode ^ model.hashCode ^ usage.hashCode;
 
   /// This class is used to represent an OpenAI embeddings request.
-  OpenAIEmbeddingsModel({
+  const OpenAIEmbeddingsModel({
     required this.data,
     required this.model,
     required this.usage,
@@ -32,7 +37,8 @@ class OpenAIEmbeddingsModel {
       ),
       model: map['model'] as String,
       usage: OpenAIEmbeddingsUsageModel.fromMap(
-          map['usage'] as Map<String, dynamic>),
+        map['usage'] as Map<String, dynamic>,
+      ),
     );
   }
 
@@ -45,9 +51,6 @@ class OpenAIEmbeddingsModel {
         other.model == model &&
         other.usage == usage;
   }
-
-  @override
-  int get hashCode => data.hashCode ^ model.hashCode ^ usage.hashCode;
 
   @override
   String toString() =>

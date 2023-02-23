@@ -1,12 +1,18 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class OpenAIEmbeddingsUsageModel {
   /// The number of tokens in the prompt.
-  int? promptTokens;
+  final int? promptTokens;
 
   /// The total number of tokens in the prompt and completion.
-  int? totalTokens;
+  final int? totalTokens;
+
+  @override
+  int get hashCode => promptTokens.hashCode ^ totalTokens.hashCode;
 
   /// This class is used to represent the usage of an OpenAI embeddings.
-  OpenAIEmbeddingsUsageModel({
+  const OpenAIEmbeddingsUsageModel({
     required this.promptTokens,
     required this.totalTokens,
   });
@@ -30,7 +36,4 @@ class OpenAIEmbeddingsUsageModel {
     return other.promptTokens == promptTokens &&
         other.totalTokens == totalTokens;
   }
-
-  @override
-  int get hashCode => promptTokens.hashCode ^ totalTokens.hashCode;
 }

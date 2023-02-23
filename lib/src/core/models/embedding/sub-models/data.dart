@@ -1,14 +1,19 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 class OpenAIEmbeddingsDataModel {
   /// The embedding of the text.
-  List<double> embeddings;
+  final List<double> embeddings;
 
   /// The index of the text.
-  int index;
+  final int index;
+
+  @override
+  int get hashCode => embeddings.hashCode ^ index.hashCode;
 
   /// This class is used to represent the data returned by an OpenAI embeddings request.
-  OpenAIEmbeddingsDataModel({
+  const OpenAIEmbeddingsDataModel({
     required this.embeddings,
     required this.index,
   });
@@ -32,9 +37,6 @@ class OpenAIEmbeddingsDataModel {
 
     return listEquals(other.embeddings, embeddings) && other.index == index;
   }
-
-  @override
-  int get hashCode => embeddings.hashCode ^ index.hashCode;
 
   @override
   String toString() =>
