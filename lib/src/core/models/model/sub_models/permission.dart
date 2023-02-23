@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class OpenAIModelModelPermission {
   /// The ID of the permission.
   final String? id;
@@ -32,8 +35,23 @@ class OpenAIModelModelPermission {
   /// Whether the permission is blocking.
   final bool? isBlocking;
 
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        created.hashCode ^
+        allowCreateEngine.hashCode ^
+        allowSampling.hashCode ^
+        allowLogprobs.hashCode ^
+        allowSearchIndices.hashCode ^
+        allowView.hashCode ^
+        allowFineTuning.hashCode ^
+        organization.hashCode ^
+        group.hashCode ^
+        isBlocking.hashCode;
+  }
+
   /// This class is used to represent an OpenAI model permission, it's used in [OpenAIModelModel].
-  OpenAIModelModelPermission({
+  const OpenAIModelModelPermission({
     this.id,
     this.created,
     this.allowCreateEngine,
@@ -85,20 +103,5 @@ class OpenAIModelModelPermission {
         other.organization == organization &&
         other.group == group &&
         other.isBlocking == isBlocking;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        created.hashCode ^
-        allowCreateEngine.hashCode ^
-        allowSampling.hashCode ^
-        allowLogprobs.hashCode ^
-        allowSearchIndices.hashCode ^
-        allowView.hashCode ^
-        allowFineTuning.hashCode ^
-        organization.hashCode ^
-        group.hashCode ^
-        isBlocking.hashCode;
   }
 }

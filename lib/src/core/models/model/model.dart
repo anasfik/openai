@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 import 'sub_models/permission.dart';
 
 export 'sub_models/permission.dart';
 
+@immutable
 class OpenAIModelModel {
   /// The ID of the model.
   final String id;
@@ -13,8 +15,11 @@ class OpenAIModelModel {
   /// The permissions of the model.
   final List<OpenAIModelModelPermission> permission;
 
+  @override
+  int get hashCode => id.hashCode ^ ownedBy.hashCode ^ permission.hashCode;
+
   /// This class is used to represent an OpenAI model.
-  OpenAIModelModel({
+  const OpenAIModelModel({
     required this.id,
     required this.ownedBy,
     required this.permission,
@@ -25,7 +30,7 @@ class OpenAIModelModel {
     return OpenAIModelModel(
       id: json['id'],
       ownedBy: json['owned_by'],
-      permission: (json['permission'] as List<dynamic>)
+      permission: (json['permission'] as List)
           .map((e) =>
               OpenAIModelModelPermission.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -45,7 +50,4 @@ class OpenAIModelModel {
         other.ownedBy == ownedBy &&
         listEquals(other.permission, permission);
   }
-
-  @override
-  int get hashCode => id.hashCode ^ ownedBy.hashCode ^ permission.hashCode;
 }
