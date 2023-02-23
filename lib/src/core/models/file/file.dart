@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class OpenAIFileModel {
   /// The ID of the file. This is used to reference the file in other API calls.
   final String id;
@@ -14,8 +17,17 @@ class OpenAIFileModel {
   /// The purpose of the file.
   final String purpose;
 
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        bytes.hashCode ^
+        createdAt.hashCode ^
+        fileName.hashCode ^
+        purpose.hashCode;
+  }
+
   /// This class is used to represent an OpenAI file.
-  OpenAIFileModel({
+  const OpenAIFileModel({
     required this.id,
     required this.bytes,
     required this.createdAt,
@@ -43,15 +55,6 @@ class OpenAIFileModel {
         other.createdAt == createdAt &&
         other.fileName == fileName &&
         other.purpose == purpose;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        bytes.hashCode ^
-        createdAt.hashCode ^
-        fileName.hashCode ^
-        purpose.hashCode;
   }
 
   @override
