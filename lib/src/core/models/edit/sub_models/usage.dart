@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class OpenAIEditModelUsage {
   /// The number of tokens in the prompt.
   final int promptTokens;
@@ -8,8 +11,12 @@ class OpenAIEditModelUsage {
   /// The total number of tokens in the prompt and completion.
   final int totalTokens;
 
+  @override
+  int get hashCode =>
+      promptTokens.hashCode ^ completionTokens.hashCode ^ totalTokens.hashCode;
+
   /// This class is used to represent the usage of an OpenAI completion.
-  OpenAIEditModelUsage({
+  const OpenAIEditModelUsage({
     required this.promptTokens,
     required this.completionTokens,
     required this.totalTokens,
@@ -32,10 +39,6 @@ class OpenAIEditModelUsage {
         other.completionTokens == completionTokens &&
         other.totalTokens == totalTokens;
   }
-
-  @override
-  int get hashCode =>
-      promptTokens.hashCode ^ completionTokens.hashCode ^ totalTokens.hashCode;
 
   @override
   String toString() =>

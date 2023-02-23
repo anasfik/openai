@@ -1,10 +1,12 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 import 'sub_models/choice.dart';
 import 'sub_models/usage.dart';
 
 export 'sub_models/choice.dart';
 export 'sub_models/usage.dart';
 
+@immutable
 class OpenAIEditModel {
   /// The date the edit was created.
   final DateTime created;
@@ -15,8 +17,11 @@ class OpenAIEditModel {
   /// The usage of the edit, if any.
   final OpenAIEditModelUsage? usage;
 
+  @override
+  int get hashCode => created.hashCode ^ choices.hashCode ^ usage.hashCode;
+
   /// This class is used to represent an OpenAI edit.
-  OpenAIEditModel({
+  const OpenAIEditModel({
     required this.created,
     required this.choices,
     required this.usage,
@@ -26,7 +31,7 @@ class OpenAIEditModel {
   factory OpenAIEditModel.fromJson(Map<String, dynamic> json) {
     return OpenAIEditModel(
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
-      choices: (json['choices'] as List<dynamic>)
+      choices: (json['choices'] as List)
           .map((e) => OpenAIEditModelChoice.fromJson(e))
           .toList(),
       usage: OpenAIEditModelUsage.fromJson(json['usage']),
@@ -46,7 +51,4 @@ class OpenAIEditModel {
         listEquals(other.choices, choices) &&
         other.usage == usage;
   }
-
-  @override
-  int get hashCode => created.hashCode ^ choices.hashCode ^ usage.hashCode;
 }
