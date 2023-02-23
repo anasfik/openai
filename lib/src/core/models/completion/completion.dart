@@ -1,4 +1,6 @@
 import 'package:collection/collection.dart';
+import "package:meta/meta.dart";
+
 import 'sub_models/choice.dart';
 import 'sub_models/usage.dart';
 
@@ -6,6 +8,7 @@ export 'sub_models/choice.dart';
 export 'sub_models/usage.dart';
 export 'stream/completion.dart';
 
+@immutable
 class OpenAICompletionModel {
   /// The ID of the completion.
   final String id;
@@ -22,8 +25,13 @@ class OpenAICompletionModel {
   /// The usage of the completion, if any.
   final OpenAICompletionModelUsage? usage;
 
+  @override
+  int get hashCode {
+    return id.hashCode ^ created.hashCode ^ model.hashCode ^ choices.hashCode;
+  }
+
   /// This class is used to represent an OpenAI completion.
-  OpenAICompletionModel({
+  const OpenAICompletionModel({
     required this.id,
     required this.created,
     required this.model,
@@ -37,7 +45,7 @@ class OpenAICompletionModel {
       id: json['id'],
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
       model: json['model'],
-      choices: (json['choices'] as List<dynamic>)
+      choices: (json['choices'] as List)
           .map((i) => OpenAICompletionModelChoice.fromJson(i))
           .toList(),
       usage: OpenAICompletionModelUsage.fromJson(json['usage']),
@@ -58,10 +66,5 @@ class OpenAICompletionModel {
         other.created == created &&
         other.model == model &&
         listEquals(other.choices, choices);
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^ created.hashCode ^ model.hashCode ^ choices.hashCode;
   }
 }

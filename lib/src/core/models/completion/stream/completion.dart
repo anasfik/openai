@@ -1,7 +1,11 @@
+import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
+
 import 'sub_models/choices.dart';
 
 export 'sub_models/choices.dart';
 
+@immutable
 class OpenAIStreamCompletionModel {
   /// The ID of the completion.
   final String id;
@@ -15,8 +19,13 @@ class OpenAIStreamCompletionModel {
   /// The model used to generate the completion.
   final String model;
 
+  @override
+  int get hashCode {
+    return id.hashCode ^ created.hashCode ^ choices.hashCode ^ model.hashCode;
+  }
+
   /// This class is used to represent an OpenAI stream completion.
-  OpenAIStreamCompletionModel({
+  const OpenAIStreamCompletionModel({
     required this.id,
     required this.created,
     required this.choices,
@@ -33,5 +42,21 @@ class OpenAIStreamCompletionModel {
           .toList(),
       model: json['model'],
     );
+  }
+
+  @override
+  bool operator ==(covariant OpenAIStreamCompletionModel other) {
+    if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
+
+    return other.id == id &&
+        other.created == created &&
+        listEquals(other.choices, choices) &&
+        other.model == model;
+  }
+
+  @override
+  String toString() {
+    return 'OpenAIStreamCompletionModel(id: $id, created: $created, choices: $choices, model: $model)';
   }
 }
