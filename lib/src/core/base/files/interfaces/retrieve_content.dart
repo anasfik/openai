@@ -1,3 +1,3 @@
 abstract class RetrieveContentInterface {
-  Future<dynamic> retrieveContent(String fileId);
+  Future retrieveContent(String fileId);
 }

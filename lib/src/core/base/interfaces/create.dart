@@ -3,7 +3,7 @@ import '../../models/completion/completion.dart';
 abstract class CreateInterface {
   Future<OpenAICompletionModel> create({
     required String model,
-    dynamic prompt,
+    prompt,
     String? suffix,
     int? maxTokens,
     double? temperature,
@@ -21,7 +21,7 @@ abstract class CreateInterface {
 
   Stream<OpenAIStreamCompletionModel> createStream({
     required String model,
-    dynamic prompt,
+    prompt,
     String? suffix,
     int? maxTokens,
     double? temperature,
@@ -39,7 +39,7 @@ abstract class CreateInterface {
 
   Stream<String> createStreamText({
     required String model,
-    dynamic prompt,
+    prompt,
     String? suffix,
     int? maxTokens,
     double? temperature,
