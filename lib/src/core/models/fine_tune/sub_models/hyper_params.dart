@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class OpenAiFineTuneHyperParamsModel {
   /// The batch size used for fine-tuning.
   final int? batchSize;
@@ -11,8 +14,16 @@ class OpenAiFineTuneHyperParamsModel {
   /// The prompt loss weight used for fine-tuning.
   final double? promptLossWeight;
 
+  @override
+  int get hashCode {
+    return batchSize.hashCode ^
+        learningRateMultiplier.hashCode ^
+        nEpochs.hashCode ^
+        promptLossWeight.hashCode;
+  }
+
   /// This class is used to represent the hyper-parameters used for fine-tuning.
-  OpenAiFineTuneHyperParamsModel({
+  const OpenAiFineTuneHyperParamsModel({
     required this.batchSize,
     required this.learningRateMultiplier,
     required this.nEpochs,
@@ -42,13 +53,5 @@ class OpenAiFineTuneHyperParamsModel {
         other.learningRateMultiplier == learningRateMultiplier &&
         other.nEpochs == nEpochs &&
         other.promptLossWeight == promptLossWeight;
-  }
-
-  @override
-  int get hashCode {
-    return batchSize.hashCode ^
-        learningRateMultiplier.hashCode ^
-        nEpochs.hashCode ^
-        promptLossWeight.hashCode;
   }
 }

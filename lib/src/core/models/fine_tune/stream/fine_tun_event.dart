@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class OpenAIFineTuneEventStreamModel {
   /// The level of the event.
   final String level;
@@ -7,6 +10,9 @@ class OpenAIFineTuneEventStreamModel {
 
   /// The time the event was created.
   final DateTime createdAt;
+
+  @override
+  int get hashCode => level.hashCode ^ message.hashCode ^ createdAt.hashCode;
 
   /// Creates a new instance of [OpenAIFineTuneEventStreamModel].
   const OpenAIFineTuneEventStreamModel({
@@ -36,7 +42,4 @@ class OpenAIFineTuneEventStreamModel {
         other.message == message &&
         other.createdAt == createdAt;
   }
-
-  @override
-  int get hashCode => level.hashCode ^ message.hashCode ^ createdAt.hashCode;
 }

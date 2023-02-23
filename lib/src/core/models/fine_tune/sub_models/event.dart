@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class OpenAIFineTuneEventModel {
   /// The date the event was created.
   final DateTime createdAt;
@@ -8,8 +11,11 @@ class OpenAIFineTuneEventModel {
   /// The message of the event.
   final String? message;
 
+  @override
+  int get hashCode => createdAt.hashCode ^ level.hashCode ^ message.hashCode;
+
   /// This class is used to represent an OpenAI fine-tune event.
-  OpenAIFineTuneEventModel({
+  const OpenAIFineTuneEventModel({
     required this.createdAt,
     required this.level,
     required this.message,
@@ -36,7 +42,4 @@ class OpenAIFineTuneEventModel {
         other.level == level &&
         other.message == message;
   }
-
-  @override
-  int get hashCode => createdAt.hashCode ^ level.hashCode ^ message.hashCode;
 }

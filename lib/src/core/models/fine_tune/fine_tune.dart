@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 import 'sub_models/event.dart';
 import 'sub_models/hyper_params.dart';
 import 'sub_models/training_files.dart';
@@ -8,6 +9,7 @@ export 'sub_models/hyper_params.dart';
 export 'sub_models/training_files.dart';
 export 'stream/fine_tun_event.dart';
 
+@immutable
 class OpenAIFineTuneModel {
   /// The ID of the fine-tuning job.
   final String id;
@@ -40,13 +42,13 @@ class OpenAIFineTuneModel {
   final List<String>? validationFiles;
 
   /// The training files used for fine-tuning.
-  final List<OpenAiFineTuneTrainingFilesModel?> trainingFiles;
+  final List<OpenAIFineTuneTrainingFilesModel?> trainingFiles;
 
   /// The date the fine-tuning job was last updated.
   final DateTime? updatedAt;
 
   /// This class is used to represent an OpenAI fine-tuning job.
-  OpenAIFineTuneModel({
+  const OpenAIFineTuneModel({
     required this.id,
     required this.model,
     required this.createdAt,
@@ -79,7 +81,7 @@ class OpenAIFineTuneModel {
       validationFiles:
           (json['validation_files'] as List).map((e) => e.toString()).toList(),
       trainingFiles: (json['training_files'] as List)
-          .map((e) => OpenAiFineTuneTrainingFilesModel.fromJson(e))
+          .map((e) => OpenAIFineTuneTrainingFilesModel.fromJson(e))
           .toList(),
       updatedAt: DateTime.fromMillisecondsSinceEpoch(json['updated_at'] * 1000),
     );

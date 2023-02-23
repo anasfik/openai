@@ -1,4 +1,7 @@
-class OpenAiFineTuneTrainingFilesModel {
+import 'package:meta/meta.dart';
+
+@immutable
+class OpenAIFineTuneTrainingFilesModel {
   /// The id of the file.
   final String id;
 
@@ -14,8 +17,17 @@ class OpenAiFineTuneTrainingFilesModel {
   /// The purpose of the file.
   final String? purpose;
 
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        bytes.hashCode ^
+        createdAt.hashCode ^
+        filename.hashCode ^
+        purpose.hashCode;
+  }
+
   /// This class is used to represent an OpenAI fine-tune training file.
-  OpenAiFineTuneTrainingFilesModel({
+  const OpenAIFineTuneTrainingFilesModel({
     required this.id,
     required this.bytes,
     required this.createdAt,
@@ -23,9 +35,9 @@ class OpenAiFineTuneTrainingFilesModel {
     required this.purpose,
   });
 
-  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAiFineTuneTrainingFilesModel] object.
-  factory OpenAiFineTuneTrainingFilesModel.fromJson(Map<String, dynamic> json) {
-    return OpenAiFineTuneTrainingFilesModel(
+  /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFineTuneTrainingFilesModel] object.
+  factory OpenAIFineTuneTrainingFilesModel.fromJson(Map<String, dynamic> json) {
+    return OpenAIFineTuneTrainingFilesModel(
       id: json['id'],
       bytes: json['bytes'],
       createdAt: DateTime.fromMillisecondsSinceEpoch(json['created_at'] * 1000),
@@ -36,11 +48,11 @@ class OpenAiFineTuneTrainingFilesModel {
 
   @override
   String toString() {
-    return 'OpenAiFineTuneTrainingFilesModel(id: $id, bytes: $bytes, createdAt: $createdAt, filename: $filename, purpose: $purpose)';
+    return 'OpenAIFineTuneTrainingFilesModel(id: $id, bytes: $bytes, createdAt: $createdAt, filename: $filename, purpose: $purpose)';
   }
 
   @override
-  bool operator ==(covariant OpenAiFineTuneTrainingFilesModel other) {
+  bool operator ==(covariant OpenAIFineTuneTrainingFilesModel other) {
     if (identical(this, other)) return true;
 
     return other.id == id &&
@@ -48,14 +60,5 @@ class OpenAiFineTuneTrainingFilesModel {
         other.createdAt == createdAt &&
         other.filename == filename &&
         other.purpose == purpose;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        bytes.hashCode ^
-        createdAt.hashCode ^
-        filename.hashCode ^
-        purpose.hashCode;
   }
 }
