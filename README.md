@@ -1,5 +1,3 @@
-# Dart library For OpenAI APIs (GPT-3 & DALL-E..)
-
 # NEW: ChatGPT API is [added](#chat-chatgpt) to the library and can be used directly.
 
 <br>
