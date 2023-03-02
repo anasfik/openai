@@ -1,4 +1,3 @@
-import 'package:dart_openai/src/core/base/openai_client/base.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 
@@ -10,6 +9,31 @@ class OpenAIChat implements OpenAIChatBase {
   @override
   String get endpoint => "/chat/completions";
 
+  /// Creates a completion for the chat message
+  ///
+  /// [model] is the model to use for completion.
+  ///
+  /// [messages] is the list of messages to complete from, note you need to set each message as a [OpenAIChatCompletionChoiceMessageModel] object.
+  ///
+  /// [temperature] is the value controlling randomness in boltzmann
+  ///
+  /// [topP] is the cumulative probability for top-k filtering
+  ///
+  /// [n] is the number of results to return
+  ///
+  /// [stop] is the sequence to stop on. Overrides [maxTokens].
+  ///
+  /// [maxTokens] is the maximum number of tokens to generate.
+  ///
+  /// [presencePenalty] is the penalty for tokens already in the sequence.
+  ///
+  /// [frequencyPenalty] is the penalty for existing words in the sequence.
+  ///
+  /// [logitBias] is the token to bias the logit towards.
+  ///
+  /// [user] is the user ID to use for the completion.
+  ///
+  /// Returns a [OpenAIChatCompletionModel] object.
   @override
   Future create({
     required String model,

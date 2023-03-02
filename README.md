@@ -72,7 +72,8 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Embeddings](#embeddings)
 - [x] [Files](#files)
 - [x] [Fine-tunes](#fine-tunes)
-- [x] [Moderation](#moderations)</br>
+- [x] [Moderation](#moderations)
+- [x] [chat (chatGPT)]()</br>
 
 </br>
 

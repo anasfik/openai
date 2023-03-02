@@ -15,8 +15,7 @@ class OpenAIChatCompletionChoiceMessageModel {
       content: json['content'],
     );
   }
-
-  Map<String, dynamic> toMap() {
+Map<String, dynamic> toMap() {
     return {
       "role": role,
       "content": content,
