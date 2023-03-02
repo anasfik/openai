@@ -67,13 +67,13 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
 - [x] [Completions](#completions)
+- [x] [chat (chatGPT)]()
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
 - [x] [Files](#files)
 - [x] [Fine-tunes](#fine-tunes)
-- [x] [Moderation](#moderations)
-- [x] [chat (chatGPT)]()</br>
+- [x] [Moderation](#moderations)</br>
 
 </br>
 
@@ -207,6 +207,17 @@ completionStream.listen((event) {
 
 </br>
 
+## Chat (ChatGPT)
+
+```dart
+OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
+    model: "gpt-3.5-turbo",
+    messages: [
+      OpenAIChatCompletionChoiceMessageModel(content: "hello, what is Flutter and Dart ?", role: "user"),
+    ],
+);
+```
+
 ## Edits
 
 Creates an edited version of the given prompt based on the used model.
@@ -215,11 +226,11 @@ Creates an edited version of the given prompt based on the used model.
 
 ```dart
 OpenAIEditModel edit = await OpenAI.instance.edit.create(
-  model: "text-davinci-edit-001";
-  instruction: "remote all '!'from input text",
-  input: "Hello!!, I! need to be ! somethi!ng"
-  n: 1,
-  temperature: 0.8,
+model: "text-davinci-edit-001";
+instruction: "remote all '!'from input text",
+input: "Hello!!, I! need to be ! somethi!ng"
+n: 1,
+temperature: 0.8,
 );
 ```
 

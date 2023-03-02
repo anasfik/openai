@@ -6,7 +6,7 @@ void main() async {
   // Set the OpenAI API key from the .env file.
   OpenAI.apiKey = Env.apiKey;
 
-  final chatCompletion = await OpenAI.instance.chat.create(
+  OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
       model: "gpt-3.5-turbo",
       messages: [
         OpenAIChatCompletionChoiceMessageModel(content: "hello", role: "user")
