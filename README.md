@@ -62,7 +62,7 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [ ] Chat (chatGPT)
   - [ ] With `Stream` responses.
 
-## 💫 Testing Progress (100 %)
+## 💫 Testing Progress (90 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)

@@ -3,6 +3,8 @@ import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 
 import '../../core/base/chat/chat.dart';
+import '../../core/models/chat/chat.dart';
+import '../../core/models/chat/sub_models/choices/sub_models/message.dart';
 
 class OpenAIChat implements OpenAIChatBase {
   @override
@@ -11,7 +13,7 @@ class OpenAIChat implements OpenAIChatBase {
   @override
   Future create({
     required String model,
-    required List messages,
+    required List<OpenAIChatCompletionChoiceMessageModel> messages,
     double? temperature,
     double? topP,
     int? n,
@@ -26,7 +28,7 @@ class OpenAIChat implements OpenAIChatBase {
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
         "model": model,
-        "messages": messages,
+        "messages": messages.map((message) => message.toMap()).toList(),
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
@@ -38,7 +40,7 @@ class OpenAIChat implements OpenAIChatBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return response;
+        return OpenAIChatCompletionModel.fromJson(response);
       },
     );
   }
