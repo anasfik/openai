@@ -3,7 +3,7 @@ import 'sub_models/message.dart';
 class OpenAIChatCompletionChoiceModel {
   final int index;
   final OpenAIChatCompletionChoiceMessageModel message;
-  final String finishReason;
+  final String? finishReason;
 
   @override
   int get hashCode {

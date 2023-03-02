@@ -4,6 +4,7 @@ import 'sub_models/choices/choices.dart';
 import 'sub_models/usage.dart';
 
 export 'sub_models/usage.dart';
+export 'sub_models/choices/choices.dart';
 
 class OpenAIChatCompletionModel {
   /// The [id] of the chat completion.

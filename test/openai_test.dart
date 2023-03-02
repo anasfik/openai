@@ -114,7 +114,31 @@ void main() async {
   });
 
   group('chat (chatGPT)', () {
-    test('create', () async {});
+
+    test('create', () async {
+      final OpenAIChatCompletionModel chatCompletion =
+          await OpenAI.instance.chat.create(
+        model: "gpt-3.5-turbo",
+        messages: [
+          OpenAIChatCompletionChoiceMessageModel(
+            content: "Hello, how are you?",
+            role: "user",
+          ),
+        ],
+      );
+
+      expect(chatCompletion, isA<OpenAIChatCompletionModel>());
+      expect(
+        chatCompletion.choices.first,
+        isA<OpenAIChatCompletionChoiceModel>(),
+      );
+      expect(chatCompletion.choices.first.message, isNotNull);
+      expect(
+        chatCompletion.choices.first.message,
+        isA<OpenAIChatCompletionChoiceMessageModel>(),
+      );
+      expect(chatCompletion.choices.first.message.content, isA<String>());
+    });
   });
   group('edits', () {
     test('create', () async {
