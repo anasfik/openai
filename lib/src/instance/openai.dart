@@ -6,6 +6,7 @@ import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
 import '../core/exceptions/api_key_not_set.dart';
 import '../core/utils/logger.dart';
+import 'chat/chat.dart';
 import 'completion/completion.dart';
 import 'embedding/embedding.dart';
 import 'files/files.dart';
@@ -99,6 +100,9 @@ class OpenAI extends OpenAIClientBase {
 
   /// The [OpenAIModeration] instance, used to access the moderation endpoints.
   OpenAIModeration get moderation => OpenAIModeration();
+
+  /// The [OpenAIChat] instance, used to access the chat endpoints.
+  OpenAIChat get chat => OpenAIChat();
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();
