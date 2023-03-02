@@ -112,6 +112,10 @@ void main() async {
       expect(completion, isA<Stream<OpenAIStreamCompletionModel>>());
     });
   });
+
+  group('chat (chatGPT)', () {
+    test('create', () async {});
+  });
   group('edits', () {
     test('create', () async {
       final OpenAIEditModel edit = await OpenAI.instance.edit.create(
