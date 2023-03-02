@@ -34,6 +34,15 @@ class OpenAIChat implements OpenAIChatBase {
   /// [user] is the user ID to use for the completion.
   ///
   /// Returns a [OpenAIChatCompletionModel] object.
+  ///
+  /// Example:
+  /// ```dart
+  /// final chatCompletion = await OpenAI.instance.chat.create(
+  /// model: "gpt-3.5-turbo",
+  /// messages: [
+  ///   OpenAIChatCompletionChoiceMessageModel(content: "hello, what is Flutter and Dart ?", role: "user")
+  /// ]);
+  /// ```
   @override
   Future<OpenAIChatCompletionModel> create({
     required String model,
