@@ -46,20 +46,21 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - Developer-friendly.
 - `Stream` functionality for completions API & fine-tune events API.
 
-## 👑 Code Progress (100 %)
+## 👑 Code Progress (90 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
 - [x] [Completions](#completions)
-  - [x] With `Stream` responses
+  - [x] With `Stream` responses.
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
 - [x] [Files](#files)
 - [x] [Fine-tunes](#fine-tunes)
-  - [x] With events `Stream` responses
+  - [x] With events `Stream` responses.
 - [x] [Moderation](#moderations)
-- [ ] ChatGPT ( as soon as possible when it's released )
+- [ ] Chat (chatGPT)
+  - [ ] With `Stream` responses.
 
 ## 💫 Testing Progress (100 %)
 
