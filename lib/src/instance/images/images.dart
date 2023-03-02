@@ -181,6 +181,7 @@ class OpenAIImages implements OpenAIImagesBase {
     String? user,
   }) async {
     final String variations = "/variations";
+
     return await OpenAINetworkingClient.imageVariationForm<
         OpenAIImageVariationModel>(
       image: image,

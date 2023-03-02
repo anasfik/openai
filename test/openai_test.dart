@@ -114,7 +114,6 @@ void main() async {
   });
 
   group('chat (chatGPT)', () {
-
     test('create', () async {
       final OpenAIChatCompletionModel chatCompletion =
           await OpenAI.instance.chat.create(
