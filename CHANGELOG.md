@@ -1,3 +1,7 @@
+# 1.5.5
+
+- Added new ChatGPT API to the library.
+
 # 1.4.9
 
 - Ensured immutability of results from requests.
