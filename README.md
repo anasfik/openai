@@ -52,6 +52,8 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Models](#models)
 - [x] [Completions](#completions)
   - [x] With `Stream` responses.
+- [x] [Chat (chatGPT)](#chat-chatgpt)
+  - [ ] With `Stream` responses.
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
@@ -59,15 +61,13 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Fine-tunes](#fine-tunes)
   - [x] With events `Stream` responses.
 - [x] [Moderation](#moderations)
-- [ ] Chat (chatGPT)
-  - [ ] With `Stream` responses.
 
 ## 💫 Testing Progress (90 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
 - [x] [Completions](#completions)
-- [x] [chat (chatGPT)]()
+- [ ] [chat (chatGPT)](#chat-chatgpt)
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
@@ -209,6 +209,8 @@ completionStream.listen((event) {
 
 ## Chat (ChatGPT)
 
+Creates a completion for the chat message, note you need to set each message as a [OpenAIChatCompletionChoiceMessageModel] object.
+
 ```dart
 OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
     model: "gpt-3.5-turbo",
@@ -220,9 +222,9 @@ OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
 
 ## Edits
 
-Creates an edited version of the given prompt based on the used model.
-
 ### Create edit
+
+Creates an edited version of the given prompt based on the used model.
 
 ```dart
 OpenAIEditModel edit = await OpenAI.instance.edit.create(
