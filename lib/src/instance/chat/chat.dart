@@ -35,7 +35,7 @@ class OpenAIChat implements OpenAIChatBase {
   ///
   /// Returns a [OpenAIChatCompletionModel] object.
   @override
-  Future create({
+  Future<OpenAIChatCompletionModel> create({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
     double? temperature,

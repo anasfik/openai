@@ -140,7 +140,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.4.4"
+    version: "1.4.9"
   dart_style:
     dependency: transitive
     description:
@@ -148,13 +148,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.4"
-  dotenv:
-    dependency: "direct main"
-    description:
-      name: dotenv
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.1.0"
   envied:
     dependency: "direct main"
     description:
