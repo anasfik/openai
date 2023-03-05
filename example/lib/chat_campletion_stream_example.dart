@@ -6,7 +6,7 @@ void main() {
   // Set the OpenAI API key from the .env file.
   OpenAI.apiKey = Env.apiKey;
 
-  // Creates A Stream Of Completions text.
+  // Creates A Stream Of Chat Completions.
   final stream = OpenAI.instance.chat.createStream(
     model: "gpt-3.5-turbo",
     messages: [
@@ -18,7 +18,7 @@ void main() {
   );
 
   var answer = "";
-  // listen to the stream and print the text.
+  // listen to the stream and print the content.
   stream.listen(
     (event) {
       final delta = event.choices.first.delta;

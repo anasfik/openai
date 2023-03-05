@@ -29,7 +29,7 @@ class OpenAIStreamChatCompletionChoiceDeltaModel {
 
   @override
   String toString() {
-    return 'OpenAIChatCompletionChoiceMessageModel(role: $role, content: $content)';
+    return 'OpenAIStreamChatCompletionChoiceMessageModel(role: $role, content: $content)';
   }
 
   @override

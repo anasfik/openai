@@ -38,7 +38,7 @@ class OpenAIStreamChatCompletionModel {
 
   @override
   String toString() {
-    return 'OpenAIChatCompletionModel(id: $id, created: $created, choices: $choices)';
+    return 'OpenAIStreamChatCompletionModel(id: $id, created: $created, choices: $choices)';
   }
 
   @override

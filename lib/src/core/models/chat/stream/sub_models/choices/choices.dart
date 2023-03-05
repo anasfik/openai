@@ -17,7 +17,8 @@ class OpenAIStreamChatCompletionChoiceModel {
   });
 
   factory OpenAIStreamChatCompletionChoiceModel.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     return OpenAIStreamChatCompletionChoiceModel(
       index: json['index'],
       delta: OpenAIStreamChatCompletionChoiceDeltaModel.fromJson(json['delta']),
@@ -27,7 +28,7 @@ class OpenAIStreamChatCompletionChoiceModel {
 
   @override
   String toString() {
-    return 'OpenAIChatCompletionChoiceModel(index: $index, delta: $delta, finishReason: $finishReason)';
+    return 'OpenAIStreamChatCompletionChoiceModel(index: $index, delta: $delta, finishReason: $finishReason)';
   }
 
   @override

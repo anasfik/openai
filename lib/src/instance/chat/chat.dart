@@ -77,7 +77,7 @@ class OpenAIChat implements OpenAIChatBase {
     );
   }
 
-  /// This function creates a completion [Stream]  of [OpenAIChatCompletionModel], which it does stream the results as they are generated.
+  /// This function creates a completion [Stream]  of [OpenAIStreamChatCompletionModel], which it does stream the results as they are generated.
   ///
   /// [model] is the model to use for completion.
   ///
