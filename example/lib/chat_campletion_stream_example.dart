@@ -7,26 +7,27 @@ void main() {
   OpenAI.apiKey = Env.apiKey;
 
   // Creates A Stream Of Chat Completions.
-  final stream = OpenAI.instance.chat.createStream(
+  final chatStream = OpenAI.instance.chat.createStream(
     model: "gpt-3.5-turbo",
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
-        content: "hello",
+        content: "hello, what is Flutter and Dart ?",
         role: "user",
       )
     ],
   );
 
-  var answer = "";
-  // listen to the stream and print the content.
-  stream.listen(
-    (event) {
-      final delta = event.choices.first.delta;
-      print(delta.toString());
-      if (delta.content != null) {
-        answer += delta.content!;
-      }
+  chatStream.listen(
+    (streamChatCompletion) {
+      final delta = streamChatCompletion.choices.first.delta.content;
+      print(delta);
     },
-    onDone: () => print(answer),
+    onError: (error) {
+      print(error);
+    },
+    cancelOnError: false,
+    onDone: () {
+      print("Done");
+    },
   );
 }

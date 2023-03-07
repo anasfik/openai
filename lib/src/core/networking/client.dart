@@ -192,30 +192,45 @@ class OpenAINetworkingClient {
     client.send(request).then(
       (respond) {
         OpenAILogger.log("Starting to reading stream response");
-        respond.stream.listen((value) {
-          final String data = utf8.decode(value);
+        respond.stream.listen(
+          (value) {
+            final String data = utf8.decode(value);
+            final decodedData = jsonDecode(data) as Map<String, dynamic>;
+            if (decodedData['error'] != null) {
+              final Map<String, dynamic> error = decodedData['error'];
 
-          final List<String> dataLines =
-              data.split("\n").where((element) => element.isNotEmpty).toList();
-
-          for (String line in dataLines) {
-            if (line.startsWith("data: ")) {
-              final String data = line.substring(6);
-              if (data.startsWith("[DONE]")) {
-                OpenAILogger.log("stream response is done");
-                return;
-              }
-
-              final decoded = jsonDecode(data) as Map<String, dynamic>;
-
-              controller.add(onSuccess(decoded));
+              controller.addError(RequestFailedException(
+                error["message"],
+                respond.statusCode,
+              ));
             }
-          }
-        }, onDone: () {
-          close();
-        }, onError: (error) {
-          controller.addError(error);
-        });
+            final List<String> dataLines = data
+                .split("\n")
+                .where((element) => element.isNotEmpty)
+                .toList();
+
+            for (String line in dataLines) {
+              if (line.startsWith("data: ")) {
+                final String data = line.substring(6);
+                if (data.startsWith("[DONE]")) {
+                  OpenAILogger.log("stream response is done");
+
+                  return;
+                }
+
+                final decoded = jsonDecode(data) as Map<String, dynamic>;
+
+                controller.add(onSuccess(decoded));
+              }
+            }
+          },
+          onDone: () {
+            close();
+          },
+          onError: (error, stackTrace) {
+            controller.addError(error, stackTrace);
+          },
+        );
       },
     );
 
