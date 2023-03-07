@@ -11,7 +11,7 @@ void main() {
     model: "gpt-3.5-turbo",
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
-        content: "hello, what is Flutter and Dart ?",
+        content: "hello",
         role: "user",
       )
     ],
@@ -19,8 +19,8 @@ void main() {
 
   chatStream.listen(
     (streamChatCompletion) {
-      final delta = streamChatCompletion.choices.first.delta.content;
-      print(delta);
+      final content = streamChatCompletion.choices.first.delta.content;
+      print(content);
     },
     onError: (error) {
       print(error);

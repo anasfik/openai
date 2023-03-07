@@ -195,15 +195,7 @@ class OpenAINetworkingClient {
         respond.stream.listen(
           (value) {
             final String data = utf8.decode(value);
-            final decodedData = jsonDecode(data) as Map<String, dynamic>;
-            if (decodedData['error'] != null) {
-              final Map<String, dynamic> error = decodedData['error'];
 
-              controller.addError(RequestFailedException(
-                error["message"],
-                respond.statusCode,
-              ));
-            }
             final List<String> dataLines = data
                 .split("\n")
                 .where((element) => element.isNotEmpty)
@@ -212,7 +204,7 @@ class OpenAINetworkingClient {
             for (String line in dataLines) {
               if (line.startsWith("data: ")) {
                 final String data = line.substring(6);
-                if (data.startsWith("[DONE]")) {
+                if (data.contains("[DONE]")) {
                   OpenAILogger.log("stream response is done");
 
                   return;
@@ -221,6 +213,13 @@ class OpenAINetworkingClient {
                 final decoded = jsonDecode(data) as Map<String, dynamic>;
 
                 controller.add(onSuccess(decoded));
+              } else if (jsonDecode(data)['error'] != null) {
+                final Map<String, dynamic> error = jsonDecode(data)['error'];
+
+                controller.addError(RequestFailedException(
+                  error["message"],
+                  respond.statusCode,
+                ));
               }
             }
           },
