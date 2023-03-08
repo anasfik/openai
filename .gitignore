@@ -8,4 +8,3 @@ example/.env
 *.jsonl
 env.g.dart
 .env
-*.png

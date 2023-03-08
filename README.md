@@ -46,14 +46,14 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - Developer-friendly.
 - `Stream` functionality for completions API & fine-tune events API.
 
-## 👑 Code Progress (90 %)
+## 👑 Code Progress (100 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
 - [x] [Completions](#completions)
   - [x] With `Stream` responses.
 - [x] [Chat (chatGPT)](#chat-chatgpt)
-  - [ ] With `Stream` responses.
+  - [x] With `Stream` responses.
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
@@ -62,12 +62,12 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
   - [x] With events `Stream` responses.
 - [x] [Moderation](#moderations)
 
-## 💫 Testing Progress (90 %)
+## 💫 Testing Progress (100 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
 - [x] [Completions](#completions)
-- [ ] [chat (chatGPT)](#chat-chatgpt)
+- [x] [chat (chatGPT)](#chat-chatgpt)
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
@@ -209,7 +209,9 @@ completionStream.listen((event) {
 
 ## Chat (ChatGPT)
 
-Creates a completion for the chat message, note you need to set each message as a [OpenAIChatCompletionChoiceMessageModel] object.
+### Create chat completion
+
+Creates a completion for the chat message, note you need to set each message as a `OpenAIChatCompletionChoiceMessageModel` object.
 
 ```dart
 OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
@@ -218,6 +220,26 @@ OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
       OpenAIChatCompletionChoiceMessageModel(content: "hello, what is Flutter and Dart ?", role: "user"),
     ],
 );
+```
+
+### Create a chat completion stream
+
+in addition to calling `OpenAI.instance.chat.create()` which is a `Future` and will resolve only after the whole chat is generated, you can get a `Stream` of results:
+
+```dart
+  OpenAIStreamChatCompletionModel chatStream = OpenAI.instance.chat.createStream(
+    model: "gpt-3.5-turbo",
+    messages: [
+      OpenAIChatCompletionChoiceMessageModel(
+        content: "hello",
+        role: "user",
+      )
+    ],
+  );
+
+  chatStream.listen((chatStreamEvent) {
+print(chatStreamEvent); // ...
+  })
 ```
 
 ## Edits

@@ -1,3 +1,7 @@
+# 1.6.1
+
+- Added documentation of chat completion stream.
+
 # 1.6.0
 
 - Added And Fixed chat completions stream.
