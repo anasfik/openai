@@ -17,6 +17,7 @@ void main() {
     ],
   );
 
+  // Listen to the stream.
   chatStream.listen(
     (streamChatCompletion) {
       final content = streamChatCompletion.choices.first.delta.content;
