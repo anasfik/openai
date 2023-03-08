@@ -1,6 +1,5 @@
 export "choices/choices.dart";
 
-
 class OpenAIStreamChatCompletionUsageModel {
   final int promptTokens;
   final int completionTokens;
