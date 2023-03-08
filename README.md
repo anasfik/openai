@@ -509,6 +509,9 @@ try {
 }
 ```
 
+<br>
+<br>
+
 #### Want To Help ?
 
 Please, Just remember that any kind of help related to these tasks are welcome, for the sake of the community.
@@ -516,4 +519,4 @@ Please, Just remember that any kind of help related to these tasks are welcome, 
 - Writing documentation: if you see any class, property, method.. that you know what does and it is undocumented, please take from your time 2 minutes and help another developer that doesn't.
 - Code Refactoring: I know this is my job not yours :), but if you can and want, you're more than welcome.
 - Reviewing code: if it happens that there is a better way to make something happen in the SDK, please just let me know.
--
+- if you tried any sample of use cases, examples of yours and wanted to include it in the examples/, please go ahead.
