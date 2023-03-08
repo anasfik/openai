@@ -1,3 +1,8 @@
+# 1.6.0
+
+- Added And Fixed chat completions stream.
+- Fixed the error concerning the openAI usual errors while using streams for chat completions and completion.
+
 # 1.5.5
 
 - Added new ChatGPT API to the library.

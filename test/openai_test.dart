@@ -139,7 +139,7 @@ void main() async {
       expect(chatCompletion.choices.first.message.content, isA<String>());
     });
     test('create with a stream', () {
-      final completion = OpenAI.instance.chat.createStream(
+      final chatStream = OpenAI.instance.chat.createStream(
         model: "gpt-3.5-turbo",
         messages: [
           OpenAIChatCompletionChoiceMessageModel(
@@ -148,7 +148,11 @@ void main() async {
           ),
         ],
       );
-      expect(completion, isA<Stream<OpenAIChatCompletionModel>>());
+      expect(chatStream, isA<Stream<OpenAIStreamChatCompletionModel>>());
+      chatStream.listen((streamEvent) {
+        expect(streamEvent, isA<OpenAIStreamCompletionModel>());
+        expect(streamEvent.choices.first.delta.content, isA<String>());
+      });
     });
   });
   group('edits', () {
