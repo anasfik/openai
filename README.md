@@ -46,7 +46,7 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - Developer-friendly.
 - `Stream` functionality for completions API & fine-tune events API.
 
-## 👑 Code Progress (100 %)
+## 👑 Code Progress (94 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
@@ -57,12 +57,13 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
+- [ ] [Audio](#audio)
 - [x] [Files](#files)
 - [x] [Fine-tunes](#fine-tunes)
   - [x] With events `Stream` responses.
 - [x] [Moderation](#moderations)
 
-## 💫 Testing Progress (100 %)
+## 💫 Testing Progress (94 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
@@ -71,6 +72,7 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
+- [ ] [Audio](#audio)
 - [x] [Files](#files)
 - [x] [Fine-tunes](#fine-tunes)
 - [x] [Moderation](#moderations)</br>
@@ -507,7 +509,11 @@ try {
 }
 ```
 
-##### Articles:
+#### Want To Help ?
 
-- [How to generate AI images using Dall-e inside a Flutter/Dart application.
-  ](https://medium.com/@ffikhi.aanas/how-to-generate-ai-images-using-dall-e-inside-a-flutter-dart-application-fd66aa031b14)
+Please, Just remember that any kind of help related to these tasks are welcome, for the sake of the community.
+
+- Writing documentation: if you see any class, property, method.. that you know what does and it is undocumented, please take from your time 2 minutes and help another developer that doesn't.
+- Code Refactoring: I know this is my job not yours :), but if you can and want, you're more than welcome.
+- Reviewing code: if it happens that there is a better way to make something happen in the SDK, please just let me know.
+-
