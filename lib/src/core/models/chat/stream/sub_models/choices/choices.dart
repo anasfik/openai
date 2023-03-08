@@ -1,5 +1,5 @@
 import 'sub_models/delta.dart';
-
+export "sub_models/delta.dart";
 class OpenAIStreamChatCompletionChoiceModel {
   final int index;
   final OpenAIStreamChatCompletionChoiceDeltaModel delta;

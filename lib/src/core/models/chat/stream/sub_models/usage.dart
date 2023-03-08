@@ -1,4 +1,5 @@
-export 'choices/sub_models/delta.dart';
+export "choices/choices.dart";
+
 
 class OpenAIStreamChatCompletionUsageModel {
   final int promptTokens;
