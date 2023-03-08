@@ -213,9 +213,11 @@ class OpenAINetworkingClient {
                 final decoded = jsonDecode(data) as Map<String, dynamic>;
 
                 controller.add(onSuccess(decoded));
-              } else if (jsonDecode(data)['error'] != null) {
-                final Map<String, dynamic> error = jsonDecode(data)['error'];
 
+                return;
+              }
+              final error = jsonDecode(data)['error'];
+              if (error != null) {
                 controller.addError(RequestFailedException(
                   error["message"],
                   respond.statusCode,

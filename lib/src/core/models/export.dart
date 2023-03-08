@@ -9,5 +9,6 @@ export 'image/edit/image_edit.dart';
 export 'image/variation/variation.dart';
 export 'model/model.dart';
 export 'moderation/moderation.dart';
-export './image/enum.dart';
-export "./chat/chat.dart";
+export 'image/enum.dart';
+export 'chat/chat.dart';
+export 'audio/audio.dart';
