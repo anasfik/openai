@@ -12,7 +12,7 @@ class OpenAIStreamCompletionModelChoice {
   final int? logprobs;
 
   /// The reason the completion finished.
-  final finishReason;
+  final String finishReason;
 
   @override
   int get hashCode {
