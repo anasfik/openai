@@ -30,8 +30,7 @@ void main() async {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "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";
-      // OpenAI.apiKey = "YOUR KEY HERE SO THE TESTS CAN RUN";
+      OpenAI.apiKey = "YOUR KEY HERE SO THE TESTS CAN RUN";
 
       expect(OpenAI.instance, isA<OpenAI>());
     });
