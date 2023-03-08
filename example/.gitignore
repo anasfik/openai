@@ -8,3 +8,5 @@ env.g.dart
 # Conventional directory for build output.
 build/
 *.mp3
+
+*.png

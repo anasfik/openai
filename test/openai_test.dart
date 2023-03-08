@@ -30,7 +30,8 @@ void main() async {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "YOUR KEY HERE SO THE TESTS CAN RUN";
+      OpenAI.apiKey = "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";
+      // OpenAI.apiKey = "YOUR KEY HERE SO THE TESTS CAN RUN";
 
       expect(OpenAI.instance, isA<OpenAI>());
     });
@@ -93,7 +94,7 @@ void main() async {
       expect(completion, isA<OpenAICompletionModel>());
       expect(completion.choices.first, isA<OpenAICompletionModelChoice>());
       expect(completion.choices.first.text, isNotNull);
-      expect(completion.choices.first.text, isA<String>());
+      expect(completion.choices.first.text, isA<String?>());
     });
     test('create with a stream', () {
       final Stream<OpenAIStreamCompletionModel> completion =
