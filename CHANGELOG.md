@@ -1,3 +1,8 @@
+# 1.8.0
+
+- Added the Audio APIs including creating transcription and translation.
+- More documentation for models properties.
+
 # 1.6.1
 
 - Added documentation of chat completion stream.
