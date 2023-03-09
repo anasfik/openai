@@ -26,13 +26,13 @@ class OpenAIModelModel {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModelModel] object.
-  factory OpenAIModelModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAIModelModel.fromMap(Map<String, dynamic> json) {
     return OpenAIModelModel(
       id: json['id'],
       ownedBy: json['owned_by'],
       permission: (json['permission'] as List)
           .map((e) =>
-              OpenAIModelModelPermission.fromJson(e as Map<String, dynamic>))
+              OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>))
           .toList(),
     );
   }

@@ -33,12 +33,12 @@ class OpenAIStreamCompletionModel {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIStreamCompletionModel] object.
-  factory OpenAIStreamCompletionModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAIStreamCompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAIStreamCompletionModel(
       id: json['id'],
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
       choices: (json['choices'] as List)
-          .map((e) => OpenAIStreamCompletionModelChoice.fromJson(e))
+          .map((e) => OpenAIStreamCompletionModelChoice.fromMap(e))
           .toList(),
       model: json['model'],
     );

@@ -12,7 +12,7 @@ class OpenAIStreamChatCompletionChoiceDeltaModel {
     required this.content,
   });
 
-  factory OpenAIStreamChatCompletionChoiceDeltaModel.fromJson(
+  factory OpenAIStreamChatCompletionChoiceDeltaModel.fromMap(
     Map<String, dynamic> json,
   ) {
     return OpenAIStreamChatCompletionChoiceDeltaModel(

@@ -39,7 +39,7 @@ class OpenAIModeration implements OpenAIModerationBase {
   }) async {
     return await OpenAINetworkingClient.post<OpenAIModerationModel>(
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIModerationModel.fromJson(response);
+        return OpenAIModerationModel.fromMap(response);
       },
       body: {
         "input": input,

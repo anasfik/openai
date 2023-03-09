@@ -22,7 +22,7 @@ class OpenAIFineTuneEventStreamModel {
   });
 
   /// Creates a new instance of [OpenAIFineTuneEventStreamModel] from a [Map].
-  factory OpenAIFineTuneEventStreamModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAIFineTuneEventStreamModel.fromMap(Map<String, dynamic> json) {
     return OpenAIFineTuneEventStreamModel(
       level: json['level'] as String,
       message: json['message'] as String,

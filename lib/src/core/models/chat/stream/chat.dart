@@ -26,12 +26,12 @@ class OpenAIStreamChatCompletionModel {
     required this.choices,
   });
 
-  factory OpenAIStreamChatCompletionModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAIStreamChatCompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAIStreamChatCompletionModel(
       id: json['id'],
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
       choices: (json['choices'] as List)
-          .map((e) => OpenAIStreamChatCompletionChoiceModel.fromJson(e))
+          .map((e) => OpenAIStreamChatCompletionChoiceModel.fromMap(e))
           .toList(),
     );
   }

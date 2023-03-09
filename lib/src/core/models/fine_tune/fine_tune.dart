@@ -64,16 +64,16 @@ class OpenAIFineTuneModel {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFineTuneModel] object.
-  factory OpenAIFineTuneModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAIFineTuneModel.fromMap(Map<String, dynamic> json) {
     return OpenAIFineTuneModel(
       id: json['id'],
       model: json['model'],
       createdAt: DateTime.fromMillisecondsSinceEpoch(json['created_at'] * 1000),
       events: (json['events'] as List?)
-          ?.map((e) => OpenAIFineTuneEventModel.fromJson(e))
+          ?.map((e) => OpenAIFineTuneEventModel.fromMap(e))
           .toList(),
       fineTunedModel: json['fine_tuned_model'],
-      hyperparams: OpenAiFineTuneHyperParamsModel.fromJson(json['hyperparams']),
+      hyperparams: OpenAiFineTuneHyperParamsModel.fromMap(json['hyperparams']),
       organizationId: json['organization_id'],
       resultFiles:
           (json['result_files'] as List).map((e) => e.toString()).toList(),
@@ -81,7 +81,7 @@ class OpenAIFineTuneModel {
       validationFiles:
           (json['validation_files'] as List).map((e) => e.toString()).toList(),
       trainingFiles: (json['training_files'] as List)
-          .map((e) => OpenAIFineTuneTrainingFilesModel.fromJson(e))
+          .map((e) => OpenAIFineTuneTrainingFilesModel.fromMap(e))
           .toList(),
       updatedAt: DateTime.fromMillisecondsSinceEpoch(json['updated_at'] * 1000),
     );

@@ -30,7 +30,7 @@ class OpenAIAudio implements OpenAIAudioBase {
         if (laungage != null) "language": laungage,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIAudioModel.fromJson(response);
+        return OpenAIAudioModel.fromMap(response);
       },
     );
   }
@@ -53,7 +53,7 @@ class OpenAIAudio implements OpenAIAudioBase {
         if (temperature != null) "temperature": temperature.toString(),
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIAudioModel.fromJson(response);
+        return OpenAIAudioModel.fromMap(response);
       },
     );
   }

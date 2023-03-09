@@ -18,7 +18,7 @@ class OpenAIStreamChatCompletionUsageModel {
     required this.totalTokens,
   });
 
-  factory OpenAIStreamChatCompletionUsageModel.fromJson(
+  factory OpenAIStreamChatCompletionUsageModel.fromMap(
       Map<String, dynamic> json) {
     return OpenAIStreamChatCompletionUsageModel(
       promptTokens: json['prompt_tokens'],

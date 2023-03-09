@@ -82,7 +82,7 @@ class OpenAIChat implements OpenAIChatBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIChatCompletionModel.fromJson(response);
+        return OpenAIChatCompletionModel.fromMap(response);
       },
     );
   }
@@ -165,7 +165,7 @@ class OpenAIChat implements OpenAIChatBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIStreamChatCompletionModel.fromJson(response);
+        return OpenAIStreamChatCompletionModel.fromMap(response);
       },
     );
   }

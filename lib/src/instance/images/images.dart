@@ -62,7 +62,7 @@ class OpenAIImages implements OpenAIImagesBase {
     final String generations = "/generations";
     return await OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.build(endpoint + generations),
-      onSuccess: (json) => OpenAIImageModel.fromJson(json),
+      onSuccess: (json) => OpenAIImageModel.fromMap(json),
       body: {
         "prompt": prompt,
         if (n != null) "n": n,
@@ -134,7 +134,7 @@ class OpenAIImages implements OpenAIImagesBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAiImageEditModel.fromJson(response);
+        return OpenAiImageEditModel.fromMap(response);
       },
       to: BaseApiUrlBuilder.build(endpoint + edit),
     );
@@ -192,7 +192,7 @@ class OpenAIImages implements OpenAIImagesBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIImageVariationModel.fromJson(response);
+        return OpenAIImageVariationModel.fromMap(response);
       },
       to: BaseApiUrlBuilder.build(endpoint + variations),
     );

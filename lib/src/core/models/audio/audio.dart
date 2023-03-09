@@ -1,24 +1,32 @@
-class OpenAIAudioModel {
-  // lass from json
-//   {
-//   "text": "Imagine the wildest idea that you've ever had, and you're curious about how it might scale to something that's a 100, a 1,000 times bigger. This is a place where you can get to do that."
-// }
+import 'package:meta/meta.dart';
 
+/// {@template openai_audio}
+/// This class represents the audio model of the OpenAI API, which is used and get returned while using the [OpenAIAudio] methods.
+/// {@endtemplate}
+@immutable
+class OpenAIAudioModel {
+  // This the generated text.
   final String text;
 
   @override
   int get hashCode => text.hashCode;
 
+  /// {@macro openai_audio}
   OpenAIAudioModel({
     required this.text,
   });
-  factory OpenAIAudioModel.fromJson(Map<String, dynamic> json) {
+
+  /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIAudioModel] object.
+  factory OpenAIAudioModel.fromMap(Map<String, dynamic> json) {
     return OpenAIAudioModel(
       text: json['text'],
     );
   }
 
-  Map<String, dynamic> toJson() {
+  ///  This method used to convert the [OpenAIAudioModel] to a [Map<String, dynamic>] object.
+  ///
+  /// could be useful if you want to save an audio response to a database.
+  Map<String, dynamic> toMap() {
     return {
       'text': text,
     };

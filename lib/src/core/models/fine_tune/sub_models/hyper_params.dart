@@ -31,7 +31,7 @@ class OpenAiFineTuneHyperParamsModel {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAiFineTuneHyperParamsModel] object.
-  factory OpenAiFineTuneHyperParamsModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAiFineTuneHyperParamsModel.fromMap(Map<String, dynamic> json) {
     return OpenAiFineTuneHyperParamsModel(
       batchSize: json['batch_size'],
       learningRateMultiplier: json['learning_rate_multiplier'],

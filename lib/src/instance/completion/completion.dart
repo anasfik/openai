@@ -128,7 +128,7 @@ class OpenAICompletion implements OpenAICompletionBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAICompletionModel.fromJson(response);
+        return OpenAICompletionModel.fromMap(response);
       },
     );
   }
@@ -241,7 +241,7 @@ class OpenAICompletion implements OpenAICompletionBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIStreamCompletionModel.fromJson(response);
+        return OpenAIStreamCompletionModel.fromMap(response);
       },
     );
   }

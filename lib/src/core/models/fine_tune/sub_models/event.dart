@@ -22,7 +22,7 @@ class OpenAIFineTuneEventModel {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFineTuneEventModel] object.
-  factory OpenAIFineTuneEventModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAIFineTuneEventModel.fromMap(Map<String, dynamic> json) {
     return OpenAIFineTuneEventModel(
       createdAt: DateTime.fromMillisecondsSinceEpoch(json['created_at'] * 1000),
       level: json['level'],

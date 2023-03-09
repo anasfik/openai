@@ -6,8 +6,12 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 void main() async {
-  final exampleImageFile = getFileFromUrl(
+  final exampleImageFile = await getFileFromUrl(
     "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png",
+  );
+  final audioExampleFile = await getFileFromUrl(
+    "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
+    fileExtension: "mp3",
   );
 
   final imageFileExample = await exampleImageFile;
@@ -210,6 +214,28 @@ void main() async {
     });
   });
 
+  group('audio', () {
+    test("create transcription", () async {
+      final transcription = await OpenAI.instance.audio.createTranscription(
+        file: audioExampleFile,
+        model: "whisper-1",
+        responseFormat: "json",
+      );
+
+      expect(transcription, isA<OpenAIAudioModel>());
+      expect(transcription.text, isA<String>());
+    });
+    test("create translation", () async {
+      final translation = await OpenAI.instance.audio.createTranslation(
+        file: audioExampleFile,
+        model: "whisper-1",
+      );
+
+      expect(translation, isA<OpenAIAudioModel>());
+      expect(translation.text, isA<String>());
+    });
+  });
+
   group("files", () {
     test("upload", () async {
       final OpenAIFileModel file = await OpenAI.instance.file.upload(
@@ -353,10 +379,13 @@ File jsonLFileExample() {
   return file;
 }
 
-Future<File> getFileFromUrl(String networkUrl) async {
+Future<File> getFileFromUrl(
+  String networkUrl, {
+  String fileExtension = 'png',
+}) async {
   final response = await http.get(Uri.parse(networkUrl));
   final uniqueImageName = DateTime.now().microsecondsSinceEpoch;
-  final file = File("$uniqueImageName.png");
+  final file = File("$uniqueImageName.$fileExtension");
   await file.writeAsBytes(response.bodyBytes);
   return file;
 }

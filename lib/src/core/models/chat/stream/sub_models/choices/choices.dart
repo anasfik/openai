@@ -17,12 +17,12 @@ class OpenAIStreamChatCompletionChoiceModel {
     required this.finishReason,
   });
 
-  factory OpenAIStreamChatCompletionChoiceModel.fromJson(
+  factory OpenAIStreamChatCompletionChoiceModel.fromMap(
     Map<String, dynamic> json,
   ) {
     return OpenAIStreamChatCompletionChoiceModel(
       index: json['index'],
-      delta: OpenAIStreamChatCompletionChoiceDeltaModel.fromJson(json['delta']),
+      delta: OpenAIStreamChatCompletionChoiceDeltaModel.fromMap(json['delta']),
       finishReason: json['finish_reason'],
     );
   }

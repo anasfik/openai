@@ -23,7 +23,7 @@ class OpenAIEditModelUsage {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEditModelUsage] object.
-  factory OpenAIEditModelUsage.fromJson(Map<String, dynamic> json) {
+  factory OpenAIEditModelUsage.fromMap(Map<String, dynamic> json) {
     return OpenAIEditModelUsage(
       promptTokens: json['prompt_tokens'],
       completionTokens: json['completion_tokens'],

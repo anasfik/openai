@@ -29,12 +29,12 @@ class OpenAIModerationResultModel {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModerationResultModel] object.
-  factory OpenAIModerationResultModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAIModerationResultModel.fromMap(Map<String, dynamic> json) {
     return OpenAIModerationResultModel(
-      categories: OpenAIModerationResultCategoriesModel.fromJson(
+      categories: OpenAIModerationResultCategoriesModel.fromMap(
         json['categories'],
       ),
-      categoryScores: OpenAIModerationResultScoresModel.fromJson(
+      categoryScores: OpenAIModerationResultScoresModel.fromMap(
         json['category_scores'],
       ),
       flagged: json['flagged'],

@@ -31,7 +31,7 @@ class OpenAICompletionModelChoice {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAICompletionModelChoice] object.
-  factory OpenAICompletionModelChoice.fromJson(Map<String, dynamic> json) {
+  factory OpenAICompletionModelChoice.fromMap(Map<String, dynamic> json) {
     return OpenAICompletionModelChoice(
       text: json['text'],
       index: json['index'],

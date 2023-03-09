@@ -40,15 +40,15 @@ class OpenAICompletionModel {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAICompletionModel] object.
-  factory OpenAICompletionModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAICompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAICompletionModel(
       id: json['id'],
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
       model: json['model'],
       choices: (json['choices'] as List)
-          .map((i) => OpenAICompletionModelChoice.fromJson(i))
+          .map((i) => OpenAICompletionModelChoice.fromMap(i))
           .toList(),
-      usage: OpenAICompletionModelUsage.fromJson(json['usage']),
+      usage: OpenAICompletionModelUsage.fromMap(json['usage']),
     );
   }
 

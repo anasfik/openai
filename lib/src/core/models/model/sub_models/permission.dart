@@ -66,7 +66,7 @@ class OpenAIModelModelPermission {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModelModelPermission] object.
-  factory OpenAIModelModelPermission.fromJson(Map<String, dynamic> json) {
+  factory OpenAIModelModelPermission.fromMap(Map<String, dynamic> json) {
     return OpenAIModelModelPermission(
       id: json['id'],
       created:

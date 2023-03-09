@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 
 import 'sub_models/choices/choices.dart';
 import 'sub_models/usage.dart';
@@ -7,6 +8,10 @@ export 'sub_models/usage.dart';
 export 'sub_models/choices/choices.dart';
 export 'stream/chat.dart';
 
+/// {@template openai_chat_completion}
+/// This class represents the chat completion response model of the OpenAI API, which is used and get returned while using the [OpenAIChat] methods.
+/// {@endtemplate}
+@immutable
 class OpenAIChatCompletionModel {
   /// The [id] of the chat completion.
   final String id;
@@ -25,6 +30,7 @@ class OpenAIChatCompletionModel {
     return id.hashCode ^ created.hashCode ^ choices.hashCode ^ usage.hashCode;
   }
 
+  /// {@macro openai_chat_completion}
   OpenAIChatCompletionModel({
     required this.id,
     required this.created,
@@ -32,15 +38,26 @@ class OpenAIChatCompletionModel {
     required this.usage,
   });
 
-  factory OpenAIChatCompletionModel.fromJson(Map<String, dynamic> json) {
+  /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionModel] object.
+  factory OpenAIChatCompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAIChatCompletionModel(
       id: json['id'],
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
       choices: (json['choices'] as List)
-          .map((e) => OpenAIChatCompletionChoiceModel.fromJson(e))
+          .map((e) => OpenAIChatCompletionChoiceModel.fromMap(e))
           .toList(),
-      usage: OpenAIChatCompletionUsageModel.fromJson(json['usage']),
+      usage: OpenAIChatCompletionUsageModel.fromMap(json['usage']),
     );
+  }
+
+  /// This is used to convert a [OpenAIChatCompletionModel] object to a [Map<String, dynamic>] object.
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "created": created.millisecondsSinceEpoch,
+      "choices": choices.map((e) => e.toMap()).toList(),
+      "usage": usage.toMap(),
+    };
   }
 
   @override

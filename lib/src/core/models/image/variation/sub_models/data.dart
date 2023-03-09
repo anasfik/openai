@@ -14,7 +14,7 @@ class OpenAIVariationData {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIVariationData] object.
-  factory OpenAIVariationData.fromJson(Map<String, dynamic> json) {
+  factory OpenAIVariationData.fromMap(Map<String, dynamic> json) {
     return OpenAIVariationData(url: json['url']);
   }
 

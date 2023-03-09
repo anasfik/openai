@@ -29,7 +29,7 @@ class OpenAIModel implements OpenAIModelBase {
       ),
       onSuccess: (Map<String, dynamic> response) {
         final List data = response['data'];
-        return data.map((model) => OpenAIModelModel.fromJson(model)).toList();
+        return data.map((model) => OpenAIModelModel.fromMap(model)).toList();
       },
     );
   }
@@ -48,7 +48,7 @@ class OpenAIModel implements OpenAIModelBase {
     return await OpenAINetworkingClient.get<OpenAIModelModel>(
       from: BaseApiUrlBuilder.build(endpoint, id),
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIModelModel.fromJson(response);
+        return OpenAIModelModel.fromMap(response);
       },
     );
   }

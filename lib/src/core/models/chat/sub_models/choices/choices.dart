@@ -1,8 +1,16 @@
 import 'sub_models/message.dart';
 
+/// {@template openai_chat_completion_choice}
+/// This class represents a choice of the [OpenAIChatCompletionModel] model of the OpenAI API, which is used and get returned while using the [OpenAIChat] methods.
+/// {@endtemplate}
 class OpenAIChatCompletionChoiceModel {
+  /// The [index] of the choice.
   final int index;
+
+  /// The [message] of the choice.
   final OpenAIChatCompletionChoiceMessageModel message;
+
+  /// The [finishReason] of the choice.
   final String? finishReason;
 
   @override
@@ -10,18 +18,29 @@ class OpenAIChatCompletionChoiceModel {
     return index.hashCode ^ message.hashCode ^ finishReason.hashCode;
   }
 
+  /// {@macro openai_chat_completion_choice}
   OpenAIChatCompletionChoiceModel({
     required this.index,
     required this.message,
     required this.finishReason,
   });
 
-  factory OpenAIChatCompletionChoiceModel.fromJson(Map<String, dynamic> json) {
+  /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceModel] object.
+  factory OpenAIChatCompletionChoiceModel.fromMap(Map<String, dynamic> json) {
     return OpenAIChatCompletionChoiceModel(
       index: json['index'],
-      message: OpenAIChatCompletionChoiceMessageModel.fromJson(json['message']),
+      message: OpenAIChatCompletionChoiceMessageModel.fromMap(json['message']),
       finishReason: json['finish_reason'],
     );
+  }
+
+  /// This method used to convert the [OpenAIChatCompletionChoiceModel] to a [Map<String, dynamic>] object.
+  Map<String, dynamic> toMap() {
+    return {
+      "index": index,
+      "message": message.toMap(),
+      "finish_reason": finishReason,
+    };
   }
 
   @override

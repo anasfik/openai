@@ -1,5 +1,12 @@
+/// {@template openai_chat_completion_choice_message_model}
+/// This represents the message of the [OpenAIChatCompletionChoiceModel] model of the OpenAI API, which is used and get returned while using the [OpenAIChat] methods.
+/// {@endtemplate}
+
 class OpenAIChatCompletionChoiceMessageModel {
+  /// The [role] of the message.
   final String role;
+
+  /// The [content] of the message.
   final String content;
 
   @override
@@ -7,12 +14,14 @@ class OpenAIChatCompletionChoiceMessageModel {
     return role.hashCode ^ content.hashCode;
   }
 
+  /// {@macro openai_chat_completion_choice_message_model}
   OpenAIChatCompletionChoiceMessageModel({
     required this.role,
     required this.content,
   });
 
-  factory OpenAIChatCompletionChoiceMessageModel.fromJson(
+  /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceMessageModel] object.
+  factory OpenAIChatCompletionChoiceMessageModel.fromMap(
     Map<String, dynamic> json,
   ) {
     return OpenAIChatCompletionChoiceMessageModel(
@@ -20,6 +29,8 @@ class OpenAIChatCompletionChoiceMessageModel {
       content: json['content'],
     );
   }
+
+  /// This method used to convert the [OpenAIChatCompletionChoiceMessageModel] to a [Map<String, dynamic>] object.
   Map<String, dynamic> toMap() {
     return {
       "role": role,

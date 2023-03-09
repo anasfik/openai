@@ -18,7 +18,7 @@ class OpenAIEditModelChoice {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEditModelChoice] object.
-  factory OpenAIEditModelChoice.fromJson(Map<String, dynamic> json) {
+  factory OpenAIEditModelChoice.fromMap(Map<String, dynamic> json) {
     return OpenAIEditModelChoice(
       text: json['text'],
       index: json['index'],

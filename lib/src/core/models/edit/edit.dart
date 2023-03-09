@@ -28,13 +28,13 @@ class OpenAIEditModel {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEditModel] object.
-  factory OpenAIEditModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAIEditModel.fromMap(Map<String, dynamic> json) {
     return OpenAIEditModel(
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
       choices: (json['choices'] as List)
-          .map((e) => OpenAIEditModelChoice.fromJson(e))
+          .map((e) => OpenAIEditModelChoice.fromMap(e))
           .toList(),
-      usage: OpenAIEditModelUsage.fromJson(json['usage']),
+      usage: OpenAIEditModelUsage.fromMap(json['usage']),
     );
   }
 

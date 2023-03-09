@@ -22,12 +22,12 @@ class OpenAiImageEditModel {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAiImageEditModel] object.
-  factory OpenAiImageEditModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAiImageEditModel.fromMap(Map<String, dynamic> json) {
     return OpenAiImageEditModel(
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
       data: List<OpenAIImageEditDataModel>.from(
         json['data'].map(
-          (x) => OpenAIImageEditDataModel.fromJson(x),
+          (x) => OpenAIImageEditDataModel.fromMap(x),
         ),
       ),
     );

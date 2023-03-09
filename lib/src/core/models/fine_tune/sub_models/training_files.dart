@@ -36,7 +36,7 @@ class OpenAIFineTuneTrainingFilesModel {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFineTuneTrainingFilesModel] object.
-  factory OpenAIFineTuneTrainingFilesModel.fromJson(Map<String, dynamic> json) {
+  factory OpenAIFineTuneTrainingFilesModel.fromMap(Map<String, dynamic> json) {
     return OpenAIFineTuneTrainingFilesModel(
       id: json['id'],
       bytes: json['bytes'],

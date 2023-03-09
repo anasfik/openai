@@ -14,7 +14,7 @@ class OpenAIImageData {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIImageData] object.
-  factory OpenAIImageData.fromJson(Map<String, dynamic> json) {
+  factory OpenAIImageData.fromMap(Map<String, dynamic> json) {
     return OpenAIImageData(url: json['url']);
   }
 

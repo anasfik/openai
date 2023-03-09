@@ -58,7 +58,7 @@ class OpenAIEdits implements OpenAIEditsBase {
         if (topP != null) "top_p": topP,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIEditModel.fromJson(response);
+        return OpenAIEditModel.fromMap(response);
       },
     );
   }

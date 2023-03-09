@@ -23,7 +23,7 @@ class OpenAICompletionModelUsage {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAICompletionModelUsage] object.
-  factory OpenAICompletionModelUsage.fromJson(Map<String, dynamic> json) {
+  factory OpenAICompletionModelUsage.fromMap(Map<String, dynamic> json) {
     return OpenAICompletionModelUsage(
       promptTokens: json['prompt_tokens'],
       completionTokens: json['completion_tokens'],

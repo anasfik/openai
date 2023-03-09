@@ -31,7 +31,7 @@ class OpenAIStreamCompletionModelChoice {
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIStreamCompletionModelChoice] object.
-  factory OpenAIStreamCompletionModelChoice.fromJson(
+  factory OpenAIStreamCompletionModelChoice.fromMap(
     Map<String, dynamic> json,
   ) {
     return OpenAIStreamCompletionModelChoice(

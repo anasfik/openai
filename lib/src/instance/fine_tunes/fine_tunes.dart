@@ -94,7 +94,7 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
       },
       to: BaseApiUrlBuilder.build(endpoint),
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIFineTuneModel.fromJson(response);
+        return OpenAIFineTuneModel.fromMap(response);
       },
     );
   }
@@ -113,7 +113,7 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
       from: BaseApiUrlBuilder.build(endpoint),
       onSuccess: (Map<String, dynamic> response) {
         final dataList = response['data'] as List;
-        return dataList.map((e) => OpenAIFineTuneModel.fromJson(e)).toList();
+        return dataList.map((e) => OpenAIFineTuneModel.fromMap(e)).toList();
       },
     );
   }
@@ -134,7 +134,7 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
     return await OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.build(fineTuneCancelEndpoint),
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIFineTuneModel.fromJson(response);
+        return OpenAIFineTuneModel.fromMap(response);
       },
     );
   }
@@ -169,7 +169,7 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
       from: BaseApiUrlBuilder.build(fineTuneEvents),
       onSuccess: (Map<String, dynamic> response) {
         final List events = response['data'] as List;
-        return events.map((e) => OpenAIFineTuneEventModel.fromJson(e)).toList();
+        return events.map((e) => OpenAIFineTuneEventModel.fromMap(e)).toList();
       },
     );
   }
@@ -200,7 +200,7 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
     return OpenAINetworkingClient.getStream<OpenAIFineTuneEventStreamModel>(
       from: BaseApiUrlBuilder.build(fineTuneEvents, null, "stream=true"),
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIFineTuneEventStreamModel.fromJson(response);
+        return OpenAIFineTuneEventStreamModel.fromMap(response);
       },
     );
   }
@@ -221,7 +221,7 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
     return await OpenAINetworkingClient.get<OpenAIFineTuneModel>(
       from: BaseApiUrlBuilder.build(fineTuneRetrieve),
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIFineTuneModel.fromJson(response);
+        return OpenAIFineTuneModel.fromMap(response);
       },
     );
   }
