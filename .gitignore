@@ -8,3 +8,5 @@ example/.env
 *.jsonl
 env.g.dart
 .env
+*.mp3
+*.png

@@ -1,4 +1,4 @@
-# NEW: ChatGPT API is [added](#chat-chatgpt) to the library and can be used directly.
+# NEW: ChatGPT & Whisper APIs are [added](#chat-chatgpt) to the library and can be used directly.
 
 <br>
 <p align="center">
@@ -46,7 +46,7 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - Developer-friendly.
 - `Stream` functionality for completions API & fine-tune events API.
 
-## 👑 Code Progress (94 %)
+## 👑 Code Progress (100 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
@@ -57,13 +57,13 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
-- [ ] [Audio](#audio)
+- [x] [Audio](#audio)
 - [x] [Files](#files)
 - [x] [Fine-tunes](#fine-tunes)
   - [x] With events `Stream` responses.
 - [x] [Moderation](#moderations)
 
-## 💫 Testing Progress (94 %)
+## 💫 Testing Progress (100 %)
 
 - [x] [Authentication](#authentication)
 - [x] [Models](#models)
@@ -72,7 +72,7 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
-- [ ] [Audio](#audio)
+- [x] [Audio](#audio)
 - [x] [Files](#files)
 - [x] [Fine-tunes](#fine-tunes)
 - [x] [Moderation](#moderations)</br>
@@ -244,6 +244,8 @@ print(chatStreamEvent); // ...
   })
 ```
 
+</br>
+
 ## Edits
 
 ### Create edit
@@ -325,6 +327,32 @@ OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/embeddings)
+
+</br>
+
+# Audio
+
+## Create transcription
+
+for transcribing an audio `File`, you can use the `createTranscription()` method directly by providing the `file` property:
+
+```dart
+OpenAIAudioModel transcription = OpenAI.instance.audio.createTranscription(
+  file: /* THE AUDIO FILE HERE */,
+  model: "whisper-1",
+);
+```
+
+## Create translation
+
+to get access to the translation API, and translate an audio file to english, you can use the `createTranslation()` method, by providing the `file`` property:
+
+```dart
+OpenAIAudioModel translation = await OpenAI.instance.audio.createTranslation(
+  file: /* THE AUDIO FILE HERE */,
+  model: "whisper-1",
+);
+```
 
 </br>
 
