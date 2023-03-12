@@ -17,3 +17,5 @@ dependencies:
   http: ^0.13.5
   meta: ^1.8.0
   collection: ^1.17.0
+  get_it: ^7.2.0
+  dio: ^5.0.2

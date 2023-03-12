@@ -1,3 +1,4 @@
+import 'package:dart_openai/src/core/builder/openai_dio.dart';
 import 'package:meta/meta.dart';
 
 import '../constants/config.dart';
@@ -12,7 +13,9 @@ abstract class BaseApiUrlBuilder {
   /// if an [id] is provided, it will be added to the url as well.
   @internal
   static String build(String endpoint, [String? id, String? query]) {
-    String apiLink = "$_baseUrl/$_version$endpoint";
+    String apiLink =
+        (getOpenAIDioOrNull()?.options.baseUrl ?? "$_baseUrl/$_version") +
+            "$endpoint";
     if (id != null) {
       apiLink += "/$id";
     }

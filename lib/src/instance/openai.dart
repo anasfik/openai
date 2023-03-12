@@ -1,3 +1,5 @@
+import 'package:dart_openai/src/core/constants/config.dart';
+import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/instance/edits/edits.dart';
 import 'package:dart_openai/src/instance/moderations/moderations.dart';
@@ -22,24 +24,24 @@ import 'model/model.dart';
 /// ```
 @immutable
 class OpenAI extends OpenAIClientBase {
-  /// The singleton instance of [OpenAI].
-  static final OpenAI _instance = OpenAI._();
-
   /// The API key used to authenticate the requests.
   static String? _internalApiKey;
 
   /// The singleton instance of [OpenAI], make sure to call the [OpenAI.initialize] method before accessing [instance], otherwise it will throw an [Exception].
   /// A [MissingApiKeyException] will be thrown, if the API key is not set.
   static OpenAI get instance {
-    if (_internalApiKey == null) {
+    if (_internalApiKey == null &&  GetIt.I.isRegistered<OpenAIConfig>()) {
       throw MissingApiKeyException("""
       You must set the api key before accessing the instance of this class.
       Example:
       OpenAI.apiKey = "Your API Key";
       """);
     }
+    GetIt.I.isRegistered<OpenAI>()
+        ? null
+        : GetIt.I.registerSingleton<OpenAI>(OpenAI._());
 
-    return _instance;
+    return GetIt.I<OpenAI>();
   }
 
   /// This is used to initialize the [OpenAI] instance, by providing the API key.
@@ -110,4 +112,7 @@ class OpenAI extends OpenAIClientBase {
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();
+
+  /// only for manual injection
+  OpenAI.create();
 }
