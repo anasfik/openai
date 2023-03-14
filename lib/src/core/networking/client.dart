@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dart_openai/openai.dart';
-import 'package:http/http.dart' as http;
 import 'package:dart_openai/src/core/builder/headers.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
+import 'package:http/http.dart' as http;
 
 import '../exceptions/request_failure.dart';
 
@@ -192,9 +192,14 @@ class OpenAINetworkingClient {
     client.send(request).then(
       (respond) {
         OpenAILogger.log("Starting to reading stream response");
-        respond.stream.listen(
+
+        final stream = respond.stream
+            .transform(utf8.decoder)
+            .transform(const LineSplitter());
+
+        stream.listen(
           (value) {
-            final String data = utf8.decode(value);
+            final data = value;
 
             final List<String> dataLines = data
                 .split("\n")
