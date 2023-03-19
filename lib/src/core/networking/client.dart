@@ -214,7 +214,7 @@ class OpenAINetworkingClient {
 
                 controller.add(onSuccess(decoded));
 
-                return;
+                continue;
               }
               final error = jsonDecode(data)['error'];
               if (error != null) {
