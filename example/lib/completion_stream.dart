@@ -10,9 +10,8 @@ void main() {
   Stream<OpenAIStreamCompletionModel> stream =
       OpenAI.instance.completion.createStream(
     model: "text-davinci-003",
-    prompt: 'Flutter is ',
-    maxTokens: 20,
-    temperature: 0.8,
+    n: 1,
+    prompt: [" "],
   );
 
   // listen to the stream and print the text.

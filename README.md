@@ -160,7 +160,7 @@ Retrieves a single model by its id and gets additional pieces of information abo
  print(model.id)
 ```
 
-If the model id does not exists, a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
+If the model id does not exist, a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/models)
 

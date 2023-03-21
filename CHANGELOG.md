@@ -1,3 +1,8 @@
+# 1.8.3
+
+- Fixed web issue for chat streams
+- Exposed the base url to be changed externally
+
 # 1.8.0
 
 - Added the Audio APIs including creating transcription and translation.
