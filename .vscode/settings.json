@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["openai"]
+  "cSpell.words": ["openai"],
+  "editor.acceptSuggestionOnEnter": "off"
 }

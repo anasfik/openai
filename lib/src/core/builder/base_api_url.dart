@@ -5,7 +5,6 @@ import '../constants/config.dart';
 @immutable
 @internal
 abstract class BaseApiUrlBuilder {
-
   /// This is used to build the API url for all the requests, it will return a [String].
   /// if an [id] is provided, it will be added to the url as well.
   @internal
