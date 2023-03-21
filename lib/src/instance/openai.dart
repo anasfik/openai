@@ -4,6 +4,7 @@ import 'package:dart_openai/src/instance/moderations/moderations.dart';
 
 import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
+import '../core/constants/config.dart';
 import '../core/exceptions/api_key_not_set.dart';
 import '../core/utils/logger.dart';
 import 'audio/audio.dart';
@@ -50,6 +51,10 @@ class OpenAI extends OpenAIClientBase {
   static set apiKey(String apiKey) {
     HeadersBuilder.apiKey = apiKey;
     _internalApiKey = apiKey;
+  }
+
+  static set baseUrl(String baseUrl) {
+    OpenAIConfig.baseUrl = baseUrl;
   }
 
   /// If you have multiple organizations, you can set it's id with this.

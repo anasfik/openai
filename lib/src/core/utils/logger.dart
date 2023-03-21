@@ -43,6 +43,11 @@ abstract class OpenAILogger {
     log("api key is set");
   }
 
+  /// Logs that an baseUrl key is being set, if the logger is active.
+  static void logBaseUrl() {
+    log("baseUrl is set");
+  }
+
   /// Logs that an organization id is being set, if the logger is active.
   static void logOrganization(String? organizationId) {
     log("organization id set to $organizationId");
