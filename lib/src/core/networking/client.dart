@@ -238,6 +238,9 @@ class OpenAINetworkingClient {
           },
         );
       },
+      onError: (error, stackTrace) {
+        controller.addError(error, stackTrace);
+      },
     );
 
     return controller.stream;
