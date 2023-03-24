@@ -9,7 +9,7 @@ abstract class CreateInterface {
     String? prompt,
     String? responseFormat,
     double? temperature,
-    String? laungage,
+    String? language,
   });
 
   Future<OpenAIAudioModel> createTranslation({

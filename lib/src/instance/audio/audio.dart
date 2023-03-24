@@ -17,7 +17,7 @@ class OpenAIAudio implements OpenAIAudioBase {
     String? prompt,
     String? responseFormat,
     double? temperature,
-    String? laungage,
+    String? language,
   }) async {
     return await OpenAINetworkingClient.fileUpload(
       file: file,
@@ -27,7 +27,7 @@ class OpenAIAudio implements OpenAIAudioBase {
         if (prompt != null) "prompt": prompt,
         if (responseFormat != null) "response_format": responseFormat,
         if (temperature != null) "temperature": temperature.toString(),
-        if (laungage != null) "language": laungage,
+        if (language != null) "language": language,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIAudioModel.fromMap(response);
