@@ -17,3 +17,4 @@ dependencies:
   http: ^0.13.5
   meta: ^1.8.0
   collection: ^1.17.0
+  fetch_client: ^1.0.0
