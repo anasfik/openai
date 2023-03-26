@@ -6,12 +6,19 @@ import '../../core/builder/base_api_url.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
+/// {@template openai_edits}
 /// The class that handles all the requests related to the edits in the OpenAI API.
+/// {@endtemplate}
 @immutable
 @protected
 class OpenAIEdits implements OpenAIEditsBase {
   @override
   String get endpoint => "/edits";
+
+  /// {@macro openai_edits}
+  OpenAIEdits() {
+    OpenAILogger.logEndpoint(endpoint);
+  }
 
   /// Given a [prompt] and an instruction, this method will return an edited version of the prompt.
   ///
@@ -61,9 +68,5 @@ class OpenAIEdits implements OpenAIEditsBase {
         return OpenAIEditModel.fromMap(response);
       },
     );
-  }
-
-  OpenAIEdits() {
-    OpenAILogger.logEndpoint(endpoint);
   }
 }

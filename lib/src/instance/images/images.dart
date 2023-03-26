@@ -12,12 +12,19 @@ import '../../core/models/image/enum.dart';
 import '../../core/models/image/variation/variation.dart';
 import '../../core/utils/logger.dart';
 
+/// {@template openai_images}
 /// The class that handles all the requests related to the images in the OpenAI API.
+/// {@endtemplate}
 @immutable
 @protected
 class OpenAIImages implements OpenAIImagesBase {
   @override
   String get endpoint => "/images";
+
+  /// {@macro openai_images}
+  OpenAIImages() {
+    OpenAILogger.logEndpoint(endpoint);
+  }
 
   /// This function creates an image based on a given prompt.
   ///
@@ -196,9 +203,5 @@ class OpenAIImages implements OpenAIImagesBase {
       },
       to: BaseApiUrlBuilder.build(endpoint + variations),
     );
-  }
-
-  OpenAIImages() {
-    OpenAILogger.logEndpoint(endpoint);
   }
 }

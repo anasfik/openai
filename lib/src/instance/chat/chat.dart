@@ -3,10 +3,19 @@ import 'package:dart_openai/src/core/networking/client.dart';
 
 import '../../core/base/chat/chat.dart';
 import '../../core/models/chat/chat.dart';
+import '../../core/utils/logger.dart';
 
+/// {@template openai_chat}
+/// This class is responsible for handling all chat requests, such as creating a chat completion for the message(s).
+/// {@endtemplate}
 class OpenAIChat implements OpenAIChatBase {
   @override
   String get endpoint => "/chat/completions";
+
+  /// {@macro openai_chat}
+  OpenAIChat() {
+    OpenAILogger.logEndpoint(endpoint);
+  }
 
   /// Creates a chat completion for the message(s).
   ///

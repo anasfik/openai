@@ -6,12 +6,19 @@ import 'package:meta/meta.dart';
 
 import '../../core/base/completion.dart';
 
+/// {@template openai_completion}
 /// This class is responsible for handling all the requests related to the completion in the OpenAI API such as creating a completion.
+/// {@endtemplate}
 @immutable
 @protected
 class OpenAICompletion implements OpenAICompletionBase {
   @override
   String get endpoint => "/completions";
+
+  /// {@macro openai_completion}
+  OpenAICompletion() {
+    OpenAILogger.logEndpoint(endpoint);
+  }
 
   /// Creates a new completion and returns a [OpenAICompletionModel] object.
   ///
@@ -352,9 +359,5 @@ class OpenAICompletion implements OpenAICompletionBase {
     );
 
     return stream.map((event) => event.choices.first.text);
-  }
-
-  OpenAICompletion() {
-    OpenAILogger.logEndpoint(endpoint);
   }
 }

@@ -7,11 +7,19 @@ import 'package:meta/meta.dart';
 import '../../core/base/fine_tunes/base.dart';
 import '../../core/utils/logger.dart';
 
+/// {@template openai_finetunes}
+/// This class is responsible for handling all fine-tunes requests, such as creating a fine-tune model.
+/// {@endtemplate}
 @immutable
 @protected
 class OpenAIFineTunes implements OpenAIFineTunesBase {
   @override
   String get endpoint => "/fine-tunes";
+
+  /// {@macro openai_finetunes}
+  OpenAIFineTunes() {
+    OpenAILogger.logEndpoint(endpoint);
+  }
 
   /// [trainingFile] is The ID of an uploaded file that contains training data. The file must be formatted as a JSONL file and uploaded with the purpose of fine-tuning.
   ///
@@ -224,9 +232,5 @@ class OpenAIFineTunes implements OpenAIFineTunesBase {
         return OpenAIFineTuneModel.fromMap(response);
       },
     );
-  }
-
-  OpenAIFineTunes() {
-    OpenAILogger.logEndpoint(endpoint);
   }
 }

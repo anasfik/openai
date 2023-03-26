@@ -8,11 +8,19 @@ import 'dart:io';
 import '../../core/base/files/base.dart';
 import '../../core/utils/logger.dart';
 
+/// {@template openai_files}
+/// This class is responsible for handling all files requests, such as uploading a file to be used across various endpoints/features.
+/// {@endtemplate}
 @immutable
 @protected
 class OpenAIFiles implements OpenAIFilesBase {
   @override
   String get endpoint => "/files";
+
+  /// {@macro openai_files}
+  OpenAIFiles() {
+    OpenAILogger.logEndpoint(endpoint);
+  }
 
   /// This method fetches for your files list that exists in your OPenAI account.
   ///
@@ -114,6 +122,7 @@ class OpenAIFiles implements OpenAIFilesBase {
   @override
   Future<bool> delete(String fileId) async {
     final String fileIdEndpoint = "/$fileId";
+
     return await OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.build(endpoint + fileIdEndpoint),
       onSuccess: (Map<String, dynamic> response) {
@@ -122,9 +131,5 @@ class OpenAIFiles implements OpenAIFilesBase {
         return isDeleted;
       },
     );
-  }
-
-  OpenAIFiles() {
-    OpenAILogger.logEndpoint(endpoint);
   }
 }

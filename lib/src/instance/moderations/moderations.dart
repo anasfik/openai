@@ -7,11 +7,19 @@ import 'package:meta/meta.dart';
 
 import '../../core/utils/logger.dart';
 
+/// {@template openai_moderation}
+/// The class that handles all the requests related to the moderation in the OpenAI API.
+/// {@endtemplate}
 @immutable
 @protected
 class OpenAIModeration implements OpenAIModerationBase {
   @override
   String get endpoint => "/moderations";
+
+  /// {@macro openai_moderation}
+  OpenAIModeration() {
+    OpenAILogger.logEndpoint(endpoint);
+  }
 
   /// Creates a moderation request.
   ///
@@ -47,9 +55,5 @@ class OpenAIModeration implements OpenAIModerationBase {
       },
       to: BaseApiUrlBuilder.build(endpoint),
     );
-  }
-
-  OpenAIModeration() {
-    OpenAILogger.logEndpoint(endpoint);
   }
 }

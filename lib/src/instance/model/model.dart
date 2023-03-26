@@ -5,13 +5,19 @@ import '../../core/builder/base_api_url.dart';
 import '../../core/networking/client.dart';
 import 'package:meta/meta.dart';
 
+/// {@template openai_model}
 /// The class that handles all the requests related to the models in the OpenAI API.
-/// it provides methods to list all the models, retrieve a model by it's id, and delete a fine-tuned model that you did made.
+/// {@endtemplate}
 @immutable
 @protected
 class OpenAIModel implements OpenAIModelBase {
   @override
   String get endpoint => "/models";
+
+  /// {@macro openai_model}
+  OpenAIModel() {
+    OpenAILogger.logEndpoint(endpoint);
+  }
 
   /// Lists all the models available in the OpenAI API and returns a list of [OpenAIModelModel] objects.
   /// Refer to [Models](https://platform.openai.com/docs/models/models) for more information about the available models.
@@ -70,9 +76,5 @@ class OpenAIModel implements OpenAIModelBase {
         return response['deleted'];
       },
     );
-  }
-
-  OpenAIModel() {
-    OpenAILogger.logEndpoint(endpoint);
   }
 }

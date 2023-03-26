@@ -6,12 +6,19 @@ import '../../core/base/embeddings/base.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
+/// {@template openai_embedding}
 /// Get a vector representation of a given input that can be easily consumed by machine learning models and algorithms.
+/// {@endtemplate}
 @immutable
 @protected
 class OpenAIEmbedding implements OpenAIEmbeddingBase {
   @override
   String get endpoint => "/embeddings";
+
+  /// {@macro openai_embedding}
+  OpenAIEmbedding() {
+    OpenAILogger.logEndpoint(endpoint);
+  }
 
   /// Creates an embedding vector representing the input text.
   ///
@@ -55,9 +62,5 @@ class OpenAIEmbedding implements OpenAIEmbeddingBase {
         if (user != null) "user": user,
       },
     );
-  }
-
-  OpenAIEmbedding() {
-    OpenAILogger.logEndpoint(endpoint);
   }
 }
