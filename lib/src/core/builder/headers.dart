@@ -1,26 +1,38 @@
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 
+/// {@template headers_builder}
+/// This class is responsible for building the headers for all the requests.
+/// {@endtemplate}
 @immutable
 @internal
 abstract class HeadersBuilder {
-  // This is used to store the organization id.
+  /// {@template headers_builder_api_key}
+  /// This is used to store the API key if it is set.
+  /// {@endtemplate}
+  static String? _apiKey;
+
+  /// {@template headers_builder_organization}
+  /// This is used to store the organization id if it is set.
+  /// {@endtemplate}
   static String? _organization;
 
-  // This is the public getter for the organization id, it will return null if the organization id is not set.
+  /// {@macro headers_builder_organization}
+  @internal
   static String? get organization => _organization;
+
+  /// This is used to check if the organization id is set or not.
+  static bool get isOrganizationSet => organization != null;
+
+  /// {@macro headers_builder_api_key}
+  @internal
+  static String? get apiKey => _apiKey;
+
   @internal
   static set organization(String? organizationId) {
     _organization = organizationId;
     OpenAILogger.logOrganization(_organization);
   }
-
-  // This is used to store the API key.
-  static String? _apiKey;
-
-  // This is the public getter for the API key, it will return null if the API key is not set.
-  @internal
-  static String? get apiKey => _apiKey;
 
   @internal
   static set apiKey(String? apiKey) {
@@ -28,9 +40,12 @@ abstract class HeadersBuilder {
     OpenAILogger.logAPIKey();
   }
 
-  /// This is used to build the headers for all the requests, it will return a [Map<String, String>].
-  /// if an organization id is set, it will be added to the headers as well.
-  /// If in anyhow the API key is not set, it will throw an [AssertionError].
+  /// {@macro headers_builder}
+  ///
+  /// it will return a [Map<String, String>].
+  ///
+  /// if the [organization] is set, it will be added to the headers as well.
+  /// If in anyhow the API key is not set, it will throw an [AssertionError] while debugging.
   @internal
   static Map<String, String> build() {
     final Map<String, String> headers = <String, String>{
@@ -39,7 +54,8 @@ abstract class HeadersBuilder {
 
     assert(
       apiKey != null,
-      """You must set the API key before making building any headers for a request.""",
+      """
+      You must set the API key before making building any headers for a request.""",
     );
 
     if (isOrganizationSet) {
@@ -50,8 +66,4 @@ abstract class HeadersBuilder {
 
     return headers;
   }
-
-  /// This is used to check if the organization id is set or not.
-  @internal
-  static bool get isOrganizationSet => organization != null;
 }
