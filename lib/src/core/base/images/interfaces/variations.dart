@@ -7,7 +7,7 @@ abstract class VariationInterface {
     required File image,
     int? n,
     OpenAIImageSize? size,
-    OpenAIResponseFormat? responseFormat,
+    OpenAIImageResponseFormat? responseFormat,
     String? user,
   });
 }

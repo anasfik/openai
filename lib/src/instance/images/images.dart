@@ -42,8 +42,8 @@ class OpenAIImages implements OpenAIImagesBase {
   ///
   ///
   /// [responseFormat] is the format in which the generated images are returned. Must be one of :
-  /// - `OpenAIResponseFormat.url`
-  /// - `OpenAIResponseFormat.b64Json`
+  /// - `OpenAIImageResponseFormat.url`
+  /// - `OpenAIImageResponseFormat.b64Json`
   ///
   ///
   /// [user] is the user ID to associate with the request. This is used to prevent abuse of the API.
@@ -55,7 +55,7 @@ class OpenAIImages implements OpenAIImagesBase {
   ///  prompt: 'create an image about the sea',
   ///  n: 1,
   ///  size: OpenAIImageSize.size1024,
-  ///  responseFormat: OpenAIResponseFormat.url,
+  ///  responseFormat: OpenAIImageResponseFormat.url,
   /// );
   ///```
   @override
@@ -63,7 +63,7 @@ class OpenAIImages implements OpenAIImagesBase {
     required String prompt,
     int? n,
     OpenAIImageSize? size,
-    OpenAIResponseFormat? responseFormat,
+    OpenAIImageResponseFormat? responseFormat,
     String? user,
   }) async {
     final String generations = "/generations";
@@ -100,8 +100,8 @@ class OpenAIImages implements OpenAIImagesBase {
   ///
   ///
   /// [responseFormat] is the format in which the generated images are returned. Must be one of :
-  /// - `OpenAIResponseFormat.url`
-  /// - `OpenAIResponseFormat.b64Json`
+  /// - `OpenAIImageResponseFormat.url`
+  /// - `OpenAIImageResponseFormat.b64Json`
   ///
   ///
   ///
@@ -116,7 +116,7 @@ class OpenAIImages implements OpenAIImagesBase {
   ///  prompt: "mask the image with a dinosaur in the image",
   ///  n: 1,
   ///  size: OpenAIImageSize.size1024,
-  ///  responseFormat: OpenAIResponseFormat.url,
+  ///  responseFormat: OpenAIImageResponseFormat.url,
   /// );
   ///```
   @override
@@ -126,7 +126,7 @@ class OpenAIImages implements OpenAIImagesBase {
     required String prompt,
     int? n,
     OpenAIImageSize? size,
-    OpenAIResponseFormat? responseFormat,
+    OpenAIImageResponseFormat? responseFormat,
     String? user,
   }) async {
     final String edit = "/edits";
@@ -163,8 +163,8 @@ class OpenAIImages implements OpenAIImagesBase {
   ///
   ///
   /// [responseFormat] is the format in which the generated images are returned. Must be one of :
-  /// - `OpenAIResponseFormat.url`
-  /// - `OpenAIResponseFormat.b64Json`
+  /// - `OpenAIImageResponseFormat.url`
+  /// - `OpenAIImageResponseFormat.b64Json`
   ///
   ///
   /// [user] is the user ID to associate with the request. This is used to prevent abuse of the API.
@@ -176,7 +176,7 @@ class OpenAIImages implements OpenAIImagesBase {
   /// image: File(/* IMAGE PATH HERE */),
   /// n: 1,
   /// size: OpenAIImageSize.size1024,
-  /// responseFormat: OpenAIResponseFormat.url,
+  /// responseFormat: OpenAIImageResponseFormat.url,
   /// );
   /// ```
   @override
@@ -184,7 +184,7 @@ class OpenAIImages implements OpenAIImagesBase {
     required File image,
     int? n,
     OpenAIImageSize? size,
-    OpenAIResponseFormat? responseFormat,
+    OpenAIImageResponseFormat? responseFormat,
     String? user,
   }) async {
     final String variations = "/variations";

@@ -13,7 +13,7 @@ Future<void> main() async {
     image: File("example.png"),
     n: 1,
     size: OpenAIImageSize.size256,
-    responseFormat: OpenAIResponseFormat.b64Json,
+    responseFormat: OpenAIImageResponseFormat.b64Json,
   );
 
   // Prints the result.

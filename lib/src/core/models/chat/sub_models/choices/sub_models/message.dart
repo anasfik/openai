@@ -1,9 +1,11 @@
+import '../../../../image/enum.dart';
+
 /// {@template openai_chat_completion_choice_message_model}
 /// This represents the message of the [OpenAIChatCompletionChoiceModel] model of the OpenAI API, which is used and get returned while using the [OpenAIChat] methods.
 /// {@endtemplate}
 class OpenAIChatCompletionChoiceMessageModel {
   /// The [role] of the message.
-  final String role;
+  final OpenAIChatMessageRole role;
 
   /// The [content] of the message.
   final String content;
@@ -24,7 +26,8 @@ class OpenAIChatCompletionChoiceMessageModel {
     Map<String, dynamic> json,
   ) {
     return OpenAIChatCompletionChoiceMessageModel(
-      role: json['role'],
+      role: OpenAIChatMessageRole.values
+          .firstWhere((role) => role.name == json['role']),
       content: json['content'],
     );
   }
@@ -32,7 +35,7 @@ class OpenAIChatCompletionChoiceMessageModel {
   /// This method used to convert the [OpenAIChatCompletionChoiceMessageModel] to a [Map<String, dynamic>] object.
   Map<String, dynamic> toMap() {
     return {
-      "role": role,
+      "role": role.name,
       "content": content,
     };
   }

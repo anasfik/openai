@@ -9,7 +9,7 @@ abstract class EditInterface {
     required String prompt,
     int? n,
     OpenAIImageSize? size,
-    OpenAIResponseFormat? responseFormat,
+    OpenAIImageResponseFormat? responseFormat,
     String? user,
   });
 }

@@ -219,7 +219,10 @@ Creates a completion for the chat message, note you need to set each message as 
 OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
     model: "gpt-3.5-turbo",
     messages: [
-      OpenAIChatCompletionChoiceMessageModel(content: "hello, what is Flutter and Dart ?", role: "user"),
+      OpenAIChatCompletionChoiceMessageModel(
+        content: "hello, what is Flutter and Dart ?",
+        role: OpenAIChatMessageRole.user,
+        ),
     ],
 );
 ```
@@ -234,7 +237,7 @@ OpenAIStreamChatCompletionModel chatStream = OpenAI.instance.chat.createStream(
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
         content: "hello",
-        role: "user",
+        role: OpenAIChatMessageRole.user,
       )
     ],
   );
@@ -277,7 +280,7 @@ Generates a new image based on a prompt given.
   prompt: 'an astronaut on the sea',
   n: 1,
   size: OpenAIImageSize.size1024,
-  responseFormat: OpenAIResponseFormat.url,
+  responseFormat: OpenAIImageResponseFormat.url,
 );
 ```
 
@@ -292,7 +295,7 @@ OpenAiImageEditModel imageEdit = await OpenAI.instance.image.edit(
  prompt: "mask the image with a dinosaur",
  n: 1,
  size: OpenAIImageSize.size1024,
- responseFormat: OpenAIResponseFormat.url,
+ responseFormat: OpenAIImageResponseFormat.url,
 );
 ```
 
@@ -305,7 +308,7 @@ OpenAIImageVariationModel imageVariation = await OpenAI.instance.image.variation
  image: File(/* IMAGE PATH HERE */),
  n: 1,
  size: OpenAIImageSize.size1024,
- responseFormat: OpenAIResponseFormat.url,
+ responseFormat: OpenAIImageResponseFormat.url,
 );
 ```
 

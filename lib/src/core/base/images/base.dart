@@ -25,12 +25,12 @@ extension SizeToStingExtension on OpenAIImageSize {
   }
 }
 
-extension ResponseFormatToStingExtension on OpenAIResponseFormat {
+extension ResponseFormatToStingExtension on OpenAIImageResponseFormat {
   String get value {
     switch (this) {
-      case OpenAIResponseFormat.url:
+      case OpenAIImageResponseFormat.url:
         return "url";
-      case OpenAIResponseFormat.b64Json:
+      case OpenAIImageResponseFormat.b64Json:
         return "b64_json";
     }
   }

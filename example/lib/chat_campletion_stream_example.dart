@@ -12,7 +12,7 @@ void main() {
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
         content: "hello",
-        role: "user",
+        role: OpenAIChatMessageRole.user,
       )
     ],
   );
