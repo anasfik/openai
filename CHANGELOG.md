@@ -1,3 +1,9 @@
+# 1.9.0
+
+- Exposed more enums to be used with the library.
+- Added more documentation for more low level é models SDK's APIs
+- Applied fixes relating to web streams APIs.
+
 # 1.8.4
 
 - base url not changeable after first request fixed.
