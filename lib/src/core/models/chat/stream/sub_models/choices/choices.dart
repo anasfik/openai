@@ -1,9 +1,17 @@
 import 'sub_models/delta.dart';
 export "sub_models/delta.dart";
 
+/// {@template openai_stream_chat_completion_choice}
+/// The [OpenAIStreamChatCompletionChoiceModel] class represents the chat completion choice response model of the OpenAI API, which is used and get returned while using the chat methods that leverages [Stream] functionality.
+/// {@endtemplate}
 class OpenAIStreamChatCompletionChoiceModel {
+  /// The [index] of the choice.
   final int index;
+
+  /// The [delta] of the choice.
   final OpenAIStreamChatCompletionChoiceDeltaModel delta;
+
+  /// The [finishReason] of the choice.
   final String? finishReason;
 
   @override
@@ -11,12 +19,14 @@ class OpenAIStreamChatCompletionChoiceModel {
     return index.hashCode ^ delta.hashCode ^ finishReason.hashCode;
   }
 
+  /// {@macro openai_stream_chat_completion_choice}
   OpenAIStreamChatCompletionChoiceModel({
     required this.index,
     required this.delta,
     required this.finishReason,
   });
 
+  /// {@macro openai_stream_chat_completion_choice}
   factory OpenAIStreamChatCompletionChoiceModel.fromMap(
     Map<String, dynamic> json,
   ) {

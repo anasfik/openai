@@ -1,5 +1,11 @@
+/// {@template openai_stream_chat_completion_choice_delta_model}
+/// This contains the [role] and [content] of the choice of the chat response.
+/// {@endtemplate}
 class OpenAIStreamChatCompletionChoiceDeltaModel {
+  /// The [role] of the choice.
   final String? role;
+
+  /// The [content] of the choice.
   final String? content;
 
   @override
@@ -7,11 +13,13 @@ class OpenAIStreamChatCompletionChoiceDeltaModel {
     return role.hashCode ^ content.hashCode;
   }
 
+  /// {@macro openai_stream_chat_completion_choice_delta_model}
   OpenAIStreamChatCompletionChoiceDeltaModel({
     required this.role,
     required this.content,
   });
 
+  /// {@macro openai_stream_chat_completion_choice_delta_model}
   factory OpenAIStreamChatCompletionChoiceDeltaModel.fromMap(
     Map<String, dynamic> json,
   ) {

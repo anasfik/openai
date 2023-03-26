@@ -5,6 +5,9 @@ import 'sub_models/choices/choices.dart';
 export 'sub_models/choices/choices.dart';
 export 'sub_models/usage.dart';
 
+/// {@template openai_stream_chat_completion}
+/// The [OpenAIStreamChatCompletionModel] class represents the chat completion response model of the OpenAI API, which is used and get returned while using the chat methods that leverages [Stream] functionality.
+/// {@endtemplate}
 class OpenAIStreamChatCompletionModel {
   /// The [id] of the chat completion.
   final String id;
@@ -20,12 +23,15 @@ class OpenAIStreamChatCompletionModel {
     return id.hashCode ^ created.hashCode ^ choices.hashCode;
   }
 
+  /// {@macro openai_stream_chat_completion}
   OpenAIStreamChatCompletionModel({
     required this.id,
     required this.created,
     required this.choices,
   });
 
+  /// {@macro openai_stream_chat_completion}
+  /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIStreamChatCompletionModel] object.
   factory OpenAIStreamChatCompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAIStreamChatCompletionModel(
       id: json['id'],

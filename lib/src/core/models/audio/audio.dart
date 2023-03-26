@@ -5,7 +5,8 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @immutable
 class OpenAIAudioModel {
-  // This the generated text.
+  /// The text response from the audio requests.
+  /// This is the only field that is returned from the API.
   final String text;
 
   @override
