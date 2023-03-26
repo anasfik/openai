@@ -1,5 +1,8 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_embeddings_usage_model}
+/// This class is used to represent the usage of an OpenAI embeddings.
+/// {@endtemplate}
 @immutable
 class OpenAIEmbeddingsUsageModel {
   /// The number of tokens in the prompt.
@@ -11,12 +14,13 @@ class OpenAIEmbeddingsUsageModel {
   @override
   int get hashCode => promptTokens.hashCode ^ totalTokens.hashCode;
 
-  /// This class is used to represent the usage of an OpenAI embeddings.
+  /// {@template openai_embeddings_usage_model}
   const OpenAIEmbeddingsUsageModel({
     required this.promptTokens,
     required this.totalTokens,
   });
 
+  /// {@template openai_embeddings_usage_model}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEmbeddingsUsageModel] object.
   factory OpenAIEmbeddingsUsageModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsUsageModel(

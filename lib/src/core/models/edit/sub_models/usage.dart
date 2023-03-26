@@ -1,5 +1,8 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_edit_model_usage}
+/// This class is used to represent the usage of an OpenAI completion.
+/// {@endtemplate}
 @immutable
 class OpenAIEditModelUsage {
   /// The number of tokens in the prompt.
@@ -15,13 +18,14 @@ class OpenAIEditModelUsage {
   int get hashCode =>
       promptTokens.hashCode ^ completionTokens.hashCode ^ totalTokens.hashCode;
 
-  /// This class is used to represent the usage of an OpenAI completion.
+  /// {@template openai_edit_model_usage}
   const OpenAIEditModelUsage({
     required this.promptTokens,
     required this.completionTokens,
     required this.totalTokens,
   });
 
+  /// {@template openai_edit_model_usage}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEditModelUsage] object.
   factory OpenAIEditModelUsage.fromMap(Map<String, dynamic> json) {
     return OpenAIEditModelUsage(

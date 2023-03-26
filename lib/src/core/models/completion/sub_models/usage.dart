@@ -1,5 +1,8 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_completion_model_usage}
+/// This represents the usage of a completion response.
+/// {@endtemplate}
 @immutable
 class OpenAICompletionModelUsage {
   /// The number of tokens in the prompt.
@@ -15,13 +18,14 @@ class OpenAICompletionModelUsage {
   int get hashCode =>
       promptTokens.hashCode ^ completionTokens.hashCode ^ totalTokens.hashCode;
 
-  /// This class is used to represent the usage of an OpenAI completion.
+  /// {@macro openai_completion_model_usage}
   const OpenAICompletionModelUsage({
     required this.promptTokens,
     required this.completionTokens,
     required this.totalTokens,
   });
 
+  /// {@macro openai_completion_model_usage}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAICompletionModelUsage] object.
   factory OpenAICompletionModelUsage.fromMap(Map<String, dynamic> json) {
     return OpenAICompletionModelUsage(

@@ -9,6 +9,9 @@ export 'sub_models/hyper_params.dart';
 export 'sub_models/training_files.dart';
 export 'stream/fine_tun_event.dart';
 
+/// {@template openai_fine_tune_model}
+/// This class is used to represent an OpenAI fine-tuning job.
+/// {@endtemplate}
 @immutable
 class OpenAIFineTuneModel {
   /// The ID of the fine-tuning job.
@@ -27,7 +30,7 @@ class OpenAIFineTuneModel {
   final String? fineTunedModel;
 
   /// The hyperparameters used for fine-tuning.
-  final OpenAiFineTuneHyperParamsModel? hyperparams;
+  final OpenAIFineTuneHyperParamsModel? hyperparams;
 
   /// The ID of the organization that owns the fine-tuning job.
   final String? organizationId;
@@ -47,7 +50,7 @@ class OpenAIFineTuneModel {
   /// The date the fine-tuning job was last updated.
   final DateTime? updatedAt;
 
-  /// This class is used to represent an OpenAI fine-tuning job.
+  /// {@macro openai_fine_tune_model}
   const OpenAIFineTuneModel({
     required this.id,
     required this.model,
@@ -63,6 +66,7 @@ class OpenAIFineTuneModel {
     required this.updatedAt,
   });
 
+  /// {@macro openai_fine_tune_model}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFineTuneModel] object.
   factory OpenAIFineTuneModel.fromMap(Map<String, dynamic> json) {
     return OpenAIFineTuneModel(
@@ -73,7 +77,7 @@ class OpenAIFineTuneModel {
           ?.map((e) => OpenAIFineTuneEventModel.fromMap(e))
           .toList(),
       fineTunedModel: json['fine_tuned_model'],
-      hyperparams: OpenAiFineTuneHyperParamsModel.fromMap(json['hyperparams']),
+      hyperparams: OpenAIFineTuneHyperParamsModel.fromMap(json['hyperparams']),
       organizationId: json['organization_id'],
       resultFiles:
           (json['result_files'] as List).map((e) => e.toString()).toList(),

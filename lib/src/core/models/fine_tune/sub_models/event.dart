@@ -1,5 +1,8 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_fine_tune_event_model}
+/// This class is used to represent an OpenAI fine-tune event.
+/// {@endtemplate}
 @immutable
 class OpenAIFineTuneEventModel {
   /// The date the event was created.
@@ -14,13 +17,14 @@ class OpenAIFineTuneEventModel {
   @override
   int get hashCode => createdAt.hashCode ^ level.hashCode ^ message.hashCode;
 
-  /// This class is used to represent an OpenAI fine-tune event.
+  /// {@macro openai_fine_tune_event_model}
   const OpenAIFineTuneEventModel({
     required this.createdAt,
     required this.level,
     required this.message,
   });
 
+  /// {@macro openai_fine_tune_event_model}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFineTuneEventModel] object.
   factory OpenAIFineTuneEventModel.fromMap(Map<String, dynamic> json) {
     return OpenAIFineTuneEventModel(

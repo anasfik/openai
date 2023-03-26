@@ -1,5 +1,8 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_fine_tune_event_stream_model}
+/// Creates a new instance of [OpenAIFineTuneEventStreamModel].
+/// {@endtemplate}
 @immutable
 class OpenAIFineTuneEventStreamModel {
   /// The level of the event.
@@ -14,13 +17,14 @@ class OpenAIFineTuneEventStreamModel {
   @override
   int get hashCode => level.hashCode ^ message.hashCode ^ createdAt.hashCode;
 
-  /// Creates a new instance of [OpenAIFineTuneEventStreamModel].
+  /// {@macro openai_fine_tune_event_stream_model}
   const OpenAIFineTuneEventStreamModel({
     required this.level,
     required this.message,
     required this.createdAt,
   });
 
+  /// {@macro openai_fine_tune_event_stream_model}
   /// Creates a new instance of [OpenAIFineTuneEventStreamModel] from a [Map].
   factory OpenAIFineTuneEventStreamModel.fromMap(Map<String, dynamic> json) {
     return OpenAIFineTuneEventStreamModel(

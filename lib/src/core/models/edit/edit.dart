@@ -6,6 +6,9 @@ import 'sub_models/usage.dart';
 export 'sub_models/choice.dart';
 export 'sub_models/usage.dart';
 
+/// {@template openai_edit_model}
+/// This class is used to represent an OpenAI edit.
+/// {@endtemplate}
 @immutable
 class OpenAIEditModel {
   /// The date the edit was created.
@@ -20,13 +23,14 @@ class OpenAIEditModel {
   @override
   int get hashCode => created.hashCode ^ choices.hashCode ^ usage.hashCode;
 
-  /// This class is used to represent an OpenAI edit.
+  /// {@macro openai_edit_model}
   const OpenAIEditModel({
     required this.created,
     required this.choices,
     required this.usage,
   });
 
+  ///{@macro openai_edit_model}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEditModel] object.
   factory OpenAIEditModel.fromMap(Map<String, dynamic> json) {
     return OpenAIEditModel(

@@ -5,6 +5,9 @@ import 'sub_models/choices.dart';
 
 export 'sub_models/choices.dart';
 
+/// {@template openai_stream_completion_model}
+/// This class is used to represent an OpenAI stream completion.
+/// {@endtemplate}
 @immutable
 class OpenAIStreamCompletionModel {
   /// The ID of the completion.
@@ -24,7 +27,7 @@ class OpenAIStreamCompletionModel {
     return id.hashCode ^ created.hashCode ^ choices.hashCode ^ model.hashCode;
   }
 
-  /// This class is used to represent an OpenAI stream completion.
+  /// {@macro openai_stream_completion_model}
   const OpenAIStreamCompletionModel({
     required this.id,
     required this.created,
@@ -32,6 +35,7 @@ class OpenAIStreamCompletionModel {
     required this.model,
   });
 
+  /// {@macro openai_stream_completion_model}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIStreamCompletionModel] object.
   factory OpenAIStreamCompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAIStreamCompletionModel(

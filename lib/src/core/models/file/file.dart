@@ -1,5 +1,8 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_file_model}
+/// This class is used to represent an OpenAI file.
+/// {@endtemplate}
 @immutable
 class OpenAIFileModel {
   /// The ID of the file. This is used to reference the file in other API calls.
@@ -26,7 +29,7 @@ class OpenAIFileModel {
         purpose.hashCode;
   }
 
-  /// This class is used to represent an OpenAI file.
+  /// {@macro openai_file_model}
   const OpenAIFileModel({
     required this.id,
     required this.bytes,
@@ -35,6 +38,7 @@ class OpenAIFileModel {
     required this.purpose,
   });
 
+  /// {@macro openai_file_model}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFileModel] object.
   factory OpenAIFileModel.fromMap(Map<String, dynamic> map) {
     return OpenAIFileModel(

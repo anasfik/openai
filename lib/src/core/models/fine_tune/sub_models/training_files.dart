@@ -1,5 +1,8 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_fine_tune_training_files_model}
+/// This class is used to represent an OpenAI fine-tune training file.
+/// {@endtemplate}
 @immutable
 class OpenAIFineTuneTrainingFilesModel {
   /// The id of the file.
@@ -26,7 +29,7 @@ class OpenAIFineTuneTrainingFilesModel {
         purpose.hashCode;
   }
 
-  /// This class is used to represent an OpenAI fine-tune training file.
+  /// {@macro openai_fine_tune_training_files_model}
   const OpenAIFineTuneTrainingFilesModel({
     required this.id,
     required this.bytes,
@@ -35,6 +38,7 @@ class OpenAIFineTuneTrainingFilesModel {
     required this.purpose,
   });
 
+  /// {@macro openai_fine_tune_training_files_model}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFineTuneTrainingFilesModel] object.
   factory OpenAIFineTuneTrainingFilesModel.fromMap(Map<String, dynamic> json) {
     return OpenAIFineTuneTrainingFilesModel(

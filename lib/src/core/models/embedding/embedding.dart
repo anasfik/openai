@@ -6,6 +6,9 @@ import 'sub-models/usage.dart';
 export 'sub-models/data.dart';
 export 'sub-models/usage.dart';
 
+/// {@template openai_embeddings_model}
+/// This class is used to represent an OpenAI embeddings request.
+/// {@endtemplate}
 @immutable
 class OpenAIEmbeddingsModel {
   /// The data returned by the embeddings request.
@@ -20,13 +23,14 @@ class OpenAIEmbeddingsModel {
   @override
   int get hashCode => data.hashCode ^ model.hashCode ^ usage.hashCode;
 
-  /// This class is used to represent an OpenAI embeddings request.
+  /// {@macro openai_embeddings_model}
   const OpenAIEmbeddingsModel({
     required this.data,
     required this.model,
     required this.usage,
   });
 
+  /// {@macro openai_embeddings_model}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEmbeddingsModel] object.
   factory OpenAIEmbeddingsModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsModel(

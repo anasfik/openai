@@ -1,6 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
+/// {@template openai_embeddings_data_model}
+/// This class is used to represent the data returned by an OpenAI embeddings request.
+/// {@endtemplate}
 @immutable
 class OpenAIEmbeddingsDataModel {
   /// The embedding of the text.
@@ -12,12 +15,13 @@ class OpenAIEmbeddingsDataModel {
   @override
   int get hashCode => embeddings.hashCode ^ index.hashCode;
 
-  /// This class is used to represent the data returned by an OpenAI embeddings request.
+  /// {@macro openai_embeddings_data_model}
   const OpenAIEmbeddingsDataModel({
     required this.embeddings,
     required this.index,
   });
 
+  /// {@macro openai_embeddings_data_model}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEmbeddingsDataModel] object.
   factory OpenAIEmbeddingsDataModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsDataModel(
