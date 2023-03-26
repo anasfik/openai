@@ -16,7 +16,7 @@ Future<void> main() async {
         'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
         fileExtension: "mp3"),
     model: "whisper-1",
-    responseFormat: "json",
+    responseFormat: OpenAIAudioResponseFormat.json,
   );
 
   // print the translation.

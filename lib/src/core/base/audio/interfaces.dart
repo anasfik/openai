@@ -7,7 +7,7 @@ abstract class CreateInterface {
     required File file,
     required String model,
     String? prompt,
-    String? responseFormat,
+    OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
     String? language,
   });
@@ -16,7 +16,7 @@ abstract class CreateInterface {
     required File file,
     required String model,
     String? prompt,
-    String? responseFormat,
+    OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
   });
 }

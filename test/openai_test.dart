@@ -219,7 +219,7 @@ void main() async {
       final transcription = await OpenAI.instance.audio.createTranscription(
         file: audioExampleFile,
         model: "whisper-1",
-        responseFormat: "json",
+        responseFormat: OpenAIAudioResponseFormat.json,
       );
 
       expect(transcription, isA<OpenAIAudioModel>());

@@ -340,6 +340,7 @@ for transcribing an audio `File`, you can use the `createTranscription()` method
 OpenAIAudioModel transcription = OpenAI.instance.audio.createTranscription(
   file: /* THE AUDIO FILE HERE */,
   model: "whisper-1",
+  responseFormat: OpenAIAudioResponseFormat.json,
 );
 ```
 
@@ -351,6 +352,8 @@ to get access to the translation API, and translate an audio file to english, yo
 OpenAIAudioModel translation = await OpenAI.instance.audio.createTranslation(
   file: /* THE AUDIO FILE HERE */,
   model: "whisper-1",
+  responseFormat: OpenAIAudioResponseFormat.text,
+
 );
 ```
 
