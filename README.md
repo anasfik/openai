@@ -85,6 +85,16 @@ For the full documentation about all members this library offers, [check here](h
 
 </br>
 
+# 🟢 Permissions
+
+## MacOS
+MacOS builds require network permissions by adding the following key to `macos/Runner/DebugProfile.entitlements` and `macos/Runner/Release.entitlements`. This resolves socket related exceptions when building on MacOS.
+
+```yaml
+<key>com.apple.security.network.client</key>
+<true/>
+```
+
 # 🟢 Usage
 
 ## Authentication
