@@ -1,3 +1,4 @@
+import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:meta/meta.dart';
 
@@ -13,16 +14,13 @@ abstract class OpenAIConfig {
   static String? _baseUrl;
 
   /// This is the version of the API.
-  static String get version => "v1";
+  static String get version => OpenAIStrings.version;
 
   /// {@macro openai_config_base_url}
   @internal
   static String get baseUrl {
-    if (_baseUrl == null) {
-      return "https://api.openai.com";
-    }
 
-    return _baseUrl!;
+    return _baseUrl ?? OpenAIStrings.defaultBaseUrl;
   }
 
   @internal

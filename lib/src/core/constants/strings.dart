@@ -5,5 +5,9 @@ import 'package:meta/meta.dart';
 @immutable
 abstract class OpenAIStrings {
   /// This is the capitalized version of "openai" used in the SDK.
-  static const String openai = 'OpenAI';
+  static const  openai = 'OpenAI';
+
+  static const  version = 'v1';
+
+  static const defaultBaseUrl = 'https://api.openai.com';
 }

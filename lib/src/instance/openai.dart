@@ -43,44 +43,7 @@ class OpenAI extends OpenAIClientBase {
     return _instance;
   }
 
-  /// This is used to initialize the [OpenAI] instance, by providing the API key.
-  /// All the requests will be authenticated using this API key.
-  /// ```dart
-  /// OpenAI.apiKey = "YOUR_API_KEY";
-  /// ```
-  static set apiKey(String apiKey) {
-    HeadersBuilder.apiKey = apiKey;
-    _internalApiKey = apiKey;
-  }
 
-  static set baseUrl(String baseUrl) {
-    OpenAIConfig.baseUrl = baseUrl;
-  }
-
-  /// If you have multiple organizations, you can set it's id with this.
-  /// once this is set, it will be used in all the requests to the OpenAI API.
-  /// Example:
-  /// ```dart
-  /// OpenAI.organization = "YOUR_ORGANIZATION_ID";
-  /// ```
-  static set organization(String? organizationId) {
-    HeadersBuilder.organization = organizationId;
-  }
-
-  static String? get organization => HeadersBuilder.organization;
-
-  /// This controls whether to log steps inside the process of making a request, this helps debugging and pointing where something went wrong.
-  /// This uses  [dart:developer] internally, so it will show anyway only while debugging code.
-  ///
-  /// By default it is set to [true].
-  ///
-  /// Example:
-  /// ```dart
-  /// OpenAI.instance.showLogs = false;
-  /// ```
-  static set showLogs(bool newValue) {
-    OpenAILogger.isActive = newValue;
-  }
 
   /// The [OpenAIModel] instance, used to access the model endpoints.
   /// Please, refer to the Models page from the official OpenAI documentation website in order to know what models are available and what's the use case of every model.
@@ -112,6 +75,49 @@ class OpenAI extends OpenAIClientBase {
 
   /// The [OpenAIAudio] instance, used to access the audio endpoints.
   OpenAIAudio get audio => OpenAIAudio();
+
+
+  /// The organization id, if set, it will be used in all the requests to the OpenAI API.
+  static String? get organization => HeadersBuilder.organization;
+
+  /// This is used to initialize the [OpenAI] instance, by providing the API key.
+  /// All the requests will be authenticated using this API key.
+  /// ```dart
+  /// OpenAI.apiKey = "YOUR_API_KEY";
+  /// ```
+  static set apiKey(String apiKey) {
+    HeadersBuilder.apiKey = apiKey;
+    _internalApiKey = apiKey;
+  }
+
+  /// This is used to set the base url of the OpenAI API, by default it is set to [OpenAIConfig.baseUrl].
+  static set baseUrl(String baseUrl) {
+    OpenAIConfig.baseUrl = baseUrl;
+  }
+
+  /// If you have multiple organizations, you can set it's id with this.
+  /// once this is set, it will be used in all the requests to the OpenAI API.
+  /// Example:
+  /// ```dart
+  /// OpenAI.organization = "YOUR_ORGANIZATION_ID";
+  /// ```
+  static set organization(String? organizationId) {
+    HeadersBuilder.organization = organizationId;
+  }
+
+
+  /// This controls whether to log steps inside the process of making a request, this helps debugging and pointing where something went wrong.
+  /// This uses  [dart:developer] internally, so it will show anyway only while debugging code.
+  ///
+  /// By default it is set to [true].
+  ///
+  /// Example:
+  /// ```dart
+  /// OpenAI.instance.showLogs = false;
+  /// ```
+  static set showLogs(bool newValue) {
+    OpenAILogger.isActive = newValue;
+  }
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();
