@@ -25,13 +25,16 @@ class OpenAIChatCompletionModel {
   /// The [usage] of the chat completion.
   final OpenAIChatCompletionUsageModel usage;
 
+  /// Weither the chat completion have at least one choice in [choices].
+  bool get haveChoices => choices.isNotEmpty;
+
   @override
   int get hashCode {
     return id.hashCode ^ created.hashCode ^ choices.hashCode ^ usage.hashCode;
   }
 
   /// {@macro openai_chat_completion}
-  OpenAIChatCompletionModel({
+  const OpenAIChatCompletionModel({
     required this.id,
     required this.created,
     required this.choices,

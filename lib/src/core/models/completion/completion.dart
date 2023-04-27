@@ -28,6 +28,9 @@ class OpenAICompletionModel {
   /// The usage of the completion, if any.
   final OpenAICompletionModelUsage? usage;
 
+  /// Weither the completion have at least one choice in [choices].
+  bool get haveChoices => choices.isNotEmpty;
+
   @override
   int get hashCode {
     return id.hashCode ^ created.hashCode ^ model.hashCode ^ choices.hashCode;

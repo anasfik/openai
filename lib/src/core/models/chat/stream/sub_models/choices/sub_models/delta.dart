@@ -14,7 +14,7 @@ class OpenAIStreamChatCompletionChoiceDeltaModel {
   }
 
   /// {@macro openai_stream_chat_completion_choice_delta_model}
-  OpenAIStreamChatCompletionChoiceDeltaModel({
+  const OpenAIStreamChatCompletionChoiceDeltaModel({
     required this.role,
     required this.content,
   });

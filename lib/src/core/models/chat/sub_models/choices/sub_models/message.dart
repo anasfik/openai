@@ -16,7 +16,7 @@ class OpenAIChatCompletionChoiceMessageModel {
   }
 
   /// {@macro openai_chat_completion_choice_message_model}
-  OpenAIChatCompletionChoiceMessageModel({
+  const OpenAIChatCompletionChoiceMessageModel({
     required this.role,
     required this.content,
   });

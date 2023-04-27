@@ -22,7 +22,7 @@ class OpenAIStreamChatCompletionUsageModel {
   }
 
   /// {@macro openai_stream_chat_completion_usage}
-  OpenAIStreamChatCompletionUsageModel({
+  const OpenAIStreamChatCompletionUsageModel({
     required this.promptTokens,
     required this.completionTokens,
     required this.totalTokens,

@@ -20,7 +20,7 @@ class OpenAIStreamChatCompletionChoiceModel {
   }
 
   /// {@macro openai_stream_chat_completion_choice}
-  OpenAIStreamChatCompletionChoiceModel({
+  const OpenAIStreamChatCompletionChoiceModel({
     required this.index,
     required this.delta,
     required this.finishReason,

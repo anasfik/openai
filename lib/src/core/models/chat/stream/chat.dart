@@ -18,13 +18,16 @@ class OpenAIStreamChatCompletionModel {
   /// The [choices] of the chat completion.
   final List<OpenAIStreamChatCompletionChoiceModel> choices;
 
+  /// Weither the chat completion have at least one choice in [choices].
+  bool get haveChoices => choices.isNotEmpty;
+
   @override
   int get hashCode {
     return id.hashCode ^ created.hashCode ^ choices.hashCode;
   }
 
   /// {@macro openai_stream_chat_completion}
-  OpenAIStreamChatCompletionModel({
+  const OpenAIStreamChatCompletionModel({
     required this.id,
     required this.created,
     required this.choices,

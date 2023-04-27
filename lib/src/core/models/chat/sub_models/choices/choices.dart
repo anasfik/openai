@@ -19,7 +19,7 @@ class OpenAIChatCompletionChoiceModel {
   }
 
   /// {@macro openai_chat_completion_choice}
-  OpenAIChatCompletionChoiceModel({
+  const OpenAIChatCompletionChoiceModel({
     required this.index,
     required this.message,
     required this.finishReason,

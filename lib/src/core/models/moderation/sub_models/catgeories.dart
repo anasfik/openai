@@ -23,6 +23,39 @@ class OpenAIModerationResultCategoriesModel {
   /// The violence and graphic category.
   final bool violenceAndGraphic;
 
+/// Whether hate is detected or not. 
+bool get isHate => hate;
+
+/// Whether hate and threatening is detected or not.
+bool get isHateAndThreatening => hateAndThreatening;
+
+/// Whether self harm is detected or not.
+bool get isSelfHarm => selfHarm;
+
+/// Whether sexual is detected or not.
+bool get isSexual => sexual;
+
+/// Whether sexual and minors is detected or not.
+bool get isSexualAndMinors => sexualAndMinors;
+
+/// Whether violence is detected or not.
+bool get isViolence => violence;
+
+/// Whether violence and graphic is detected or not.
+bool get isViolenceAndGraphic => violenceAndGraphic;
+
+  /// Whether the moderation request is safe or not.
+  bool get isSafe =>
+      !hate &&
+      !hateAndThreatening &&
+      !selfHarm &&
+      !sexual &&
+      !sexualAndMinors &&
+      !violence &&
+      !violenceAndGraphic;
+
+/// Whether the moderation request is not safe or not.
+bool get isNotSafe => !isSafe;
   @override
   int get hashCode {
     return hate.hashCode ^

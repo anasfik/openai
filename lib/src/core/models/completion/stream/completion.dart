@@ -22,6 +22,9 @@ class OpenAIStreamCompletionModel {
   /// The model used to generate the completion.
   final String model;
 
+  /// Weither the chat completion have at least one choice in [choices].
+  bool get haveChoices => choices.isNotEmpty;
+
   @override
   int get hashCode {
     return id.hashCode ^ created.hashCode ^ choices.hashCode ^ model.hashCode;

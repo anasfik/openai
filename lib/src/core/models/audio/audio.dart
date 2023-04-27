@@ -13,7 +13,7 @@ class OpenAIAudioModel {
   int get hashCode => text.hashCode;
 
   /// {@macro openai_audio}
-  OpenAIAudioModel({
+  const OpenAIAudioModel({
     required this.text,
   });
 

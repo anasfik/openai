@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 class OpenAIImageData {
   /// The URL of the image.
   final String? url;
-  
+
   /// the [OpenAIImageResponseFormat] b64Json data
   final String? data;
 
