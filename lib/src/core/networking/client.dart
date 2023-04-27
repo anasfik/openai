@@ -10,6 +10,68 @@ import 'package:http/http.dart' as http;
 
 import '../exceptions/request_failure.dart';
 
+const _DATA_START = "data: ";
+const _DATA_DONE = "[DONE]";
+
+/// Handling exceptions returned by OpenAI Stream API.
+class _OpenAIChatStreamSink extends EventSink<String> {
+  final EventSink<String> _sink;
+
+  final List<String> _carries = [];
+
+  _OpenAIChatStreamSink(this._sink);
+
+  void add(String str) {
+    if (str.startsWith(_DATA_START) || str.contains(_DATA_DONE)) {
+      addCarryIfNeeded();
+
+      _sink.add(str);
+    } else {
+      _carries.add(str);
+    }
+  }
+
+  void addError(Object error, [StackTrace? stackTrace]) {
+    _sink.addError(error, stackTrace);
+  }
+
+  void addSlice(String str, int start, int end, bool isLast) {
+    if (start == 0 && end == str.length) {
+      add(str);
+    } else {
+      add(str.substring(start, end));
+    }
+    if (isLast) close();
+  }
+
+  void addCarryIfNeeded() {
+    if (_carries.isNotEmpty) {
+      _sink.add(_carries.join());
+
+      _carries.clear();
+    }
+  }
+
+  void close() {
+    addCarryIfNeeded();
+    _sink.close();
+  }
+}
+
+class _OpenAIChatStreamLineSplitter extends LineSplitter {
+  const _OpenAIChatStreamLineSplitter();
+
+  Stream<String> bind(Stream<String> stream) {
+    Stream<String> lineStream = super.bind(stream);
+
+    return Stream<String>.eventTransformed(
+        lineStream, (sink) => _OpenAIChatStreamSink(sink));
+  }
+}
+
+const LineSplitter _openAIChatStreamLineSplitter =
+    const _OpenAIChatStreamLineSplitter();
+
 class OpenAINetworkingClient {
   static Future<T> get<T>({
     required String from,
@@ -69,8 +131,10 @@ class OpenAINetworkingClient {
       streamedResponse.stream.listen((value) {
         final String data = utf8.decode(value);
 
-        final List<String> dataLines =
-            data.split("\n").where((element) => element.isNotEmpty).toList();
+        final List<String> dataLines = _openAIChatStreamLineSplitter
+            .convert(data)
+            .where((element) => element.isNotEmpty)
+            .toList();
 
         for (String line in dataLines) {
           if (line.startsWith("data: ")) {
@@ -196,7 +260,7 @@ class OpenAINetworkingClient {
 
         final stream = respond.stream
             .transform(utf8.decoder)
-            .transform(const LineSplitter());
+            .transform(_openAIChatStreamLineSplitter);
 
         stream.listen(
           (value) {
@@ -208,9 +272,9 @@ class OpenAINetworkingClient {
                 .toList();
 
             for (String line in dataLines) {
-              if (line.startsWith("data: ")) {
+              if (line.startsWith(_DATA_START)) {
                 final String data = line.substring(6);
-                if (data.contains("[DONE]")) {
+                if (data.contains(_DATA_DONE)) {
                   OpenAILogger.log("stream response is done");
 
                   return;

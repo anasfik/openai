@@ -1,3 +1,5 @@
+# 1.9.5
+ - More issues fixes.
 # 1.9.0
 
 - Exposed more enums to be used with the library.

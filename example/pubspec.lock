@@ -159,7 +159,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.8.4"
+    version: "1.9.0"
   dart_style:
     dependency: transitive
     description:
@@ -184,6 +184,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
+  fetch_api:
+    dependency: transitive
+    description:
+      name: fetch_api
+      sha256: "7896632eda5af40c4459d673ad601df21d4c3ae6a45997e300a92ca63ec9fe4c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  fetch_client:
+    dependency: transitive
+    description:
+      name: fetch_client
+      sha256: b302b66e1b98d9d0636066a0f120013d1e1c9c7c21a2a832a0137afaccbfa56e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   file:
     dependency: transitive
     description:
@@ -545,4 +561,4 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.19.0 <4.0.0"
+  dart: ">=2.19.0 <3.0.0"
