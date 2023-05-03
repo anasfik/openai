@@ -1,5 +1,6 @@
 # 1.9.6
  - Added more helper memebers for some models.
+ - Minor changes to some implementations.
  
 # 1.9.5
  - More issues fixes.
