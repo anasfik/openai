@@ -1,9 +1,16 @@
+# 1.9.7
+
+- Added more examples for the package use in /example folder.
+
 # 1.9.6
- - Added more helper memebers for some models.
- - Minor changes to some implementations.
- 
+
+- Added more helper memebers for some models.
+- Minor changes to some implementations.
+
 # 1.9.5
- - More issues fixes.
+
+- More issues fixes.
+
 # 1.9.0
 
 - Exposed more enums to be used with the library.
