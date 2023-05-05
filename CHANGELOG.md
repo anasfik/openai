@@ -1,3 +1,8 @@
+# 1.9.8
+
+- Fixed the non catched error for stream functionality of chat completions and completions.
+- Added example for testing the catchong of errors in the stream like when the internet connectioni off.
+
 # 1.9.7
 
 - Added more examples for the package use in /example folder.

@@ -239,74 +239,79 @@ class OpenAINetworkingClient {
     required Map<String, dynamic> body,
   }) {
     StreamController<T> controller = StreamController<T>();
+    try {
+      final http.Client client = createClient();
+      http.Request request = http.Request(
+        "POST",
+        Uri.parse(to),
+      );
+      request.headers.addAll(HeadersBuilder.build());
+      request.body = jsonEncode(body);
 
-    final http.Client client = createClient();
-    http.Request request = http.Request(
-      "POST",
-      Uri.parse(to),
-    );
-    request.headers.addAll(HeadersBuilder.build());
-    request.body = jsonEncode(body);
+      void close() {
+        client.close();
+        controller.close();
+      }
 
-    void close() {
-      client.close();
-      controller.close();
-    }
+      OpenAILogger.log("starting request to $to");
+      client.send(request).then(
+        (respond) {
+          OpenAILogger.log("Starting to reading stream response");
 
-    OpenAILogger.log("starting request to $to");
-    client.send(request).then(
-      (respond) {
-        OpenAILogger.log("Starting to reading stream response");
+          final stream = respond.stream
+              .transform(utf8.decoder)
+              .transform(_openAIChatStreamLineSplitter);
 
-        final stream = respond.stream
-            .transform(utf8.decoder)
-            .transform(_openAIChatStreamLineSplitter);
+          stream.listen(
+            (value) {
+              final data = value;
 
-        stream.listen(
-          (value) {
-            final data = value;
+              final List<String> dataLines = data
+                  .split("\n")
+                  .where((element) => element.isNotEmpty)
+                  .toList();
 
-            final List<String> dataLines = data
-                .split("\n")
-                .where((element) => element.isNotEmpty)
-                .toList();
+              for (String line in dataLines) {
+                if (line.startsWith(_DATA_START)) {
+                  final String data = line.substring(6);
+                  if (data.contains(_DATA_DONE)) {
+                    OpenAILogger.log("stream response is done");
 
-            for (String line in dataLines) {
-              if (line.startsWith(_DATA_START)) {
-                final String data = line.substring(6);
-                if (data.contains(_DATA_DONE)) {
-                  OpenAILogger.log("stream response is done");
+                    return;
+                  }
 
-                  return;
+                  final decoded = jsonDecode(data) as Map<String, dynamic>;
+
+                  controller.add(onSuccess(decoded));
+
+                  continue;
                 }
-
-                final decoded = jsonDecode(data) as Map<String, dynamic>;
-
-                controller.add(onSuccess(decoded));
-
-                continue;
+                final error = jsonDecode(data)['error'];
+                if (error != null) {
+                  controller.addError(RequestFailedException(
+                    error["message"],
+                    respond.statusCode,
+                  ));
+                }
               }
-              final error = jsonDecode(data)['error'];
-              if (error != null) {
-                controller.addError(RequestFailedException(
-                  error["message"],
-                  respond.statusCode,
-                ));
-              }
-            }
-          },
-          onDone: () {
-            close();
-          },
-          onError: (error, stackTrace) {
-            controller.addError(error, stackTrace);
-          },
-        );
-      },
-      onError: (error, stackTrace) {
-        controller.addError(error, stackTrace);
-      },
-    );
+            },
+            onDone: () {
+              close();
+            },
+            onError: (error, stackTrace) {
+              controller.addError(error, stackTrace);
+            },
+          );
+        },
+        onError: (error, stackTrace) {
+          controller.addError(error, stackTrace);
+        },
+      ).catchError((e) {
+        controller.addError(e);
+      });
+    } catch (e) {
+      controller.addError(e);
+    }
 
     return controller.stream;
   }
