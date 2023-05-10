@@ -19,7 +19,6 @@ abstract class OpenAIConfig {
   /// {@macro openai_config_base_url}
   @internal
   static String get baseUrl {
-
     return _baseUrl ?? OpenAIStrings.defaultBaseUrl;
   }
 

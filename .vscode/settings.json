@@ -1,4 +1,7 @@
 {
-  "cSpell.words": ["openai"],
+  "cSpell.words": [
+    "Epoches",
+    "openai"
+  ],
   "editor.acceptSuggestionOnEnter": "off"
 }
