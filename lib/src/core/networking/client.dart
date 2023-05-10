@@ -1,17 +1,15 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'package:dart_openai/src/core/utils/http_client_web.dart'
-    if (dart.library.io) 'package:dart_openai/src/core/utils/http_client_io.dart';
-import 'package:dart_openai/openai.dart';
-import 'package:dart_openai/src/core/builder/headers.dart';
-import 'package:dart_openai/src/core/utils/logger.dart';
-import 'package:http/http.dart' as http;
+import "dart:async";
+import "dart:convert";
+import "dart:io";
+import "package:dart_openai/src/core/utils/http_client_web.dart"
+    if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
+import "package:dart_openai/openai.dart";
+import "package:dart_openai/src/core/builder/headers.dart";
+import "package:dart_openai/src/core/utils/logger.dart";
+import "package:http/http.dart" as http;
 
+import '../constants/strings.dart';
 import '../exceptions/request_failure.dart';
-
-const _DATA_START = "data: ";
-const _DATA_DONE = "[DONE]";
 
 /// Handling exceptions returned by OpenAI Stream API.
 class _OpenAIChatStreamSink extends EventSink<String> {
@@ -22,8 +20,10 @@ class _OpenAIChatStreamSink extends EventSink<String> {
   _OpenAIChatStreamSink(this._sink);
 
   void add(String str) {
-    final isDataResponseBoundaries =
-        str.startsWith(_DATA_START) || str.contains(_DATA_DONE);
+    final isStartOfResponse = str.startsWith(OpenAIStrings.streamResponseStart);
+    final isEndOfResponse = str.contains(OpenAIStrings.streamResponseEnd);
+    final isDataResponseBoundaries = isStartOfResponse || isEndOfResponse;
+
     if (isDataResponseBoundaries) {
       addCarryIfNeeded();
 
@@ -104,8 +104,9 @@ class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error = decodedBody['error'];
-      final message = error["message"];
+      final Map<String, dynamic> error =
+          decodedBody[OpenAIStrings.errorFieldKey];
+      final message = error[OpenAIStrings.messageFieldKey];
       final statusCode = response.statusCode;
 
       final exception = RequestFailedException(message, statusCode);
@@ -128,7 +129,9 @@ class OpenAINetworkingClient {
     final client = http.Client();
     final uri = Uri.parse(from);
 
-    final request = http.Request("GET", uri);
+    final httpMethod = OpenAIStrings.getMethod;
+
+    final request = http.Request(httpMethod, uri);
 
     request.headers.addAll(HeadersBuilder.build());
 
@@ -150,9 +153,9 @@ class OpenAINetworkingClient {
               .toList();
 
           for (String line in dataLines) {
-            if (line.startsWith("data: ")) {
+            if (line.startsWith(OpenAIStrings.streamResponseStart)) {
               final String data = line.substring(6);
-              if (data.startsWith("[DONE]")) {
+              if (data.startsWith(OpenAIStrings.streamResponseEnd)) {
                 OpenAILogger.streamResponseDone();
 
                 return;
@@ -201,8 +204,9 @@ class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error = decodedBody['error'];
-      final message = error["message"];
+      final Map<String, dynamic> error =
+          decodedBody[OpenAIStrings.errorFieldKey];
+      final message = error[OpenAIStrings.messageFieldKey];
       final statusCode = response.statusCode;
 
       final exception = RequestFailedException(message, statusCode);
@@ -229,7 +233,10 @@ class OpenAINetworkingClient {
       final uri = Uri.parse(to);
 
       final headers = HeadersBuilder.build();
-      http.Request request = http.Request("POST", uri);
+
+      final httpMethod = OpenAIStrings.postMethod;
+
+      final request = http.Request(httpMethod, uri);
 
       request.headers.addAll(headers);
 
@@ -261,9 +268,9 @@ class OpenAINetworkingClient {
                   .toList();
 
               for (String line in dataLines) {
-                if (line.startsWith(_DATA_START)) {
+                if (line.startsWith(OpenAIStrings.streamResponseStart)) {
                   final String data = line.substring(6);
-                  if (data.contains(_DATA_DONE)) {
+                  if (data.contains(OpenAIStrings.streamResponseEnd)) {
                     OpenAILogger.streamResponseDone();
 
                     return;
@@ -279,8 +286,9 @@ class OpenAINetworkingClient {
                 final decodedData = decodeToMap(data);
 
                 if (doesErrorExists(decodedData)) {
-                  final error = decodedData["error"] as Map<String, dynamic>;
-                  final message = error["message"];
+                  final error = decodedData[OpenAIStrings.errorFieldKey]
+                      as Map<String, dynamic>;
+                  final message = error[OpenAIStrings.messageFieldKey];
                   final statusCode = respond.statusCode;
                   final exception = RequestFailedException(message, statusCode);
 
@@ -320,9 +328,13 @@ class OpenAINetworkingClient {
 
     final uri = Uri.parse(to);
 
-    final request = http.MultipartRequest("POST", uri);
+    final headers = HeadersBuilder.build();
 
-    request.headers.addAll(HeadersBuilder.build());
+    final httpMethod = OpenAIStrings.postMethod;
+
+    final request = http.MultipartRequest(httpMethod, uri);
+
+    request.headers.addAll(headers);
 
     final file = await http.MultipartFile.fromPath("image", image.path);
 
@@ -349,9 +361,10 @@ class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error = decodedBody['error'];
+      final Map<String, dynamic> error =
+          decodedBody[OpenAIStrings.errorFieldKey];
 
-      final message = error["message"];
+      final message = error[OpenAIStrings.messageFieldKey];
       final statusCode = response.statusCode;
 
       final exception = RequestFailedException(message, statusCode);
@@ -374,7 +387,9 @@ class OpenAINetworkingClient {
   }) async {
     OpenAILogger.logStartRequest(to);
 
-    final request = http.MultipartRequest("POST", Uri.parse(to));
+    final httpMethod = OpenAIStrings.postMethod;
+
+    final request = http.MultipartRequest(httpMethod, Uri.parse(to));
 
     request.headers.addAll(HeadersBuilder.build());
 
@@ -395,8 +410,9 @@ class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error = decodedBody['error'];
-      final message = error["message"];
+      final Map<String, dynamic> error =
+          decodedBody[OpenAIStrings.errorFieldKey];
+      final message = error[OpenAIStrings.messageFieldKey];
       final statusCode = response.statusCode;
 
       final exception = RequestFailedException(message, statusCode);
@@ -421,7 +437,8 @@ class OpenAINetworkingClient {
     final uri = Uri.parse(to);
     final headers = HeadersBuilder.build();
 
-    final request = http.MultipartRequest("POST", uri);
+    final httpMethod = OpenAIStrings.postMethod;
+    final request = http.MultipartRequest(httpMethod, uri);
 
     request.headers.addAll(headers);
 
@@ -441,8 +458,9 @@ class OpenAINetworkingClient {
 
     OpenAILogger.decodedSuccessfully();
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error = decodedBody['error'];
-      final message = error["message"];
+      final Map<String, dynamic> error =
+          decodedBody[OpenAIStrings.errorFieldKey];
+      final message = error[OpenAIStrings.messageFieldKey];
       final statusCode = response.statusCode;
 
       final exception = RequestFailedException(message, statusCode);
@@ -476,8 +494,9 @@ class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error = decodedBody['error'];
-      final String message = error["message"];
+      final Map<String, dynamic> error =
+          decodedBody[OpenAIStrings.errorFieldKey];
+      final String message = error[OpenAIStrings.messageFieldKey];
       final statusCode = response.statusCode;
 
       final exception = RequestFailedException(message, statusCode);
@@ -496,6 +515,6 @@ class OpenAINetworkingClient {
   }
 
   static bool doesErrorExists(Map<String, dynamic> decodedResponseBody) {
-    return decodedResponseBody['error'] != null;
+    return decodedResponseBody[OpenAIStrings.errorFieldKey] != null;
   }
 }
