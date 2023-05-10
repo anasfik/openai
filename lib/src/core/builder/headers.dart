@@ -37,7 +37,7 @@ abstract class HeadersBuilder {
   @internal
   static set apiKey(String? apiKey) {
     _apiKey = apiKey;
-    OpenAILogger.logAPIKey();
+    OpenAILogger.logAPIKey(_apiKey);
   }
 
   /// {@macro headers_builder}
@@ -48,21 +48,18 @@ abstract class HeadersBuilder {
   /// If in anyhow the API key is not set, it will throw an [AssertionError] while debugging.
   @internal
   static Map<String, String> build() {
-    final Map<String, String> headers = <String, String>{
-      'Content-Type': 'application/json',
-    };
+    Map<String, String> headers = <String, String>{};
 
     assert(
       apiKey != null,
       """
       You must set the API key before making building any headers for a request.""",
     );
-
-    if (isOrganizationSet) {
-      headers['OpenAI-Organization'] = organization!;
-    }
-
-    headers["Authorization"] = "Bearer $apiKey";
+    headers = {
+      ...headers,
+      if (isOrganizationSet) 'OpenAI-Organization': organization!,
+      "Authorization": "Bearer $apiKey",
+    };
 
     return headers;
   }

@@ -1,5 +1,7 @@
 import 'package:meta/meta.dart';
 
+import 'endpoints.dart';
+
 /// This class is responsible for storing general [String] constants.
 @internal
 @immutable
@@ -21,4 +23,6 @@ abstract class OpenAIStrings {
   static const errorFieldKey = 'error';
 
   static const messageFieldKey = 'message';
+
+  static final endpoints = OpenAIApisEndpoints.instance;
 }

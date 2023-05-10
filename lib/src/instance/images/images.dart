@@ -6,6 +6,7 @@ import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:meta/meta.dart';
 
 import '../../core/base/images/base.dart';
+import '../../core/constants/strings.dart';
 import '../../core/models/image/edit/image_edit.dart';
 
 import '../../core/models/image/enum.dart';
@@ -19,7 +20,7 @@ import '../../core/utils/logger.dart';
 @protected
 class OpenAIImages implements OpenAIImagesBase {
   @override
-  String get endpoint => "/images";
+  String get endpoint => OpenAIStrings.endpoints.images;
 
   /// {@macro openai_images}
   OpenAIImages() {

@@ -5,6 +5,7 @@ import 'dart:io';
 
 import '../../../openai.dart';
 import '../../core/base/audio/audio.dart';
+import '../../core/constants/strings.dart';
 import '../../core/utils/logger.dart';
 
 /// {@template openai_audio}
@@ -12,7 +13,7 @@ import '../../core/utils/logger.dart';
 /// {@endtemplate}
 class OpenAIAudio implements OpenAIAudioBase {
   @override
-  String get endpoint => "/audio";
+  String get endpoint => OpenAIStrings.endpoints.audio;
 
   /// {@macro openai_audio}
   OpenAIAudio() {

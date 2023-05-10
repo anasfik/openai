@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import 'dart:io';
 
 import '../../core/base/files/base.dart';
+import '../../core/constants/strings.dart';
 import '../../core/utils/logger.dart';
 
 /// {@template openai_files}
@@ -15,7 +16,7 @@ import '../../core/utils/logger.dart';
 @protected
 class OpenAIFiles implements OpenAIFilesBase {
   @override
-  String get endpoint => "/files";
+  String get endpoint => OpenAIStrings.endpoints.files;
 
   /// {@macro openai_files}
   OpenAIFiles() {

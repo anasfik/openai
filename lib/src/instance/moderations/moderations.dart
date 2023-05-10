@@ -1,4 +1,6 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/constants/config.dart';
+import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/moderation/moderation.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 
@@ -14,7 +16,7 @@ import '../../core/utils/logger.dart';
 @protected
 class OpenAIModeration implements OpenAIModerationBase {
   @override
-  String get endpoint => "/moderations";
+  String get endpoint => OpenAIStrings.endpoints.moderation;
 
   /// {@macro openai_moderation}
   OpenAIModeration() {

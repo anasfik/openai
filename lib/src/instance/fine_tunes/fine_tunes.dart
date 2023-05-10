@@ -5,6 +5,7 @@ import 'package:dart_openai/src/instance/model/model.dart';
 import 'package:meta/meta.dart';
 
 import '../../core/base/fine_tunes/base.dart';
+import '../../core/constants/strings.dart';
 import '../../core/utils/logger.dart';
 
 /// {@template openai_finetunes}
@@ -14,7 +15,7 @@ import '../../core/utils/logger.dart';
 @protected
 class OpenAIFineTunes implements OpenAIFineTunesBase {
   @override
-  String get endpoint => "/fine-tunes";
+  String get endpoint => OpenAIStrings.endpoints.fineTunes;
 
   /// {@macro openai_finetunes}
   OpenAIFineTunes() {

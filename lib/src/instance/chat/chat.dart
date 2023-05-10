@@ -2,6 +2,7 @@ import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 
 import '../../core/base/chat/chat.dart';
+import '../../core/constants/strings.dart';
 import '../../core/models/chat/chat.dart';
 import '../../core/utils/logger.dart';
 
@@ -10,7 +11,7 @@ import '../../core/utils/logger.dart';
 /// {@endtemplate}
 class OpenAIChat implements OpenAIChatBase {
   @override
-  String get endpoint => "/chat/completions";
+  String get endpoint => OpenAIStrings.endpoints.chat;
 
   /// {@macro openai_chat}
   OpenAIChat() {

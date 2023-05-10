@@ -3,6 +3,7 @@ import 'package:dart_openai/src/core/models/embedding/embedding.dart';
 import 'package:meta/meta.dart';
 
 import '../../core/base/embeddings/base.dart';
+import '../../core/constants/strings.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
@@ -13,7 +14,7 @@ import '../../core/utils/logger.dart';
 @protected
 class OpenAIEmbedding implements OpenAIEmbeddingBase {
   @override
-  String get endpoint => "/embeddings";
+  String get endpoint => OpenAIStrings.endpoints.embeddings;
 
   /// {@macro openai_embedding}
   OpenAIEmbedding() {

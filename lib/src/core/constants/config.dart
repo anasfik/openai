@@ -25,6 +25,6 @@ abstract class OpenAIConfig {
   @internal
   static set baseUrl(String? baseUrl) {
     _baseUrl = baseUrl;
-    OpenAILogger.logBaseUrl();
+    OpenAILogger.logBaseUrl(_baseUrl);
   }
 }

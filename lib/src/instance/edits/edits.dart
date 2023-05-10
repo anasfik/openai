@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../../core/base/edits/edits.dart';
 import '../../core/builder/base_api_url.dart';
+import '../../core/constants/strings.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
@@ -13,7 +14,7 @@ import '../../core/utils/logger.dart';
 @protected
 class OpenAIEdits implements OpenAIEditsBase {
   @override
-  String get endpoint => "/edits";
+  String get endpoint => OpenAIStrings.endpoints.edits;
 
   /// {@macro openai_edits}
   OpenAIEdits() {
