@@ -82,7 +82,7 @@ class OpenAINetworkingClient {
     bool returnRawResponse = false,
     T Function(Map<String, dynamic>)? onSuccess,
   }) async {
-    OpenAILogger.logStartRequestFrom(from);
+    OpenAILogger.logStartRequest(from);
 
     final uri = Uri.parse(from);
     final headers = HeadersBuilder.build();
@@ -104,13 +104,14 @@ class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      OpenAILogger.errorOcurred();
-
       final Map<String, dynamic> error = decodedBody['error'];
       final message = error["message"];
       final statusCode = response.statusCode;
 
-      throw RequestFailedException(message, statusCode);
+      final exception = RequestFailedException(message, statusCode);
+      OpenAILogger.errorOcurred(exception);
+
+      throw exception;
     } else {
       OpenAILogger.requestFinishedSuccessfully();
 
@@ -179,7 +180,7 @@ class OpenAINetworkingClient {
     required T Function(Map<String, dynamic>) onSuccess,
     Map<String, dynamic>? body,
   }) async {
-    OpenAILogger.logStartRequestTo(to);
+    OpenAILogger.logStartRequest(to);
 
     final uri = Uri.parse(to);
     final headers = HeadersBuilder.build();
@@ -200,13 +201,14 @@ class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      OpenAILogger.errorOcurred();
-
       final Map<String, dynamic> error = decodedBody['error'];
       final message = error["message"];
       final statusCode = response.statusCode;
 
-      throw RequestFailedException(message, statusCode);
+      final exception = RequestFailedException(message, statusCode);
+      OpenAILogger.errorOcurred(exception);
+
+      throw exception;
     } else {
       OpenAILogger.requestFinishedSuccessfully();
 
@@ -240,7 +242,7 @@ class OpenAINetworkingClient {
         ]);
       }
 
-      OpenAILogger.logStartRequestTo(to);
+      OpenAILogger.logStartRequest(to);
       client.send(request).then(
         (respond) {
           OpenAILogger.startReadStreamResponse();
@@ -314,7 +316,7 @@ class OpenAINetworkingClient {
     required File? mask,
     required Map<String, String> body,
   }) async {
-    OpenAILogger.logStartRequestTo(to);
+    OpenAILogger.logStartRequest(to);
 
     final uri = Uri.parse(to);
 
@@ -347,14 +349,15 @@ class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      OpenAILogger.errorOcurred();
-
       final Map<String, dynamic> error = decodedBody['error'];
 
       final message = error["message"];
       final statusCode = response.statusCode;
 
-      throw RequestFailedException(message, statusCode);
+      final exception = RequestFailedException(message, statusCode);
+      OpenAILogger.errorOcurred(exception);
+
+      throw exception;
     } else {
       OpenAILogger.requestFinishedSuccessfully();
 
@@ -369,7 +372,7 @@ class OpenAINetworkingClient {
     required Map<String, dynamic> body,
     required File image,
   }) async {
-    OpenAILogger.logStartRequestTo(to);
+    OpenAILogger.logStartRequest(to);
 
     final request = http.MultipartRequest("POST", Uri.parse(to));
 
@@ -392,13 +395,14 @@ class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      OpenAILogger.errorOcurred();
-
       final Map<String, dynamic> error = decodedBody['error'];
       final message = error["message"];
       final statusCode = response.statusCode;
 
-      throw RequestFailedException(message, statusCode);
+      final exception = RequestFailedException(message, statusCode);
+      OpenAILogger.errorOcurred(exception);
+
+      throw exception;
     } else {
       OpenAILogger.requestFinishedSuccessfully();
 
@@ -412,7 +416,7 @@ class OpenAINetworkingClient {
     required Map<String, String> body,
     required File file,
   }) async {
-    OpenAILogger.logStartRequestTo(to);
+    OpenAILogger.logStartRequest(to);
 
     final uri = Uri.parse(to);
     final headers = HeadersBuilder.build();
@@ -437,13 +441,14 @@ class OpenAINetworkingClient {
 
     OpenAILogger.decodedSuccessfully();
     if (doesErrorExists(decodedBody)) {
-      OpenAILogger.errorOcurred();
-
       final Map<String, dynamic> error = decodedBody['error'];
       final message = error["message"];
       final statusCode = response.statusCode;
 
-      throw RequestFailedException(message, statusCode);
+      final exception = RequestFailedException(message, statusCode);
+      OpenAILogger.errorOcurred(exception);
+
+      throw exception;
     } else {
       OpenAILogger.requestFinishedSuccessfully();
 
@@ -455,7 +460,7 @@ class OpenAINetworkingClient {
     required String from,
     required T Function(Map<String, dynamic> response) onSuccess,
   }) async {
-    OpenAILogger.logStartRequestTo(from);
+    OpenAILogger.logStartRequest(from);
 
     final headers = HeadersBuilder.build();
     final uri = Uri.parse(from);
@@ -471,13 +476,14 @@ class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      OpenAILogger.errorOcurred();
-
       final Map<String, dynamic> error = decodedBody['error'];
       final String message = error["message"];
       final statusCode = response.statusCode;
 
-      throw RequestFailedException(message, statusCode);
+      final exception = RequestFailedException(message, statusCode);
+      OpenAILogger.errorOcurred(exception);
+
+      throw exception;
     } else {
       OpenAILogger.requestFinishedSuccessfully();
 

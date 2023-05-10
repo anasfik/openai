@@ -22,15 +22,10 @@ abstract class OpenAILogger {
   }
 
   /// Logs a message, if the logger is active.
-  static void log(String message) {
-    if (!_isActive) {
-      return;
+  static void log(String message, [Object? error]) {
+    if (_isActive) {
+      dev.log(message, name: OpenAIStrings.openai, error: error);
     }
-
-    dev.log(
-      message,
-      name: OpenAIStrings.openai,
-    );
   }
 
   /// Logs that a request to an [endpoint] is being made, if the logger is active.
@@ -49,8 +44,12 @@ abstract class OpenAILogger {
   }
 
   /// Logs that an baseUrl key is being set, if the logger is active.
-  static void logBaseUrl() {
-    log("baseUrl is set");
+  static void logBaseUrl([String? baseUrl]) {
+    if (baseUrl != null) {
+      log("base url set to $baseUrl");
+    } else {
+      log("base url is set");
+    }
   }
 
   /// Logs that an organization id is being set, if the logger is active.
@@ -58,12 +57,8 @@ abstract class OpenAILogger {
     log("organization id set to $organizationId");
   }
 
-  static void logStartRequestFrom(String from) {
+  static void logStartRequest(String from) {
     return log("starting request to $from");
-  }
-
-  static void logStartRequestTo(String to) {
-    return log("starting request to $to");
   }
 
   static void requestToWithStatusCode(String url, int statusCode) {
@@ -78,8 +73,8 @@ abstract class OpenAILogger {
     return log("response body decoded successfully");
   }
 
-  static void errorOcurred() {
-    return log("an error occurred, throwing exception");
+  static void errorOcurred([Object? error]) {
+    return log("an error occurred, throwing exception: $error");
   }
 
   static void requestFinishedSuccessfully() {
