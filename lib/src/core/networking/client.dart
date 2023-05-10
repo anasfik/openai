@@ -65,7 +65,9 @@ class _OpenAIChatStreamLineSplitter extends LineSplitter {
     Stream<String> lineStream = super.bind(stream);
 
     return Stream<String>.eventTransformed(
-        lineStream, (sink) => _OpenAIChatStreamSink(sink));
+      lineStream,
+      (sink) => _OpenAIChatStreamSink(sink),
+    );
   }
 }
 
@@ -78,7 +80,7 @@ class OpenAINetworkingClient {
     bool returnRawResponse = false,
     T Function(Map<String, dynamic>)? onSuccess,
   }) async {
-    OpenAILogger.log("starting request to $from");
+    OpenAILogger.logStartRequestFrom(from);
 
     final http.Response response = await http.get(
       Uri.parse(from),
@@ -88,26 +90,27 @@ class OpenAINetworkingClient {
     if (returnRawResponse) {
       return response.body as T;
     }
-    OpenAILogger.log(
-        "request to $from finished with status code ${response.statusCode}");
 
-    OpenAILogger.log("starting decoding response body");
+    OpenAILogger.requestToWithStatusCode(from, response.statusCode);
+    OpenAILogger.startingDecoding();
+
     Utf8Decoder utf8decoder = Utf8Decoder();
     final Map<String, dynamic> decodedBody =
         jsonDecode(utf8decoder.convert(response.bodyBytes))
             as Map<String, dynamic>;
 
-    OpenAILogger.log("response body decoded successfully");
+    OpenAILogger.decodedSuccessfully();
 
     if (decodedBody['error'] != null) {
-      OpenAILogger.log("an error occurred, throwing exception");
+      OpenAILogger.errorOcurred();
       final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
       );
     } else {
-      OpenAILogger.log("request finished successfully");
+      OpenAILogger.requestFinishedSuccessfully();
+
       return onSuccess!(decodedBody);
     }
   }
@@ -128,32 +131,36 @@ class OpenAINetworkingClient {
     }
 
     client.send(request).then((streamedResponse) {
-      streamedResponse.stream.listen((value) {
-        final String data = utf8.decode(value);
+      streamedResponse.stream.listen(
+        (value) {
+          final String data = utf8.decode(value);
 
-        final List<String> dataLines = _openAIChatStreamLineSplitter
-            .convert(data)
-            .where((element) => element.isNotEmpty)
-            .toList();
+          final List<String> dataLines = _openAIChatStreamLineSplitter
+              .convert(data)
+              .where((element) => element.isNotEmpty)
+              .toList();
 
-        for (String line in dataLines) {
-          if (line.startsWith("data: ")) {
-            final String data = line.substring(6);
-            if (data.startsWith("[DONE]")) {
-              OpenAILogger.log("stream response is done");
+          for (String line in dataLines) {
+            if (line.startsWith("data: ")) {
+              final String data = line.substring(6);
+              if (data.startsWith("[DONE]")) {
+                OpenAILogger.streamResponseDone();
 
-              return;
+                return;
+              }
+
+              final decoded = jsonDecode(data) as Map<String, dynamic>;
+              controller.add(onSuccess(decoded));
             }
-
-            final decoded = jsonDecode(data) as Map<String, dynamic>;
-            controller.add(onSuccess(decoded));
           }
-        }
-      }, onDone: () {
-        close();
-      }, onError: (err) {
-        controller.addError(err);
-      });
+        },
+        onDone: () {
+          close();
+        },
+        onError: (err) {
+          controller.addError(err);
+        },
+      );
     });
 
     return controller.stream;
@@ -164,7 +171,7 @@ class OpenAINetworkingClient {
     required T Function(Map<String, dynamic>) onSuccess,
     Map<String, dynamic>? body,
   }) async {
-    OpenAILogger.log("starting request to $to");
+    OpenAILogger.logStartRequestTo(to);
 
     final http.Response response = await http.post(
       Uri.parse(to),
@@ -172,66 +179,28 @@ class OpenAINetworkingClient {
       body: body != null ? jsonEncode(body) : null,
     );
 
-    OpenAILogger.log(
-        "request to $to finished with status code ${response.statusCode}");
+    OpenAILogger.requestToWithStatusCode(to, response.statusCode);
+    OpenAILogger.startingDecoding();
 
-    OpenAILogger.log("starting decoding response body");
     Utf8Decoder utf8decoder = Utf8Decoder();
     final Map<String, dynamic> decodedBody =
         jsonDecode(utf8decoder.convert(response.bodyBytes))
             as Map<String, dynamic>;
-    OpenAILogger.log("response body decoded successfully");
+    OpenAILogger.decodedSuccessfully();
 
     if (decodedBody['error'] != null) {
-      OpenAILogger.log("an error occurred, throwing exception");
+      OpenAILogger.errorOcurred();
       final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
       );
     } else {
-      OpenAILogger.log("request finished successfully");
+      OpenAILogger.requestFinishedSuccessfully();
+
       return onSuccess(decodedBody);
     }
   }
-
-  // static Stream<T> postStream<T>({
-  //   required String to,
-  //   required T Function(Map<String, dynamic>) onSuccess,
-  //   required Map<String, dynamic> body,
-  // }) async* {
-  //   OpenAILogger.log("starting request to $to");
-
-  //   final http.Client client = http.Client();
-  //   final clientRequest = client.post(
-  //     Uri.parse(to),
-  //     headers: HeadersBuilder.build(),
-  //     body: jsonEncode(body),
-  //   );
-
-  //   final response = clientRequest.asStream();
-  //   OpenAILogger.log("Starting to reading stream response");
-
-  //   await for (var chunk in response) {
-  //     String eventData = utf8.decode(chunk.bodyBytes);
-
-  //     List<String> dataLines = eventData.split("\n");
-
-  //     for (var line in dataLines) {
-  //       if (line.startsWith("data: ")) {
-  //         String data = line.substring(6);
-  //         if (data.startsWith("[DONE]")) {
-  //           OpenAILogger.log("stream response is done");
-  //           client.close();
-  //           return;
-  //         }
-  //         final decoded = jsonDecode(data) as Map<String, dynamic>;
-
-  //         yield onSuccess(decoded);
-  //       }
-  //     }
-  //   }
-  // }
 
   static Stream<T> postStream<T>({
     required String to,
@@ -253,10 +222,11 @@ class OpenAINetworkingClient {
         controller.close();
       }
 
+      OpenAILogger.logStartRequestTo(to);
       OpenAILogger.log("starting request to $to");
       client.send(request).then(
         (respond) {
-          OpenAILogger.log("Starting to reading stream response");
+          OpenAILogger.startReadStreamResponse();
 
           final stream = respond.stream
               .transform(utf8.decoder)
@@ -275,7 +245,7 @@ class OpenAINetworkingClient {
                 if (line.startsWith(_DATA_START)) {
                   final String data = line.substring(6);
                   if (data.contains(_DATA_DONE)) {
-                    OpenAILogger.log("stream response is done");
+                    OpenAILogger.streamResponseDone();
 
                     return;
                   }
@@ -323,7 +293,7 @@ class OpenAINetworkingClient {
     required File? mask,
     required Map<String, String> body,
   }) async {
-    OpenAILogger.log("starting request to $to");
+    OpenAILogger.logStartRequestTo(to);
     final http.MultipartRequest request = http.MultipartRequest(
       "POST",
       Uri.parse(to),
@@ -340,23 +310,23 @@ class OpenAINetworkingClient {
     if (maskFile != null) request.files.add(maskFile);
     request.fields.addAll(body);
     final http.StreamedResponse response = await request.send();
-    OpenAILogger.log(
-        "request to $to finished with status code ${response.statusCode}");
+    OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
-    OpenAILogger.log("starting decoding response body");
+    OpenAILogger.startingDecoding();
     final String encodedBody = await response.stream.bytesToString();
     final Map<String, dynamic> decodedBody =
         jsonDecode(encodedBody) as Map<String, dynamic>;
-    OpenAILogger.log("response body decoded successfully");
+    OpenAILogger.decodedSuccessfully();
     if (decodedBody['error'] != null) {
-      OpenAILogger.log("an error occurred, throwing exception");
+      OpenAILogger.errorOcurred();
       final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
       );
     } else {
-      OpenAILogger.log("request finished successfully");
+      OpenAILogger.requestFinishedSuccessfully();
+
       return onSuccess(decodedBody);
     }
   }
@@ -368,7 +338,7 @@ class OpenAINetworkingClient {
     required Map<String, dynamic> body,
     required File image,
   }) async {
-    OpenAILogger.log("starting request to $to");
+    OpenAILogger.logStartRequestTo(to);
     final http.MultipartRequest request = http.MultipartRequest(
       "POST",
       Uri.parse(to),
@@ -378,23 +348,23 @@ class OpenAINetworkingClient {
         await http.MultipartFile.fromPath("image", image.path);
     request.files.add(imageFile);
     final http.StreamedResponse response = await request.send();
-    OpenAILogger.log(
-        "request to $to finished with status code ${response.statusCode},");
+    OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
-    OpenAILogger.log("starting decoding response body");
+    OpenAILogger.startingDecoding();
     final String encodedBody = await response.stream.bytesToString();
     final Map<String, dynamic> decodedBody =
         jsonDecode(encodedBody) as Map<String, dynamic>;
-    OpenAILogger.log("response body decoded successfully");
+    OpenAILogger.decodedSuccessfully();
     if (decodedBody['error'] != null) {
-      OpenAILogger.log("an error occurred, throwing exception");
+      OpenAILogger.errorOcurred();
       final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
       );
     } else {
-      OpenAILogger.log("request finished successfully");
+      OpenAILogger.requestFinishedSuccessfully();
+
       return onSuccess(decodedBody);
     }
   }
@@ -405,7 +375,7 @@ class OpenAINetworkingClient {
     required Map<String, String> body,
     required File file,
   }) async {
-    OpenAILogger.log("starting request to $to");
+    OpenAILogger.logStartRequestTo(to);
     final http.MultipartRequest request = http.MultipartRequest(
       "POST",
       Uri.parse(to),
@@ -419,25 +389,25 @@ class OpenAINetworkingClient {
     request.fields.addAll(body);
     final http.StreamedResponse response = await request.send();
 
-    OpenAILogger.log(
-        "request to $to finished with status code ${response.statusCode},");
+    OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
-    OpenAILogger.log("starting decoding response body");
+    OpenAILogger.startingDecoding();
 
     final String encodedBody = await response.stream.bytesToString();
     final Map<String, dynamic> decodedBody =
         jsonDecode(encodedBody) as Map<String, dynamic>;
 
-    OpenAILogger.log("response body decoded successfully");
+    OpenAILogger.decodedSuccessfully();
     if (decodedBody['error'] != null) {
-      OpenAILogger.log("an error occurred, throwing exception");
+      OpenAILogger.errorOcurred();
       final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
       );
     } else {
-      OpenAILogger.log("request finished successfully");
+      OpenAILogger.requestFinishedSuccessfully();
+
       return onSuccess(decodedBody);
     }
   }
@@ -446,29 +416,29 @@ class OpenAINetworkingClient {
     required String from,
     required T Function(Map<String, dynamic> response) onSuccess,
   }) async {
-    OpenAILogger.log("starting request to $from");
+    OpenAILogger.logStartRequestTo(from);
 
     final http.Response response = await http.delete(
       Uri.parse(from),
       headers: HeadersBuilder.build(),
     );
 
-    OpenAILogger.log(
-        "request to $from finished with status code ${response.statusCode}");
+    OpenAILogger.requestToWithStatusCode(from, response.statusCode);
 
-    OpenAILogger.log("starting decoding response body");
+    OpenAILogger.startingDecoding();
     final Map<String, dynamic> decodedBody =
         jsonDecode(response.body) as Map<String, dynamic>;
-    OpenAILogger.log("response body decoded successfully");
+    OpenAILogger.decodedSuccessfully();
     if (decodedBody['error'] != null) {
-      OpenAILogger.log("an error occurred, throwing exception");
+      OpenAILogger.errorOcurred();
       final Map<String, dynamic> error = decodedBody['error'];
       throw RequestFailedException(
         error["message"],
         response.statusCode,
       );
     } else {
-      OpenAILogger.log("request finished successfully");
+      OpenAILogger.requestFinishedSuccessfully();
+
       return onSuccess(decodedBody);
     }
   }

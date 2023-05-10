@@ -43,8 +43,6 @@ class OpenAI extends OpenAIClientBase {
     return _instance;
   }
 
-
-
   /// The [OpenAIModel] instance, used to access the model endpoints.
   /// Please, refer to the Models page from the official OpenAI documentation website in order to know what models are available and what's the use case of every model.
   OpenAIModel get model => OpenAIModel();
@@ -76,7 +74,6 @@ class OpenAI extends OpenAIClientBase {
   /// The [OpenAIAudio] instance, used to access the audio endpoints.
   OpenAIAudio get audio => OpenAIAudio();
 
-
   /// The organization id, if set, it will be used in all the requests to the OpenAI API.
   static String? get organization => HeadersBuilder.organization;
 
@@ -104,7 +101,6 @@ class OpenAI extends OpenAIClientBase {
   static set organization(String? organizationId) {
     HeadersBuilder.organization = organizationId;
   }
-
 
   /// This controls whether to log steps inside the process of making a request, this helps debugging and pointing where something went wrong.
   /// This uses  [dart:developer] internally, so it will show anyway only while debugging code.

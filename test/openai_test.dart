@@ -5,7 +5,6 @@ import 'package:dart_openai/openai.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
-@Timeout(Duration(minutes: 2))
 void main() async {
   final exampleImageFile = await getFileFromUrl(
     "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png",

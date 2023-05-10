@@ -40,12 +40,12 @@ abstract class OpenAILogger {
 
   /// Logs that an api key is being set, if the logger is active.
   static void logAPIKey([String? apiKey]) {
-if(apiKey != null) {
-  final hiddenApiKey = apiKey.replaceRange(0, apiKey.length - 10, '****');
-  log("api key set to $hiddenApiKey");
-} else {
-    log("api key is set");
-}
+    if (apiKey != null) {
+      final hiddenApiKey = apiKey.replaceRange(0, apiKey.length - 10, '****');
+      log("api key set to $hiddenApiKey");
+    } else {
+      log("api key is set");
+    }
   }
 
   /// Logs that an baseUrl key is being set, if the logger is active.
@@ -56,5 +56,41 @@ if(apiKey != null) {
   /// Logs that an organization id is being set, if the logger is active.
   static void logOrganization(String? organizationId) {
     log("organization id set to $organizationId");
+  }
+
+  static void logStartRequestFrom(String from) {
+    return log("starting request to $from");
+  }
+
+  static void logStartRequestTo(String to) {
+    return log("starting request to $to");
+  }
+
+  static void requestToWithStatusCode(String url, int statusCode) {
+    return log("request to $url finished with status code ${statusCode}");
+  }
+
+  static void startingDecoding() {
+    return log("starting decoding response body");
+  }
+
+  static void decodedSuccessfully() {
+    return log("response body decoded successfully");
+  }
+
+  static void errorOcurred() {
+    return log("an error occurred, throwing exception");
+  }
+
+  static void requestFinishedSuccessfully() {
+    return log("request finished successfully");
+  }
+
+  static void streamResponseDone() {
+    return log("stream response is done");
+  }
+
+  static void startReadStreamResponse() {
+    return log("Starting to reading stream response");
   }
 }
