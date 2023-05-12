@@ -48,7 +48,9 @@ abstract class HeadersBuilder {
   /// If in anyhow the API key is not set, it will throw an [AssertionError] while debugging.
   @internal
   static Map<String, String> build() {
-    Map<String, String> headers = <String, String>{};
+    Map<String, String> headers = <String, String>{
+      'Content-Type': 'application/json',
+    };
 
     assert(
       apiKey != null,
