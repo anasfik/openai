@@ -11,7 +11,7 @@ import '../../core/utils/logger.dart';
 /// {@template openai_audio}
 /// This class is responsible for handling all audio requests, such as creating a transcription or translation for a given audio file.
 /// {@endtemplate}
-class OpenAIAudio implements OpenAIAudioBase {
+interface class OpenAIAudio implements OpenAIAudioBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.audio;
 

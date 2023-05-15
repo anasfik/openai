@@ -12,7 +12,7 @@ import '../../core/utils/logger.dart';
 /// {@endtemplate}
 @immutable
 @protected
-class OpenAIEdits implements OpenAIEditsBase {
+interface class OpenAIEdits implements OpenAIEditsBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.edits;
 

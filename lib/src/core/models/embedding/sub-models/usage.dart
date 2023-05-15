@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// This class is used to represent the usage of an OpenAI embeddings.
 /// {@endtemplate}
 @immutable
-class OpenAIEmbeddingsUsageModel {
+final class OpenAIEmbeddingsUsageModel {
   /// The number of tokens in the prompt.
   final int? promptTokens;
 

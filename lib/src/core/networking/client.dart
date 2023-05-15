@@ -7,12 +7,13 @@ import "package:dart_openai/openai.dart";
 import "package:dart_openai/src/core/builder/headers.dart";
 import "package:dart_openai/src/core/utils/logger.dart";
 import "package:http/http.dart" as http;
+import "package:meta/meta.dart";
 
 import '../constants/strings.dart';
 import '../exceptions/request_failure.dart';
 
 /// Handling exceptions returned by OpenAI Stream API.
-class _OpenAIChatStreamSink extends EventSink<String> {
+final class _OpenAIChatStreamSink implements EventSink<String> {
   final EventSink<String> _sink;
 
   final List<String> _carries = [];
@@ -61,22 +62,24 @@ class _OpenAIChatStreamSink extends EventSink<String> {
   }
 }
 
-class OpenAIChatStreamLineSplitter extends LineSplitter {
-  const OpenAIChatStreamLineSplitter();
+// class OpenAIChatStreamLineSplitter extends LineSplitter {
+//   const OpenAIChatStreamLineSplitter();
 
-  Stream<String> bind(Stream<String> stream) {
-    Stream<String> lineStream = super.bind(stream);
+//   Stream<String> bind(Stream<String> stream) {
+//     Stream<String> lineStream = super.bind(stream);
 
-    return Stream<String>.eventTransformed(
-      lineStream,
-      (sink) => _OpenAIChatStreamSink(sink),
-    );
-  }
-}
+//     return Stream<String>.eventTransformed(
+//       lineStream,
+//       (sink) => _OpenAIChatStreamSink(sink),
+//     );
+//   }
+// }
 
-const openAIChatStreamLineSplitter = const OpenAIChatStreamLineSplitter();
+const openAIChatStreamLineSplitter = const LineSplitter();
 
-class OpenAINetworkingClient {
+@protected
+@immutable
+abstract final class OpenAINetworkingClient {
   static Future<T> get<T>({
     required String from,
     bool returnRawResponse = false,

@@ -20,6 +20,7 @@ Future<void> main() async {
     );
 
     print(
-        "completion for '$accumulativeSentence': ${completion.choices.first.text}");
+      "completion for '$accumulativeSentence': ${completion.choices.first.text}",
+    );
   }
 }

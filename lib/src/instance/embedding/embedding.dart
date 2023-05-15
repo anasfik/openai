@@ -12,7 +12,7 @@ import '../../core/utils/logger.dart';
 /// {@endtemplate}
 @immutable
 @protected
-class OpenAIEmbedding implements OpenAIEmbeddingBase {
+interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.embeddings;
 

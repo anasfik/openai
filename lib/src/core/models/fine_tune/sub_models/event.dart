@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// This class is used to represent an OpenAI fine-tune event.
 /// {@endtemplate}
 @immutable
-class OpenAIFineTuneEventModel {
+final class OpenAIFineTuneEventModel {
   /// The date the event was created.
   final DateTime createdAt;
 

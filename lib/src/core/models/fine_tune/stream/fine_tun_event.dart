@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// Creates a new instance of [OpenAIFineTuneEventStreamModel].
 /// {@endtemplate}
 @immutable
-class OpenAIFineTuneEventStreamModel {
+final class OpenAIFineTuneEventStreamModel {
   /// The level of the event.
   final String level;
 

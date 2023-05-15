@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// This class is used to represent the usage of an OpenAI completion.
 /// {@endtemplate}
 @immutable
-class OpenAIEditModelUsage {
+final class OpenAIEditModelUsage {
   /// The number of tokens in the prompt.
   final int promptTokens;
 

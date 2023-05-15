@@ -3,7 +3,7 @@ import '../../../../image/enum.dart';
 /// {@template openai_chat_completion_choice_message_model}
 /// This represents the message of the [OpenAIChatCompletionChoiceModel] model of the OpenAI API, which is used and get returned while using the [OpenAIChat] methods.
 /// {@endtemplate}
-class OpenAIChatCompletionChoiceMessageModel {
+final class OpenAIChatCompletionChoiceMessageModel {
   /// The [role] of the message.
   final OpenAIChatMessageRole role;
 

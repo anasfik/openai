@@ -7,7 +7,7 @@ import '../constants/strings.dart';
 @protected
 @immutable
 @internal
-abstract class OpenAILogger {
+abstract final class OpenAILogger {
   /// This represents the default value of the logger active state.
   static bool _isActive = true;
 

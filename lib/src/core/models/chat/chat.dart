@@ -12,7 +12,7 @@ export 'stream/chat.dart';
 /// This class represents the chat completion response model of the OpenAI API, which is used and get returned while using the [OpenAIChat] methods.
 /// {@endtemplate}
 @immutable
-class OpenAIChatCompletionModel {
+final class OpenAIChatCompletionModel {
   /// The [id] of the chat completion.
   final String id;
 

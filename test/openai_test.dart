@@ -160,18 +160,18 @@ void main() async {
     });
   });
   group('edits', () {
-    //! temporary disabled, because the API have on this and throws an unexpected error from OpenAI end.
-    // test('create', () async {
-    //   final OpenAIEditModel edit = await OpenAI.instance.edit.create(
-    //     model: "text-davinci-edit-001",
-    //     instruction: "remove the word 'made' from the text",
-    //     input: "I made something, idk man",
-    //   );
-    //   expect(edit, isA<OpenAIEditModel>());
-    //   expect(edit.choices.first, isA<OpenAIEditModelChoice>());
-    //   expect(edit.choices.first.text, isNotNull);
-    //   expect(edit.choices.first.text, isA<String>());
-    // });
+    ! temporary disabled, because the API have on this and throws an unexpected error from OpenAI end.
+    test('create', () async {
+      final OpenAIEditModel edit = await OpenAI.instance.edit.create(
+        model: "text-davinci-edit-001",
+        instruction: "remove the word 'made' from the text",
+        input: "I made something, idk man",
+      );
+      expect(edit, isA<OpenAIEditModel>());
+      expect(edit.choices.first, isA<OpenAIEditModelChoice>());
+      expect(edit.choices.first.text, isNotNull);
+      expect(edit.choices.first.text, isA<String>());
+    });
   });
   group('images', () {
     test('create', () async {

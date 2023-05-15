@@ -12,7 +12,7 @@ import '../../core/base/completion.dart';
 /// {@endtemplate}
 @immutable
 @protected
-class OpenAICompletion implements OpenAICompletionBase {
+interface class OpenAICompletion implements OpenAICompletionBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.completion;
 

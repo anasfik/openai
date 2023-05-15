@@ -2,6 +2,11 @@
 
 ## 1.9.9
 
+ - Fixed minor issue.
+
+## 1.9.9
+
+
 - More refatocration for the packages services.
 - Fixes some minor issues with the logging service.
 - Removed repeated constants, code.

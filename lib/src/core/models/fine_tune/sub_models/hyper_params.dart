@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// This class is used to represent the hyper-parameters used for fine-tuning.
 /// {@endtemplate}
 @immutable
-class OpenAIFineTuneHyperParamsModel {
+final class OpenAIFineTuneHyperParamsModel {
   /// The batch size used for fine-tuning.
   final int? batchSize;
 

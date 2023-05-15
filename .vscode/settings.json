@@ -3,5 +3,6 @@
     "Epoches",
     "openai"
   ],
-  "editor.acceptSuggestionOnEnter": "off"
+  "editor.acceptSuggestionOnEnter": "off",
+  "dart.sdkPath": "C:\\tools\\dart-sdk-v3.0.0\\"
 }

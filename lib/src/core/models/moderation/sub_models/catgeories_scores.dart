@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class OpenAIModerationResultScoresModel {
+final class OpenAIModerationResultScoresModel {
   /// The hate score of the moderation job.
   final double hate;
 

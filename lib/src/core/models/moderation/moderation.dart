@@ -7,7 +7,7 @@ import 'sub_models/result.dart';
 export 'sub_models/result.dart';
 
 @immutable
-class OpenAIModerationModel {
+final class OpenAIModerationModel {
   /// The ID of the moderation job.
   final String id;
 

@@ -3,7 +3,7 @@ export 'choices/sub_models/message.dart';
 /// {@template openai_chat_completion_usage}
 /// This class represents the chat completion usage model of the OpenAI API, which is used and get returned while using the [OpenAIChat] methods.
 /// {@endtemplate}
-class OpenAIChatCompletionUsageModel {
+final class OpenAIChatCompletionUsageModel {
   /// The number of tokens used for the prompt(s).
   final int promptTokens;
 

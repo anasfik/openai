@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 /// This class is used to represent the data returned by an OpenAI embeddings request.
 /// {@endtemplate}
 @immutable
-class OpenAIEmbeddingsDataModel {
+final class OpenAIEmbeddingsDataModel {
   /// The embedding of the text.
   final List<double> embeddings;
 

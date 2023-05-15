@@ -3,7 +3,7 @@ export "choices/choices.dart";
 /// {@template openai_stream_chat_completion_usage}
 /// The [OpenAIStreamChatCompletionUsageModel] class represents the usage model of the OpenAI API, which is used and get returned while using the chat methods that leverages [Stream] functionality.
 /// {@endtemplate}
-class OpenAIStreamChatCompletionUsageModel {
+final class OpenAIStreamChatCompletionUsageModel {
   /// The number of tokens used for the prompt(s).
   final int promptTokens;
 

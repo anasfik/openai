@@ -9,7 +9,7 @@ import '../../core/utils/logger.dart';
 /// {@template openai_chat}
 /// This class is responsible for handling all chat requests, such as creating a chat completion for the message(s).
 /// {@endtemplate}
-class OpenAIChat implements OpenAIChatBase {
+interface class OpenAIChat implements OpenAIChatBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.chat;
 

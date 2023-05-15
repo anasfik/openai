@@ -13,7 +13,7 @@ export 'stream/fine_tun_event.dart';
 /// This class is used to represent an OpenAI fine-tuning job.
 /// {@endtemplate}
 @immutable
-class OpenAIFineTuneModel {
+final class OpenAIFineTuneModel {
   /// The ID of the fine-tuning job.
   final String id;
 

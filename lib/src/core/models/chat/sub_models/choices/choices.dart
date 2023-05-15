@@ -3,7 +3,7 @@ import 'sub_models/message.dart';
 /// {@template openai_chat_completion_choice}
 /// This class represents a choice of the [OpenAIChatCompletionModel] model of the OpenAI API, which is used and get returned while using the [OpenAIChat] methods.
 /// {@endtemplate}
-class OpenAIChatCompletionChoiceModel {
+final class OpenAIChatCompletionChoiceModel {
   /// The [index] of the choice.
   final int index;
 

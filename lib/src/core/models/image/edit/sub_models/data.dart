@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class OpenAIImageEditDataModel {
+final class OpenAIImageEditDataModel {
   /// The url of the image.
   final String? url;
 

@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// This represents the usage of a completion response.
 /// {@endtemplate}
 @immutable
-class OpenAICompletionModelUsage {
+final class OpenAICompletionModelUsage {
   /// The number of tokens in the prompt.
   final int? promptTokens;
 

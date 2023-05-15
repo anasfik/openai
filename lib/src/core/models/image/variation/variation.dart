@@ -5,7 +5,7 @@ import 'sub_models/data.dart';
 export 'sub_models/data.dart';
 
 @immutable
-class OpenAIImageVariationModel {
+final class OpenAIImageVariationModel {
   /// The time the image was created.
   final DateTime created;
 

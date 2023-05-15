@@ -5,7 +5,7 @@ import 'sub_models/permission.dart';
 export 'sub_models/permission.dart';
 
 @immutable
-class OpenAIModelModel {
+final class OpenAIModelModel {
   /// The ID of the model.
   final String id;
 

@@ -22,7 +22,7 @@ import 'model/model.dart';
 /// final openai = OpenAI.instance;
 /// ```
 @immutable
-class OpenAI extends OpenAIClientBase {
+final class OpenAI extends OpenAIClientBase {
   /// The singleton instance of [OpenAI].
   static final OpenAI _instance = OpenAI._();
 

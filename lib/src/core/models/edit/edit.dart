@@ -10,7 +10,7 @@ export 'sub_models/usage.dart';
 /// This class is used to represent an OpenAI edit.
 /// {@endtemplate}
 @immutable
-class OpenAIEditModel {
+final class OpenAIEditModel {
   /// The date the edit was created.
   final DateTime created;
 

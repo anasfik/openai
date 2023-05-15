@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class OpenAIImageData {
+final class OpenAIImageData {
   /// The URL of the image.
   final String? url;
 

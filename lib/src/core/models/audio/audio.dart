@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// This class represents the audio model of the OpenAI API, which is used and get returned while using the [OpenAIAudio] methods.
 /// {@endtemplate}
 @immutable
-class OpenAIAudioModel {
+final class OpenAIAudioModel {
   /// The text response from the audio requests.
   /// This is the only field that is returned from the API.
   final String text;
@@ -13,9 +13,7 @@ class OpenAIAudioModel {
   int get hashCode => text.hashCode;
 
   /// {@macro openai_audio}
-  const OpenAIAudioModel({
-    required this.text,
-  });
+  const OpenAIAudioModel({required this.text});
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIAudioModel] object.
   factory OpenAIAudioModel.fromMap(Map<String, dynamic> json) {

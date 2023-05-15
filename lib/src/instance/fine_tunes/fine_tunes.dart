@@ -13,7 +13,7 @@ import '../../core/utils/logger.dart';
 /// {@endtemplate}
 @immutable
 @protected
-class OpenAIFineTunes implements OpenAIFineTunesBase {
+interface class OpenAIFineTunes implements OpenAIFineTunesBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.fineTunes;
 

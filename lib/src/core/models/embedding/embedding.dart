@@ -10,7 +10,7 @@ export 'sub-models/usage.dart';
 /// This class is used to represent an OpenAI embeddings request.
 /// {@endtemplate}
 @immutable
-class OpenAIEmbeddingsModel {
+final class OpenAIEmbeddingsModel {
   /// The data returned by the embeddings request.
   final List<OpenAIEmbeddingsDataModel> data;
 

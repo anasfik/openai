@@ -18,7 +18,7 @@ import '../../core/utils/logger.dart';
 /// {@endtemplate}
 @immutable
 @protected
-class OpenAIImages implements OpenAIImagesBase {
+interface class OpenAIImages implements OpenAIImagesBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.images;
 

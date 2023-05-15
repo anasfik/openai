@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// This class is used to represent an OpenAI file.
 /// {@endtemplate}
 @immutable
-class OpenAIFileModel {
+final class OpenAIFileModel {
   /// The ID of the file. This is used to reference the file in other API calls.
   final String id;
 

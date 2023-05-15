@@ -9,7 +9,7 @@ export 'sub_models/choices.dart';
 /// This class is used to represent an OpenAI stream completion.
 /// {@endtemplate}
 @immutable
-class OpenAIStreamCompletionModel {
+final class OpenAIStreamCompletionModel {
   /// The ID of the completion.
   final String id;
 

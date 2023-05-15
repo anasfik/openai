@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class OpenAIModelModelPermission {
+final class OpenAIModelModelPermission {
   /// The ID of the permission.
   final String? id;
 

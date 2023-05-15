@@ -11,7 +11,7 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @immutable
 @protected
-class OpenAIModel implements OpenAIModelBase {
+interface class OpenAIModel implements OpenAIModelBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.models;
 

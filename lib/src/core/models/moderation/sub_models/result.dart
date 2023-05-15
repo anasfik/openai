@@ -7,7 +7,7 @@ export 'catgeories.dart';
 export 'catgeories_scores.dart';
 
 @immutable
-class OpenAIModerationResultModel {
+final class OpenAIModerationResultModel {
   /// The categories of the moderation job.
   final OpenAIModerationResultCategoriesModel categories;
 

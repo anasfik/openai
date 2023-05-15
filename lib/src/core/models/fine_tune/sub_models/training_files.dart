@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 /// This class is used to represent an OpenAI fine-tune training file.
 /// {@endtemplate}
 @immutable
-class OpenAIFineTuneTrainingFilesModel {
+final class OpenAIFineTuneTrainingFilesModel {
   /// The id of the file.
   final String id;
 

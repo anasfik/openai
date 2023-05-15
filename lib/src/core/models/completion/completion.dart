@@ -12,7 +12,7 @@ export 'stream/completion.dart';
 /// This represents the response from a completion request.
 /// {@endtemplate}
 @immutable
-class OpenAICompletionModel {
+final class OpenAICompletionModel {
   /// The ID of the completion.
   final String id;
 

@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class OpenAIModerationResultCategoriesModel {
+final class OpenAIModerationResultCategoriesModel {
   /// The hate category.
   final bool hate;
 

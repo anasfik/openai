@@ -5,7 +5,7 @@ import 'sub_models/data.dart';
 export 'sub_models/data.dart';
 
 @immutable
-class OpenAiImageEditModel {
+final class OpenAiImageEditModel {
   /// The time the image was created.
   final DateTime created;
 
