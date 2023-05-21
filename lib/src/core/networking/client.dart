@@ -3,7 +3,7 @@ import "dart:convert";
 import "dart:io";
 import "package:dart_openai/src/core/utils/http_client_web.dart"
     if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
-import "package:dart_openai/openai.dart";
+import 'package:dart_openai/dart_openai.dart';
 import "package:dart_openai/src/core/builder/headers.dart";
 import "package:dart_openai/src/core/utils/logger.dart";
 import "package:http/http.dart" as http;
@@ -62,18 +62,19 @@ final class _OpenAIChatStreamSink implements EventSink<String> {
   }
 }
 
-// class OpenAIChatStreamLineSplitter extends LineSplitter {
-//   const OpenAIChatStreamLineSplitter();
+class OpenAIChatStreamLineSplitter
+    extends StreamTransformerBase<String, String> {
+  const OpenAIChatStreamLineSplitter();
 
-//   Stream<String> bind(Stream<String> stream) {
-//     Stream<String> lineStream = super.bind(stream);
+  Stream<String> bind(Stream<String> stream) {
+    Stream<String> lineStream = LineSplitter().bind(stream);
 
-//     return Stream<String>.eventTransformed(
-//       lineStream,
-//       (sink) => _OpenAIChatStreamSink(sink),
-//     );
-//   }
-// }
+    return Stream<String>.eventTransformed(
+      lineStream,
+      (sink) => _OpenAIChatStreamSink(sink),
+    );
+  }
+}
 
 const openAIChatStreamLineSplitter = const LineSplitter();
 

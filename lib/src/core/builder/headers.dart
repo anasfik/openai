@@ -17,6 +17,9 @@ abstract class HeadersBuilder {
   /// {@endtemplate}
   static String? _organization;
 
+  /// This represents additional hezders to be added in all requests made by the package/
+  static Map<String, dynamic> _additionalHeadersToRequests = {};
+
   /// {@macro headers_builder_organization}
   @internal
   static String? get organization => _organization;
@@ -59,10 +62,22 @@ abstract class HeadersBuilder {
     );
     headers = {
       ...headers,
+      ..._additionalHeadersToRequests,
       if (isOrganizationSet) 'OpenAI-Organization': organization!,
       "Authorization": "Bearer $apiKey",
     };
 
     return headers;
+  }
+
+  /// Will save the given [headers] to the [_additionalHeadersToRequests] map. so it will be used in all requests.
+  @internal
+  static void includeHeaders(Map<String, dynamic> headers) {
+    _additionalHeadersToRequests = {
+      ..._additionalHeadersToRequests,
+      ...headers,
+    };
+
+    OpenAILogger.logIncludedHeaders(_additionalHeadersToRequests);
   }
 }

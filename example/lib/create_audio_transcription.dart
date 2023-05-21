@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dart_openai/openai.dart';
+import 'package:dart_openai/dart_openai.dart';
 
 import 'env/env.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dart_openai/openai.dart';
+import 'package:dart_openai/dart_openai.dart';
 import 'package:example/env/env.dart';
 
 // This example is for testing the stream error, as example, cut the internet connection and run this example.

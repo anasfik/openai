@@ -115,6 +115,18 @@ final class OpenAI extends OpenAIClientBase {
     OpenAILogger.isActive = newValue;
   }
 
+  /// Adds the given [headers] to all future requests made using the package.
+  ///
+  /// Example:
+  /// ```dart
+  /// OpenAI.includeHeaders({
+  ///  "X-My-Header": "My Header Value",
+  /// });
+  /// ```
+  static void includeHeaders(Map<String, dynamic> headers) {
+    HeadersBuilder.includeHeaders(headers);
+  }
+
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();
 }

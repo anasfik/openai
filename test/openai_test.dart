@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dart_openai/openai.dart';
+import 'package:dart_openai/dart_openai.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -23,6 +23,7 @@ void main() async {
 
   String? fineTuneExampleId;
 
+  // ignore: unused_local_variable
   String? fileToDelete;
 
   group('authentication', () {
@@ -160,7 +161,7 @@ void main() async {
     });
   });
   group('edits', () {
-    ! temporary disabled, because the API have on this and throws an unexpected error from OpenAI end.
+    // ! temporary disabled, because the API have on this and throws an unexpected error from OpenAI end.
     test('create', () async {
       final OpenAIEditModel edit = await OpenAI.instance.edit.create(
         model: "text-davinci-edit-001",

@@ -3,7 +3,7 @@ import 'package:dart_openai/src/core/networking/client.dart';
 
 import 'dart:io';
 
-import '../../../openai.dart';
+import '../../../dart_openai.dart';
 import '../../core/base/audio/audio.dart';
 import '../../core/constants/strings.dart';
 import '../../core/utils/logger.dart';

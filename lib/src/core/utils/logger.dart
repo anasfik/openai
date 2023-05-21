@@ -88,4 +88,15 @@ abstract final class OpenAILogger {
   static void startReadStreamResponse() {
     return log("Starting to reading stream response");
   }
+
+  static void logIncludedHeaders(
+    Map<String, dynamic> additionalHeadersToRequests,
+  ) {
+    for (int index = 0;
+        index < additionalHeadersToRequests.entries.length;
+        index++) {
+      final entry = additionalHeadersToRequests.entries.elementAt(index);
+      log("header ${entry.key}:${entry.value} will be added to all requets");
+    }
+  }
 }

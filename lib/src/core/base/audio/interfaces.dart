@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../../../openai.dart';
+import '../../../../dart_openai.dart';
 
 abstract class CreateInterface {
   Future<OpenAIAudioModel> createTranscription({
