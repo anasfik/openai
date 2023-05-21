@@ -157,7 +157,7 @@ Retrieves a single model by its id and gets additional pieces of information abo
 
 ```dart
  OpenAIModelModel model = await OpenAI.instance.model.retrieve("text-davinci-003");
- print(model.id)
+ print(model.id);
 ```
 
 If the model id does not exist, a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
@@ -244,7 +244,7 @@ OpenAIStreamChatCompletionModel chatStream = OpenAI.instance.chat.createStream(
 
 chatStream.listen((chatStreamEvent) {
 print(chatStreamEvent); // ...
-  })
+  });
 ```
 
 </br>
@@ -539,7 +539,7 @@ try {
  );
 } on RequestFailedException catch(e) {
  print(e.message);
- print(e.statusCode)
+ print(e.statusCode);
 }
 ```
 
