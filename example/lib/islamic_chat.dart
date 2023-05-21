@@ -14,4 +14,8 @@ Future<void> main() async {
     ],
     temperature: .9,
   );
+
+  chatStream.listen((event) {
+    print(event);
+  });
 }

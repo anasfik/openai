@@ -4,6 +4,7 @@ import 'package:dart_openai/dart_openai.dart';
 
 import 'env/env.dart';
 
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 Future<void> main() async {
