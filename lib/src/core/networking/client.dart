@@ -90,10 +90,6 @@ abstract class OpenAINetworkingClient {
   static http.Client get httpClient {
     final clientToUse = _internalHttpClient ?? _defaultHttpClient;
 
-    if (clientToUse.isUndefinedOrNull) {
-      throw Exception("Client is null");
-    }
-
     return clientToUse;
   }
 
