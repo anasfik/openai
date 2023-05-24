@@ -131,10 +131,11 @@ abstract class OpenAINetworkingClient {
   static Stream<T> getStream<T>({
     required String from,
     required T Function(Map<String, dynamic>) onSuccess,
+    http.Client? client,
   }) {
     final controller = StreamController<T>();
 
-    final client = http.Client();
+    final clientForUse = client ?? http.Client();
 
     final uri = Uri.parse(from);
 
@@ -146,12 +147,12 @@ abstract class OpenAINetworkingClient {
 
     Future<void> close() {
       return Future.wait([
-        Future.delayed(Duration.zero, client.close),
+        Future.delayed(Duration.zero, client!.close),
         controller.close(),
       ]);
     }
 
-    client.send(request).then((streamedResponse) {
+    clientForUse.send(request).then((streamedResponse) {
       streamedResponse.stream.listen(
         (value) {
           final data = utf8.decode(value);
@@ -191,6 +192,7 @@ abstract class OpenAINetworkingClient {
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
     Map<String, dynamic>? body,
+    http.Client? client,
   }) async {
     OpenAILogger.logStartRequest(to);
 
@@ -200,7 +202,9 @@ abstract class OpenAINetworkingClient {
 
     final handledBody = body != null ? jsonEncode(body) : null;
 
-    final response = await http.post(uri, headers: headers, body: handledBody);
+    final response = client == null
+        ? await http.post(uri, headers: headers, body: handledBody)
+        : await client.post(uri, headers: headers, body: handledBody);
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
@@ -235,11 +239,12 @@ abstract class OpenAINetworkingClient {
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
     required Map<String, dynamic> body,
+    http.Client? client,
   }) {
     final controller = StreamController<T>();
 
     try {
-      final client = http.Client();
+      final clientForUse = client ?? http.Client();
 
       final uri = Uri.parse(to);
 
@@ -255,13 +260,13 @@ abstract class OpenAINetworkingClient {
 
       Future<void> close() {
         return Future.wait([
-          Future.delayed(Duration.zero, client.close),
+          Future.delayed(Duration.zero, client!.close),
           controller.close(),
         ]);
       }
 
       OpenAILogger.logStartRequest(to);
-      client.send(request).then(
+      clientForUse.send(request).then(
         (respond) {
           OpenAILogger.startReadStreamResponse();
 
@@ -488,13 +493,16 @@ abstract class OpenAINetworkingClient {
   static Future<T> delete<T>({
     required String from,
     required T Function(Map<String, dynamic> response) onSuccess,
+    http.Client? client,
   }) async {
     OpenAILogger.logStartRequest(from);
 
     final headers = HeadersBuilder.build();
     final uri = Uri.parse(from);
 
-    final response = await http.delete(uri, headers: headers);
+    final response = client == null
+        ? await http.delete(uri, headers: headers)
+        : await client.delete(uri, headers: headers);
 
     OpenAILogger.requestToWithStatusCode(from, response.statusCode);
 
