@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 abstract class CancelInterface {
   Future<OpenAIFineTuneModel> cancel(
-    String fineTuneId,
+    String fineTuneId, {
     http.Client? client,
-  );
+  });
 }

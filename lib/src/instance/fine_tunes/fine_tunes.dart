@@ -146,9 +146,9 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// ```
   @override
   Future<OpenAIFineTuneModel> cancel(
-    String fineTuneId,
+    String fineTuneId, {
     http.Client? client,
-  ) async {
+  }) async {
     final String fineTuneCancelEndpoint = "$endpoint/$fineTuneId/cancel";
 
     return await OpenAINetworkingClient.post(
