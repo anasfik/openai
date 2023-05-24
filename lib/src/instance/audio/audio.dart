@@ -8,6 +8,8 @@ import '../../core/base/audio/audio.dart';
 import '../../core/constants/strings.dart';
 import '../../core/utils/logger.dart';
 
+import 'package:http/http.dart' as http;
+
 /// {@template openai_audio}
 /// This class is responsible for handling all audio requests, such as creating a transcription or translation for a given audio file.
 /// {@endtemplate}

@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+
 import '../../../models/chat/chat.dart';
 
 abstract class CreateInterface {
@@ -13,6 +15,7 @@ abstract class CreateInterface {
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
     String? user,
+    http.Client? client,
   });
 
   Stream<OpenAIStreamChatCompletionModel> createStream({
@@ -27,5 +30,6 @@ abstract class CreateInterface {
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
     String? user,
+    http.Client? client,
   });
 }

@@ -453,6 +453,8 @@ abstract class OpenAINetworkingClient {
     final uri = Uri.parse(to);
     final headers = HeadersBuilder.build();
 
+    final client = http.Client();
+
     final httpMethod = OpenAIStrings.postMethod;
     final request = http.MultipartRequest(httpMethod, uri);
 

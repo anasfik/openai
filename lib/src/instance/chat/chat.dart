@@ -6,6 +6,8 @@ import '../../core/constants/strings.dart';
 import '../../core/models/chat/chat.dart';
 import '../../core/utils/logger.dart';
 
+import 'package:http/http.dart' as http;
+
 /// {@template openai_chat}
 /// This class is responsible for handling all chat requests, such as creating a chat completion for the message(s).
 /// {@endtemplate}
@@ -75,6 +77,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
     String? user,
+    http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.build(endpoint),
@@ -94,6 +97,7 @@ interface class OpenAIChat implements OpenAIChatBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIChatCompletionModel.fromMap(response);
       },
+      client: client,
     );
   }
 
@@ -157,6 +161,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
     String? user,
+    http.Client? client,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
@@ -177,6 +182,7 @@ interface class OpenAIChat implements OpenAIChatBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamChatCompletionModel.fromMap(response);
       },
+      client: client,
     );
   }
 }
