@@ -9,6 +9,8 @@ import '../../core/base/files/base.dart';
 import '../../core/constants/strings.dart';
 import '../../core/utils/logger.dart';
 
+import 'package:http/http.dart' as http;
+
 /// {@template openai_files}
 /// This class is responsible for handling all files requests, such as uploading a file to be used across various endpoints/features.
 /// {@endtemplate}
@@ -31,11 +33,15 @@ interface class OpenAIFiles implements OpenAIFilesBase {
   /// print(files.first.id);
   ///```
   @override
-  Future<List<OpenAIFileModel>> list() async {
+  Future<List<OpenAIFileModel>> list({
+    http.Client? client,
+  }) async {
     return await OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.build(endpoint),
+      client: client,
       onSuccess: (Map<String, dynamic> response) {
         final List filesList = response["data"];
+
         return filesList.map((e) => OpenAIFileModel.fromMap(e)).toList();
       },
     );
@@ -50,7 +56,10 @@ interface class OpenAIFiles implements OpenAIFilesBase {
   /// print(file);
   ///```
   @override
-  Future<OpenAIFileModel> retrieve(String fileId) async {
+  Future<OpenAIFileModel> retrieve(
+    String fileId, {
+    http.Client? client,
+  }) async {
     final String fileIdEndpoint = "/$fileId";
 
     return await OpenAINetworkingClient.get(
@@ -70,7 +79,10 @@ interface class OpenAIFiles implements OpenAIFilesBase {
   /// print(fileContent);
   /// ```
   @override
-  Future retrieveContent(String fileId) async {
+  Future retrieveContent(
+    String fileId, {
+    http.Client? client,
+  }) async {
     final String fileIdEndpoint = "/$fileId/content";
 
     return await OpenAINetworkingClient.get(
@@ -121,7 +133,10 @@ interface class OpenAIFiles implements OpenAIFilesBase {
   /// print(isFileDeleted);
   /// ```
   @override
-  Future<bool> delete(String fileId) async {
+  Future<bool> delete(
+    String fileId, {
+    http.Client? client,
+  }) async {
     final String fileIdEndpoint = "/$fileId";
 
     return await OpenAINetworkingClient.delete(
