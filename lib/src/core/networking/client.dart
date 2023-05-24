@@ -83,20 +83,6 @@ const openAIChatStreamLineSplitter = const LineSplitter();
 @protected
 @immutable
 abstract class OpenAINetworkingClient {
-  static http.Client? _internalHttpClient;
-
-  static http.Client _defaultHttpClient = createClient();
-
-  static http.Client get httpClient {
-    final clientToUse = _internalHttpClient ?? _defaultHttpClient;
-
-    return clientToUse;
-  }
-
-  static set httpClient(http.Client httpClient) {
-    _internalHttpClient = httpClient;
-  }
-
   static Future<T> get<T>({
     required String from,
     bool returnRawResponse = false,
@@ -107,7 +93,7 @@ abstract class OpenAINetworkingClient {
     final uri = Uri.parse(from);
     final headers = HeadersBuilder.build();
 
-    final response = await httpClient.get(uri, headers: headers);
+    final response = await http.get(uri, headers: headers);
 
     if (returnRawResponse) {
       return response.body as T;
@@ -146,7 +132,7 @@ abstract class OpenAINetworkingClient {
   }) {
     final controller = StreamController<T>();
 
-    final client = httpClient;
+    final client = http.Client();
 
     final uri = Uri.parse(from);
 
@@ -212,8 +198,7 @@ abstract class OpenAINetworkingClient {
 
     final handledBody = body != null ? jsonEncode(body) : null;
 
-    final response =
-        await httpClient.post(uri, headers: headers, body: handledBody);
+    final response = await http.post(uri, headers: headers, body: handledBody);
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
@@ -252,7 +237,7 @@ abstract class OpenAINetworkingClient {
     final controller = StreamController<T>();
 
     try {
-      final client = httpClient;
+      final client = http.Client();
 
       final uri = Uri.parse(to);
 
@@ -507,7 +492,7 @@ abstract class OpenAINetworkingClient {
     final headers = HeadersBuilder.build();
     final uri = Uri.parse(from);
 
-    final response = await httpClient.delete(uri, headers: headers);
+    final response = await http.delete(uri, headers: headers);
 
     OpenAILogger.requestToWithStatusCode(from, response.statusCode);
 

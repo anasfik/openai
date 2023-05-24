@@ -78,14 +78,14 @@ final class OpenAI extends OpenAIClientBase {
   /// The organization id, if set, it will be used in all the requests to the OpenAI API.
   static String? get organization => HeadersBuilder.organization;
 
-  /// The HTTP client that will be used to make the requests to the OpenAI API.
-  /// you can set yout own client, or just set to [null] to use the default client.
-  ///
-  /// Example:
-  /// ```dart
-  /// final theClientUsedByThePackageAtAnyMoment = OpenAI.httpClient;
-  /// ```
-  static http.Client get httpClient => OpenAINetworkingClient.httpClient;
+  // /// The HTTP client that will be used to make the requests to the OpenAI API.
+  // /// you can set yout own client, or just set to [null] to use the default client.
+  // ///
+  // /// Example:
+  // /// ```dart
+  // /// final theClientUsedByThePackageAtAnyMoment = OpenAI.httpClient;
+  // /// ```
+  // static http.Client get httpClient => OpenAINetworkingClient.httpClient;
 
   /// This is used to initialize the [OpenAI] instance, by providing the API key.
   /// All the requests will be authenticated using this API key.
@@ -127,15 +127,15 @@ final class OpenAI extends OpenAIClientBase {
     OpenAILogger.isActive = newValue;
   }
 
-  /// Sets the given [client] as the new client that will be used in the requests made by the package.
-  ///
-  /// Example:
-  /// ```dart
-  /// OpenAI.httpClient = http.Client(); /// assuming that you imported the http package
-  /// ```
-  static set httpClient(http.Client client) {
-    OpenAINetworkingClient.httpClient = client;
-  }
+  // /// Sets the given [client] as the new client that will be used in the requests made by the package.
+  // ///
+  // /// Example:
+  // /// ```dart
+  // /// OpenAI.httpClient = http.Client(); /// assuming that you imported the http package
+  // /// ```
+  // static set httpClient(http.Client client) {
+  //   OpenAINetworkingClient.httpClient = client;
+  // }
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
   OpenAI._();
