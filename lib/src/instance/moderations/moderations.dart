@@ -8,6 +8,8 @@ import 'package:meta/meta.dart';
 
 import '../../core/utils/logger.dart';
 
+import 'package:http/http.dart' as http;
+
 /// {@template openai_moderation}
 /// The class that handles all the requests related to the moderation in the OpenAI API.
 /// {@endtemplate}
@@ -45,6 +47,7 @@ interface class OpenAIModeration implements OpenAIModerationBase {
   Future<OpenAIModerationModel> create({
     required String input,
     String? model,
+    http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIModerationModel>(
       onSuccess: (Map<String, dynamic> response) {
