@@ -1,7 +1,6 @@
 import "dart:async";
 import "dart:convert";
 import "dart:io";
-import "dart:js_interop";
 import "package:dart_openai/src/core/utils/http_client_web.dart"
     if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
 
@@ -87,13 +86,16 @@ abstract class OpenAINetworkingClient {
     required String from,
     bool returnRawResponse = false,
     T Function(Map<String, dynamic>)? onSuccess,
+    http.Client? client,
   }) async {
     OpenAILogger.logStartRequest(from);
 
     final uri = Uri.parse(from);
     final headers = HeadersBuilder.build();
 
-    final response = await http.get(uri, headers: headers);
+    final response = client == null
+        ? await http.get(uri, headers: headers)
+        : await client.get(uri, headers: headers);
 
     if (returnRawResponse) {
       return response.body as T;

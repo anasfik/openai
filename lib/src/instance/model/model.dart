@@ -6,6 +6,8 @@ import '../../core/constants/strings.dart';
 import '../../core/networking/client.dart';
 import 'package:meta/meta.dart';
 
+import 'package:http/http.dart' as http;
+
 /// {@template openai_model}
 /// The class that handles all the requests related to the models in the OpenAI API.
 /// {@endtemplate}
@@ -29,15 +31,19 @@ interface class OpenAIModel implements OpenAIModelBase {
   ///  print(models.first.id);
   /// ```
   @override
-  Future<List<OpenAIModelModel>> list() async {
+  Future<List<OpenAIModelModel>> list({
+    http.Client? client,
+  }) async {
     return await OpenAINetworkingClient.get<List<OpenAIModelModel>>(
       from: BaseApiUrlBuilder.build(
         endpoint,
       ),
       onSuccess: (Map<String, dynamic> response) {
         final List data = response['data'];
+
         return data.map((model) => OpenAIModelModel.fromMap(model)).toList();
       },
+      client: client,
     );
   }
 
