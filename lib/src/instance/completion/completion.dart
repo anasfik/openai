@@ -7,6 +7,8 @@ import 'package:meta/meta.dart';
 
 import '../../core/base/completion.dart';
 
+import 'package:http/http.dart' as http;
+
 /// {@template openai_completion}
 /// This class is responsible for handling all the requests related to the completion in the OpenAI API such as creating a completion.
 /// {@endtemplate}
@@ -105,6 +107,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     int? bestOf,
     Map<String, dynamic>? logitBias,
     String? user,
+    http.Client? client,
   }) async {
     assert(
       prompt is String || prompt is List<String> || prompt == null,
@@ -227,6 +230,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     int? bestOf,
     Map<String, dynamic>? logitBias,
     String? user,
+    http.Client? client,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamCompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
@@ -340,6 +344,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     int? bestOf,
     Map<String, dynamic>? logitBias,
     String? user,
+    http.Client? client,
   }) {
     Stream<OpenAIStreamCompletionModel> stream = createStream(
       model: model,

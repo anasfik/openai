@@ -1,5 +1,7 @@
 import '../../models/completion/completion.dart';
 
+import 'package:http/http.dart' as http;
+
 abstract class CreateInterface {
   Future<OpenAICompletionModel> create({
     required String model,
@@ -17,6 +19,7 @@ abstract class CreateInterface {
     int? bestOf,
     Map<String, dynamic>? logitBias,
     String? user,
+    http.Client? client,
   });
 
   Stream<OpenAIStreamCompletionModel> createStream({
@@ -35,6 +38,7 @@ abstract class CreateInterface {
     int? bestOf,
     Map<String, dynamic>? logitBias,
     String? user,
+    http.Client? client,
   });
 
   Stream<String> createStreamText({
@@ -53,5 +57,6 @@ abstract class CreateInterface {
     int? bestOf,
     Map<String, dynamic>? logitBias,
     String? user,
+    http.Client? client,
   });
 }
