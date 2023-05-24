@@ -7,6 +7,8 @@ import '../../core/constants/strings.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
+import 'package:http/http.dart' as http;
+
 /// {@template openai_embedding}
 /// Get a vector representation of a given input that can be easily consumed by machine learning models and algorithms.
 /// {@endtemplate}
@@ -46,6 +48,7 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
     required String model,
     required input,
     String? user,
+    http.Client? client,
   }) async {
     assert(
       input is String || input is List<String>,
