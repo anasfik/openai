@@ -1,11 +1,12 @@
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/instance/edits/edits.dart';
 import 'package:dart_openai/src/instance/moderations/moderations.dart';
-
+import 'package:http/http.dart' as http;
 import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
 import '../core/constants/config.dart';
 import '../core/exceptions/api_key_not_set.dart';
+import '../core/networking/client.dart';
 import '../core/utils/logger.dart';
 import 'audio/audio.dart';
 import 'chat/chat.dart';
@@ -77,6 +78,15 @@ final class OpenAI extends OpenAIClientBase {
   /// The organization id, if set, it will be used in all the requests to the OpenAI API.
   static String? get organization => HeadersBuilder.organization;
 
+  /// The HTTP client that will be used to make the requests to the OpenAI API.
+  /// you can set yout own client, or just set to [null] to use the default client.
+  ///
+  /// Example:
+  /// ```dart
+  /// final theClientUsedByThePackageAtAnyMoment = OpenAI.httpClient;
+  /// ```
+  static http.Client get httpClient => OpenAINetworkingClient.httpClient;
+
   /// This is used to initialize the [OpenAI] instance, by providing the API key.
   /// All the requests will be authenticated using this API key.
   /// ```dart
@@ -94,7 +104,9 @@ final class OpenAI extends OpenAIClientBase {
 
   /// If you have multiple organizations, you can set it's id with this.
   /// once this is set, it will be used in all the requests to the OpenAI API.
+  ///
   /// Example:
+  ///
   /// ```dart
   /// OpenAI.organization = "YOUR_ORGANIZATION_ID";
   /// ```
@@ -115,6 +127,19 @@ final class OpenAI extends OpenAIClientBase {
     OpenAILogger.isActive = newValue;
   }
 
+  /// Sets the given [client] as the new client that will be used in the requests made by the package.
+  ///
+  /// Example:
+  /// ```dart
+  /// OpenAI.httpClient = http.Client(); /// assuming that you imported the http package
+  /// ```
+  static set httpClient(http.Client client) {
+    OpenAINetworkingClient.httpClient = client;
+  }
+
+  /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
+  OpenAI._();
+
   /// Adds the given [headers] to all future requests made using the package.
   ///
   /// Example:
@@ -126,7 +151,4 @@ final class OpenAI extends OpenAIClientBase {
   static void includeHeaders(Map<String, dynamic> headers) {
     HeadersBuilder.includeHeaders(headers);
   }
-
-  /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
-  OpenAI._();
 }

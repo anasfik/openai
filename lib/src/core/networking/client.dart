@@ -1,8 +1,10 @@
 import "dart:async";
 import "dart:convert";
 import "dart:io";
+import "dart:js_interop";
 import "package:dart_openai/src/core/utils/http_client_web.dart"
     if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
+
 import 'package:dart_openai/dart_openai.dart';
 import "package:dart_openai/src/core/builder/headers.dart";
 import "package:dart_openai/src/core/utils/logger.dart";
@@ -80,7 +82,25 @@ const openAIChatStreamLineSplitter = const LineSplitter();
 
 @protected
 @immutable
-abstract final class OpenAINetworkingClient {
+abstract class OpenAINetworkingClient {
+  static http.Client? _internalHttpClient;
+
+  static http.Client _defaultHttpClient = createClient();
+
+  static http.Client get httpClient {
+    final clientToUse = _internalHttpClient ?? _defaultHttpClient;
+
+    if (clientToUse.isUndefinedOrNull) {
+      throw Exception("Client is null");
+    }
+
+    return clientToUse;
+  }
+
+  static set httpClient(http.Client httpClient) {
+    _internalHttpClient = httpClient;
+  }
+
   static Future<T> get<T>({
     required String from,
     bool returnRawResponse = false,
@@ -91,7 +111,7 @@ abstract final class OpenAINetworkingClient {
     final uri = Uri.parse(from);
     final headers = HeadersBuilder.build();
 
-    final response = await http.get(uri, headers: headers);
+    final response = await httpClient.get(uri, headers: headers);
 
     if (returnRawResponse) {
       return response.body as T;
@@ -130,7 +150,8 @@ abstract final class OpenAINetworkingClient {
   }) {
     final controller = StreamController<T>();
 
-    final client = http.Client();
+    final client = httpClient;
+
     final uri = Uri.parse(from);
 
     final httpMethod = OpenAIStrings.getMethod;
@@ -190,10 +211,13 @@ abstract final class OpenAINetworkingClient {
     OpenAILogger.logStartRequest(to);
 
     final uri = Uri.parse(to);
+
     final headers = HeadersBuilder.build();
+
     final handledBody = body != null ? jsonEncode(body) : null;
 
-    final response = await http.post(uri, headers: headers, body: handledBody);
+    final response =
+        await httpClient.post(uri, headers: headers, body: handledBody);
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
@@ -232,7 +256,7 @@ abstract final class OpenAINetworkingClient {
     final controller = StreamController<T>();
 
     try {
-      final client = createClient();
+      final client = httpClient;
 
       final uri = Uri.parse(to);
 
@@ -487,7 +511,7 @@ abstract final class OpenAINetworkingClient {
     final headers = HeadersBuilder.build();
     final uri = Uri.parse(from);
 
-    final response = await http.delete(uri, headers: headers);
+    final response = await httpClient.delete(uri, headers: headers);
 
     OpenAILogger.requestToWithStatusCode(from, response.statusCode);
 
