@@ -13,6 +13,8 @@ import '../../core/models/image/enum.dart';
 import '../../core/models/image/variation/variation.dart';
 import '../../core/utils/logger.dart';
 
+import 'package:http/http.dart' as http;
+
 /// {@template openai_images}
 /// The class that handles all the requests related to the images in the OpenAI API.
 /// {@endtemplate}
@@ -66,8 +68,10 @@ interface class OpenAIImages implements OpenAIImagesBase {
     OpenAIImageSize? size,
     OpenAIImageResponseFormat? responseFormat,
     String? user,
+    http.Client? client,
   }) async {
     final String generations = "/generations";
+
     return await OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.build(endpoint + generations),
       onSuccess: (json) => OpenAIImageModel.fromMap(json),
@@ -78,6 +82,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (responseFormat != null) "response_format": responseFormat.value,
         if (user != null) "user": user,
       },
+      client: client,
     );
   }
 
