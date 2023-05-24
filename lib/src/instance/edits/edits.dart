@@ -7,6 +7,8 @@ import '../../core/constants/strings.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
+import 'package:http/http.dart' as http;
+
 /// {@template openai_edits}
 /// The class that handles all the requests related to the edits in the OpenAI API.
 /// {@endtemplate}
@@ -54,6 +56,7 @@ interface class OpenAIEdits implements OpenAIEditsBase {
     int? n,
     double? temperature,
     double? topP,
+    http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIEditModel>(
       to: BaseApiUrlBuilder.build(endpoint),
