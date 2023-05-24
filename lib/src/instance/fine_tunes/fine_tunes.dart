@@ -8,6 +8,8 @@ import '../../core/base/fine_tunes/base.dart';
 import '../../core/constants/strings.dart';
 import '../../core/utils/logger.dart';
 
+import 'package:http/http.dart' as http;
+
 /// {@template openai_finetunes}
 /// This class is responsible for handling all fine-tunes requests, such as creating a fine-tune model.
 /// {@endtemplate}
@@ -80,6 +82,7 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
     int? classificationPositiveClass,
     int? classificationBetas,
     String? suffix,
+    http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post(
       body: {
@@ -105,6 +108,7 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFineTuneModel.fromMap(response);
       },
+      client: client,
     );
   }
 
@@ -117,13 +121,17 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// print(fineTunes.first.id);
   /// ```
   @override
-  Future<List<OpenAIFineTuneModel>> list() async {
+  Future<List<OpenAIFineTuneModel>> list({
+    http.Client? client,
+  }) async {
     return await OpenAINetworkingClient.get<List<OpenAIFineTuneModel>>(
       from: BaseApiUrlBuilder.build(endpoint),
       onSuccess: (Map<String, dynamic> response) {
         final dataList = response['data'] as List;
+
         return dataList.map((e) => OpenAIFineTuneModel.fromMap(e)).toList();
       },
+      client: client,
     );
   }
 
@@ -137,7 +145,10 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// print(cancelledFineTune.status); // ...
   /// ```
   @override
-  Future<OpenAIFineTuneModel> cancel(String fineTuneId) async {
+  Future<OpenAIFineTuneModel> cancel(
+    String fineTuneId,
+    http.Client? client,
+  ) async {
     final String fineTuneCancelEndpoint = "$endpoint/$fineTuneId/cancel";
 
     return await OpenAINetworkingClient.post(
@@ -145,6 +156,7 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFineTuneModel.fromMap(response);
       },
+      client: client,
     );
   }
 
@@ -157,8 +169,11 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// print(deleted); // ...
   /// ```
   @override
-  Future<bool> delete(String fineTuneId) async {
-    return await OpenAIModel().delete(fineTuneId);
+  Future<bool> delete(
+    String fineTuneId, {
+    http.Client? client,
+  }) async {
+    return await OpenAIModel().delete(fineTuneId, client: client);
   }
 
   /// This function lists all events of a fine-tune job by its id.
@@ -171,15 +186,20 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// print(events.first.message); // ...
   /// ```
   @override
-  Future<List<OpenAIFineTuneEventModel>> listEvents(String fineTuneId) async {
+  Future<List<OpenAIFineTuneEventModel>> listEvents(
+    String fineTuneId, {
+    http.Client? client,
+  }) async {
     final String fineTuneEvents = "$endpoint/$fineTuneId/events";
 
     return await OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.build(fineTuneEvents),
       onSuccess: (Map<String, dynamic> response) {
         final List events = response['data'] as List;
+
         return events.map((e) => OpenAIFineTuneEventModel.fromMap(e)).toList();
       },
+      client: client,
     );
   }
 
@@ -203,7 +223,10 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// });
   ///
   /// ```
-  Stream<OpenAIFineTuneEventStreamModel> listEventsStream(String fineTuneId) {
+  Stream<OpenAIFineTuneEventStreamModel> listEventsStream(
+    String fineTuneId, {
+    http.Client? client,
+  }) {
     final String fineTuneEvents = "$endpoint/$fineTuneId/events";
 
     return OpenAINetworkingClient.getStream<OpenAIFineTuneEventStreamModel>(
@@ -211,6 +234,7 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFineTuneEventStreamModel.fromMap(response);
       },
+      client: client,
     );
   }
 
@@ -224,7 +248,10 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
   /// print(fineTune.id); // ...
   /// ```
   @override
-  Future<OpenAIFineTuneModel> retrieve(String fineTuneId) async {
+  Future<OpenAIFineTuneModel> retrieve(
+    String fineTuneId, {
+    http.Client? client,
+  }) async {
     final String fineTuneRetrieve = "$endpoint/$fineTuneId";
 
     return await OpenAINetworkingClient.get<OpenAIFineTuneModel>(
@@ -232,6 +259,7 @@ interface class OpenAIFineTunes implements OpenAIFineTunesBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFineTuneModel.fromMap(response);
       },
+      client: client,
     );
   }
 }

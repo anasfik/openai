@@ -1,5 +1,7 @@
 import '../../../models/fine_tune/fine_tune.dart';
 
+import 'package:http/http.dart' as http;
+
 abstract class CreateInterface {
   Future<OpenAIFineTuneModel> create({
     required String trainingFile,
@@ -14,5 +16,6 @@ abstract class CreateInterface {
     int? classificationPositiveClass,
     int? classificationBetas,
     String? suffix,
+    http.Client? client,
   });
 }
