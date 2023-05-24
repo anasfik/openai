@@ -57,12 +57,16 @@ interface class OpenAIModel implements OpenAIModelBase {
   /// print(model.id)
   /// ```
   @override
-  Future<OpenAIModelModel> retrieve(String id) async {
+  Future<OpenAIModelModel> retrieve(
+    String id, {
+    http.Client? client,
+  }) async {
     return await OpenAINetworkingClient.get<OpenAIModelModel>(
       from: BaseApiUrlBuilder.build(endpoint, id),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIModelModel.fromMap(response);
       },
+      client: client,
     );
   }
 
@@ -74,7 +78,11 @@ interface class OpenAIModel implements OpenAIModelBase {
   /// ```dart
   /// bool deleted = await OpenAI.instance.fineTune.delete("fine-tune-id");
   /// ```
-  Future<bool> delete(String fineTuneId) async {
+  @override
+  Future<bool> delete(
+    String fineTuneId, {
+    http.Client? client,
+  }) async {
     final String fineTuneModelDelete = "$endpoint/$fineTuneId";
 
     return await OpenAINetworkingClient.delete(
@@ -82,6 +90,7 @@ interface class OpenAIModel implements OpenAIModelBase {
       onSuccess: (Map<String, dynamic> response) {
         return response['deleted'];
       },
+      client: client,
     );
   }
 }
