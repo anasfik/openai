@@ -1,5 +1,5 @@
 # Changelog
-## 1.9.95
+## 1.9.93
 
  - Added custom HTTP client options for all the package APIs that requires one.
 ## 1.9.92

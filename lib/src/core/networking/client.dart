@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:convert";
 import "dart:io";
+// ignore: unused_import
 import "package:dart_openai/src/core/utils/http_client_web.dart"
     if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
 
@@ -452,8 +453,6 @@ abstract class OpenAINetworkingClient {
 
     final uri = Uri.parse(to);
     final headers = HeadersBuilder.build();
-
-    final client = http.Client();
 
     final httpMethod = OpenAIStrings.postMethod;
     final request = http.MultipartRequest(httpMethod, uri);

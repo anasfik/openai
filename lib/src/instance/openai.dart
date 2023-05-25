@@ -1,12 +1,10 @@
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/instance/edits/edits.dart';
 import 'package:dart_openai/src/instance/moderations/moderations.dart';
-import 'package:http/http.dart' as http;
 import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
 import '../core/constants/config.dart';
 import '../core/exceptions/api_key_not_set.dart';
-import '../core/networking/client.dart';
 import '../core/utils/logger.dart';
 import 'audio/audio.dart';
 import 'chat/chat.dart';
