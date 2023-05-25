@@ -1,4 +1,7 @@
 # Changelog
+## 1.9.95
+
+ - Added custom HTTP client options for all the package APIs that requires one.
 ## 1.9.92
 
  - exposed an external method for inclusing custom headers to the requests.
