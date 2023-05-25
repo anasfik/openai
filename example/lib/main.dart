@@ -2,8 +2,6 @@ import 'package:dart_openai/dart_openai.dart';
 
 import 'env/env.dart';
 
-import 'package:http/http.dart' as http;
-
 Future<void> main() async {
   // Set the OpenAI API key from the .env file.
   OpenAI.apiKey = Env.apiKey;
