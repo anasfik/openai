@@ -1,5 +1,10 @@
 # Changelog
-## 1.9.93
+## 2.0.0
+
+ - Exposing of custom thttp client for methods - Fixed issue related to streams that uses a custom http client
+ 
+ ## 1.9.93
+
 
  - Added custom HTTP client options for all the package APIs that requires one.
 ## 1.9.92

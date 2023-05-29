@@ -159,7 +159,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.9.93"
+    version: "2.0.0"
   dart_style:
     dependency: transitive
     description:

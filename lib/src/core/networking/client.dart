@@ -261,7 +261,7 @@ abstract class OpenAINetworkingClient {
 
       Future<void> close() {
         return Future.wait([
-          Future.delayed(Duration.zero, client!.close),
+          if (client == null) Future.delayed(Duration.zero, clientForUse.close),
           controller.close(),
         ]);
       }

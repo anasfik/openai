@@ -11,7 +11,7 @@ void main() {
       OpenAI.instance.completion.createStream(
     model: "text-davinci-003",
     n: 1,
-    prompt: [" "],
+    prompt: ["hello"],
   );
 
   // listen to the stream and print the text.
