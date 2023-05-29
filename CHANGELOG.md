@@ -1,4 +1,8 @@
 # Changelog
+## 2.0.1
+
+ - Formated unformatted files.
+
 ## 2.0.0
 
  - Exposing of custom thttp client for methods - Fixed issue related to streams that uses a custom http client
