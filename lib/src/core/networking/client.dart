@@ -305,7 +305,8 @@ abstract class OpenAINetworkingClient {
                 if (doesErrorExists(decodedData)) {
                   final error = decodedData[OpenAIStrings.errorFieldKey]
                       as Map<String, dynamic>;
-                  final message = error[OpenAIStrings.messageFieldKey];
+                  var message = error[OpenAIStrings.messageFieldKey] as String;
+                  message = message.isEmpty ? jsonEncode(error) : message;
                   final statusCode = respond.statusCode;
                   final exception = RequestFailedException(message, statusCode);
 
