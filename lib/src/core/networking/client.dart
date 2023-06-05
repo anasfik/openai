@@ -2,8 +2,7 @@ import "dart:async";
 import "dart:convert";
 import "dart:io";
 // ignore: unused_import
-import "package:dart_openai/src/core/utils/http_client_web.dart"
-    if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
+import "package:dart_openai/src/core/utils/http_client_web.dart" if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
 
 import 'package:dart_openai/dart_openai.dart';
 import "package:dart_openai/src/core/builder/headers.dart";
@@ -64,8 +63,7 @@ final class _OpenAIChatStreamSink implements EventSink<String> {
   }
 }
 
-class OpenAIChatStreamLineSplitter
-    extends StreamTransformerBase<String, String> {
+class OpenAIChatStreamLineSplitter extends StreamTransformerBase<String, String> {
   const OpenAIChatStreamLineSplitter();
 
   Stream<String> bind(Stream<String> stream) {
@@ -83,6 +81,10 @@ const openAIChatStreamLineSplitter = const LineSplitter();
 @protected
 @immutable
 abstract class OpenAINetworkingClient {
+  static const _headerResetIn = "x-ratelimit-reset-requests";
+  static const _headerRequestsRemaining = "x-ratelimit-remaining-requests";
+  static const _rateLimitStatusCode = 429;
+
   static Future<T> get<T>({
     required String from,
     bool returnRawResponse = false,
@@ -94,9 +96,7 @@ abstract class OpenAINetworkingClient {
     final uri = Uri.parse(from);
     final headers = HeadersBuilder.build();
 
-    final response = client == null
-        ? await http.get(uri, headers: headers)
-        : await client.get(uri, headers: headers);
+    final response = client == null ? await http.get(uri, headers: headers) : await client.get(uri, headers: headers);
 
     if (returnRawResponse) {
       return response.body as T;
@@ -113,12 +113,7 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
-      final message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
-
-      final exception = RequestFailedException(message, statusCode);
+      final exception = extractException(response.statusCode, decodedBody, response.headers);
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -158,10 +153,7 @@ abstract class OpenAINetworkingClient {
         (value) {
           final data = utf8.decode(value);
 
-          final dataLines = openAIChatStreamLineSplitter
-              .convert(data)
-              .where((element) => element.isNotEmpty)
-              .toList();
+          final dataLines = openAIChatStreamLineSplitter.convert(data).where((element) => element.isNotEmpty).toList();
 
           for (String line in dataLines) {
             if (line.startsWith(OpenAIStrings.streamResponseStart)) {
@@ -203,9 +195,7 @@ abstract class OpenAINetworkingClient {
 
     final handledBody = body != null ? jsonEncode(body) : null;
 
-    final response = client == null
-        ? await http.post(uri, headers: headers, body: handledBody)
-        : await client.post(uri, headers: headers, body: handledBody);
+    final response = client == null ? await http.post(uri, headers: headers, body: handledBody) : await client.post(uri, headers: headers, body: handledBody);
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
@@ -220,12 +210,7 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
-      final message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
-
-      final exception = RequestFailedException(message, statusCode);
+      final exception = extractException(response.statusCode, decodedBody, response.headers);
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -271,18 +256,13 @@ abstract class OpenAINetworkingClient {
         (respond) {
           OpenAILogger.startReadStreamResponse();
 
-          final stream = respond.stream
-              .transform(utf8.decoder)
-              .transform(openAIChatStreamLineSplitter);
+          final stream = respond.stream.transform(utf8.decoder).transform(openAIChatStreamLineSplitter);
 
           stream.listen(
             (value) {
               final data = value;
 
-              final dataLines = data
-                  .split("\n")
-                  .where((element) => element.isNotEmpty)
-                  .toList();
+              final dataLines = data.split("\n").where((element) => element.isNotEmpty).toList();
 
               for (String line in dataLines) {
                 if (line.startsWith(OpenAIStrings.streamResponseStart)) {
@@ -303,12 +283,7 @@ abstract class OpenAINetworkingClient {
                 final decodedData = decodeToMap(data);
 
                 if (doesErrorExists(decodedData)) {
-                  final error = decodedData[OpenAIStrings.errorFieldKey]
-                      as Map<String, dynamic>;
-                  var message = error[OpenAIStrings.messageFieldKey] as String;
-                  message = message.isEmpty ? jsonEncode(error) : message;
-                  final statusCode = respond.statusCode;
-                  final exception = RequestFailedException(message, statusCode);
+                  final exception = extractException(respond.statusCode, decodedData, respond.headers);
 
                   controller.addError(exception);
                 }
@@ -356,9 +331,7 @@ abstract class OpenAINetworkingClient {
 
     final file = await http.MultipartFile.fromPath("image", image.path);
 
-    final maskFile = mask != null
-        ? await http.MultipartFile.fromPath("mask", mask.path)
-        : null;
+    final maskFile = mask != null ? await http.MultipartFile.fromPath("mask", mask.path) : null;
 
     request.files.add(file);
 
@@ -379,13 +352,8 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
+      final exception = extractException(response.statusCode, decodedBody, response.headers);
 
-      final message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
-
-      final exception = RequestFailedException(message, statusCode);
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -428,12 +396,8 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
-      final message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
+      final exception = extractException(response.statusCode, decodedBody, response.headers);
 
-      final exception = RequestFailedException(message, statusCode);
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -476,12 +440,8 @@ abstract class OpenAINetworkingClient {
 
     OpenAILogger.decodedSuccessfully();
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
-      final message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
+      final exception = extractException(response.statusCode, decodedBody, response.headers);
 
-      final exception = RequestFailedException(message, statusCode);
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -502,9 +462,7 @@ abstract class OpenAINetworkingClient {
     final headers = HeadersBuilder.build();
     final uri = Uri.parse(from);
 
-    final response = client == null
-        ? await http.delete(uri, headers: headers)
-        : await client.delete(uri, headers: headers);
+    final response = client == null ? await http.delete(uri, headers: headers) : await client.delete(uri, headers: headers);
 
     OpenAILogger.requestToWithStatusCode(from, response.statusCode);
 
@@ -515,12 +473,7 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
-      final String message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
-
-      final exception = RequestFailedException(message, statusCode);
+      final exception = extractException(response.statusCode, decodedBody, response.headers);
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -537,5 +490,63 @@ abstract class OpenAINetworkingClient {
 
   static bool doesErrorExists(Map<String, dynamic> decodedResponseBody) {
     return decodedResponseBody[OpenAIStrings.errorFieldKey] != null;
+  }
+
+  static RequestFailedException extractException(int statusCode, Map<String, dynamic> errorBody, Map<String, String> headers) {
+    final message = errorBody[OpenAIStrings.messageFieldKey];
+    final msg = message?.toString() ?? "";
+
+    if (statusCode == _rateLimitStatusCode) {
+      final remainingValue = headers[_headerRequestsRemaining];
+      final remaining = int.tryParse(remainingValue ?? "");
+      final resetValue = headers[_headerResetIn];
+      if (resetValue != null && resetValue.isNotEmpty) {
+        final timeoutDuration = parseResetTimeout(resetValue);
+        final timedOutUntil = DateTime.now().add(timeoutDuration);
+
+        return RateLimitedException(msg, statusCode, timeoutDuration, timedOutUntil);
+      } else if (remaining != null && remaining <= 0) {
+        return OutOfCreditsException(msg, statusCode);
+      }
+    }
+
+    // Sometimes the remaining requests header is absent from the response, but OpenAI serves a 429 anywway. This is likely an out of credits exception.
+
+    return RequestFailedException(msg, statusCode);
+  }
+
+  /// Extracts a timeout from a formatted string returned by OpenAI
+  ///
+  /// This method expects strings in the format of '\d+(\.\d+) [hms]', e.g., '59.21 s' indicating '59 seconds 210 miliseconds
+  static Duration parseResetTimeout(String resetValue) {
+    const timeoutMinLength = 2;
+    const markerHour = "h";
+    const markerMinute = "m";
+    const markerSecond = "s";
+
+    Duration timeout = const Duration(seconds: 60);
+    if (resetValue.length > timeoutMinLength) {
+      final marker = resetValue[resetValue.length - 1];
+      final numeralStr = resetValue.substring(0, resetValue.lastIndexOf(marker)).trim();
+      final numeral = double.tryParse(numeralStr);
+
+      if (numeral != null) {
+        if (marker == markerHour) {
+          final hours = numeral.truncate();
+          final minutes = ((numeral - hours)) * 60;
+          final seconds = (minutes - minutes.truncate()) * 60;
+          timeout = Duration(hours: hours, minutes: minutes.truncate(), seconds: seconds.truncate());
+        } else if (marker == markerMinute) {
+          final minutes = numeral.truncate();
+          final seconds = (numeral - minutes) * 60;
+          timeout = Duration(minutes: minutes, seconds: seconds.truncate());
+        } else if (marker == markerSecond) {
+          final seconds = numeral.truncate();
+          timeout = Duration(seconds: seconds);
+        }
+      }
+    }
+
+    return timeout;
   }
 }
