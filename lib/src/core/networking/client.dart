@@ -537,7 +537,11 @@ abstract class OpenAINetworkingClient {
   }
 
   static Map<String, dynamic> decodeToMap(String responseBody) {
-    return jsonDecode(responseBody) as Map<String, dynamic>;
+      try {
+        return jsonDecode(responseBody) as Map<String, dynamic>;
+      } catch (e) {
+        throw FormatException('Failed to decode JSON: $e');
+      }
   }
 
   static bool doesErrorExists(Map<String, dynamic> decodedResponseBody) {
