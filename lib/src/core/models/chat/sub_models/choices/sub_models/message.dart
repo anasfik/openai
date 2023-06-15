@@ -8,7 +8,7 @@ final class OpenAIChatCompletionChoiceMessageModel {
   final OpenAIChatMessageRole role;
 
   /// The [content] of the message.
-  final String content;
+  final dynamic content;
 
   @override
   int get hashCode {
@@ -28,7 +28,7 @@ final class OpenAIChatCompletionChoiceMessageModel {
     return OpenAIChatCompletionChoiceMessageModel(
       role: OpenAIChatMessageRole.values
           .firstWhere((role) => role.name == json['role']),
-      content: json['content'],
+      content: json['content'] ?? json['function_call'],
     );
   }
 

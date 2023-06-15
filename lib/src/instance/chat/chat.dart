@@ -27,7 +27,8 @@ interface class OpenAIChat implements OpenAIChatBase {
   ///
   /// [messages] is the list of messages to complete from, note you need to set each message as a [OpenAIChatCompletionChoiceMessageModel] object.
   ///
-  ///
+  /// [functions] is a list of Json objects describing a function for function calling go to https://openai.com/blog/function-calling-and-other-api-updates for more info
+  /// 
   /// What sampling [temperature] to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
   ///
   ///
@@ -61,13 +62,14 @@ interface class OpenAIChat implements OpenAIChatBase {
   /// final chatCompletion = await OpenAI.instance.chat.create(
   /// model: "gpt-3.5-turbo",
   /// messages: [
-  ///   OpenAIChatCompletionChoiceMessageModel(content: "hello, what is Flutter and Dart ?", role: "user")
+  ///   OpenAIChatCompletionChoiceMessageModel(content: "hello, what is Flutter and Dart ?", role: OpenAIChatMessageRole.user)
   /// ]);
   /// ```
   @override
   Future<OpenAIChatCompletionModel> create({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
+    List? functions,
     double? temperature,
     double? topP,
     int? n,
@@ -84,6 +86,7 @@ interface class OpenAIChat implements OpenAIChatBase {
       body: {
         "model": model,
         "messages": messages.map((message) => message.toMap()).toList(),
+        if (functions != null) "functions": functions,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
