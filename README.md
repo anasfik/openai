@@ -249,6 +249,61 @@ print(chatStreamEvent); // ...
 
 </br>
 
+### Functions
+
+You can use the chat functions interface with both the `Stream` and `Future` interface.
+(Note that functions requires at least model `gpt-3.5-turbo-0613`)
+Request:
+
+```dart
+OpenAIChatCompletionModel chatCompletion =
+    await OpenAI.instance.chat.create(
+      model: 'gpt-3.5-turbo-0613',
+      messages: [
+          OpenAIChatCompletionChoiceMessageModel(
+              content: "What's the weather like in Boston?",
+              role: OpenAIChatMessageRole.user,
+          )
+      ],
+      temperature: 0,
+      functions: [
+              OpenAiFunctionModel(
+                name: 'get_current_weather',
+                description: 'Get the current weather in a given location',
+                parameters: OpenAiFunctionParameters(
+                  properties: [
+                    OpenAiFunctionProperty(
+                      name: 'location',
+                      description: 'The city and state, e.g. San Francisco, CA',
+                      type: OpenAiFunctionProperty.functionTypeString,
+                      isRequired: true,
+                    ),
+                    OpenAiFunctionProperty(
+                      name: 'unit',
+                      type: OpenAiFunctionProperty.functionTypeString,
+                      enumValues: ['celsius', 'fahrenheit']
+                    ),
+                  ],
+                ),
+              ),
+            ],
+      functionCall: FunctionCall.auto,
+    );
+```
+
+The `functionalCall` parameter can be set to a specific function name to force the model to use that function:
+```dart
+functionCall: FunctionCall.forFunction('get_current_weather')
+```
+
+You can access the results in the `paramters` field of the `function_call` field.
+
+```dart
+FunctionCallResponse? response = chatCompletion.choices.first.message.functionCall;
+String? functionName = response?.name;
+Map<String, dynamic>? functionParameters = response.parameters;
+```
+
 ## Edits
 
 ### Create edit
