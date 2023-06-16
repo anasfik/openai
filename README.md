@@ -91,7 +91,7 @@ For the full documentation about all members this library offers, [check here](h
 
 ### API key
 
-The OpenAI API uses API keys for authentication. you can get your account APU key by visiting [API keys](https://platform.openai.com/account/api-keys) of your account.
+The OpenAI API uses API keys for authentication. you can get your account API key by visiting [API keys](https://platform.openai.com/account/api-keys) of your account.
 
 We highly recommend loading your secret key at runtime from a `.env` file, you can use the [envied](https://pub.dev/packages/envied) package.
 
@@ -248,6 +248,61 @@ print(chatStreamEvent); // ...
 ```
 
 </br>
+
+### Functions
+
+You can use the chat functions interface with both the `Stream` and `Future` interface.
+(Note that functions requires at least model `gpt-3.5-turbo-0613`)
+Request:
+
+```dart
+OpenAIChatCompletionModel chatCompletion =
+    await OpenAI.instance.chat.create(
+      model: 'gpt-3.5-turbo-0613',
+      messages: [
+          OpenAIChatCompletionChoiceMessageModel(
+              content: "What's the weather like in Boston?",
+              role: OpenAIChatMessageRole.user,
+          )
+      ],
+      temperature: 0,
+      functions: [
+              OpenAIFunctionModel(
+                name: 'get_current_weather',
+                description: 'Get the current weather in a given location',
+                parameters: OpenAIFunctionParameters.fromProperties(
+                  [
+                    OpenAIFunctionProperty(
+                      name: 'location',
+                      description: 'The city and state, e.g. San Francisco, CA',
+                      type: OpenAIFunctionProperty.functionTypeString,
+                      isRequired: true,
+                    ),
+                    OpenAIFunctionProperty(
+                      name: 'unit',
+                      type: OpenAIFunctionProperty.functionTypeString,
+                      enumValues: ['celsius', 'fahrenheit']
+                    ),
+                  ],
+                ),
+              ),
+            ],
+      functionCall: FunctionCall.auto,
+    );
+```
+
+The `functionalCall` parameter can be set to a specific function name to force the model to use that function:
+```dart
+functionCall: FunctionCall.forFunction('get_current_weather')
+```
+
+You can access the results in the `paramters` field of the `function_call` field.
+
+```dart
+FunctionCallResponse? response = chatCompletion.choices.first.message.functionCall;
+String? functionName = response?.name;
+Map<String, dynamic>? functionParameters = response?.parameters;
+```
 
 ## Edits
 
