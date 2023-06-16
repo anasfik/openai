@@ -192,7 +192,7 @@ void main() async {
 
         sendEmail(
           message: funcCall!.arguments["message"],
-          to: funcCall!.arguments["to"],
+          to: funcCall.arguments["to"],
         );
       },
     );

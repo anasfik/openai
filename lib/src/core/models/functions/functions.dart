@@ -70,14 +70,6 @@ class OpenAIFunctionProperty {
   final List<String>? enumValues;
   final bool isRequired;
 
-  const OpenAIFunctionProperty({
-    required this.name,
-    this.type,
-    this.description,
-    this.isRequired = false,
-    this.enumValues,
-  });
-
   @override
   int get hashCode {
     return name.hashCode ^
@@ -85,6 +77,14 @@ class OpenAIFunctionProperty {
         description.hashCode ^
         enumValues.hashCode;
   }
+
+  const OpenAIFunctionProperty({
+    required this.name,
+    this.type,
+    this.description,
+    this.isRequired = false,
+    this.enumValues,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -105,7 +105,7 @@ class FunctionCall {
   /// The model can pick between an end-user or calling a function.
   static const auto = FunctionCall._(value: 'auto');
 
-  final dynamic value;
+  final value;
 
   const FunctionCall._({required this.value});
 
