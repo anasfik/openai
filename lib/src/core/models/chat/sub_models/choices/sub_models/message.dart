@@ -1,3 +1,5 @@
+import 'package:dart_openai/dart_openai.dart';
+
 import '../../../../image/enum.dart';
 
 /// {@template openai_chat_completion_choice_message_model}
@@ -10,6 +12,8 @@ final class OpenAIChatCompletionChoiceMessageModel {
   /// The [content] of the message.
   final String content;
 
+  final FunctionCallResponse? functionCall;
+
   @override
   int get hashCode {
     return role.hashCode ^ content.hashCode;
@@ -19,6 +23,7 @@ final class OpenAIChatCompletionChoiceMessageModel {
   const OpenAIChatCompletionChoiceMessageModel({
     required this.role,
     required this.content,
+    this.functionCall,
   });
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceMessageModel] object.
@@ -28,7 +33,10 @@ final class OpenAIChatCompletionChoiceMessageModel {
     return OpenAIChatCompletionChoiceMessageModel(
       role: OpenAIChatMessageRole.values
           .firstWhere((role) => role.name == json['role']),
-      content: json['content'],
+      content: json['content'] ?? '',
+      functionCall: json['function_call'] != null
+          ? FunctionCallResponse.fromMap(json['function_call'])
+          : null,
     );
   }
 
@@ -37,11 +45,15 @@ final class OpenAIChatCompletionChoiceMessageModel {
     return {
       "role": role.name,
       "content": content,
+      if (functionCall != null) "function_call": functionCall,
     };
   }
 
   @override
   String toString() {
+    if (functionCall != null) {
+      return 'OpenAIChatCompletionChoiceMessageModel(role: $role, content: $content, functionCall: $functionCall)';
+    }
     return 'OpenAIChatCompletionChoiceMessageModel(role: $role, content: $content)';
   }
 
@@ -51,6 +63,7 @@ final class OpenAIChatCompletionChoiceMessageModel {
 
     return other is OpenAIChatCompletionChoiceMessageModel &&
         other.role == role &&
-        other.content == content;
+        other.content == content &&
+        other.functionCall == functionCall;
   }
 }

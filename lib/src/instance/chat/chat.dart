@@ -4,6 +4,7 @@ import 'package:dart_openai/src/core/networking/client.dart';
 import '../../core/base/chat/chat.dart';
 import '../../core/constants/strings.dart';
 import '../../core/models/chat/chat.dart';
+import '../../core/models/functions/functions.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;
@@ -68,6 +69,8 @@ interface class OpenAIChat implements OpenAIChatBase {
   Future<OpenAIChatCompletionModel> create({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
+    List<OpenAiFunctionModel>? functions,
+    FunctionCall? functionCall,
     double? temperature,
     double? topP,
     int? n,
@@ -84,6 +87,9 @@ interface class OpenAIChat implements OpenAIChatBase {
       body: {
         "model": model,
         "messages": messages.map((message) => message.toMap()).toList(),
+        if (functions != null)
+          "functions": functions.map((function) => function.toMap()).toList(),
+        if (functionCall != null) "function_call": functionCall.value,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
@@ -152,6 +158,8 @@ interface class OpenAIChat implements OpenAIChatBase {
   Stream<OpenAIStreamChatCompletionModel> createStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
+    List<OpenAiFunctionModel>? functions,
+    FunctionCall? functionCall,
     double? temperature,
     double? topP,
     int? n,
@@ -169,6 +177,9 @@ interface class OpenAIChat implements OpenAIChatBase {
         "model": model,
         "stream": true,
         "messages": messages.map((message) => message.toMap()).toList(),
+        if (functions != null)
+          "functions": functions.map((function) => function.toMap()).toList(),
+        if (functionCall != null) "function_call": functionCall.value,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,

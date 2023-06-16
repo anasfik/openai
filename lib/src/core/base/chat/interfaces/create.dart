@@ -1,11 +1,14 @@
 import 'package:http/http.dart' as http;
 
 import '../../../models/chat/chat.dart';
+import '../../../models/functions/functions.dart';
 
 abstract class CreateInterface {
   Future<OpenAIChatCompletionModel> create({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
+    List<OpenAiFunctionModel>? functions,
+    FunctionCall? functionCall,
     double? temperature,
     double? topP,
     int? n,
@@ -21,6 +24,8 @@ abstract class CreateInterface {
   Stream<OpenAIStreamChatCompletionModel> createStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
+    List<OpenAiFunctionModel>? functions,
+    FunctionCall? functionCall,
     double? temperature,
     double? topP,
     int? n,
