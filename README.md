@@ -267,20 +267,20 @@ OpenAIChatCompletionModel chatCompletion =
       ],
       temperature: 0,
       functions: [
-              OpenAiFunctionModel(
+              OpenAIFunctionModel(
                 name: 'get_current_weather',
                 description: 'Get the current weather in a given location',
-                parameters: OpenAiFunctionParameters(
-                  properties: [
-                    OpenAiFunctionProperty(
+                parameters: OpenAIFunctionParameters.fromProperties(
+                  [
+                    OpenAIFunctionProperty(
                       name: 'location',
                       description: 'The city and state, e.g. San Francisco, CA',
-                      type: OpenAiFunctionProperty.functionTypeString,
+                      type: OpenAIFunctionProperty.functionTypeString,
                       isRequired: true,
                     ),
-                    OpenAiFunctionProperty(
+                    OpenAIFunctionProperty(
                       name: 'unit',
-                      type: OpenAiFunctionProperty.functionTypeString,
+                      type: OpenAIFunctionProperty.functionTypeString,
                       enumValues: ['celsius', 'fahrenheit']
                     ),
                   ],
@@ -301,7 +301,7 @@ You can access the results in the `paramters` field of the `function_call` field
 ```dart
 FunctionCallResponse? response = chatCompletion.choices.first.message.functionCall;
 String? functionName = response?.name;
-Map<String, dynamic>? functionParameters = response.parameters;
+Map<String, dynamic>? functionParameters = response?.parameters;
 ```
 
 ## Edits

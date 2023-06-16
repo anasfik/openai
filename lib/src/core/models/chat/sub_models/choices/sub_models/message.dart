@@ -25,6 +25,8 @@ final class OpenAIChatCompletionChoiceMessageModel {
     this.functionCall,
   });
 
+  bool get hasFunctionCall => functionCall != null;
+
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceMessageModel] object.
   factory OpenAIChatCompletionChoiceMessageModel.fromMap(
     Map<String, dynamic> json,
