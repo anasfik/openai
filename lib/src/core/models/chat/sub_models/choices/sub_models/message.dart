@@ -1,5 +1,4 @@
-import 'package:dart_openai/dart_openai.dart';
-
+import '../../../../functions/functions.dart';
 import '../../../../image/enum.dart';
 
 /// {@template openai_chat_completion_choice_message_model}
