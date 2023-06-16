@@ -37,11 +37,13 @@ class OpenAIFunctionParameters {
       : _map = parametersSchema;
 
   factory OpenAIFunctionParameters.fromProperties(
-      Iterable<OpenAIFunctionProperty> properties) {
+    Iterable<OpenAIFunctionProperty> properties,
+  ) {
     final requiredProperties = properties
         .where((property) => property.isRequired)
         .map((property) => property.name)
         .toList(growable: false);
+
     return OpenAIFunctionParameters({
       'type': 'object',
       'properties': {

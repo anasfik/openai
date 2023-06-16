@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'dart:developer' as dev;
 import 'package:dart_openai/dart_openai.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
@@ -35,7 +35,7 @@ void main() async {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "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";
+      OpenAI.apiKey = "YOUR API KEY HERE";
 
       expect(OpenAI.instance, isA<OpenAI>());
     });
@@ -143,6 +143,60 @@ void main() async {
       );
       expect(chatCompletion.choices.first.message.content, isA<String>());
     });
+
+    test(
+      'create with function call',
+      () async {
+        void sendEmail({required String to, required String message}) {
+          dev.log(
+            "mock Action: the message: $message is sent to $to successfully.",
+          );
+        }
+
+        final OpenAIChatCompletionModel chatCompletion =
+            await OpenAI.instance.chat.create(
+          model: "gpt-3.5-turbo-0613",
+          messages: [
+            OpenAIChatCompletionChoiceMessageModel(
+              content: "Send an email to John asking about Marrakech weather",
+              role: OpenAIChatMessageRole.user,
+            ),
+          ],
+          functions: [
+            OpenAIFunctionModel(
+              name: "sendEmail",
+              description:
+                  "sends the given email message to the a specific person",
+              parameters: OpenAIFunctionParameters.fromProperties(
+                [
+                  OpenAIFunctionProperty(
+                    name: "to",
+                    description: "the name of the message receiver",
+                    type: "string",
+                  ),
+                  OpenAIFunctionProperty(
+                    name: "message",
+                    description: "the message to be sent",
+                    type: "string",
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+
+        final funcCall = chatCompletion.choices.first.message.functionCall;
+        expect(funcCall, isNotNull);
+        expect(funcCall?.arguments["to"], isNotNull);
+        expect(funcCall?.arguments["message"], isNotNull);
+
+        sendEmail(
+          message: funcCall!.arguments["message"],
+          to: funcCall!.arguments["to"],
+        );
+      },
+    );
+
     test('create with a stream', () {
       final chatStream = OpenAI.instance.chat.createStream(
         model: "gpt-3.5-turbo",
