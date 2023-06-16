@@ -7,7 +7,7 @@ abstract class CreateInterface {
   Future<OpenAIChatCompletionModel> create({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<OpenAiFunctionModel>? functions,
+    List<OpenAIFunctionModel>? functions,
     FunctionCall? functionCall,
     double? temperature,
     double? topP,
@@ -24,7 +24,7 @@ abstract class CreateInterface {
   Stream<OpenAIStreamChatCompletionModel> createStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<OpenAiFunctionModel>? functions,
+    List<OpenAIFunctionModel>? functions,
     FunctionCall? functionCall,
     double? temperature,
     double? topP,

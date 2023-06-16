@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:meta/meta.dart';
 
 @immutable
-class OpenAiFunctionModel {
+class OpenAIFunctionModel {
   /// The name of the function to be called. Must be a-z, A-Z, 0-9, or contain
   /// underscores and dashes, with a maximum length of 64.
   final String name;
@@ -13,9 +13,9 @@ class OpenAiFunctionModel {
 
   /// The parameters the functions accepts, described as a
   /// [JSON Schema](https://json-schema.org/understanding-json-schema) object.
-  final OpenAiFunctionParameters? parameters;
+  final OpenAIFunctionParameters? parameters;
 
-  const OpenAiFunctionModel({
+  const OpenAIFunctionModel({
     required this.name,
     this.description,
     this.parameters,
@@ -30,36 +30,33 @@ class OpenAiFunctionModel {
   }
 }
 
-class OpenAiFunctionParameters {
-  final String type;
-  final List<OpenAiFunctionProperty> properties;
-  const OpenAiFunctionParameters({
-    this.type = 'object',
-    required this.properties,
-  });
+class OpenAIFunctionParameters {
+  final Map<String, dynamic> _map;
 
-  Map<String, dynamic> toMap() {
+  const OpenAIFunctionParameters(Map<String, dynamic> parametersSchema)
+      : _map = parametersSchema;
+
+  factory OpenAIFunctionParameters.fromProperties(
+      Iterable<OpenAIFunctionProperty> properties) {
     final requiredProperties = properties
         .where((property) => property.isRequired)
         .map((property) => property.name)
         .toList(growable: false);
-    return {
-      'type': type,
+    return OpenAIFunctionParameters({
+      'type': 'object',
       'properties': {
-        for (final parameter in properties)
-          parameter.name: {
-            if (parameter.type != null) 'type': parameter.type,
-            if (parameter.description != null)
-              'description': parameter.description,
-            if (parameter.enumValues != null) 'enum': parameter.enumValues,
-          },
+        for (final property in properties) property.name: property.toMap(),
       },
       'required': requiredProperties,
-    };
+    });
+  }
+
+  Map<String, dynamic> toMap() {
+    return _map;
   }
 }
 
-class OpenAiFunctionProperty {
+class OpenAIFunctionProperty {
   static const functionTypeInteger = 'integer';
   static const functionTypeString = 'string';
   static const functionTypeBoolean = 'boolean';
@@ -71,7 +68,7 @@ class OpenAiFunctionProperty {
   final List<String>? enumValues;
   final bool isRequired;
 
-  const OpenAiFunctionProperty({
+  const OpenAIFunctionProperty({
     required this.name,
     this.type,
     this.description,
@@ -85,6 +82,15 @@ class OpenAiFunctionProperty {
         type.hashCode ^
         description.hashCode ^
         enumValues.hashCode;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      if (type != null) 'type': type,
+      if (description != null) 'description': description,
+      if (enumValues != null) 'enum': enumValues,
+    };
   }
 }
 

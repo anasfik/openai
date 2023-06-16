@@ -69,7 +69,7 @@ interface class OpenAIChat implements OpenAIChatBase {
   Future<OpenAIChatCompletionModel> create({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<OpenAiFunctionModel>? functions,
+    List<OpenAIFunctionModel>? functions,
     FunctionCall? functionCall,
     double? temperature,
     double? topP,
@@ -160,7 +160,7 @@ interface class OpenAIChat implements OpenAIChatBase {
   Stream<OpenAIStreamChatCompletionModel> createStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<OpenAiFunctionModel>? functions,
+    List<OpenAIFunctionModel>? functions,
     FunctionCall? functionCall,
     double? temperature,
     double? topP,

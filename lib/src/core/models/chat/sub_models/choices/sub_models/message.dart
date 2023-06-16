@@ -44,7 +44,7 @@ final class OpenAIChatCompletionChoiceMessageModel {
     return {
       "role": role.name,
       "content": content,
-      if (functionCall != null) "function_call": functionCall,
+      if (functionCall != null) "function_call": functionCall!.toMap(),
     };
   }
 
