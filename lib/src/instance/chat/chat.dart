@@ -88,7 +88,9 @@ interface class OpenAIChat implements OpenAIChatBase {
         "model": model,
         "messages": messages.map((message) => message.toMap()).toList(),
         if (functions != null)
-          "functions": functions.map((function) => function.toMap()).toList(),
+          "functions": functions
+              .map((function) => function.toMap())
+              .toList(growable: false),
         if (functionCall != null) "function_call": functionCall.value,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
@@ -178,7 +180,9 @@ interface class OpenAIChat implements OpenAIChatBase {
         "stream": true,
         "messages": messages.map((message) => message.toMap()).toList(),
         if (functions != null)
-          "functions": functions.map((function) => function.toMap()).toList(),
+          "functions": functions
+              .map((function) => function.toMap())
+              .toList(growable: false),
         if (functionCall != null) "function_call": functionCall.value,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
