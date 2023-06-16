@@ -2,7 +2,9 @@ import "dart:async";
 import "dart:convert";
 import "dart:io";
 // ignore: unused_import
+
 import "package:dart_openai/src/core/utils/http_client_web.dart"
+    if (dart.library.js) "package:dart_openai/src/core/utils/http_client_io.dart"
     if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
 
 import 'package:dart_openai/dart_openai.dart';
@@ -275,9 +277,11 @@ abstract class OpenAINetworkingClient {
               .transform(utf8.decoder)
               .transform(openAIChatStreamLineSplitter);
 
+          String respondData = "";
           stream.listen(
             (value) {
               final data = value;
+              respondData += data;
 
               final dataLines = data
                   .split("\n")
@@ -300,7 +304,10 @@ abstract class OpenAINetworkingClient {
                   continue;
                 }
 
-                final decodedData = decodeToMap(data);
+                Map<String, dynamic> decodedData = {};
+                try {
+                  decodedData = decodeToMap(respondData);
+                } catch (error) {/** ignore, data has not been received */}
 
                 if (doesErrorExists(decodedData)) {
                   final error = decodedData[OpenAIStrings.errorFieldKey]
