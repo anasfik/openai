@@ -11,11 +11,20 @@ final class OpenAIChatCompletionChoiceMessageModel {
   /// The [content] of the message.
   final String content;
 
+  /// The function that the model is requesting to call.
   final FunctionCallResponse? functionCall;
+
+  /// The name of the function that was called.
+  final String? functionName;
+
+  bool get hasFunctionCall => functionCall != null;
 
   @override
   int get hashCode {
-    return role.hashCode ^ content.hashCode;
+    return role.hashCode ^
+        content.hashCode ^
+        functionCall.hashCode ^
+        functionName.hashCode;
   }
 
   /// {@macro openai_chat_completion_choice_message_model}
@@ -23,9 +32,8 @@ final class OpenAIChatCompletionChoiceMessageModel {
     required this.role,
     required this.content,
     this.functionCall,
+    this.functionName,
   });
-
-  bool get hasFunctionCall => functionCall != null;
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceMessageModel] object.
   factory OpenAIChatCompletionChoiceMessageModel.fromMap(
@@ -47,15 +55,24 @@ final class OpenAIChatCompletionChoiceMessageModel {
       "role": role.name,
       "content": content,
       if (functionCall != null) "function_call": functionCall!.toMap(),
+      if (functionName != null) "name": functionName,
     };
   }
 
   @override
   String toString() {
+    String str = 'OpenAIChatCompletionChoiceMessageModel('
+        'role: $role, '
+        'content: $content, ';
     if (functionCall != null) {
-      return 'OpenAIChatCompletionChoiceMessageModel(role: $role, content: $content, functionCall: $functionCall)';
+      str += 'functionCall: $functionCall, ';
     }
-    return 'OpenAIChatCompletionChoiceMessageModel(role: $role, content: $content)';
+    if (functionName != null) {
+      str += 'functionName: $functionName, ';
+    }
+    str += ')';
+
+    return str;
   }
 
   @override
@@ -65,6 +82,7 @@ final class OpenAIChatCompletionChoiceMessageModel {
     return other is OpenAIChatCompletionChoiceMessageModel &&
         other.role == role &&
         other.content == content &&
-        other.functionCall == functionCall;
+        other.functionCall == functionCall &&
+        other.functionName == functionName;
   }
 }
