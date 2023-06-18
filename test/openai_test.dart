@@ -35,7 +35,7 @@ void main() async {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "YOUR API KEY HERE";
+      OpenAI.apiKey = "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";
 
       expect(OpenAI.instance, isA<OpenAI>());
     });
@@ -163,24 +163,20 @@ void main() async {
             ),
           ],
           functions: [
-            OpenAIFunctionModel(
+            OpenAIFunctionModel.withParameters(
               name: "sendEmail",
               description:
                   "sends the given email message to the a specific person",
-              parameters: OpenAIFunctionParameters.fromProperties(
-                [
-                  OpenAIFunctionProperty(
-                    name: "to",
-                    description: "the name of the message receiver",
-                    type: "string",
-                  ),
-                  OpenAIFunctionProperty(
-                    name: "message",
-                    description: "the message to be sent",
-                    type: "string",
-                  ),
-                ],
-              ),
+              parameters: [
+                OpenAIFunctionProperty.string(
+                  name: "to",
+                  description: "the name of the message receiver",
+                ),
+                OpenAIFunctionProperty.string(
+                  name: "message",
+                  description: "the message to be sent",
+                ),
+              ],
             ),
           ],
         );

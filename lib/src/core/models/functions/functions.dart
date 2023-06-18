@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dart_openai/src/core/utils/extensions.dart';
 import 'package:meta/meta.dart';
 
 @immutable

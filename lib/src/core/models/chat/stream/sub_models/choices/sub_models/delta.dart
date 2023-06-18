@@ -1,4 +1,3 @@
-import '../../../../../functions/functions.dart';
 
 /// {@template openai_stream_chat_completion_choice_delta_model}
 /// This contains the [role] and [content] of the choice of the chat response.

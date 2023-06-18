@@ -7,25 +7,21 @@ import 'env/env.dart';
 Future<void> main() async {
   OpenAI.apiKey = Env.apiKey;
 
-  final function = OpenAIFunctionModel(
+  final function = OpenAIFunctionModel.withParameters(
     name: "getCurrentWeather",
     description: "Get the current weather in a given location",
-    parameters: OpenAIFunctionParameters.fromProperties(
-      [
-        OpenAIFunctionProperty(
-          name: "location",
-          description: 'The city and state, e.g. San Francisco, CA',
-          type: OpenAIFunctionProperty.functionTypeString,
-          isRequired: true,
-        ),
-        OpenAIFunctionProperty(
-          name: "unit",
-          description: 'The unit of temperature to return',
-          type: OpenAIFunctionProperty.functionTypeString,
-          enumValues: ["celsius", "fahrenheit"],
-        ),
-      ],
-    ),
+    parameters: [
+      OpenAIFunctionProperty.string(
+        name: "location",
+        description: 'The city and state, e.g. San Francisco, CA',
+        isRequired: true,
+      ),
+      OpenAIFunctionProperty.string(
+        name: "unit",
+        description: 'The unit of temperature to return',
+        enumValues: ["celsius", "fahrenheit"],
+      ),
+    ],
   );
 
   final userMsg = OpenAIChatCompletionChoiceMessageModel(
