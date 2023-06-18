@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dart_openai/src/core/utils/extensions.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -120,10 +121,10 @@ class FunctionCall {
 @immutable
 class FunctionCallResponse {
   /// The name of the function that the model wants to call.
-  final String name;
+  final String? name;
 
   /// The arguments that the model wants to pass to the function.
-  final Map<String, dynamic> arguments;
+  final Map<String, dynamic>? arguments;
 
   const FunctionCallResponse({
     required this.name,
@@ -131,9 +132,19 @@ class FunctionCallResponse {
   });
 
   factory FunctionCallResponse.fromMap(Map<String, dynamic> map) {
+    final argsField = map['arguments'];
+
+    Map<String, dynamic> arguments;
+
+    try {
+      arguments = jsonDecode(argsField);
+    } catch (e) {
+      arguments = {};
+    }
+
     return FunctionCallResponse(
       name: map['name'],
-      arguments: json.decode(map['arguments']),
+      arguments: arguments,
     );
   }
 

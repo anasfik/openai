@@ -24,8 +24,6 @@ abstract class CreateInterface {
   Stream<OpenAIStreamChatCompletionModel> createStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<OpenAIFunctionModel>? functions,
-    FunctionCall? functionCall,
     double? temperature,
     double? topP,
     int? n,

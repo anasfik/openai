@@ -160,8 +160,6 @@ interface class OpenAIChat implements OpenAIChatBase {
   Stream<OpenAIStreamChatCompletionModel> createStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<OpenAIFunctionModel>? functions,
-    FunctionCall? functionCall,
     double? temperature,
     double? topP,
     int? n,
@@ -179,11 +177,6 @@ interface class OpenAIChat implements OpenAIChatBase {
         "model": model,
         "stream": true,
         "messages": messages.map((message) => message.toMap()).toList(),
-        if (functions != null)
-          "functions": functions
-              .map((function) => function.toMap())
-              .toList(growable: false),
-        if (functionCall != null) "function_call": functionCall.value,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,

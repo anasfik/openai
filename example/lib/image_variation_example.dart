@@ -9,13 +9,11 @@ Future<void> main() async {
   OpenAI.apiKey = Env.apiKey;
 
   // Creates the Image Variation
-  OpenAIImageVariationModel variation = await OpenAI.instance.image.variation(
-    image: File("example.png"),
-    n: 1,
-    size: OpenAIImageSize.size256,
-    responseFormat: OpenAIImageResponseFormat.b64Json,
+  final variation = await OpenAI.instance.image.create(
+    prompt: "Tree with blue butterflies wings",
+    n: 2,
   );
 
   // Prints the result.
-  print(variation.data.first.url);
+  print(variation.data);
 }

@@ -187,12 +187,12 @@ void main() async {
 
         final funcCall = chatCompletion.choices.first.message.functionCall;
         expect(funcCall, isNotNull);
-        expect(funcCall?.arguments["to"], isNotNull);
-        expect(funcCall?.arguments["message"], isNotNull);
+        expect(funcCall?.arguments?["to"], isNotNull);
+        expect(funcCall?.arguments?["message"], isNotNull);
 
         sendEmail(
-          message: funcCall!.arguments["message"],
-          to: funcCall.arguments["to"],
+          message: funcCall!.arguments?["message"],
+          to: funcCall.arguments?["to"],
         );
       },
     );

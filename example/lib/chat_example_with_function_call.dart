@@ -33,7 +33,7 @@ Future<void> main() async {
   final funcCall = chatRes.choices.first.message.functionCall;
 
   if (funcCall != null && funcCall.name == "sendEmail") {
-    final message = funcCall.arguments["message"];
+    final message = funcCall.arguments?["message"];
     sendEmail(message);
   }
 }
