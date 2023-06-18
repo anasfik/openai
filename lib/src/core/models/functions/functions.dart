@@ -13,46 +13,35 @@ class OpenAIFunctionModel {
 
   /// The parameters the functions accepts, described as a
   /// [JSON Schema](https://json-schema.org/understanding-json-schema) object.
-  final OpenAIFunctionParameters? parameters;
+  final Map<String, dynamic> parametersSchema;
 
   const OpenAIFunctionModel({
     required this.name,
+    required this.parametersSchema,
     this.description,
-    this.parameters,
   });
+
+  factory OpenAIFunctionModel.withParameters({
+    required String name,
+    String? description,
+    required Iterable<OpenAIFunctionProperty> parameters,
+  }) {
+    return OpenAIFunctionModel(
+      name: name,
+      description: description,
+      parametersSchema: OpenAIFunctionProperty.object(
+        name: '',
+        properties: parameters,
+      ).typeMap(),
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
       if (description != null) 'description': description,
-      if (parameters != null) 'parameters': parameters!.toMap(),
+      'parameters': parametersSchema,
     };
-  }
-}
-
-class OpenAIFunctionParameters {
-  final Map<String, dynamic> _map;
-
-  const OpenAIFunctionParameters(Map<String, dynamic> parametersSchema)
-      : _map = parametersSchema;
-
-  factory OpenAIFunctionParameters.fromProperties(
-      Iterable<OpenAIFunctionProperty> properties) {
-    final requiredProperties = properties
-        .where((property) => property.isRequired)
-        .map((property) => property.name)
-        .toList(growable: false);
-    return OpenAIFunctionParameters({
-      'type': 'object',
-      'properties': {
-        for (final property in properties) property.name: property.toMap(),
-      },
-      'required': requiredProperties,
-    });
-  }
-
-  Map<String, dynamic> toMap() {
-    return _map;
   }
 }
 
@@ -60,36 +49,154 @@ class OpenAIFunctionProperty {
   static const functionTypeInteger = 'integer';
   static const functionTypeString = 'string';
   static const functionTypeBoolean = 'boolean';
-  static const functionTypeFloat = 'float';
+  static const functionTypeNumber = 'number';
+  static const functionTypeArray = 'array';
+  static const functionTypeObject = 'object';
 
   final String name;
-  final String? type;
-  final String? description;
-  final List<String>? enumValues;
   final bool isRequired;
+  final Map<String, dynamic> _typeMap;
 
   const OpenAIFunctionProperty({
     required this.name,
-    this.type,
-    this.description,
+    required Map<String, dynamic> typeMap,
     this.isRequired = false,
-    this.enumValues,
-  });
+    List<String>? requiredProperties,
+  }) : _typeMap = typeMap;
+
+  factory OpenAIFunctionProperty.primitive({
+    required String name,
+    String? description,
+    bool isRequired = false,
+    required String type,
+    List<dynamic>? enumValues,
+  }) {
+    return OpenAIFunctionProperty(
+      name: name,
+      isRequired: isRequired,
+      typeMap: {
+        'type': type,
+        if (description != null) 'description': description,
+        if (enumValues != null) 'enum': enumValues,
+      },
+    );
+  }
+
+  factory OpenAIFunctionProperty.string({
+    required String name,
+    String? description,
+    bool isRequired = false,
+    List<String>? enumValues,
+  }) {
+    return OpenAIFunctionProperty.primitive(
+      name: name,
+      isRequired: isRequired,
+      type: functionTypeString,
+      description: description,
+      enumValues: enumValues,
+    );
+  }
+
+  factory OpenAIFunctionProperty.boolean({
+    required String name,
+    String? description,
+    bool isRequired = false,
+  }) {
+    return OpenAIFunctionProperty.primitive(
+      name: name,
+      isRequired: isRequired,
+      type: functionTypeBoolean,
+      description: description,
+    );
+  }
+
+  factory OpenAIFunctionProperty.integer({
+    required String name,
+    String? description,
+    bool isRequired = false,
+  }) {
+    return OpenAIFunctionProperty.primitive(
+      name: name,
+      isRequired: isRequired,
+      type: functionTypeInteger,
+      description: description,
+    );
+  }
+
+  factory OpenAIFunctionProperty.number({
+    required String name,
+    String? description,
+    bool isRequired = false,
+  }) {
+    return OpenAIFunctionProperty.primitive(
+      name: name,
+      isRequired: isRequired,
+      type: functionTypeNumber,
+      description: description,
+    );
+  }
+
+  factory OpenAIFunctionProperty.array({
+    required String name,
+    String? description,
+    bool isRequired = false,
+    required OpenAIFunctionProperty items,
+  }) {
+    return OpenAIFunctionProperty(
+      name: name,
+      typeMap: {
+        'type': functionTypeArray,
+        if (description != null) 'description': description,
+        'items': items._typeMap,
+      },
+      isRequired: isRequired,
+    );
+  }
+
+  factory OpenAIFunctionProperty.object({
+    required String name,
+    String? description,
+    required Iterable<OpenAIFunctionProperty> properties,
+    bool isRequired = false,
+  }) {
+    final requiredProperties = properties
+        .where((property) => property.isRequired)
+        .map((property) => property.name)
+        .toList(growable: false);
+
+    return OpenAIFunctionProperty(
+      name: name,
+      typeMap: {
+        'type': functionTypeObject,
+        if (description != null) 'description': description,
+        'properties': Map.fromEntries(
+          properties.map(
+            (property) => property.typeEntry(),
+          ),
+        ),
+        'required': requiredProperties,
+      },
+      isRequired: isRequired,
+    );
+  }
 
   @override
   int get hashCode {
-    return name.hashCode ^
-        type.hashCode ^
-        description.hashCode ^
-        enumValues.hashCode;
+    return name.hashCode ^ _typeMap.hashCode;
+  }
+
+  MapEntry<String, Map<String, dynamic>> typeEntry() {
+    return MapEntry(name, _typeMap);
+  }
+
+  Map<String, dynamic> typeMap() {
+    return _typeMap;
   }
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      if (type != null) 'type': type,
-      if (description != null) 'description': description,
-      if (enumValues != null) 'enum': enumValues,
+      ..._typeMap,
     };
   }
 }
