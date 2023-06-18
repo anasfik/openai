@@ -12,11 +12,12 @@ Future<void> main() async {
   OpenAI.apiKey = Env.apiKey;
 
 // create the audio transcription.
-  final transcription = OpenAI.instance.audio.createTranscription(
+  final transcription = await OpenAI.instance.audio.createTranscription(
     file: await getFileFromUrl(
       'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
     ),
     model: "whisper-1",
+    responseFormat: OpenAIAudioResponseFormat.srt,
   );
 
   // print the transcription.

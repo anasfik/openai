@@ -3,6 +3,7 @@ import "dart:convert";
 import "dart:io";
 
 // ignore: unused_import
+import "package:dart_openai/src/core/utils/extensions.dart";
 import "package:dart_openai/src/core/utils/http_client_web.dart"
     if (dart.library.js) "package:dart_openai/src/core/utils/http_client_io.dart"
     if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
@@ -456,6 +457,7 @@ abstract class OpenAINetworkingClient {
     required T Function(Map<String, dynamic>) onSuccess,
     required Map<String, String> body,
     required File file,
+    Map<String, dynamic> Function(String rawResponse)? responseMapAdapter,
   }) async {
     OpenAILogger.logStartRequest(to);
 
@@ -478,13 +480,23 @@ abstract class OpenAINetworkingClient {
 
     OpenAILogger.startingDecoding();
 
-    final String encodedBody = await response.stream.bytesToString();
-    final Map<String, dynamic> decodedBody = decodeToMap(encodedBody);
+    final String responseBody = await response.stream.bytesToString();
+
+    var resultBody;
+
+    final safeResponseMapAdapter = responseMapAdapter ??
+        (rawResponse) {
+          return {"text": rawResponse};
+        };
+
+    resultBody = responseBody.canBeParsedToJson
+        ? decodeToMap(responseBody)
+        : safeResponseMapAdapter(responseBody);
 
     OpenAILogger.decodedSuccessfully();
-    if (doesErrorExists(decodedBody)) {
+    if (doesErrorExists(resultBody)) {
       final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
+          resultBody[OpenAIStrings.errorFieldKey];
       final message = error[OpenAIStrings.messageFieldKey];
       final statusCode = response.statusCode;
 
@@ -495,7 +507,7 @@ abstract class OpenAINetworkingClient {
     } else {
       OpenAILogger.requestFinishedSuccessfully();
 
-      return onSuccess(decodedBody);
+      return onSuccess(resultBody);
     }
   }
 
