@@ -140,7 +140,7 @@ class FunctionCallResponse {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'arguments': arguments,
+      'arguments': json.encode(arguments),
     };
   }
 
