@@ -267,24 +267,20 @@ OpenAIChatCompletionModel chatCompletion =
       ],
       temperature: 0,
       functions: [
-              OpenAIFunctionModel(
+              OpenAIFunctionModel.withParameters(
                 name: 'get_current_weather',
                 description: 'Get the current weather in a given location',
-                parameters: OpenAIFunctionParameters.fromProperties(
-                  [
-                    OpenAIFunctionProperty(
-                      name: 'location',
-                      description: 'The city and state, e.g. San Francisco, CA',
-                      type: OpenAIFunctionProperty.functionTypeString,
-                      isRequired: true,
-                    ),
-                    OpenAIFunctionProperty(
-                      name: 'unit',
-                      type: OpenAIFunctionProperty.functionTypeString,
-                      enumValues: ['celsius', 'fahrenheit']
-                    ),
-                  ],
-                ),
+                parameters: [
+                  OpenAIFunctionProperty.string(
+                    name: 'location',
+                    description: 'The city and state, e.g. San Francisco, CA',
+                    isRequired: true,
+                  ),
+                  OpenAIFunctionProperty.string(
+                    name: 'unit',
+                    enumValues: ['celsius', 'fahrenheit']
+                  ),
+                ],
               ),
             ],
       functionCall: FunctionCall.auto,
