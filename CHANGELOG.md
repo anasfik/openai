@@ -1,4 +1,9 @@
 # Changelog
+
+## 3.0.0
+ - Added support for functions feature of the chat API.
+ - Bugs fixes.  
+
 ## 2.0.1
 
  - Formated unformatted files.
