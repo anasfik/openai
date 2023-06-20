@@ -66,6 +66,9 @@ interface class OpenAIAudio implements OpenAIAudioBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIAudioModel.fromMap(response);
       },
+      responseMapAdapter: (res) {
+        return {"text": res};
+      },
     );
   }
 
@@ -109,6 +112,9 @@ interface class OpenAIAudio implements OpenAIAudioBase {
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIAudioModel.fromMap(response);
+      },
+      responseMapAdapter: (res) {
+        return {"text": res};
       },
     );
   }

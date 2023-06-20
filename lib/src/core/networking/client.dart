@@ -484,14 +484,11 @@ abstract class OpenAINetworkingClient {
 
     var resultBody;
 
-    final safeResponseMapAdapter = responseMapAdapter ??
-        (rawResponse) {
-          return {"text": rawResponse};
-        };
-
     resultBody = responseBody.canBeParsedToJson
         ? decodeToMap(responseBody)
-        : safeResponseMapAdapter(responseBody);
+        : responseMapAdapter != null
+            ? responseMapAdapter(responseBody)
+            : responseBody;
 
     OpenAILogger.decodedSuccessfully();
     if (doesErrorExists(resultBody)) {
