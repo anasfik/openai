@@ -341,7 +341,7 @@ Creates an edited or extended image given an original image and a prompt.
 
 ```dart
 OpenAiImageEditModel imageEdit = await OpenAI.instance.image.edit(
- file: File(/* IMAGE PATH HERE */),
+ image: File(/* IMAGE PATH HERE */),
  mask: File(/* MASK PATH HERE */),
  prompt: "mask the image with a dinosaur",
  n: 1,
