@@ -232,7 +232,7 @@ OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
 in addition to calling `OpenAI.instance.chat.create()` which is a `Future` and will resolve only after the whole chat is generated, you can get a `Stream` of results:
 
 ```dart
-OpenAIStreamChatCompletionModel chatStream = OpenAI.instance.chat.createStream(
+Stream<OpenAIStreamChatCompletionModel> chatStream = OpenAI.instance.chat.createStream(
     model: "gpt-3.5-turbo",
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
@@ -242,9 +242,10 @@ OpenAIStreamChatCompletionModel chatStream = OpenAI.instance.chat.createStream(
     ],
   );
 
-chatStream.listen((chatStreamEvent) {
-print(chatStreamEvent); // ...
-  });
+chatStream.listen((streamChatCompletion) {
+    final content = streamChatCompletion.choices.first.delta.content;
+    print(content);
+});
 ```
 
 </br>
