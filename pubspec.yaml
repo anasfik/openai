@@ -10,12 +10,12 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dev_dependencies:
-  dart_code_metrics: ^5.6.0
+  dart_code_metrics:
   lints: ^2.0.0
   test: ^1.16.0
 
 dependencies:
-  http: ^0.13.5
+  http: ^1.1.0
   meta: ^1.8.0
   collection: ^1.17.0
   fetch_client: ^1.0.0
