@@ -35,12 +35,19 @@ abstract final class OpenAILogger {
 
   /// Logs that an api key is being set, if the logger is active.
   static void logAPIKey([String? apiKey]) {
-    if (apiKey != null) {
+    if (apiKey != null && isValidApiKey(apiKey)) {
       final hiddenApiKey = apiKey.replaceRange(0, apiKey.length - 10, '****');
       log("api key set to $hiddenApiKey");
     } else {
-      log("api key is set");
+      log("api key is set but not valid");
     }
+  }
+
+  /// simple check for api key validity
+  static isValidApiKey(String key) {
+    return key.isNotEmpty &&
+        key.startsWith("sk-") &&
+        key.length > 10; //magic number
   }
 
   /// Logs that an baseUrl key is being set, if the logger is active.
