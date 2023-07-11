@@ -76,6 +76,10 @@ final class OpenAI extends OpenAIClientBase {
   /// The organization id, if set, it will be used in all the requests to the OpenAI API.
   static String? get organization => HeadersBuilder.organization;
 
+  /// The base API url, by default it is set to the OpenAI API url.
+  /// You can change it by calling the [OpenAI.baseUrl] setter.
+  static String get baseUrl => OpenAIConfig.baseUrl;
+
   // /// The HTTP client that will be used to make the requests to the OpenAI API.
   // /// you can set yout own client, or just set to [null] to use the default client.
   // ///
