@@ -2,8 +2,6 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:example/env/env.dart';
 
 Future<void> main() async {
-  OpenAIEmbeddingsModel? model;
-
   // Set the OpenAI API key from the .env file.
   OpenAI.apiKey = Env.apiKey;
 
