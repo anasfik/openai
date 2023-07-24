@@ -1,5 +1,9 @@
 # Changelog
-
+## 4.0.0
+ - Migrated internal packages to latest versions such as http.
+ - Bug fixes to new functions API
+ - Minor edits to docs, package members.
+ 
 ## 3.0.0
  - Added support for functions feature of the chat API.
  - Bugs fixes.  
