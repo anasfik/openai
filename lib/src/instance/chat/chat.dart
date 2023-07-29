@@ -200,4 +200,49 @@ interface class OpenAIChat implements OpenAIChatBase {
       client: client,
     );
   }
+
+  @override
+  Stream<OpenAIStreamChatCompletionModel> createRemoteFunctionStream({
+    required String model,
+    required List<OpenAIChatCompletionChoiceMessageModel> messages,
+    List<dynamic>? functions,
+    FunctionCall? functionCall,
+    double? temperature,
+    double? topP,
+    int? n,
+    stop,
+    int? maxTokens,
+    double? presencePenalty,
+    double? frequencyPenalty,
+    Map<String, dynamic>? logitBias,
+    String? user,
+    http.Client? client,
+  }) {
+    return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
+      to: BaseApiUrlBuilder.build(endpoint),
+      body: {
+        "model": model,
+        "stream": true,
+        "messages": messages.map((message) => message.toMap()).toList(),
+        if (functions != null)
+          "functions": functions,
+        if (functionCall != null) "function_call": functionCall.value,
+        if (temperature != null) "temperature": temperature,
+        if (topP != null) "top_p": topP,
+        if (n != null) "n": n,
+        if (stop != null) "stop": stop,
+        if (maxTokens != null) "max_tokens": maxTokens,
+        if (presencePenalty != null) "presence_penalty": presencePenalty,
+        if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
+        if (logitBias != null) "logit_bias": logitBias,
+        if (user != null) "user": user,
+      },
+      onSuccess: (Map<String, dynamic> response) {
+        return OpenAIStreamChatCompletionModel.fromMap(response);
+      },
+      client: client,
+    );
+  }
+
+
 }
