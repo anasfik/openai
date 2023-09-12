@@ -298,7 +298,7 @@ You can access the results in the `paramters` field of the `function_call` field
 ```dart
 FunctionCallResponse? response = chatCompletion.choices.first.message.functionCall;
 String? functionName = response?.name;
-Map<String, dynamic>? functionParameters = response?.parameters;
+Map<String, dynamic>? functionArguments = response?.arguments;
 ```
 
 ## Edits
