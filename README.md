@@ -293,7 +293,7 @@ The `functionalCall` parameter can be set to a specific function name to force t
 functionCall: FunctionCall.forFunction('get_current_weather')
 ```
 
-You can access the results in the `paramters` field of the `function_call` field.
+You can access the results in the `arguments` field of the `function_call` field.
 
 ```dart
 FunctionCallResponse? response = chatCompletion.choices.first.message.functionCall;
