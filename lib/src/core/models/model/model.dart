@@ -13,16 +13,18 @@ final class OpenAIModelModel {
   final String ownedBy;
 
   /// The permissions of the model.
-  final List<OpenAIModelModelPermission> permission;
+  // final List<OpenAIModelModelPermission>? permission;
 
   @override
-  int get hashCode => id.hashCode ^ ownedBy.hashCode ^ permission.hashCode;
+  int get hashCode => id.hashCode ^ ownedBy.hashCode
+  // ^ permission.hashCode
+  ;
 
   /// This class is used to represent an OpenAI model.
   const OpenAIModelModel({
     required this.id,
     required this.ownedBy,
-    required this.permission,
+    // required this.permission,
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModelModel] object.
@@ -30,16 +32,18 @@ final class OpenAIModelModel {
     return OpenAIModelModel(
       id: json['id'],
       ownedBy: json['owned_by'],
-      permission: (json['permission'] as List)
-          .map((e) =>
-              OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>))
-          .toList(),
+      // permission: (json['permission']? as List)
+      //     .map((e) =>
+      //         OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>))
+      //     .toList(),
     );
   }
 
   @override
   String toString() =>
-      'OpenAIModelModel(id: $id, ownedBy: $ownedBy, permission: $permission)';
+      'OpenAIModelModel(id: $id, ownedBy: $ownedBy'
+          // ', permission: $permission'
+          ')';
 
   @override
   bool operator ==(covariant OpenAIModelModel other) {
@@ -47,7 +51,8 @@ final class OpenAIModelModel {
     final listEquals = const DeepCollectionEquality().equals;
 
     return other.id == id &&
-        other.ownedBy == ownedBy &&
-        listEquals(other.permission, permission);
+        other.ownedBy == ownedBy
+        // && listEquals(other.permission, permission)
+    ;
   }
 }
