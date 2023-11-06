@@ -27,11 +27,11 @@ final class OpenAIModelModel {
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModelModel] object.
   factory OpenAIModelModel.fromMap(Map<String, dynamic> json) {
-    // 进行空检查，如果 'permission' 为 null，则使用空列表或者 null。
+    // Perform a null check, and if 'permission' is null, use an empty list or null.
     final permissionJson = json['permission'] as List?;
     final permissions = permissionJson != null
         ? permissionJson.map((e) => OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>)).toList()
-        : null; // 或者使用 <OpenAIModelModelPermission>[] 代替 null，如果你想要一个空列表。
+        : null; // Alternatively, use<OpenAIModelModelPermission>[] instead of null, if you want an empty list.
 
     return OpenAIModelModel(
       id: json['id'] as String,
