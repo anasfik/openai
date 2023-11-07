@@ -199,7 +199,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
         OpenAIImageVariationModel>(
       image: image,
       body: {
-        if (n != null) "n": n.toString(),
+        if (n != null) "n": n,
         if (size != null) "size": size.value,
         if (responseFormat != null) "response_format": responseFormat.value,
         if (user != null) "user": user,
