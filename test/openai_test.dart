@@ -5,6 +5,8 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
+import 'personal_for_testing/vars.dart';
+
 void main() async {
   final exampleImageFile = await getFileFromUrl(
     "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png",
@@ -36,7 +38,7 @@ void main() async {
     });
     test('with setting a key', () {
       OpenAI.apiKey = "YOUR API KEY HERE";
-      OpenAI.apiKey = "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";
+      OpenAI.apiKey = apiKey;
 
       expect(OpenAI.instance, isA<OpenAI>());
     });

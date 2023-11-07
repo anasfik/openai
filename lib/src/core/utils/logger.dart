@@ -45,7 +45,7 @@ abstract final class OpenAILogger {
       log("api key is set but not valid");
     }
 
-    log("API key is set to ${isAzureOpenAI ? 'Azure' : ''} OpenAI");
+    log("API key is set to ${isAzureOpenAI ? 'Azure ' : ''}OpenAI");
   }
 
   /// Logs that an azure api key is being set, if the logger is active.
