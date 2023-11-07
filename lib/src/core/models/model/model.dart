@@ -1,6 +1,4 @@
-import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import 'sub_models/permission.dart';
 
 export 'sub_models/permission.dart';
 
@@ -16,13 +14,12 @@ final class OpenAIModelModel {
   final List<OpenAIModelModelPermission>? permission;
 
   @override
-  int get hashCode => id.hashCode ^ ownedBy.hashCode ^ permission.hashCode;
+  int get hashCode => id.hashCode ^ ownedBy.hashCode;
 
   /// This class is used to represent an OpenAI model.
   const OpenAIModelModel({
     required this.id,
     required this.ownedBy,
-    required this.permission,
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModelModel] object.
@@ -37,12 +34,12 @@ final class OpenAIModelModel {
       id: json['id'] as String,
       ownedBy: json['owned_by'] as String,
       permission: permissions,
+
     );
   }
 
   @override
-  String toString() =>
-      'OpenAIModelModel(id: $id, ownedBy: $ownedBy, permission: $permission)';
+  String toString() => 'OpenAIModelModel(id: $id, ownedBy: $ownedBy)';
 
   @override
   bool operator ==(covariant OpenAIModelModel other) {
@@ -51,5 +48,5 @@ final class OpenAIModelModel {
 
     return other.id == id &&
         other.ownedBy == ownedBy && listEquals(other.permission, permission);
-  }
+  }  
 }
