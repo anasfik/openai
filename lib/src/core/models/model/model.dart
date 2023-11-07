@@ -1,8 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import 'sub_models/permission.dart';
 
-export 'sub_models/permission.dart';
+import 'sub_models/permission.dart';
 
 @immutable
 final class OpenAIModelModel {
@@ -13,10 +12,10 @@ final class OpenAIModelModel {
   final String ownedBy;
 
   /// The permissions of the model.
-  final List<OpenAIModelModelPermission> permission;
+  final List<OpenAIModelModelPermission>? permission;
 
   @override
-  int get hashCode => id.hashCode ^ ownedBy.hashCode ^ permission.hashCode;
+  int get hashCode => id.hashCode ^ ownedBy.hashCode;
 
   /// This class is used to represent an OpenAI model.
   const OpenAIModelModel({
@@ -27,19 +26,24 @@ final class OpenAIModelModel {
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModelModel] object.
   factory OpenAIModelModel.fromMap(Map<String, dynamic> json) {
+    // Perform a null check, and if 'permission' is null, use an empty list or null.
+    final permissionJson = json['permission'] as List?;
+    final permissions = permissionJson != null
+        ? permissionJson
+            .map((e) =>
+                OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>))
+            .toList()
+        : null; // Alternatively, use<OpenAIModelModelPermission>[] instead of null, if you want an empty list.
+
     return OpenAIModelModel(
-      id: json['id'],
-      ownedBy: json['owned_by'],
-      permission: (json['permission'] as List)
-          .map((e) =>
-              OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>))
-          .toList(),
+      id: json['id'] as String,
+      ownedBy: json['owned_by'] as String,
+      permission: permissions,
     );
   }
 
   @override
-  String toString() =>
-      'OpenAIModelModel(id: $id, ownedBy: $ownedBy, permission: $permission)';
+  String toString() => 'OpenAIModelModel(id: $id, ownedBy: $ownedBy)';
 
   @override
   bool operator ==(covariant OpenAIModelModel other) {
