@@ -11,3 +11,9 @@ extension StringExtension on String {
     }
   }
 }
+
+extension DateTimeExt on DateTime {
+  String toAzureAPIVersionString() {
+    return "${year}-${month}-${day}";
+  }
+}

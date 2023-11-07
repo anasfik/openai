@@ -7,10 +7,18 @@ import 'package:dart_openai/src/core/utils/logger.dart';
 @immutable
 @internal
 abstract class HeadersBuilder {
+  /// This is used to check if the Azure API key is set or not.
+  static bool isAzureOpenAI = false;
+
   /// {@template headers_builder_api_key}
   /// This is used to store the API key if it is set.
   /// {@endtemplate}
   static String? _apiKey;
+
+  /// {@template headers_builder_azure_api_key}
+  /// This is used to store the Azure API key if it is set.
+  /// {@endtemplate}
+  static String? _azureApiKey;
 
   /// {@template headers_builder_organization}
   /// This is used to store the organization id if it is set.
@@ -39,8 +47,13 @@ abstract class HeadersBuilder {
 
   @internal
   static set apiKey(String? apiKey) {
-    _apiKey = apiKey;
-    OpenAILogger.logAPIKey(_apiKey);
+    if (isAzureOpenAI) {
+      _azureApiKey = apiKey;
+      OpenAILogger.logAzureAPIKey(apiKey);
+    } else {
+      _apiKey = apiKey;
+      OpenAILogger.logAPIKey(_apiKey);
+    }
   }
 
   /// {@macro headers_builder}
@@ -60,11 +73,26 @@ abstract class HeadersBuilder {
       """
       You must set the API key before making building any headers for a request.""",
     );
+
+    final authorizationHeaders = <String, String>{};
+
+    if (isAzureOpenAI) {
+      assert(
+        _azureApiKey != null,
+        """
+        You must set the Azure API key before making building any headers for a request.""",
+      );
+
+      authorizationHeaders["api-key"] = apiKey!;
+    } else {
+      authorizationHeaders["Authorization"] = "Bearer $apiKey";
+    }
+
     headers = {
       ...headers,
       ..._additionalHeadersToRequests,
       if (isOrganizationSet) 'OpenAI-Organization': organization!,
-      "Authorization": "Bearer $apiKey",
+      ...authorizationHeaders,
     };
 
     return headers;

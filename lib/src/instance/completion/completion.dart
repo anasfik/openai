@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 /// {@endtemplate}
 @immutable
 @protected
-interface class OpenAICompletion implements OpenAICompletionBase {
+base class OpenAICompletion implements OpenAICompletionBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.completion;
 

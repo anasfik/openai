@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../constants/config.dart';
+import 'headers.dart';
 
 /// This class is responsible for  building the API url for all the requests endpoints
 @immutable
@@ -14,21 +15,29 @@ abstract class BaseApiUrlBuilder {
   /// if a [query] is provided, it will be added to the url as well.
   @internal
   static String build(String endpoint, [String? id, String? query]) {
-    final baseUrl = OpenAIConfig.baseUrl;
-    final version = OpenAIConfig.version;
-    final usedEndpoint = _handleEndpointsStarting(endpoint);
+    if (HeadersBuilder.isAzureOpenAI) {
+      final baseUrl = AzureOpenAIConfig.buildUrlForResource(
+        resourceEndpoint: endpoint,
+      );
 
-    String apiLink = "$baseUrl";
-    apiLink += "/$version";
-    apiLink += "$usedEndpoint";
+      return baseUrl;
+    } else {
+      final baseUrl = OpenAIConfig.baseUrl;
+      final version = OpenAIConfig.version;
+      final usedEndpoint = _handleEndpointsStarting(endpoint);
 
-    if (id != null) {
-      apiLink += "/$id";
-    } else if (query != null) {
-      apiLink += "?$query";
+      String apiLink = "$baseUrl";
+      apiLink += "/$version";
+      apiLink += "$usedEndpoint";
+
+      if (id != null) {
+        apiLink += "/$id";
+      } else if (query != null) {
+        apiLink += "?$query";
+      }
+
+      return apiLink;
     }
-
-    return apiLink;
   }
 
   static String _handleEndpointsStarting(String endpoint) {
