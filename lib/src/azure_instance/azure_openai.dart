@@ -12,12 +12,12 @@ class AzureOpenAI extends OpenAIClientBase {
   static final AzureOpenAI _instance = AzureOpenAI._();
 
   /// The API key used to authenticate the requests.
-  static String? _internalApiKey;
+  // static String? _internalApiKey;
 
   /// The singleton instance of [AzureOpenAI], make sure to call the [AzureOpenAI.initialize] method before accessing [instance], otherwise it will throw an [Exception].
   /// A [MissingApiKeyException] will be thrown, if the API key is not set.
   static AzureOpenAI get instance {
-    if (_internalApiKey == null) {
+    if (HeadersBuilder.apiKey == null) {
       throw MissingApiKeyException("""
       You must set the api key before accessing the instance of this class.
       Example:
@@ -86,7 +86,6 @@ class AzureOpenAI extends OpenAIClientBase {
     HeadersBuilder.isAzureOpenAI = true;
 
     HeadersBuilder.apiKey = apiKey;
-    _internalApiKey = apiKey;
   }
 
   static void configureRestAPI({

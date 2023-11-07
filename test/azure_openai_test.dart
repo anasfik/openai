@@ -13,8 +13,8 @@ void main() {
       }
     });
     test('with setting a key', () {
-      // AzureOpenAI.apiKey = "YOUR API KEY HERE";
-      AzureOpenAI.apiKey = azureApiKey;
+      AzureOpenAI.apiKey = "YOUR API KEY HERE";
+      // AzureOpenAI.apiKey = azureApiKey;
 
       expect(AzureOpenAI.instance, isA<AzureOpenAI>());
     });
@@ -30,6 +30,21 @@ void main() {
         AzureOpenAI.templateUrl,
         "https://your_resource_name.openai.azure.com/openai/deployments/your_deployment_name/THIS_IS_A_PLACEHOLDER_FOR_ENDPOINTS?api-version=2023-06-01",
       );
+    });
+  });
+
+  //! Testing only one method from AzureOpenAI class is enough because all its methods rely on the original OpenAI class.
+
+  group('completion (Read code comment above)', () {
+    test('create', () async {
+      AzureOpenAI.apiKey = azureApiKey;
+
+      final response = await AzureOpenAI.instance.completion.create(
+        prompt: "Hello, my name is",
+        maxTokens: 5,
+      );
+
+      expect(response, isA<OpenAICompletionModel>());
     });
   });
 }
