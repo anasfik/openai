@@ -24,6 +24,8 @@ abstract class CreateInterface {
   Stream<OpenAIStreamChatCompletionModel> createStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
+    List<OpenAIFunctionModel>? functions,
+    FunctionCall? functionCall,
     double? temperature,
     double? topP,
     int? n,
@@ -35,4 +37,25 @@ abstract class CreateInterface {
     String? user,
     http.Client? client,
   });
+
+
+  Stream<OpenAIStreamChatCompletionModel> createRemoteFunctionStream({
+    required String model,
+    required List<OpenAIChatCompletionChoiceMessageModel> messages,
+    List<dynamic>? functions,
+    FunctionCall? functionCall,
+    double? temperature,
+    double? topP,
+    int? n,
+    stop,
+    int? maxTokens,
+    double? presencePenalty,
+    double? frequencyPenalty,
+    Map<String, dynamic>? logitBias,
+    String? user,
+    http.Client? client,
+  });
+
+
+
 }
