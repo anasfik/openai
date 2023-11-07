@@ -27,7 +27,7 @@ final class OpenAIEmbeddingsDataModel {
     return OpenAIEmbeddingsDataModel(
       embeddings: List<double>.from(
         (map['embedding'] as List).map(
-          (e) => e as double,
+          (e) => e is double ? e : (e as num).toDouble(),
         ),
       ),
       index: map['index'] as int,
