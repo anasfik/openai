@@ -16,7 +16,7 @@ void main() async {
   print(AzureOpenAI.templateUrl);
 
   // Create chat completion.
-  final chatCompletion = await AzureOpenAI.instance.chat.createCompletion(
+  final chatCompletion = await AzureOpenAI.instance.chat.create(
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
         role: OpenAIChatMessageRole.user,

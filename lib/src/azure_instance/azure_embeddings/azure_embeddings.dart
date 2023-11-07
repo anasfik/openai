@@ -1,12 +1,11 @@
 import '../../../dart_openai.dart';
-import '../../instance/embedding/embedding.dart';
 
-base class AzureOpenAIEmbedding extends OpenAIEmbedding {
+base class AzureOpenAIEmbedding {
   Future<OpenAIEmbeddingsModel> get({
     required input,
     String? user,
   }) {
-    return super.create(
+    return OpenAI.instance.embedding.create(
       model: null,
       input: input,
       user: user,

@@ -1,8 +1,7 @@
 import '../../../dart_openai.dart';
-import '../../instance/chat/chat.dart';
 
-base class AzureOpenAIChat extends OpenAIChat {
-  Future<OpenAIChatCompletionModel> createCompletion({
+base class AzureOpenAIChat {
+  Future<OpenAIChatCompletionModel> create({
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
     List<OpenAIFunctionModel>? functions,
     FunctionCall? functionCall,
@@ -15,7 +14,7 @@ base class AzureOpenAIChat extends OpenAIChat {
     Map<String, dynamic>? logitBias,
     String? user,
   }) {
-    return super.create(
+    return OpenAI.instance.chat.create(
       model: null,
       messages: messages,
       frequencyPenalty: frequencyPenalty,
@@ -31,7 +30,7 @@ base class AzureOpenAIChat extends OpenAIChat {
     );
   }
 
-  Stream<OpenAIStreamChatCompletionModel> createStreamCompletion({
+  Stream<OpenAIStreamChatCompletionModel> createStream({
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
     List<OpenAIFunctionModel>? functions,
     FunctionCall? functionCall,
@@ -45,7 +44,7 @@ base class AzureOpenAIChat extends OpenAIChat {
     Map<String, dynamic>? logitBias,
     String? user,
   }) {
-    return super.createStream(
+    return OpenAI.instance.chat.createStream(
       model: null,
       messages: messages,
       frequencyPenalty: frequencyPenalty,

@@ -61,7 +61,7 @@ base class OpenAIEmbedding implements OpenAIEmbeddingBase {
       },
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
-        "model": model,
+        if (model != null) "model": model,
         if (input != null) "input": input,
         if (user != null) "user": user,
       },

@@ -1,5 +1,6 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
+import 'package:meta/meta.dart';
 
 import '../../core/base/chat/chat.dart';
 import '../../core/constants/strings.dart';
@@ -85,7 +86,7 @@ base class OpenAIChat implements OpenAIChatBase {
     return await OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
-        "model": model,
+        if (model != null) "model": model,
         "messages": messages.map((message) => message.toMap()).toList(),
         if (functions != null)
           "functions": functions
@@ -176,7 +177,7 @@ base class OpenAIChat implements OpenAIChatBase {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
-        "model": model,
+        if (model != null) "model": model,
         "stream": true,
         "messages": messages.map((message) => message.toMap()).toList(),
         if (functions != null)
