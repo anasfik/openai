@@ -1,6 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
-export 'sub_models/permission.dart';
+import 'sub_models/permission.dart';
 
 @immutable
 final class OpenAIModelModel {
@@ -20,6 +21,7 @@ final class OpenAIModelModel {
   const OpenAIModelModel({
     required this.id,
     required this.ownedBy,
+    required this.permission,
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModelModel] object.
@@ -27,14 +29,16 @@ final class OpenAIModelModel {
     // Perform a null check, and if 'permission' is null, use an empty list or null.
     final permissionJson = json['permission'] as List?;
     final permissions = permissionJson != null
-        ? permissionJson.map((e) => OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>)).toList()
+        ? permissionJson
+            .map((e) =>
+                OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>))
+            .toList()
         : null; // Alternatively, use<OpenAIModelModelPermission>[] instead of null, if you want an empty list.
 
     return OpenAIModelModel(
       id: json['id'] as String,
       ownedBy: json['owned_by'] as String,
       permission: permissions,
-
     );
   }
 
@@ -47,6 +51,7 @@ final class OpenAIModelModel {
     final listEquals = const DeepCollectionEquality().equals;
 
     return other.id == id &&
-        other.ownedBy == ownedBy && listEquals(other.permission, permission);
-  }  
+        other.ownedBy == ownedBy &&
+        listEquals(other.permission, permission);
+  }
 }
