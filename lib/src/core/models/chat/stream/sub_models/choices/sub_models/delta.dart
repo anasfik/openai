@@ -1,4 +1,3 @@
-
 import '../../../../../functions/functions.dart';
 
 /// {@template openai_stream_chat_completion_choice_delta_model}
@@ -22,9 +21,9 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
   @override
   int get hashCode {
     return role.hashCode ^
-    content.hashCode ^
-    functionCall.hashCode ^
-    functionName.hashCode;
+        content.hashCode ^
+        functionCall.hashCode ^
+        functionName.hashCode;
   }
 
   /// {@macro openai_chat_completion_choice_message_model}
@@ -37,10 +36,10 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceMessageModel] object.
   factory OpenAIStreamChatCompletionChoiceDeltaModel.fromMap(
-      Map<String, dynamic> json,
-      ) {
+    Map<String, dynamic> json,
+  ) {
     return OpenAIStreamChatCompletionChoiceDeltaModel(
-      role:  json['role'],
+      role: json['role'],
       content: json['content'] ?? '',
       functionCall: json['function_call'] != null
           ? StreamFunctionCallResponse.fromMap(json['function_call'])
