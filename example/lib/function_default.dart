@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:dart_openai/dart_openai.dart';
+import 'package:example/env/env.dart';
 
 Future<void> main() async {
+  OpenAI.apiKey = Env.apiKey;
+
   final function = OpenAIFunctionModel.withParameters(
     name: "getCurrentWeather",
     description: "Get the current weather in a given location",

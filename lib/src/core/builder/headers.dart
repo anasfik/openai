@@ -15,11 +15,6 @@ abstract class HeadersBuilder {
   /// {@endtemplate}
   static String? _apiKey;
 
-  /// {@template headers_builder_azure_api_key}
-  /// This is used to store the Azure API key if it is set.
-  /// {@endtemplate}
-  static String? _azureApiKey;
-
   /// {@template headers_builder_organization}
   /// This is used to store the organization id if it is set.
   /// {@endtemplate}
@@ -48,8 +43,8 @@ abstract class HeadersBuilder {
   @internal
   static set apiKey(String? apiKey) {
     if (isAzureOpenAI) {
-      _azureApiKey = apiKey;
-      OpenAILogger.logAzureAPIKey(apiKey);
+      _apiKey = apiKey;
+      OpenAILogger.logAzureAPIKey(_apiKey);
     } else {
       _apiKey = apiKey;
       OpenAILogger.logAPIKey(_apiKey);
@@ -68,23 +63,22 @@ abstract class HeadersBuilder {
       'Content-Type': 'application/json',
     };
 
-    assert(
-      apiKey != null,
-      """
-      You must set the API key before making building any headers for a request.""",
-    );
-
     final authorizationHeaders = <String, String>{};
 
     if (isAzureOpenAI) {
       assert(
-        _azureApiKey != null,
+        _apiKey != null,
         """
         You must set the Azure API key before making building any headers for a request.""",
       );
 
       authorizationHeaders["api-key"] = apiKey!;
     } else {
+      assert(
+        apiKey != null,
+        """
+      You must set the API key before making building any headers for a request.""",
+      );
       authorizationHeaders["Authorization"] = "Bearer $apiKey";
     }
 

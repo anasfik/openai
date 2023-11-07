@@ -44,14 +44,14 @@ abstract class AzureOpenAIConfig {
 
     final apiVersionAsString = apiVersion!.toAzureAPIVersionString();
 
-    dynamic ensuredEndpoint = resourceEndpoint.startsWith("/")
-        ? resourceEndpoint
-        : "/$resourceEndpoint";
-
-    ensuredEndpoint = ensuredEndpoint.split("");
+    dynamic ensuredEndpoint = resourceEndpoint.split("");
 
     if (ensuredEndpoint.last == "/") {
       ensuredEndpoint.removeLast();
+    }
+
+    if (ensuredEndpoint.first == "/") {
+      ensuredEndpoint.removeAt(0);
     }
 
     ensuredEndpoint = ensuredEndpoint.join("");

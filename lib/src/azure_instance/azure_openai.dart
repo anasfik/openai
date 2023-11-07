@@ -3,7 +3,9 @@ import '../core/builder/headers.dart';
 import '../core/constants/config.dart';
 import '../core/exceptions/export.dart';
 import '../core/utils/logger.dart';
+import 'azure_chat/azure_chat.dart';
 import 'azure_completion/azure_completion.dart';
+import 'azure_embeddings/azure_embeddings.dart';
 
 class AzureOpenAI extends OpenAIClientBase {
   /// The singleton instance of [AzureOpenAI].
@@ -26,21 +28,24 @@ class AzureOpenAI extends OpenAIClientBase {
     return _instance;
   }
 
+  /// The [AzureOpenAICompletion] instance, used to access the completion endpoints.
+  AzureOpenAICompletion get completion => AzureOpenAICompletion();
+
+  /// The [AzureOpenAIEmbedding] instance, used to access the embeddings endpoints.
+  AzureOpenAIEmbedding get embedding => AzureOpenAIEmbedding();
+
+  /// The [AzureOpenAIChat] instance, used to access the chat endpoints.
+  AzureOpenAIChat get chat => AzureOpenAIChat();
+
   // /// The [AzureOpenAIModel] instance, used to access the model endpoints.
   // /// Please, refer to the Models page from the official AzureOpenAI documentation website in order to know what models are available and what's the use case of every model.
   // AzureOpenAIModel get model => AzureOpenAIModel();
 
-  /// The [AzureOpenAICompletion] instance, used to access the completion endpoints.
-  AzureOpenAICompletion get completion => AzureOpenAICompletion();
-
-  // /// The [AzureOpenAIEdits] instance, used to access the edits endpoints.
+  /// The [AzureOpenAIEdits] instance, used to access the edits endpoints.
   // AzureOpenAIEdits get edit => AzureOpenAIEdits();
 
   // /// The [AzureOpenAIImages] instance, used to access the images endpoints.
   // AzureOpenAIImages get image => AzureOpenAIImages();
-
-  // /// The [AzureOpenAIEmbedding] instance, used to access the embeddings endpoints.
-  // AzureOpenAIEmbedding get embedding => AzureOpenAIEmbedding();
 
   // /// The [AzureOpenAIFiles] instance, used to access the files endpoints.
   // AzureOpenAIFiles get file => AzureOpenAIFiles();
@@ -50,9 +55,6 @@ class AzureOpenAI extends OpenAIClientBase {
 
   // /// The [AzureOpenAIModeration] instance, used to access the moderation endpoints.
   // AzureOpenAIModeration get moderation => AzureOpenAIModeration();
-
-  // /// The [AzureOpenAIChat] instance, used to access the chat endpoints.
-  // AzureOpenAIChat get chat => AzureOpenAIChat();
 
   // /// The [AzureOpenAIAudio] instance, used to access the audio endpoints.
   // AzureOpenAIAudio get audio => AzureOpenAIAudio();
@@ -81,6 +83,8 @@ class AzureOpenAI extends OpenAIClientBase {
   /// AzureOpenAI.apiKey = "YOUR_API_KEY";
   /// ```
   static set apiKey(String apiKey) {
+    HeadersBuilder.isAzureOpenAI = true;
+
     HeadersBuilder.apiKey = apiKey;
     _internalApiKey = apiKey;
   }
