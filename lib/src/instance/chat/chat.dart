@@ -224,8 +224,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         "model": model,
         "stream": true,
         "messages": messages.map((message) => message.toMap()).toList(),
-        if (functions != null)
-          "functions": functions,
+        if (functions != null) "functions": functions,
         if (functionCall != null) "function_call": functionCall.value,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
@@ -243,6 +242,4 @@ interface class OpenAIChat implements OpenAIChatBase {
       client: client,
     );
   }
-
-
 }

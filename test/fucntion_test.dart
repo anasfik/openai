@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:dart_openai/dart_openai.dart';
 
 Future<void> main() async {
-
   final function = OpenAIFunctionModel.withParameters(
     name: "getCurrentWeather",
     description: "Get the current weather in a given location",
@@ -45,8 +44,6 @@ Future<void> main() async {
   await subscription.asFuture();
 
   await checkStreamMessage(streamResponse: chatRes1);
-
-
 }
 
 Weather getCurrentWeather({
@@ -60,23 +57,26 @@ Weather getCurrentWeather({
   );
 }
 
-
-checkStreamMessage({required Stream<OpenAIStreamChatCompletionModel> streamResponse})async {
-  Stream<OpenAIStreamChatCompletionModel> stream = streamResponse.asBroadcastStream();
+checkStreamMessage(
+    {required Stream<OpenAIStreamChatCompletionModel> streamResponse}) async {
+  Stream<OpenAIStreamChatCompletionModel> stream =
+      streamResponse.asBroadcastStream();
   OpenAIStreamChatCompletionModel? first = await stream.first;
   OpenAIStreamChatCompletionChoiceDeltaModel delta = first.choices.first.delta;
   StreamFunctionCallResponse? funcCall = delta.functionCall;
 
   if (funcCall == null) {
-    final StreamSubscription<OpenAIStreamChatCompletionModel> subscription = stream.listen((event) {
+    final StreamSubscription<OpenAIStreamChatCompletionModel> subscription =
+        stream.listen((event) {
       print(event.choices.first.delta.content);
     });
     await subscription.asFuture();
-  }else{
+  } else {
     final functionName = funcCall.name ?? "";
     String argsJson = funcCall.arguments ?? "";
 
-    final StreamSubscription<OpenAIStreamChatCompletionModel> subscription = stream.listen((event) {
+    final StreamSubscription<OpenAIStreamChatCompletionModel> subscription =
+        stream.listen((event) {
       final delta = event.choices.first.delta;
       final funcCall = delta.functionCall;
       String arg = funcCall?.arguments ?? "";
@@ -94,11 +94,13 @@ checkStreamMessage({required Stream<OpenAIStreamChatCompletionModel> streamRespo
     }
     print("$functionName:$argsJson:::::$arguments");
 
-    Map<String,dynamic> functionResponse = streamCallFunction(functionName, arguments);
+    Map<String, dynamic> functionResponse =
+        streamCallFunction(functionName, arguments);
 
     final functionCallMessage = OpenAIChatCompletionChoiceMessageModel(
       role: OpenAIChatMessageRole.assistant,
-      functionCall: FunctionCallResponse.fromMap({"name":functionName, "arguments": argsJson}),
+      functionCall: FunctionCallResponse.fromMap(
+          {"name": functionName, "arguments": argsJson}),
       content: '',
     );
 
@@ -117,21 +119,20 @@ checkStreamMessage({required Stream<OpenAIStreamChatCompletionModel> streamRespo
     );
     await checkStreamMessage(streamResponse: realUserStream);
   }
-
 }
 
-Map<String, dynamic> streamCallFunction(String functionName, Map<String, dynamic> arguments){
-   if(functionName == "getCurrentWeather"){
-     final weather = getCurrentWeather(
-       location: arguments?["location"],
-       unit: arguments?["unit"],
-     );
-     return  weather.toMap();
-   }else{
-     return {};
-   }
+Map<String, dynamic> streamCallFunction(
+    String functionName, Map<String, dynamic> arguments) {
+  if (functionName == "getCurrentWeather") {
+    final weather = getCurrentWeather(
+      location: arguments["location"],
+      unit: arguments["unit"],
+    );
+    return weather.toMap();
+  } else {
+    return {};
+  }
 }
-
 
 class Weather {
   final int temperature;

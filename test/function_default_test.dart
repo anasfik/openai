@@ -2,10 +2,7 @@ import 'dart:convert';
 
 import 'package:dart_openai/dart_openai.dart';
 
-
 Future<void> main() async {
-
-
   final function = OpenAIFunctionModel.withParameters(
     name: "getCurrentWeather",
     description: "Get the current weather in a given location",

@@ -38,7 +38,6 @@ abstract class CreateInterface {
     http.Client? client,
   });
 
-
   Stream<OpenAIStreamChatCompletionModel> createRemoteFunctionStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
@@ -55,7 +54,4 @@ abstract class CreateInterface {
     String? user,
     http.Client? client,
   });
-
-
-
 }
