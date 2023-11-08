@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.2
+
+- Disabled a print method that was used for debugging purposes.
+
 ## 4.1.1
 
 - Fixed the non applied `n` field in image variation method.
