@@ -31,6 +31,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
 
   /// This function creates an image based on a given prompt.
   ///
+  /// [model] is the model to use for generating the image.
+  ///
   ///
   /// [prompt] is a text description of the desired image(s). The maximum length is 1000 characters.
   ///
@@ -38,13 +40,14 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// [n] is the number of images to generate. Must be between 1 and 10.
   ///
   ///
-  /// [size] is the size of the generated images. Must be one of :
-  /// dall-e-2 model only:
+  /// [size] is the size of the generated images, each OpenAI model has a different set of available/allowed sizes:
+  ///
+  /// `dall-e-2` model only:
   /// - `OpenAIImageSize.size256`
   /// - `OpenAIImageSize.size512`
-  /// dall-e-2 or dall-e-3 model:
+  /// `dall-e-2` or `dall-e-3` model:
   /// - `OpenAIImageSize.size1024`
-  /// dall-e-3 model only:
+  /// `dall-e-3` model only:
   /// - `OpenAIImageSize.size1792Horizontal`
   /// - `OpenAIImageSize.size1792Vertical`
   ///
@@ -52,11 +55,11 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// - `OpenAIImageResponseFormat.url`
   /// - `OpenAIImageResponseFormat.b64Json`
   ///
-  /// [style] is the style of the generated images and is only available for the dall-e-3 model. Must be one of:
+  /// [style] is the style of the generated images and is only available for the `dall-e-3` model. Must be one of:
   /// - `OpenAIImageStyle.vivid`
   /// - `OpenAIImageStyle.natural`
   ///
-  /// [quality] is the quality of the generated images and is only available for the dall-e-3 model. Must be one of:
+  /// [quality] is the quality of the generated images and is only available for the `dall-e-3` model. Must be one of:
   /// - `OpenAIImageQuality.hd`
   ///
   /// [user] is the user ID to associate with the request. This is used to prevent abuse of the API.
@@ -73,8 +76,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///```
   @override
   Future<OpenAIImageModel> create({
-    required String prompt,
     String? model,
+    required String prompt,
     int? n,
     OpenAIImageSize? size,
     OpenAIImageStyle? style,
@@ -211,7 +214,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }) async {
     final String variations = "/variations";
 
-    return await OpenAINetworkingClient.imageVariationForm<OpenAIImageVariationModel>(
+    return await OpenAINetworkingClient.imageVariationForm<
+        OpenAIImageVariationModel>(
       image: image,
       body: {
         if (n != null) "n": n.toString(),

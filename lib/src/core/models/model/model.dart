@@ -13,7 +13,7 @@ final class OpenAIModelModel {
   final String ownedBy;
 
   /// The permissions of the model.
-  final List<OpenAIModelModelPermission> permission;
+  final List<OpenAIModelModelPermission>? permission;
 
   @override
   int get hashCode => id.hashCode ^ ownedBy.hashCode ^ permission.hashCode;
@@ -30,10 +30,12 @@ final class OpenAIModelModel {
     return OpenAIModelModel(
       id: json['id'],
       ownedBy: json['owned_by'],
-      permission: (json['permission'] as List)
-          .map((e) =>
-              OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>))
-          .toList(),
+      permission: json['permission'] != null
+          ? (json['permission'] as List)
+              .map((e) =>
+                  OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>))
+              .toList()
+          : null,
     );
   }
 
