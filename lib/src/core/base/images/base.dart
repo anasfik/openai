@@ -6,11 +6,7 @@ import 'interfaces/edit.dart';
 import 'interfaces/variations.dart';
 
 abstract class OpenAIImagesBase
-    implements
-        EndpointInterface,
-        CreateInterface,
-        EditInterface,
-        VariationInterface {}
+    implements EndpointInterface, CreateInterface, EditInterface, VariationInterface {}
 
 extension SizeToStingExtension on OpenAIImageSize {
   String get value {
@@ -21,6 +17,30 @@ extension SizeToStingExtension on OpenAIImageSize {
         return "512x512";
       case OpenAIImageSize.size1024:
         return "1024x1024";
+      case OpenAIImageSize.size1792Horizontal:
+        return "1792x1024";
+      case OpenAIImageSize.size1792Vertical:
+        return "1024x1792";
+    }
+  }
+}
+
+extension StyleToStingExtension on OpenAIImageStyle {
+  String get value {
+    switch (this) {
+      case OpenAIImageStyle.vivid:
+        return "vivid";
+      case OpenAIImageStyle.natural:
+        return "natural";
+    }
+  }
+}
+
+extension QualityToStingExtension on OpenAIImageQuality {
+  String get value {
+    switch (this) {
+      case OpenAIImageQuality.hd:
+        return "hd";
     }
   }
 }

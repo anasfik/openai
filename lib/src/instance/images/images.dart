@@ -31,6 +31,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
 
   /// This function creates an image based on a given prompt.
   ///
+  /// [model] is the model to use for generating the image.
+  ///
   ///
   /// [prompt] is a text description of the desired image(s). The maximum length is 1000 characters.
   ///
@@ -38,16 +40,27 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// [n] is the number of images to generate. Must be between 1 and 10.
   ///
   ///
-  /// [size] is the size of the generated images. Must be one of :
+  /// [size] is the size of the generated images, each OpenAI model has a different set of available/allowed sizes:
+  ///
+  /// `dall-e-2` model only:
   /// - `OpenAIImageSize.size256`
   /// - `OpenAIImageSize.size512`
+  /// `dall-e-2` or `dall-e-3` model:
   /// - `OpenAIImageSize.size1024`
-  ///
+  /// `dall-e-3` model only:
+  /// - `OpenAIImageSize.size1792Horizontal`
+  /// - `OpenAIImageSize.size1792Vertical`
   ///
   /// [responseFormat] is the format in which the generated images are returned. Must be one of :
   /// - `OpenAIImageResponseFormat.url`
   /// - `OpenAIImageResponseFormat.b64Json`
   ///
+  /// [style] is the style of the generated images and is only available for the `dall-e-3` model. Must be one of:
+  /// - `OpenAIImageStyle.vivid`
+  /// - `OpenAIImageStyle.natural`
+  ///
+  /// [quality] is the quality of the generated images and is only available for the `dall-e-3` model. Must be one of:
+  /// - `OpenAIImageQuality.hd`
   ///
   /// [user] is the user ID to associate with the request. This is used to prevent abuse of the API.
   ///
@@ -63,9 +76,12 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///```
   @override
   Future<OpenAIImageModel> create({
+    String? model,
     required String prompt,
     int? n,
     OpenAIImageSize? size,
+    OpenAIImageStyle? style,
+    OpenAIImageQuality? quality,
     OpenAIImageResponseFormat? responseFormat,
     String? user,
     http.Client? client,
@@ -76,9 +92,12 @@ interface class OpenAIImages implements OpenAIImagesBase {
       to: BaseApiUrlBuilder.build(endpoint + generations),
       onSuccess: (json) => OpenAIImageModel.fromMap(json),
       body: {
+        if (model != null) "model": model,
         "prompt": prompt,
         if (n != null) "n": n,
         if (size != null) "size": size.value,
+        if (style != null) "style": style.value,
+        if (quality != null) "quality": quality.value,
         if (responseFormat != null) "response_format": responseFormat.value,
         if (user != null) "user": user,
       },
