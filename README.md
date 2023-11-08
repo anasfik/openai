@@ -17,7 +17,7 @@
 
 </br>
 
-<h3>Help this grow and get discovered by other devs with a ⭐ star.</h3>
+<h3>Help this grow and get discovered by people who might need it by starring it ⭐.</h3>
 
 </br>
 </br>
@@ -35,9 +35,13 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 </br>
 <i>OpenAI does not have any official Dart library.</I>
 
-### Note:
+### Thanks:
 
-Please note that this client SDK connects directly to [OpenAI APIs](https://platform.openai.com/docs/introduction/overview) using HTTP requests.
+Thanks to the contributors & sponsors of this project that it exists and is still maintained:
+- [Sponsors](https://github.com/sponsors/anasfik)
+- [Contributors](https://github.com/anasfik/openai/graphs/contributors)
+
+Consider helping this project you too.
 
 ## ✨ Key Features
 
