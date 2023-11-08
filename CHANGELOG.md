@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.1.1
+
+- Fixed the non applied `n` field in image variation method.
+- Exposed non-breaking `model` field for other image APIs methods.
+
 ## 4.1.0
 
 - Bugs & issues fixes.
