@@ -4,7 +4,7 @@ import "dart:io";
 import "package:dart_openai/src/core/utils/extensions.dart";
 // ignore: unused_import
 import "package:dart_openai/src/core/utils/http_client_web.dart"
-    if (dart.library.js) "package:dart_openai/src/core/utils/http_client_io.dart"
+    if (dart.library.js) "package:dart_openai/src/core/utils/http_client_web.dart"
     if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
 
 import 'package:dart_openai/dart_openai.dart';
