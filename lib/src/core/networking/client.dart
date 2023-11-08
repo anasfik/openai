@@ -280,8 +280,6 @@ abstract class OpenAINetworkingClient {
           String respondData = "";
           stream.where((event) => event.isNotEmpty).listen(
             (value) {
-              print(value);
-
               final data = value;
               respondData += data;
 
