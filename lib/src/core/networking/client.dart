@@ -278,7 +278,7 @@ abstract class OpenAINetworkingClient {
               .transform(openAIChatStreamLineSplitter);
 
           String respondData = "";
-          stream.listen(
+          stream.where((event) => event.isNotEmpty).listen(
             (value) {
               final data = value;
               respondData += data;
