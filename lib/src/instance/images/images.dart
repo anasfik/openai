@@ -39,15 +39,25 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///
   ///
   /// [size] is the size of the generated images. Must be one of :
+  /// dall-e-2 model only:
   /// - `OpenAIImageSize.size256`
   /// - `OpenAIImageSize.size512`
+  /// dall-e-2 or dall-e-3 model:
   /// - `OpenAIImageSize.size1024`
-  ///
+  /// dall-e-3 model only:
+  /// - `OpenAIImageSize.size1792Horizontal`
+  /// - `OpenAIImageSize.size1792Vertical`
   ///
   /// [responseFormat] is the format in which the generated images are returned. Must be one of :
   /// - `OpenAIImageResponseFormat.url`
   /// - `OpenAIImageResponseFormat.b64Json`
   ///
+  /// [style] is the style of the generated images and is only available for the dall-e-3 model. Must be one of:
+  /// - `OpenAIImageStyle.vivid`
+  /// - `OpenAIImageStyle.natural`
+  ///
+  /// [quality] is the quality of the generated images and is only available for the dall-e-3 model. Must be one of:
+  /// - `OpenAIImageQuality.hd`
   ///
   /// [user] is the user ID to associate with the request. This is used to prevent abuse of the API.
   ///
@@ -64,8 +74,11 @@ interface class OpenAIImages implements OpenAIImagesBase {
   @override
   Future<OpenAIImageModel> create({
     required String prompt,
+    String? model,
     int? n,
     OpenAIImageSize? size,
+    OpenAIImageStyle? style,
+    OpenAIImageQuality? quality,
     OpenAIImageResponseFormat? responseFormat,
     String? user,
     http.Client? client,
@@ -76,9 +89,12 @@ interface class OpenAIImages implements OpenAIImagesBase {
       to: BaseApiUrlBuilder.build(endpoint + generations),
       onSuccess: (json) => OpenAIImageModel.fromMap(json),
       body: {
+        if (model != null) "model": model,
         "prompt": prompt,
         if (n != null) "n": n,
         if (size != null) "size": size.value,
+        if (style != null) "style": style.value,
+        if (quality != null) "quality": quality.value,
         if (responseFormat != null) "response_format": responseFormat.value,
         if (user != null) "user": user,
       },
@@ -195,8 +211,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }) async {
     final String variations = "/variations";
 
-    return await OpenAINetworkingClient.imageVariationForm<
-        OpenAIImageVariationModel>(
+    return await OpenAINetworkingClient.imageVariationForm<OpenAIImageVariationModel>(
       image: image,
       body: {
         if (n != null) "n": n.toString(),
