@@ -107,6 +107,9 @@ interface class OpenAIImages implements OpenAIImagesBase {
 
   /// Creates an edited or extended image given an original image and a prompt.
   ///
+  /// [model] is the model to use for generating the image.
+  ///
+  ///
   /// [image] to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
   ///
   ///
@@ -146,6 +149,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///```
   @override
   Future<OpenAiImageEditModel> edit({
+    String? model,
     required File image,
     File? mask,
     required String prompt,
@@ -155,10 +159,12 @@ interface class OpenAIImages implements OpenAIImagesBase {
     String? user,
   }) async {
     final String edit = "/edits";
+
     return await OpenAINetworkingClient.imageEditForm<OpenAiImageEditModel>(
       image: image,
       mask: mask,
       body: {
+        if (model != null) "model": model,
         "prompt": prompt,
         if (n != null) "n": n.toString(),
         if (size != null) "size": size.value,
@@ -173,6 +179,9 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }
 
   /// Creates a variation of a given image.
+  ///
+  ///
+  /// [model] is the model to use for generating the image.
   ///
   ///
   /// [image] to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
@@ -206,6 +215,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// ```
   @override
   Future<OpenAIImageVariationModel> variation({
+    String? model,
     required File image,
     int? n,
     OpenAIImageSize? size,
@@ -218,7 +228,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
         OpenAIImageVariationModel>(
       image: image,
       body: {
-        if (n != null) "n": n,
+        if (model != null) "model": model,
+        if (n != null) "n": n.toString(),
         if (size != null) "size": size.value,
         if (responseFormat != null) "response_format": responseFormat.value,
         if (user != null) "user": user,

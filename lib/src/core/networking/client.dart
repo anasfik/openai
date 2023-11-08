@@ -280,6 +280,8 @@ abstract class OpenAINetworkingClient {
           String respondData = "";
           stream.where((event) => event.isNotEmpty).listen(
             (value) {
+              print(value);
+
               final data = value;
               respondData += data;
 
@@ -407,7 +409,7 @@ abstract class OpenAINetworkingClient {
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
     // ignore: avoid-unused-parameters
-    required Map<String, dynamic> body,
+    required Map<String, String> body,
     required File image,
   }) async {
     OpenAILogger.logStartRequest(to);
@@ -420,6 +422,7 @@ abstract class OpenAINetworkingClient {
 
     final imageFile = await http.MultipartFile.fromPath("image", image.path);
 
+    request.fields.addAll(body);
     request.files.add(imageFile);
 
     final http.StreamedResponse response = await request.send();
