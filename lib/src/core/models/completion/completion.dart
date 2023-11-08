@@ -55,7 +55,9 @@ final class OpenAICompletionModel {
       choices: (json['choices'] as List)
           .map((i) => OpenAICompletionModelChoice.fromMap(i))
           .toList(),
-      usage: OpenAICompletionModelUsage.fromMap(json['usage']),
+      usage: json['usage'] != null
+          ? OpenAICompletionModelUsage.fromMap(json['usage'])
+          : null,
     );
   }
 

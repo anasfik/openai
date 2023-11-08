@@ -1,7 +1,13 @@
+// ignore_for_file: avoid-passing-async-when-sync-expected
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as dev;
 import 'package:dart_openai/dart_openai.dart';
+import 'package:dart_openai/src/core/builder/headers.dart';
+import 'package:dart_openai/src/core/constants/strings.dart';
+import 'package:dart_openai/src/core/models/model/sub_models/permission.dart';
+import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -48,18 +54,49 @@ void main() async {
       // ! If you have a real organization, comment the following line.
       OpenAI.organization = null;
     });
+    test("Changing base URL", () {
+      final urlChange = "https://something.com";
+      OpenAI.baseUrl = urlChange;
+      expect(OpenAI.baseUrl, urlChange);
+
+      // ! this is to reset the base URL to the default one.
+      OpenAI.baseUrl = OpenAIStrings.defaultBaseUrl;
+    });
+    test("switching showing logs", () {
+      OpenAI.showLogs = true;
+      expect(OpenAILogger.isActive, isTrue);
+
+      OpenAI.showLogs = false;
+      expect(OpenAILogger.isActive, isFalse);
+    });
+
+    test("Add Extra headers to all requests", () {
+      OpenAI.includeHeaders({
+        "x-openai-test": "test",
+      });
+
+      expect(HeadersBuilder.build(), containsPair("x-openai-test", "test"));
+    });
   });
   group('models', () {
     test(
       'list models',
       () async {
-        final List<OpenAIModelModel> models =
-            await OpenAI.instance.model.list();
+        final models = await OpenAI.instance.model.list();
+
         expect(models, isA<List<OpenAIModelModel>>());
+
         if (models.isNotEmpty) {
           expect(models.first, isA<OpenAIModelModel>());
           expect(models.first.id, isNotNull);
           expect(models.first.id, isA<String>());
+
+          if (models.first.permission != null) {
+            expect(
+              models.first.permission,
+              isA<List<OpenAIModelModelPermission>>(),
+            );
+          }
 
           // trying to get the "text-davinci-003" model id.
           modelExampleId = models
@@ -74,10 +111,18 @@ void main() async {
         modelExampleId != null,
         "please set a model id that is not null, or let the previous test run first to get a model id example",
       );
-      final OpenAIModelModel model =
-          await OpenAI.instance.model.retrieve(modelExampleId!);
+      final model = await OpenAI.instance.model.retrieve(modelExampleId!);
+
       expect(model, isA<OpenAIModelModel>());
+
       expect(model.id, isNotNull);
+
+      if (model.permission != null) {
+        expect(
+          model.permission,
+          isA<List<OpenAIModelModelPermission>>(),
+        );
+      }
     });
   });
   group('completions', () {
@@ -95,11 +140,13 @@ void main() async {
         bestOf: 1,
         n: 1,
       );
+
       expect(completion, isA<OpenAICompletionModel>());
       expect(completion.choices.first, isA<OpenAICompletionModelChoice>());
       expect(completion.choices.first.text, isNotNull);
       expect(completion.choices.first.text, isA<String?>());
     });
+
     test('create with a stream', () {
       final Stream<OpenAIStreamCompletionModel> completion =
           OpenAI.instance.completion.createStream(
@@ -182,6 +229,7 @@ void main() async {
         );
 
         final funcCall = chatCompletion.choices.first.message.functionCall;
+
         expect(funcCall, isNotNull);
         expect(funcCall?.arguments?["to"], isNotNull);
         expect(funcCall?.arguments?["message"], isNotNull);

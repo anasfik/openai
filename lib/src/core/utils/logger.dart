@@ -11,6 +11,8 @@ abstract final class OpenAILogger {
   /// This represents the default value of the logger active state.
   static bool _isActive = true;
 
+  static bool get isActive => _isActive;
+
   /// Changes the logger active state.
   ///
   /// if true, the logger will log messages.
