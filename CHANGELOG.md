@@ -1,39 +1,50 @@
 # Changelog
+
+## 4.1.0
+
+- Bugs & issues fixes.
+- Followed up with more changes in the OpenAI API.
+- Added more documentation for the package.
+- Added more examples for the package.
+- Added more tests for the package.
+
 ## 4.0.0
- - Migrated internal packages to latest versions such as http.
- - Bug fixes to new functions API
- - Minor edits to docs, package members.
- 
+
+- Migrated internal packages to latest versions such as http.
+- Bug fixes to new functions API
+- Minor edits to docs, package members.
+
 ## 3.0.0
- - Added support for functions feature of the chat API.
- - Bugs fixes.  
+
+- Added support for functions feature of the chat API.
+- Bugs fixes.  
 
 ## 2.0.1
 
- - Formated unformatted files.
+- Formated unformatted files.
 
 ## 2.0.0
 
- - Exposing of custom thttp client for methods - Fixed issue related to streams that uses a custom http client
- 
- ## 1.9.93
+- Exposing of custom thttp client for methods- Fixed issue related to streams that uses a custom http client.
 
+## 1.9.93
 
- - Added custom HTTP client options for all the package APIs that requires one.
+- Added custom HTTP client options for all the package APIs that requires one.
+
 ## 1.9.92
 
- - exposed an external method for inclusing custom headers to the requests.
+- exposed an external method for inclusing custom headers to the requests.
+
+## 1.9.91
+
+- Fixed minor issue.
 
 ## 1.9.9
-
- - Fixed minor issue.
-
-## 1.9.9
-
 
 - More refatocration for the packages services.
 - Fixes some minor issues with the logging service.
 - Removed repeated constants, code.
+
 ## 1.9.8
 
 - Fixed the non catched error for stream functionality of chat completions and completions.
