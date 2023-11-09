@@ -43,7 +43,6 @@ void main() async {
     });
     test('with setting a key', () {
       OpenAI.apiKey = "YOUR API KEY HERE";
-      OpenAI.apiKey = "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";
 
       expect(OpenAI.instance, isA<OpenAI>());
     });
@@ -263,7 +262,7 @@ void main() async {
         expect(funcCall.arguments?["message"], isNotNull);
 
         sendEmail(
-          message: funcCall!.arguments?["message"],
+          message: funcCall.arguments?["message"],
           to: funcCall.arguments?["to"],
         );
       },

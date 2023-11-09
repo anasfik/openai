@@ -1,7 +1,5 @@
 import 'package:dart_openai/dart_openai.dart';
 
-import '../../../../../tool/function/stream_function_call_response.dart';
-import '../../../../../tool/tool.dart';
 import '../../../../sub_models/choices/sub_models/sub_models/tool_call.dart';
 
 /// {@template openai_stream_chat_completion_choice_delta_model}

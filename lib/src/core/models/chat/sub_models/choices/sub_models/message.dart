@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import '../../../../tool/tool.dart';
 import '../../../../image/enum.dart';
 import 'sub_models/tool_call.dart';
 
