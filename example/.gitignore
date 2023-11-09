@@ -10,3 +10,5 @@ build/
 *.mp3
 
 *.png
+
+speechOutput/

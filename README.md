@@ -49,6 +49,7 @@ Consider helping this project you too.
 - Authorize just once, use it anywhere and at any time in your application.
 - Developer-friendly.
 - `Stream` functionality for completions API & fine-tune events API.
+- Ready examples/snippets for almost everything implmented in the package at `/example` folder.
 
 ## 👑 Code Progress (100 %)
 
@@ -391,9 +392,26 @@ OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
 
 # Audio
 
+## Create Speech
+
+For creating a speech from a text, you can use the `createSpeech()` method directly by providing the required params:
+
+```dart
+final speech = await OpenAI.instance.audio.createSpeech(
+  model: "tts-1",
+  input: "Say my name is Anas",
+  voice: "nova",
+  responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
+  outputDirectory: await Directory("speechOutput").create(),
+  outputFileName: DateTime.now().microsecondsSinceEpoch.toString(),
+);
+```
+
+**Note: the `outputDirectory` and `outputFileName` are helpers for this package, you can use them to save the audio file to a specific directory with a specific name, with the file extension being extracted from the `responseFormat`. if you don't want to use them, you can just ignore them, and the audio file will be saved to the default directory of your app, with the `output` file name.**
+
 ## Create transcription
 
-for transcribing an audio `File`, you can use the `createTranscription()` method directly by providing the `file` property:
+For transcribing an audio `File`, you can use the `createTranscription()` method directly by providing the `file` property:
 
 ```dart
 OpenAIAudioModel transcription = OpenAI.instance.audio.createTranscription(

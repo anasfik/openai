@@ -118,4 +118,31 @@ interface class OpenAIAudio implements OpenAIAudioBase {
       },
     );
   }
+
+  @override
+  Future createSpeech({
+    required String model,
+    required String input,
+    required String voice,
+    OpenAIAudioSpeechResponseFormat? responseFormat,
+    double? speed,
+    String outputFileName = "output",
+    Directory? outputDirectory,
+  }) async {
+    return await OpenAINetworkingClient.postAndExpectFileResponse(
+      to: BaseApiUrlBuilder.build(endpoint + "/speech"),
+      body: {
+        "model": model,
+        "input": input,
+        "voice": voice,
+        if (responseFormat != null) "response_format": responseFormat.name,
+        if (speed != null) "speed": speed,
+      },
+      onFileResponse: (File res) {
+        return res;
+      },
+      outputFileName: outputFileName,
+      outputDirectory: outputDirectory,
+    );
+  }
 }

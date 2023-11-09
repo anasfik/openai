@@ -15,6 +15,7 @@ import "package:meta/meta.dart";
 
 import '../constants/strings.dart';
 import '../exceptions/request_failure.dart';
+import "../exceptions/unexpected.dart";
 
 /// Handling exceptions returned by OpenAI Stream API.
 final class _OpenAIChatStreamSink implements EventSink<String> {
@@ -189,6 +190,89 @@ abstract class OpenAINetworkingClient {
     });
 
     return controller.stream;
+  }
+
+  static Future<File> postAndExpectFileResponse({
+    required String to,
+    required File Function(File fileRes) onFileResponse,
+    required String outputFileName,
+    required Directory? outputDirectory,
+    Map<String, dynamic>? body,
+    http.Client? client,
+  }) async {
+    OpenAILogger.logStartRequest(to);
+
+    final uri = Uri.parse(to);
+
+    final headers = HeadersBuilder.build();
+
+    final handledBody = body != null ? jsonEncode(body) : null;
+
+    final response = client == null
+        ? await http.post(uri, headers: headers, body: handledBody)
+        : await client.post(uri, headers: headers, body: handledBody);
+
+    OpenAILogger.requestToWithStatusCode(to, response.statusCode);
+
+    OpenAILogger.startingTryCheckingForError();
+
+    final isJsonDecodedMap = tryDecodedToMap(response.body);
+
+    if (isJsonDecodedMap) {
+      final decodedBody = decodeToMap(response.body);
+
+      if (doesErrorExists(decodedBody)) {
+        OpenAILogger.errorFoundInRequest();
+
+        final error = decodedBody[OpenAIStrings.errorFieldKey];
+
+        final message = error[OpenAIStrings.messageFieldKey];
+
+        final statusCode = response.statusCode;
+
+        final exception = RequestFailedException(message, statusCode);
+        OpenAILogger.errorOcurred(exception);
+
+        throw exception;
+      } else {
+        OpenAILogger.unexpectedResponseGotten();
+
+        throw OpenAIUnexpectedException(
+          "Expected file response, but got non-error json response",
+          response.body,
+        );
+      }
+    } else {
+      OpenAILogger.noErrorFound();
+
+      OpenAILogger.requestFinishedSuccessfully();
+
+      final fileExtensionFromBodyResponseFormat =
+          response.headers["response_format"] ?? "mp3";
+
+      final fileName =
+          outputFileName + "." + fileExtensionFromBodyResponseFormat;
+
+      File file = File(
+        "${outputDirectory != null ? outputDirectory.path : ''}" +
+            "/" +
+            fileName,
+      );
+
+      OpenAILogger.creatingFile(fileName);
+
+      await file.create();
+      OpenAILogger.fileCreatedSuccessfully(fileName);
+      OpenAILogger.writingFileContent(fileName);
+
+      file = await file.writeAsBytes(
+        response.bodyBytes,
+        mode: FileMode.write,
+      );
+      OpenAILogger.fileContentWrittenSuccessfully(fileName);
+
+      return onFileResponse(file);
+    }
   }
 
   static Future<T> post<T>({
@@ -552,6 +636,16 @@ abstract class OpenAINetworkingClient {
       return jsonDecode(responseBody) as Map<String, dynamic>;
     } catch (e) {
       throw FormatException('Failed to decode JSON: $e');
+    }
+  }
+
+  static bool tryDecodedToMap(String responseBody) {
+    try {
+      jsonDecode(responseBody) as Map<String, dynamic>;
+
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 

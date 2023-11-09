@@ -108,4 +108,38 @@ abstract final class OpenAILogger {
       log("header ${entry.key}:${entry.value} will be added to all requets");
     }
   }
+
+  static void startingTryCheckingForError() {
+    return log("starting to check for error in the response.");
+  }
+
+  static void errorFoundInRequest() {
+    return log("error found in request, throwing exception");
+  }
+
+  static void unexpectedResponseGotten() {
+    return log(
+      "unexpected response gotten, this means that a change is made to the api, please open an issue on github",
+    );
+  }
+
+  static void noErrorFound() {
+    return log("Good, no error found in response.");
+  }
+
+  static void creatingFile(String fileName) {
+    return log("creating output file: $fileName");
+  }
+
+  static void fileCreatedSuccessfully(String fileName) {
+    return log("file $fileName created successfully");
+  }
+
+  static void writingFileContent(String fileName) {
+    return log("writing content to file $fileName");
+  }
+
+  static void fileContentWrittenSuccessfully(String fileName) {
+    return log("content written to file $fileName successfully");
+  }
 }
