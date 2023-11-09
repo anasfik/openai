@@ -25,6 +25,9 @@ final class OpenAIChatCompletionModel {
   /// The [usage] of the chat completion.
   final OpenAIChatCompletionUsageModel usage;
 
+  /// This fingerprint represents the backend configuration that the model runs with.
+  final String systemFingerprint;
+
   /// Weither the chat completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;
 
@@ -39,6 +42,7 @@ final class OpenAIChatCompletionModel {
     required this.created,
     required this.choices,
     required this.usage,
+    required this.systemFingerprint,
   });
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionModel] object.
@@ -50,6 +54,7 @@ final class OpenAIChatCompletionModel {
           .map((e) => OpenAIChatCompletionChoiceModel.fromMap(e))
           .toList(),
       usage: OpenAIChatCompletionUsageModel.fromMap(json['usage']),
+      systemFingerprint: json['system_fingerprint'],
     );
   }
 
@@ -60,12 +65,13 @@ final class OpenAIChatCompletionModel {
       "created": created.millisecondsSinceEpoch,
       "choices": choices.map((e) => e.toMap()).toList(),
       "usage": usage.toMap(),
+      "system_fingerprint": systemFingerprint,
     };
   }
 
   @override
   String toString() {
-    return 'OpenAIChatCompletionModel(id: $id, created: $created, choices: $choices, usage: $usage)';
+    return 'OpenAIChatCompletionModel(id: $id, created: $created, choices: $choices, usage: $usage, systemFingerprint: $systemFingerprint)';
   }
 
   @override
@@ -77,6 +83,7 @@ final class OpenAIChatCompletionModel {
         other.id == id &&
         other.created == created &&
         listEquals.equals(other.choices, choices) &&
-        other.usage == usage;
+        other.usage == usage &&
+        other.systemFingerprint == systemFingerprint;
   }
 }

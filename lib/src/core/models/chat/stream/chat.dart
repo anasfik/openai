@@ -18,7 +18,10 @@ final class OpenAIStreamChatCompletionModel {
   /// The [choices] of the chat completion.
   final List<OpenAIStreamChatCompletionChoiceModel> choices;
 
-  /// Weither the chat completion have at least one choice in [choices].
+  /// This fingerprint represents the backend configuration that the model runs with.
+  final String systemFingerprint;
+
+  /// Wether the chat completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;
 
   @override
@@ -31,6 +34,7 @@ final class OpenAIStreamChatCompletionModel {
     required this.id,
     required this.created,
     required this.choices,
+    required this.systemFingerprint,
   });
 
   /// {@macro openai_stream_chat_completion}
@@ -44,12 +48,13 @@ final class OpenAIStreamChatCompletionModel {
             (choice) => OpenAIStreamChatCompletionChoiceModel.fromMap(choice),
           )
           .toList(),
+      systemFingerprint: json['system_fingerprint'],
     );
   }
 
   @override
   String toString() {
-    return 'OpenAIStreamChatCompletionModel(id: $id, created: $created, choices: $choices)';
+    return 'OpenAIStreamChatCompletionModel(id: $id, created: $created, choices: $choices, systemFingerprint: $systemFingerprint)';
   }
 
   @override
@@ -60,6 +65,7 @@ final class OpenAIStreamChatCompletionModel {
     return other is OpenAIStreamChatCompletionModel &&
         other.id == id &&
         other.created == created &&
-        listEquals.equals(other.choices, choices);
+        listEquals.equals(other.choices, choices) &&
+        other.systemFingerprint == systemFingerprint;
   }
 }
