@@ -1,14 +1,14 @@
 import 'package:http/http.dart' as http;
 
 import '../../../models/chat/chat.dart';
-import '../../../models/functions/functions.dart';
+import '../../../models/tool/tool.dart';
 
 abstract class CreateInterface {
   Future<OpenAIChatCompletionModel> create({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<OpenAIFunctionModel>? functions,
-    FunctionCall? functionCall,
+    List<OpenAIToolModel>? tools,
+    toolChoice,
     double? temperature,
     double? topP,
     int? n,
@@ -19,13 +19,15 @@ abstract class CreateInterface {
     Map<String, dynamic>? logitBias,
     String? user,
     http.Client? client,
+    Map<String, String>? response_format,
+    String? seed,
   });
 
   Stream<OpenAIStreamChatCompletionModel> createStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<OpenAIFunctionModel>? functions,
-    FunctionCall? functionCall,
+    List<OpenAIToolModel>? tools,
+    toolChoice,
     double? temperature,
     double? topP,
     int? n,
@@ -34,6 +36,8 @@ abstract class CreateInterface {
     double? presencePenalty,
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
+    Map<String, String>? response_format,
+    String? seed,
     String? user,
     http.Client? client,
   });
@@ -41,8 +45,8 @@ abstract class CreateInterface {
   Stream<OpenAIStreamChatCompletionModel> createRemoteFunctionStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<dynamic>? functions,
-    FunctionCall? functionCall,
+    List<OpenAIToolModel>? tools,
+    toolChoice,
     double? temperature,
     double? topP,
     int? n,
@@ -53,5 +57,7 @@ abstract class CreateInterface {
     Map<String, dynamic>? logitBias,
     String? user,
     http.Client? client,
+    Map<String, String>? response_format,
+    String? seed,
   });
 }

@@ -32,26 +32,31 @@ Future<void> main() async {
   final chatRes1 = await OpenAI.instance.chat.create(
     model: "gpt-3.5-turbo-0613",
     messages: [userMsg],
-    functions: [function],
+    tools: [
+      OpenAIToolModel(type: "function", function: function),
+    ],
   );
 
   final assistantMsg1 = chatRes1.choices.first.message;
-  final funcCall = assistantMsg1.functionCall;
+  final toolCalls = assistantMsg1.toolCalls;
 
-  if (funcCall == null || funcCall.name != "getCurrentWeather") {
+  if (toolCalls == null ||
+      toolCalls.isEmpty ||
+      toolCalls.first.function.name != "getCurrentWeather") {
     print(assistantMsg1.content);
     return;
   }
+  final funcCall = toolCalls.first.function;
 
   final weather = getCurrentWeather(
-    location: funcCall.arguments?["location"],
-    unit: funcCall.arguments?["unit"],
+    location: jsonDecode(funcCall.arguments)?["location"],
+    unit: jsonDecode(funcCall.arguments)?["unit"],
   );
 
-  final functionMsg = OpenAIChatCompletionChoiceMessageModel(
-    functionName: function.name,
-    content: json.encode(weather.toMap()),
-    role: OpenAIChatMessageRole.function,
+  final toolMsg = OpenAIChatCompletionChoiceMessageModel(
+    toolCalls: [toolCalls.first],
+    content: weather.toMap().toString(),
+    role: OpenAIChatMessageRole.tool,
   );
 
   final chatRes2 = await OpenAI.instance.chat.create(
@@ -59,9 +64,11 @@ Future<void> main() async {
     messages: [
       userMsg,
       assistantMsg1,
-      functionMsg,
+      toolMsg.asRequestFunctionMessage(toolCallId: toolCalls.first.id!),
     ],
-    functions: [function],
+    tools: [
+      OpenAIToolModel(type: "function", function: function),
+    ],
   );
 
   final assistantMsg2 = chatRes2.choices.first.message;

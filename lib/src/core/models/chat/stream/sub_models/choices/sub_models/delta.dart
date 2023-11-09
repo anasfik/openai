@@ -1,37 +1,37 @@
-import '../../../../../functions/functions.dart';
+import 'package:dart_openai/dart_openai.dart';
+
+import '../../../../../tool/function/stream_function_call_response.dart';
+import '../../../../../tool/tool.dart';
+import '../../../../sub_models/choices/sub_models/sub_models/tool_call.dart';
 
 /// {@template openai_stream_chat_completion_choice_delta_model}
 /// This contains the [role] and [content] of the choice of the chat response.
 /// {@endtemplate}
 final class OpenAIStreamChatCompletionChoiceDeltaModel {
   /// The [role] of the message.
-  final String? role;
+  final OpenAIChatMessageRole? role;
 
   /// The [content] of the message.
-  final String content;
+  final String? content;
 
-  /// The function that the model is requesting to call.
-  final StreamFunctionCallResponse? functionCall;
+//
+  final List<OpenAIResponseToolCall>? toolCalls;
 
-  /// The name of the function that was called.
-  final String? functionName;
+  // /// The function that the model is requesting to call.
+  // final StreamFunctionCallResponse? functionCall;
 
-  bool get hasFunctionCall => functionCall != null;
+  bool get hasToolCalls => toolCalls != null;
 
   @override
   int get hashCode {
-    return role.hashCode ^
-        content.hashCode ^
-        functionCall.hashCode ^
-        functionName.hashCode;
+    return role.hashCode ^ content.hashCode ^ toolCalls.hashCode;
   }
 
   /// {@macro openai_chat_completion_choice_message_model}
   const OpenAIStreamChatCompletionChoiceDeltaModel({
     required this.role,
     required this.content,
-    this.functionCall,
-    this.functionName,
+    this.toolCalls,
   });
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceMessageModel] object.
@@ -39,10 +39,15 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
     Map<String, dynamic> json,
   ) {
     return OpenAIStreamChatCompletionChoiceDeltaModel(
-      role: json['role'],
+      role: json['role'] != null
+          ? OpenAIChatMessageRole.values
+              .firstWhere((role) => role.name == json['role'])
+          : null,
       content: json['content'] ?? '',
-      functionCall: json['function_call'] != null
-          ? StreamFunctionCallResponse.fromMap(json['function_call'])
+      toolCalls: json['tool_calls'] != null
+          ? (json['tool_calls'] as List)
+              .map((toolCall) => OpenAIStreamResponseToolCall.fromMap(toolCall))
+              .toList()
           : null,
     );
   }
@@ -50,10 +55,9 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
   /// This method used to convert the [OpenAIChatCompletionChoiceMessageModel] to a [Map<String, dynamic>] object.
   Map<String, dynamic> toMap() {
     return {
-      "role": role,
+      "role": role?.name,
       "content": content,
-      if (functionCall != null) "function_call": functionCall!.toMap(),
-      if (functionName != null) "name": functionName,
+      "tool_calls": toolCalls?.map((toolCall) => toolCall.toMap()).toList(),
     };
   }
 
@@ -62,12 +66,10 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
     String str = 'OpenAIChatCompletionChoiceMessageModel('
         'role: $role, '
         'content: $content, ';
-    if (functionCall != null) {
-      str += 'functionCall: $functionCall, ';
+    if (toolCalls != null) {
+      str += 'toolCalls: $toolCalls, ';
     }
-    if (functionName != null) {
-      str += 'functionName: $functionName, ';
-    }
+
     str += ')';
 
     return str;
@@ -80,7 +82,6 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
     return other is OpenAIStreamChatCompletionChoiceDeltaModel &&
         other.role == role &&
         other.content == content &&
-        other.functionCall == functionCall &&
-        other.functionName == functionName;
+        other.toolCalls == toolCalls;
   }
 }

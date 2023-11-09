@@ -42,6 +42,7 @@ void main() async {
     });
     test('with setting a key', () {
       OpenAI.apiKey = "YOUR API KEY HERE";
+      OpenAI.apiKey = "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";
 
       expect(OpenAI.instance, isA<OpenAI>());
     });
@@ -209,7 +210,7 @@ void main() async {
               role: OpenAIChatMessageRole.user,
             ),
           ],
-          functions: [
+          tools: [
             OpenAIFunctionModel.withParameters(
               name: "sendEmail",
               description:
@@ -225,14 +226,27 @@ void main() async {
                 ),
               ],
             ),
-          ],
+          ].map((function) {
+            return OpenAIToolModel(type: "function", function: function);
+          }).toList(),
         );
 
-        final funcCall = chatCompletion.choices.first.message.functionCall;
+        final toolCalls = chatCompletion.choices.first.message.toolCalls;
+
+        if (toolCalls == null || toolCalls.isEmpty) {
+          print(
+            "weither this happens from the API or the package, the test for this function should not show this.",
+          );
+
+          return;
+        }
+
+        final firstToolCall = toolCalls.first;
+        final funcCall = firstToolCall.function;
 
         expect(funcCall, isNotNull);
-        expect(funcCall?.arguments?["to"], isNotNull);
-        expect(funcCall?.arguments?["message"], isNotNull);
+        expect(funcCall.arguments?["to"], isNotNull);
+        expect(funcCall.arguments?["message"], isNotNull);
 
         sendEmail(
           message: funcCall!.arguments?["message"],

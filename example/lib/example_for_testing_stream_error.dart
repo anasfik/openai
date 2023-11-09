@@ -50,8 +50,13 @@ Stream<ItemBodyCompletion> itemBodyCompletionStream(
     ],
   );
   final stream = StreamController<ItemBodyCompletion>();
+
   bodyCompletion.listen((event) {
-    return stream.add(ItemBodyCompletion(body: event.choices[0].delta.content));
+    final content = event.choices[0].delta.content;
+
+    return content != null
+        ? stream.add(ItemBodyCompletion(body: event.choices[0].delta.content!))
+        : () {};
   }, onDone: () {
     stream.close();
   }, onError: (e) {

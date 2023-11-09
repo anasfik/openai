@@ -40,7 +40,9 @@ final class OpenAIStreamChatCompletionModel {
       id: json['id'],
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
       choices: (json['choices'] as List)
-          .map((e) => OpenAIStreamChatCompletionChoiceModel.fromMap(e))
+          .map(
+            (choice) => OpenAIStreamChatCompletionChoiceModel.fromMap(choice),
+          )
           .toList(),
     );
   }
