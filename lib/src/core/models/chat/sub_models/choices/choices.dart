@@ -5,7 +5,7 @@ import 'sub_models/message.dart';
 /// {@endtemplate}
 final class OpenAIChatCompletionChoiceModel {
   /// The [index] of the choice.
-  final int index;
+  final dynamic index;
 
   /// The [message] of the choice.
   final OpenAIChatCompletionChoiceMessageModel message;
@@ -28,7 +28,7 @@ final class OpenAIChatCompletionChoiceModel {
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceModel] object.
   factory OpenAIChatCompletionChoiceModel.fromMap(Map<String, dynamic> json) {
     return OpenAIChatCompletionChoiceModel(
-      index: json['index'],
+      index: int.tryParse(json['index']) ?? json['index'],
       message: OpenAIChatCompletionChoiceMessageModel.fromMap(json['message']),
       finishReason: json['finish_reason'],
     );
