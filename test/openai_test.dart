@@ -258,12 +258,16 @@ void main() async {
         final funcCall = firstToolCall.function;
 
         expect(funcCall, isNotNull);
-        expect(funcCall.arguments?["to"], isNotNull);
-        expect(funcCall.arguments?["message"], isNotNull);
+
+        final decodedArgs =
+            jsonDecode(funcCall.arguments) as Map<String, dynamic>;
+
+        expect(decodedArgs["to"], isNotNull);
+        expect(decodedArgs["message"], isNotNull);
 
         sendEmail(
-          message: funcCall.arguments?["message"],
-          to: funcCall.arguments?["to"],
+          message: decodedArgs["message"],
+          to: decodedArgs["to"],
         );
       },
     );
