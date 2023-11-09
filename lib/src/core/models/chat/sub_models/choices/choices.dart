@@ -28,7 +28,9 @@ final class OpenAIChatCompletionChoiceModel {
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceModel] object.
   factory OpenAIChatCompletionChoiceModel.fromMap(Map<String, dynamic> json) {
     return OpenAIChatCompletionChoiceModel(
-      index: int.tryParse(json['index']) ?? json['index'],
+      index: json['index'] is int
+          ? json['index']
+          : int.tryParse(json['index'].toString()) ?? json['index'],
       message: OpenAIChatCompletionChoiceMessageModel.fromMap(json['message']),
       finishReason: json['finish_reason'],
     );
