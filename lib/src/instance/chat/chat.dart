@@ -80,7 +80,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
     String? user,
-    Map<String, String>? response_format,
+    Map<String, String>? responseFormat,
     int? seed,
     http.Client? client,
   }) async {
@@ -102,6 +102,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
         if (seed != null) "seed": seed,
+        if (responseFormat != null) "response_format": responseFormat,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIChatCompletionModel.fromMap(response);
@@ -171,7 +172,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     double? presencePenalty,
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
-    Map<String, String>? response_format,
+    Map<String, String>? responseFormat,
     int? seed,
     String? user,
     http.Client? client,
@@ -195,6 +196,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
         if (seed != null) "seed": seed,
+        if (responseFormat != null) "response_format": responseFormat,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamChatCompletionModel.fromMap(response);
@@ -219,7 +221,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     Map<String, dynamic>? logitBias,
     String? user,
     http.Client? client,
-    Map<String, String>? response_format,
+    Map<String, String>? responseFormat,
     int? seed,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
@@ -241,6 +243,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
         if (seed != null) "seed": seed,
+        if (responseFormat != null) "response_format": responseFormat,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamChatCompletionModel.fromMap(response);
