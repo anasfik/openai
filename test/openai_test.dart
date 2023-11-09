@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:developer' as dev;
 import 'package:dart_openai/dart_openai.dart';
 import 'package:dart_openai/src/core/builder/headers.dart';
+import 'package:dart_openai/src/core/constants/config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/model/sub_models/permission.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
@@ -77,6 +78,19 @@ void main() async {
       });
 
       expect(HeadersBuilder.build(), containsPair("x-openai-test", "test"));
+    });
+
+    test("requests timeout", () {
+      OpenAIConfig.requestsTimeOut = Duration(seconds: 10);
+
+      expect(
+        OpenAIConfig.requestsTimeOut.inMilliseconds,
+        Duration(seconds: 10).inMilliseconds,
+      );
+
+      //! return to the default timeout.
+
+      OpenAIConfig.requestsTimeOut = OpenAIConfig.defaultRequestsTimeOut;
     });
   });
   group('models', () {

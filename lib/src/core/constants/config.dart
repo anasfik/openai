@@ -8,6 +8,14 @@ import 'package:meta/meta.dart';
 @immutable
 @internal
 abstract class OpenAIConfig {
+  static final defaultRequestsTimeOut = Duration(seconds: 30);
+
+  /// {@template openai_config_requests_timeOut}
+  /// The maximum duration a request can take, this will be applied to all requests, defaults to 30 seconds.
+  /// if you need custom timeout for each method individulaly, consider using the `client` field in each method and pass a custom HTTP client to it.
+  /// {@endtemplate}
+  static Duration requestsTimeOut = defaultRequestsTimeOut;
+
   /// {@template openai_config_base_url}
   /// This is base API url for all the requests.
   /// {@endtemplate}

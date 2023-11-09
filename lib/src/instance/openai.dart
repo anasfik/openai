@@ -42,6 +42,14 @@ final class OpenAI extends OpenAIClientBase {
     return _instance;
   }
 
+  /// {@macro openai_config_requests_timeOut}
+  static Duration get requestsTimeOut => OpenAIConfig.requestsTimeOut;
+
+  static set requestsTimeOut(Duration requestsTimeOut) {
+    OpenAIConfig.requestsTimeOut = requestsTimeOut;
+    OpenAILogger.requestsTimeoutChanged(requestsTimeOut);
+  }
+
   /// The [OpenAIModel] instance, used to access the model endpoints.
   /// Please, refer to the Models page from the official OpenAI documentation website in order to know what models are available and what's the use case of every model.
   OpenAIModel get model => OpenAIModel();

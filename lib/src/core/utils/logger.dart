@@ -142,4 +142,8 @@ abstract final class OpenAILogger {
   static void fileContentWrittenSuccessfully(String fileName) {
     return log("content written to file $fileName successfully");
   }
+
+  static void requestsTimeoutChanged(Duration requestsTimeOut) {
+    return log("requests timeout changed to $requestsTimeOut");
+  }
 }

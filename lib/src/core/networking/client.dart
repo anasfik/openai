@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:convert";
 import "dart:io";
+import "package:dart_openai/src/core/constants/config.dart";
 import "package:dart_openai/src/core/utils/extensions.dart";
 // ignore: unused_import
 import "package:dart_openai/src/core/utils/http_client_web.dart"
@@ -96,7 +97,9 @@ abstract class OpenAINetworkingClient {
     final headers = HeadersBuilder.build();
 
     final response = client == null
-        ? await http.get(uri, headers: headers)
+        ? await http
+            .get(uri, headers: headers)
+            .timeout(OpenAIConfig.requestsTimeOut)
         : await client.get(uri, headers: headers);
 
     if (returnRawResponse) {
@@ -207,7 +210,9 @@ abstract class OpenAINetworkingClient {
     final handledBody = body != null ? jsonEncode(body) : null;
 
     final response = client == null
-        ? await http.post(uri, headers: headers, body: handledBody)
+        ? await http
+            .post(uri, headers: headers, body: handledBody)
+            .timeout(OpenAIConfig.requestsTimeOut)
         : await client.post(uri, headers: headers, body: handledBody);
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
@@ -288,7 +293,9 @@ abstract class OpenAINetworkingClient {
     final handledBody = body != null ? jsonEncode(body) : null;
 
     final response = client == null
-        ? await http.post(uri, headers: headers, body: handledBody)
+        ? await http
+            .post(uri, headers: headers, body: handledBody)
+            .timeout(OpenAIConfig.requestsTimeOut)
         : await client.post(uri, headers: headers, body: handledBody);
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
@@ -455,7 +462,7 @@ abstract class OpenAINetworkingClient {
 
     request.fields.addAll(body);
 
-    final http.StreamedResponse response = await request.send();
+    final response = await request.send().timeout(OpenAIConfig.requestsTimeOut);
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
@@ -505,7 +512,8 @@ abstract class OpenAINetworkingClient {
     request.fields.addAll(body);
     request.files.add(imageFile);
 
-    final http.StreamedResponse response = await request.send();
+    final http.StreamedResponse response =
+        await request.send().timeout(OpenAIConfig.requestsTimeOut);
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
@@ -556,7 +564,8 @@ abstract class OpenAINetworkingClient {
     request.files.add(multiPartFile);
     request.fields.addAll(body);
 
-    final http.StreamedResponse response = await request.send();
+    final http.StreamedResponse response =
+        await request.send().timeout(OpenAIConfig.requestsTimeOut);
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
@@ -601,7 +610,9 @@ abstract class OpenAINetworkingClient {
     final uri = Uri.parse(from);
 
     final response = client == null
-        ? await http.delete(uri, headers: headers)
+        ? await http
+            .delete(uri, headers: headers)
+            .timeout(OpenAIConfig.requestsTimeOut)
         : await client.delete(uri, headers: headers);
 
     OpenAILogger.requestToWithStatusCode(from, response.statusCode);
