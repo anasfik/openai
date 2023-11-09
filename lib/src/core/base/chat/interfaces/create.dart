@@ -20,7 +20,7 @@ abstract class CreateInterface {
     String? user,
     http.Client? client,
     Map<String, String>? response_format,
-    String? seed,
+    int? seed,
   });
 
   Stream<OpenAIStreamChatCompletionModel> createStream({
@@ -37,9 +37,9 @@ abstract class CreateInterface {
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
     Map<String, String>? response_format,
-    String? seed,
     String? user,
     http.Client? client,
+    int? seed,
   });
 
   Stream<OpenAIStreamChatCompletionModel> createRemoteFunctionStream({
@@ -58,6 +58,6 @@ abstract class CreateInterface {
     String? user,
     http.Client? client,
     Map<String, String>? response_format,
-    String? seed,
+    int? seed,
   });
 }

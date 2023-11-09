@@ -19,7 +19,7 @@ final class OpenAIStreamChatCompletionModel {
   final List<OpenAIStreamChatCompletionChoiceModel> choices;
 
   /// This fingerprint represents the backend configuration that the model runs with.
-  final String systemFingerprint;
+  final String? systemFingerprint;
 
   /// Wether the chat completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;

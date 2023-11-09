@@ -26,7 +26,7 @@ final class OpenAIChatCompletionModel {
   final OpenAIChatCompletionUsageModel usage;
 
   /// This fingerprint represents the backend configuration that the model runs with.
-  final String systemFingerprint;
+  final String? systemFingerprint;
 
   /// Weither the chat completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;

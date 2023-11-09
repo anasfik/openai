@@ -81,7 +81,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     Map<String, dynamic>? logitBias,
     String? user,
     Map<String, String>? response_format,
-    String? seed,
+    int? seed,
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post(
@@ -101,6 +101,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
+        if (seed != null) "seed": seed,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIChatCompletionModel.fromMap(response);
@@ -171,7 +172,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
     Map<String, String>? response_format,
-    String? seed,
+    int? seed,
     String? user,
     http.Client? client,
   }) {
@@ -193,6 +194,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
+        if (seed != null) "seed": seed,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamChatCompletionModel.fromMap(response);
@@ -218,7 +220,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     String? user,
     http.Client? client,
     Map<String, String>? response_format,
-    String? seed,
+    int? seed,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
@@ -238,6 +240,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
+        if (seed != null) "seed": seed,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamChatCompletionModel.fromMap(response);

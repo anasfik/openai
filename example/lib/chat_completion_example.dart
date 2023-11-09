@@ -8,6 +8,7 @@ void main() async {
 
   OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
     model: "gpt-3.5-turbo",
+    seed: 5,
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
         content: "hello",
