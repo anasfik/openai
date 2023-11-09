@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.3
+
+- Added Audio Speech method in the Audio module with its docs, example code.
+
 ## 4.1.2
 
 - Disabled a print method that was used for debugging purposes.

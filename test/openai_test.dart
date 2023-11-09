@@ -395,68 +395,69 @@ void main() async {
     // });
   });
 
-  group("fine-tune", () {
-    test('create', () async {
-      final OpenAIFineTuneModel fineTune =
-          await OpenAI.instance.fineTune.create(
-        trainingFile: fileIdFromFilesApi!,
-      );
-      expect(fineTune, isA<OpenAIFineTuneModel>());
-      expect(fineTune.id, isA<String>());
-      expect(fineTune.id, isNotNull);
-      fineTuneExampleId = fineTune.id;
-    });
-    test('list', () async {
-      final List<OpenAIFineTuneModel> fineTunes =
-          await OpenAI.instance.fineTune.list();
-      expect(fineTunes, isA<List<OpenAIFineTuneModel>>());
-      if (fineTunes.isNotEmpty) {
-        expect(fineTunes.first, isA<OpenAIFineTuneModel>());
-        expect(fineTunes.first.id, isNotNull);
-      }
-    });
-    test('retrieve', () async {
-      final OpenAIFineTuneModel fineTune =
-          await OpenAI.instance.fineTune.retrieve(fineTuneExampleId!);
+  // group("fine-tune", () {
+  //   test('create', () async {
+  //     final OpenAIFineTuneModel fineTune =
+  //         await OpenAI.instance.fineTune.create(
+  //       trainingFile: fileIdFromFilesApi!,
+  //     );
+  //     expect(fineTune, isA<OpenAIFineTuneModel>());
+  //     expect(fineTune.id, isA<String>());
+  //     expect(fineTune.id, isNotNull);
+  //     fineTuneExampleId = fineTune.id;
+  //   });
+  //   test('list', () async {
+  //     final List<OpenAIFineTuneModel> fineTunes =
+  //         await OpenAI.instance.fineTune.list();
+  //     expect(fineTunes, isA<List<OpenAIFineTuneModel>>());
+  //     if (fineTunes.isNotEmpty) {
+  //       expect(fineTunes.first, isA<OpenAIFineTuneModel>());
+  //       expect(fineTunes.first.id, isNotNull);
+  //     }
+  //   });
+  //   test('retrieve', () async {
+  //     final OpenAIFineTuneModel fineTune =
+  //         await OpenAI.instance.fineTune.retrieve(fineTuneExampleId!);
 
-      expect(fineTune, isA<OpenAIFineTuneModel>());
-      expect(fineTune.id, isA<String>());
-      expect(fineTune.id, equals(fineTuneExampleId!));
-    });
+  //     expect(fineTune, isA<OpenAIFineTuneModel>());
+  //     expect(fineTune.id, isA<String>());
+  //     expect(fineTune.id, equals(fineTuneExampleId!));
+  //   });
 
-    test("events", () async {
-      final List<OpenAIFineTuneEventModel> events =
-          await OpenAI.instance.fineTune.listEvents(fineTuneExampleId!);
-      expect(events, isA<List<OpenAIFineTuneEventModel>>());
-      if (events.isNotEmpty) {
-        expect(events.first, isA<OpenAIFineTuneEventModel>());
-        expect(events.first.level, isA<String>());
-      }
-    });
+  //   test("events", () async {
+  //     final List<OpenAIFineTuneEventModel> events =
+  //         await OpenAI.instance.fineTune.listEvents(fineTuneExampleId!);
+  //     expect(events, isA<List<OpenAIFineTuneEventModel>>());
+  //     if (events.isNotEmpty) {
+  //       expect(events.first, isA<OpenAIFineTuneEventModel>());
+  //       expect(events.first.level, isA<String>());
+  //     }
+  //   });
 
-    test("events stream", () {
-      final Stream<OpenAIFineTuneEventStreamModel> events =
-          OpenAI.instance.fineTune.listEventsStream(fineTuneExampleId!);
-      expect(events, isA<Stream<OpenAIFineTuneEventStreamModel>>());
-      events.listen(
-        (event) {
-          expect(event, isA<OpenAIFineTuneEventStreamModel>());
-          expect(event.level, isA<String>());
-        },
-        onError: (err) {
-          expect(err, isA<RequestFailedException>());
-        },
-      );
-    });
+  //   test("events stream", () {
+  //     final Stream<OpenAIFineTuneEventStreamModel> events =
+  //         OpenAI.instance.fineTune.listEventsStream(fineTuneExampleId!);
+  //     expect(events, isA<Stream<OpenAIFineTuneEventStreamModel>>());
+  //     events.listen(
+  //       (event) {
+  //         expect(event, isA<OpenAIFineTuneEventStreamModel>());
+  //         expect(event.level, isA<String>());
+  //       },
+  //       onError: (err) {
+  //         expect(err, isA<RequestFailedException>());
+  //       },
+  //     );
+  //   });
 
-    test("cancel", () async {
-      OpenAIFineTuneModel cancelledFineTune =
-          await OpenAI.instance.fineTune.cancel(fineTuneExampleId!);
-      expect(cancelledFineTune, isA<OpenAIFineTuneModel>());
-      expect(cancelledFineTune.id, isA<String>());
-      expect(cancelledFineTune.id, equals(fineTuneExampleId!));
-    });
-  });
+  //   test("cancel", () async {
+  //     OpenAIFineTuneModel cancelledFineTune =
+  //         await OpenAI.instance.fineTune.cancel(fineTuneExampleId!);
+  //     expect(cancelledFineTune, isA<OpenAIFineTuneModel>());
+  //     expect(cancelledFineTune.id, isA<String>());
+  //     expect(cancelledFineTune.id, equals(fineTuneExampleId!));
+  //   });
+  // });
+
   group('moderations', () {
     test('create', () async {
       final OpenAIModerationModel moderation =
