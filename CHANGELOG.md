@@ -3,6 +3,8 @@
 ## 4.1.3
 
 - Added Audio Speech method in the Audio module with its docs, example code.
+- Migrated for the deprecated _`functions`_and `function_call` th the use of new fields such `tools`.. in the chat API, confirmed that it works on both asynchronous and stream responses.
+- Exposed API for controlling the requests time out for all internal client methods.
 
 ## 4.1.2
 
