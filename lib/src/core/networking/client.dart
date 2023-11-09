@@ -14,8 +14,6 @@ import "package:http/http.dart" as http;
 import "package:meta/meta.dart";
 
 import '../constants/strings.dart';
-import '../exceptions/request_failure.dart';
-import "../exceptions/unexpected.dart";
 
 /// Handling exceptions returned by OpenAI Stream API.
 final class _OpenAIChatStreamSink implements EventSink<String> {
