@@ -9,13 +9,22 @@ void main() async {
   OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
     model: "gpt-3.5-turbo-1106",
     responseFormat: {"type": "json_object"},
+    seed: 6,
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
-        content: "return any message you are given as JSON.",
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "return any message you are given as JSON.",
+          ),
+        ],
         role: OpenAIChatMessageRole.assistant,
       ),
       OpenAIChatCompletionChoiceMessageModel(
-        content: "hello",
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "Hello, I am a chatbot created by OpenAI. How are you today?",
+          ),
+        ],
         role: OpenAIChatMessageRole.user,
       ),
     ],

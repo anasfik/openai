@@ -10,7 +10,7 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
   final OpenAIChatMessageRole? role;
 
   /// The [content] of the message.
-  final String? content;
+  final List<OpenAIChatCompletionChoiceMessageContentItemModel>? content;
 
 //
   final List<OpenAIResponseToolCall>? toolCalls;
@@ -41,7 +41,9 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
           ? OpenAIChatMessageRole.values
               .firstWhere((role) => role.name == json['role'])
           : null,
-      content: json['content'] ?? '',
+      content: json['content'] != null
+          ? dynamicContentFromField(json['content'])
+          : null,
       toolCalls: json['tool_calls'] != null
           ? (json['tool_calls'] as List)
               .map((toolCall) => OpenAIStreamResponseToolCall.fromMap(toolCall))
@@ -81,5 +83,32 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
         other.role == role &&
         other.content == content &&
         other.toolCalls == toolCalls;
+  }
+
+  static List<OpenAIChatCompletionChoiceMessageContentItemModel>
+      dynamicContentFromField(
+    dynamic fieldData,
+  ) {
+    if (fieldData is String) {
+      return [
+        OpenAIChatCompletionChoiceMessageContentItemModel.text(fieldData),
+      ];
+    } else if (fieldData is List) {
+      return (fieldData as List).map(
+        (item) {
+          if (item is! Map) {
+            throw Exception('Invalid content item');
+          } else {
+            final asMap = item as Map<String, dynamic>;
+
+            return OpenAIChatCompletionChoiceMessageContentItemModel.fromMap(
+              asMap,
+            );
+          }
+        },
+      ).toList();
+    } else {
+      throw Exception('Invalid content');
+    }
   }
 }

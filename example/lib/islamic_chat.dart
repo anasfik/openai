@@ -9,13 +9,16 @@ Future<void> main() async {
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
         role: OpenAIChatMessageRole.user,
-        content: "What are the five pillars of Islam",
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "Say hello!",
+          ),
+        ],
       ),
     ],
-    temperature: .9,
   );
 
   chatStream.listen((event) {
-    print(event);
+    print(event.choices.first.delta.content?.map((e) => e.toMap()));
   });
 }

@@ -25,7 +25,11 @@ Future<void> main() async {
   );
 
   final userMsg = OpenAIChatCompletionChoiceMessageModel(
-    content: "What’s the weather like in Boston right now?",
+    content: [
+      OpenAIChatCompletionChoiceMessageContentItemModel.text(
+        "What’s the weather like in Boston right now?",
+      ),
+    ],
     role: OpenAIChatMessageRole.user,
   );
 
@@ -55,7 +59,11 @@ Future<void> main() async {
 
   final toolMsg = OpenAIChatCompletionChoiceMessageModel(
     toolCalls: [toolCalls.first],
-    content: weather.toMap().toString(),
+    content: [
+      OpenAIChatCompletionChoiceMessageContentItemModel.text(
+        weather.toMap().toString(),
+      ),
+    ],
     role: OpenAIChatMessageRole.tool,
   );
 

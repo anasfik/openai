@@ -11,7 +11,11 @@ void main() {
     model: "gpt-3.5-turbo",
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
-        content: "hello",
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "Hello",
+          ),
+        ],
         role: OpenAIChatMessageRole.user,
       )
     ],

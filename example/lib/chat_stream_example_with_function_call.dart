@@ -13,7 +13,11 @@ void main() async {
     model: "gpt-3.5-turbo",
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
-        content: "What is the fastest car in the world as of 2023?",
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "What is the fastest car in the world as of 2023?",
+          ),
+        ],
         role: OpenAIChatMessageRole.user,
       ),
     ],

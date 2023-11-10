@@ -186,7 +186,11 @@ void main() async {
         model: "gpt-3.5-turbo",
         messages: [
           OpenAIChatCompletionChoiceMessageModel(
-            content: "Hello, how are you?",
+            content: [
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                "Hello, how are you?",
+              ),
+            ],
             role: OpenAIChatMessageRole.user,
           ),
         ],
@@ -219,7 +223,11 @@ void main() async {
           model: "gpt-3.5-turbo-0613",
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
-              content: "Send an email to John asking about Marrakech weather",
+              content: [
+                OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                  "Send an email to John asking about Marrakech weather",
+                ),
+              ],
               role: OpenAIChatMessageRole.user,
             ),
           ],
@@ -277,7 +285,11 @@ void main() async {
         model: "gpt-3.5-turbo",
         messages: [
           OpenAIChatCompletionChoiceMessageModel(
-            content: "Hello, how are you?",
+            content: [
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                "Hello, how are you?",
+              ),
+            ],
             role: OpenAIChatMessageRole.user,
           ),
         ],
