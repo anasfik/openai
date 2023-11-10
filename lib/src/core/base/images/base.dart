@@ -6,7 +6,11 @@ import 'interfaces/edit.dart';
 import 'interfaces/variations.dart';
 
 abstract class OpenAIImagesBase
-    implements EndpointInterface, CreateInterface, EditInterface, VariationInterface {}
+    implements
+        EndpointInterface,
+        CreateInterface,
+        EditInterface,
+        VariationInterface {}
 
 extension SizeToStingExtension on OpenAIImageSize {
   String get value {
@@ -27,6 +31,9 @@ extension SizeToStingExtension on OpenAIImageSize {
 
 extension StyleToStingExtension on OpenAIImageStyle {
   String get value {
+    return name;
+
+    // ! pretty sure this will be needed in the future in case of adding more styles that can't be got from the `name` field.
     switch (this) {
       case OpenAIImageStyle.vivid:
         return "vivid";
@@ -38,6 +45,9 @@ extension StyleToStingExtension on OpenAIImageStyle {
 
 extension QualityToStingExtension on OpenAIImageQuality {
   String get value {
+    return name;
+
+    // ! pretty sure this will be needed in the future in case of adding more qualities that can't be got from the `name` field.
     switch (this) {
       case OpenAIImageQuality.hd:
         return "hd";

@@ -325,7 +325,7 @@ void main() async {
       expect(image.data.first.url, isA<String>());
     });
     test("edits", () async {
-      final OpenAiImageEditModel imageEdited = await OpenAI.instance.image.edit(
+      final OpenAIImageModel imageEdited = await OpenAI.instance.image.edit(
         prompt: 'mask the image with color red',
         image: imageFileExample,
         mask: maskFileExample,
@@ -334,8 +334,7 @@ void main() async {
       expect(imageEdited.data.first.url, isA<String>());
     });
     test("variation", () async {
-      final OpenAIImageVariationModel variation =
-          await OpenAI.instance.image.variation(
+      final OpenAIImageModel variation = await OpenAI.instance.image.variation(
         image: imageFileExample,
       );
 

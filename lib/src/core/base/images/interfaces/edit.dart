@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import '../../../models/image/enum.dart';
+import '../../../models/image/image/image.dart';
 
 abstract class EditInterface {
-  Future<void> edit({
+  Future<OpenAIImageModel> edit({
     required File image,
     File? mask,
     required String prompt,

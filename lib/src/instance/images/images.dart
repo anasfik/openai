@@ -138,7 +138,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///
   /// Example:
   ///```dart
-  /// OpenAiImageEditModel imageEdit = await OpenAI.instance.image.edit(
+  /// OpenAIImageModel imageEdit = await OpenAI.instance.image.edit(
   ///  file: File(/* IMAGE PATH HERE */),
   ///  mask: File(/* MASK PATH HERE */),
   ///  prompt: "mask the image with a dinosaur in the image",
@@ -148,7 +148,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// );
   ///```
   @override
-  Future<OpenAiImageEditModel> edit({
+  Future<OpenAIImageModel> edit({
     String? model,
     required File image,
     File? mask,
@@ -160,7 +160,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }) async {
     final String edit = "/edits";
 
-    return await OpenAINetworkingClient.imageEditForm<OpenAiImageEditModel>(
+    return await OpenAINetworkingClient.imageEditForm<OpenAIImageModel>(
       image: image,
       mask: mask,
       body: {
@@ -172,7 +172,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAiImageEditModel.fromMap(response);
+        return OpenAIImageModel.fromMap(response);
       },
       to: BaseApiUrlBuilder.build(endpoint + edit),
     );
@@ -206,7 +206,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///
   /// Example:
   /// ```dart
-  /// OpenAIImageVariationModel imageVariation = await OpenAI.instance.image.variation(
+  /// OpenAIImageModel imageVariation = await OpenAI.instance.image.variation(
   /// image: File(/* IMAGE PATH HERE */),
   /// n: 1,
   /// size: OpenAIImageSize.size1024,
@@ -214,7 +214,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// );
   /// ```
   @override
-  Future<OpenAIImageVariationModel> variation({
+  Future<OpenAIImageModel> variation({
     String? model,
     required File image,
     int? n,
@@ -224,8 +224,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }) async {
     final String variations = "/variations";
 
-    return await OpenAINetworkingClient.imageVariationForm<
-        OpenAIImageVariationModel>(
+    return await OpenAINetworkingClient.imageVariationForm<OpenAIImageModel>(
       image: image,
       body: {
         if (model != null) "model": model,
@@ -235,7 +234,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIImageVariationModel.fromMap(response);
+        return OpenAIImageModel.fromMap(response);
       },
       to: BaseApiUrlBuilder.build(endpoint + variations),
     );
