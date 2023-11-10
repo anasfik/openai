@@ -330,7 +330,7 @@ void main() async {
         image: imageFileExample,
         mask: maskFileExample,
       );
-      expect(imageEdited, isA<OpenAiImageEditModel>());
+      expect(imageEdited, isA<OpenAIImageModel>());
       expect(imageEdited.data.first.url, isA<String>());
     });
     test("variation", () async {
@@ -338,7 +338,7 @@ void main() async {
         image: imageFileExample,
       );
 
-      expect(variation, isA<OpenAIImageVariationModel>());
+      expect(variation, isA<OpenAIImageModel>());
       expect(variation.data.first.url, isA<String>());
     });
   });
