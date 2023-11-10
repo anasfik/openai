@@ -108,6 +108,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     Map<String, dynamic>? logitBias,
     String? user,
     http.Client? client,
+    int? seed,
   }) async {
     assert(
       prompt is String || prompt is List<String> || prompt == null,
@@ -137,6 +138,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
         if (bestOf != null) "best_of": bestOf,
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
+        if (seed != null) "seed": seed,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAICompletionModel.fromMap(response);
@@ -231,6 +233,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     Map<String, dynamic>? logitBias,
     String? user,
     http.Client? client,
+    int? seed,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamCompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
@@ -251,6 +254,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
         if (bestOf != null) "best_of": bestOf,
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
+        if (seed != null) "seed": seed,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamCompletionModel.fromMap(response);
@@ -345,6 +349,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     Map<String, dynamic>? logitBias,
     String? user,
     http.Client? client,
+    int? seed,
   }) {
     Stream<OpenAIStreamCompletionModel> stream = createStream(
       model: model,
@@ -362,6 +367,8 @@ interface class OpenAICompletion implements OpenAICompletionBase {
       bestOf: bestOf,
       logitBias: logitBias,
       user: user,
+      seed: seed,
+      client: client,
     );
 
     return stream.map((event) => event.choices.first.text);

@@ -22,6 +22,9 @@ final class OpenAIStreamCompletionModel {
   /// The model used to generate the completion.
   final String model;
 
+  ///
+  final String? systemFingerprint;
+
   /// Weither the chat completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;
 
@@ -36,6 +39,7 @@ final class OpenAIStreamCompletionModel {
     required this.created,
     required this.choices,
     required this.model,
+    required this.systemFingerprint,
   });
 
   /// {@macro openai_stream_completion_model}
@@ -48,6 +52,7 @@ final class OpenAIStreamCompletionModel {
           .map((e) => OpenAIStreamCompletionModelChoice.fromMap(e))
           .toList(),
       model: json['model'],
+      systemFingerprint: json['system_fingerprint'],
     );
   }
 

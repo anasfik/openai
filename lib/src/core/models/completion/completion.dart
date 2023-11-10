@@ -28,6 +28,9 @@ final class OpenAICompletionModel {
   /// The usage of the completion, if any.
   final OpenAICompletionModelUsage? usage;
 
+  ///
+  final String? systemFingerprint;
+
   /// Weither the completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;
 
@@ -43,6 +46,7 @@ final class OpenAICompletionModel {
     required this.model,
     required this.choices,
     required this.usage,
+    required this.systemFingerprint,
   });
 
   /// {@macro openai_completion_model}
@@ -58,6 +62,7 @@ final class OpenAICompletionModel {
       usage: json['usage'] != null
           ? OpenAICompletionModelUsage.fromMap(json['usage'])
           : null,
+      systemFingerprint: json['system_fingerprint'],
     );
   }
 
