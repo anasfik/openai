@@ -595,6 +595,9 @@ OpenAIAudioModel translation = await OpenAI.instance.audio.createTranslation(
 print(translation.text);
 ```
 
+Learn more from [here](C:\projects\Flutter_and_Dart\openai
+).
+
 </br>
 
 ## Files
