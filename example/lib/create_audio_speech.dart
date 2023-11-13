@@ -6,7 +6,8 @@ import 'package:example/env/env.dart';
 void main() async {
   OpenAI.apiKey = Env.apiKey;
 
-  final speech = await OpenAI.instance.audio.createSpeech(
+  // The speech request.
+  File speechFile = await OpenAI.instance.audio.createSpeech(
     model: "tts-1",
     input: "Say my name is ",
     voice: "nova",
@@ -15,5 +16,6 @@ void main() async {
     outputFileName: DateTime.now().microsecondsSinceEpoch.toString(),
   );
 
-  print(speech);
+  // The file result.
+  print(speechFile.path);
 }

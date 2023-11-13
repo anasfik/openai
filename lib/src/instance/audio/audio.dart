@@ -120,7 +120,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   }
 
   @override
-  Future createSpeech({
+  Future<File> createSpeech({
     required String model,
     required String input,
     required String voice,

@@ -547,17 +547,23 @@ for (int index = 0; index < embedding.data.length; index++) {
 For creating a speech from a text, you can use the `createSpeech()` method directly by providing the required params:
 
 ```dart
-final speech = await OpenAI.instance.audio.createSpeech(
+// The speech request.
+File speechFile = await OpenAI.instance.audio.createSpeech(
   model: "tts-1",
   input: "Say my name is Anas",
   voice: "nova",
   responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
   outputDirectory: await Directory("speechOutput").create(),
-  outputFileName: DateTime.now().microsecondsSinceEpoch.toString(),
+  outputFileName: "anas",
 );
+
+// The file result.
+print(speechFile.path);
 ```
 
-**Note: the `outputDirectory` and `outputFileName` are helpers for this package, you can use them to save the audio file to a specific directory with a specific name, with the file extension being extracted from the `responseFormat`. if you don't want to use them, you can just ignore them, and the audio file will be saved to the default directory of your app, with the `output` file name.**
+**Note: the `outputDirectory` and `outputFileName` are helpers for this method, you can use them to save the audio file to a specific directory with a specific name, with the file extension being extracted from the `responseFormat`. if you don't want to use them, just ignore it, and the audio file will be saved to the default directory of your app, with the `output` file name.**
+
+The example snippet above will place a generated `anas.mp3` in the `speechOutput` directory in your project.
 
 ### Create transcription
 
@@ -565,10 +571,13 @@ For transcribing an audio `File`, you can use the `createTranscription()` method
 
 ```dart
 OpenAIAudioModel transcription = OpenAI.instance.audio.createTranscription(
-  file: /* THE AUDIO FILE HERE */,
+  file: File(/* THE FILE PATH*/),
   model: "whisper-1",
   responseFormat: OpenAIAudioResponseFormat.json,
 );
+
+// print the transcription.
+print(transcription.text);
 ```
 
 ### Create translation
@@ -577,11 +586,13 @@ to get access to the translation API, and translate an audio file to english, yo
 
 ```dart
 OpenAIAudioModel translation = await OpenAI.instance.audio.createTranslation(
-  file: /* THE AUDIO FILE HERE */,
+  file: File(/* THE FILE PATH*/),
   model: "whisper-1",
   responseFormat: OpenAIAudioResponseFormat.text,
-
 );
+
+// print the translation.
+print(translation.text);
 ```
 
 </br>
