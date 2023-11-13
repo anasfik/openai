@@ -154,7 +154,7 @@ OpenAI.requestsTimeOut = Duration(seconds: 60); // 60 seconds.
 
 And now, the time consuming methods will wait for 60 seconds to get a response before throwing an exception.
 
-### Setting your own base url.
+### Setting your own base url
 
 You can change the base url used in the package to your own, this can be helpful if you want to proxy the requests to the OpenAI API, or if you want to use your own server as a proxy to the OpenAI API.
 
@@ -525,19 +525,24 @@ Get a vector representation of a given input that can be easily consumed by mach
 ### Create embeddings
 
 ```dart
-OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
- model: "text-embedding-ada-002",
- input: "This is a text input just to test",
+final embedding = await OpenAI.instance.embedding.create(
+  model: "text-embedding-ada-002",
+  input: "This is a sample text",
 );
+
+for (int index = 0; index < embedding.data.length; index++) {
+  final currentItem = embedding.data[index];
+  print(currentItem);
+}
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/embeddings)
 
 </br>
 
-# Audio
+## Audio
 
-## Create Speech
+### Create Speech
 
 For creating a speech from a text, you can use the `createSpeech()` method directly by providing the required params:
 
@@ -554,7 +559,7 @@ final speech = await OpenAI.instance.audio.createSpeech(
 
 **Note: the `outputDirectory` and `outputFileName` are helpers for this package, you can use them to save the audio file to a specific directory with a specific name, with the file extension being extracted from the `responseFormat`. if you don't want to use them, you can just ignore them, and the audio file will be saved to the default directory of your app, with the `output` file name.**
 
-## Create transcription
+### Create transcription
 
 For transcribing an audio `File`, you can use the `createTranscription()` method directly by providing the `file` property:
 
@@ -566,7 +571,7 @@ OpenAIAudioModel transcription = OpenAI.instance.audio.createTranscription(
 );
 ```
 
-## Create translation
+### Create translation
 
 to get access to the translation API, and translate an audio file to english, you can use the `createTranslation()` method, by providing the `file`` property:
 
