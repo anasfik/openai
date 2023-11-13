@@ -59,6 +59,7 @@ Consider helping this project you too.
   - [x] With `Stream` responses.
 - [x] [Chat (chatGPT)](#chat-chatgpt)
   - [x] With `Stream` responses.
+  - [x] [Tools](#tools-new-implementation-of-functions-calling)
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
@@ -435,7 +436,7 @@ You can access the results in the `paramters` field of the `function_call` field
 FunctionCallResponse? response = chatCompletion.choices.first.message.functionCall;
 String? functionName = response?.name;
 Map<String, dynamic>? functionParameters = response?.parameters;
-```
+```e
 
 ## Edits
 
