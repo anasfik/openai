@@ -308,7 +308,6 @@ OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
   temperature: 0.2,
   maxTokens: 500,
   toolChoice: "auto",
-  tools: [/* tools if you have any */],
 );
 
 print(chatCompletion.choices.first.message); // ...
@@ -338,7 +337,6 @@ final chatStream = OpenAI.instance.chat.createStream(
   messages: [
     userMessage,
   ],
-  toolChoice: "none",
   seed: 423,
   n: 2,
 );
@@ -357,45 +355,76 @@ chatStream.listen(
 
 </br>
 
-### Functions
+### Tools ( new implementation of functions calling)
 
-You can use the chat functions interface with both the `Stream` and `Future` interface.
-(Note that functions requires at least model `gpt-3.5-turbo-0613`)
-Request:
+The chat API offer the `tools` feature which allows for calling functions from the chat API, this feature is implemented in the package, and can be used like the following, please note that this is just a showcase, and you should handle the edge cases in your app such when there is no tool call, or when the tool call is not the one you sent, etc...:
 
 ```dart
-OpenAIChatCompletionModel chatCompletion =
-    await OpenAI.instance.chat.create(
-      model: 'gpt-3.5-turbo-0613',
-      messages: [
-          OpenAIChatCompletionChoiceMessageModel(
-              content: "What's the weather like in Boston?",
-              role: OpenAIChatMessageRole.user,
-          )
-      ],
-      temperature: 0,
-      functions: [
-              OpenAIFunctionModel.withParameters(
-                name: 'get_current_weather',
-                description: 'Get the current weather in a given location',
-                parameters: [
-                  OpenAIFunctionProperty.string(
-                    name: 'location',
-                    description: 'The city and state, e.g. San Francisco, CA',
-                    isRequired: true,
-                  ),
-                  OpenAIFunctionProperty.string(
-                    name: 'unit',
-                    enumValues: ['celsius', 'fahrenheit']
-                  ),
-                ],
-              ),
-            ],
-      functionCall: FunctionCall.auto,
-    );
+ OpenAI.apiKey = Env.apiKey;
+
+// The function to be called by the tool.
+void sumNumbers(int number1, int number2) {
+  print("Your sum answer is ${number1 + number2}");
+}
+
+// The tool object that wilm be sent to the API.
+final sumNumbersTool = OpenAIToolModel(
+    type: "function",
+  function: OpenAIFunctionModel.withParameters(
+    name: "sumOfTwoNumbers",
+    parameters: [
+      OpenAIFunctionProperty.integer(
+        name: "number1",
+        description: "The first number to add",
+      ),
+      OpenAIFunctionProperty.integer(
+        name: "number2",
+        description: "The second number to add",
+      ),
+    ],
+  ),
+);
+
+  // The user text message that will be sent to the API.
+final userMessage = OpenAIChatCompletionChoiceMessageModel(
+    content: [
+    OpenAIChatCompletionChoiceMessageContentItemModel.text(
+        "What is the sum of 9996 and 3?",
+      ),
+  ],
+    role: OpenAIChatMessageRole.user,
+);
+
+  // The actual call.
+final chat = await OpenAI.instance.chat.create(
+    model: "gpt-3.5-turbo",
+    messages: [userMessage],
+    tools: [sumNumbersTool],
+);
+
+// ! This handling is only for showcase and not completed as edge cases will not be handled that you should handle in your app.
+
+final message = chat.choices.first.message;
+
+// Wether the message has a tool call.
+  if (message.hasToolCalls) {
+  final call = message.toolCalls!.first;
+
+    // Wether the tool call is the one we sent.
+  if (call.function.name == "sumOfTwoNumbers") {
+      // decode the arguments from the tool call.
+    final decodedArgs = jsonDecode(call.function.arguments);
+
+    final number1 = decodedArgs["number1"];
+    final number2 = decodedArgs["number2"];
+
+    // Call the function with the arguments.
+    sumNumbers(number1, number2);
+  }
+  }
 ```
 
-The `functionalCall` parameter can be set to a specific function name to force the model to use that function:
+The `tools` parameter can be set to a specific function name to force the model to use that function:
 ```dart
 functionCall: FunctionCall.forFunction('get_current_weather')
 ```
