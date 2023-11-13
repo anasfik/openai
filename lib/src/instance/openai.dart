@@ -45,11 +45,6 @@ final class OpenAI extends OpenAIClientBase {
   /// {@macro openai_config_requests_timeOut}
   static Duration get requestsTimeOut => OpenAIConfig.requestsTimeOut;
 
-  static set requestsTimeOut(Duration requestsTimeOut) {
-    OpenAIConfig.requestsTimeOut = requestsTimeOut;
-    OpenAILogger.requestsTimeoutChanged(requestsTimeOut);
-  }
-
   /// The [OpenAIModel] instance, used to access the model endpoints.
   /// Please, refer to the Models page from the official OpenAI documentation website in order to know what models are available and what's the use case of every model.
   OpenAIModel get model => OpenAIModel();
@@ -87,6 +82,12 @@ final class OpenAI extends OpenAIClientBase {
   /// The base API url, by default it is set to the OpenAI API url.
   /// You can change it by calling the [OpenAI.baseUrl] setter.
   static String get baseUrl => OpenAIConfig.baseUrl;
+
+  /// {@macro openai_config_requests_timeOut}
+  static set requestsTimeOut(Duration requestsTimeOut) {
+    OpenAIConfig.requestsTimeOut = requestsTimeOut;
+    OpenAILogger.requestsTimeoutChanged(requestsTimeOut);
+  }
 
   // /// The HTTP client that will be used to make the requests to the OpenAI API.
   // /// you can set yout own client, or just set to [null] to use the default client.

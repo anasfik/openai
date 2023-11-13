@@ -98,9 +98,9 @@ For the full documentation about all members this library offers, [check here](h
 
 The OpenAI API uses API keys for authentication. you can get your account API key by visiting [API keys](https://platform.openai.com/account/api-keys) of your account.
 
-We highly recommend loading your secret key at runtime from a `.env` file, you can use the [envied](https://pub.dev/packages/envied) package.
+We highly recommend loading your secret key at runtime from a `.env` file, you can use the [envied](https://pub.dev/packages/envied) package or any other package that does the same job.
 
-```
+```env
 // .env
 OPEN_AI_API_KEY=<REPLACE WITH YOUR API KEY>
 ```
@@ -120,7 +120,7 @@ abstract class Env {
 ```dart
 // lib/main.dart
 void main() {
- OpenAI.apiKey = Env.apiKey; // Initializes the package with that API key
+ OpenAI.apiKey = Env.apiKey; // Initializes the package with that API key, all methods now are ready for use.
  // ..
 }
 ```
@@ -143,57 +143,97 @@ If you don't belong actually to any organization, you can just ignore this secti
 
 </br>
 
+### Settings a default request timeout.
+
+The package make use if the [http](https://pub.dev/packages/http) to make requests, this one have a default timeout of 30 seconds, this means that any requests that takes more than 30 seconds will be cancelled, and a exception will be thrown, to chenge that you will need to set your own default timeout:
+
+```dart
+OpenAI.requestsTimeOut = Duration(seconds: 60); // 60 seconds.
+```
+
+And now, the time consuming methods will wait for 60 seconds to get a response before throwing an exception.
+
+### Setting your own base url.
+
+You can change the base url used in the package to your own, this can be helpful if you want to proxy the requests to the OpenAI API, or if you want to use your own server as a proxy to the OpenAI API.
+
+```dart
+OpenAI.baseUrl = "https://api.openai.com/v1"; // the default one.
+```
+
 ## Models
 
 ### List Models
 
-Lists the currently available models, and provides basic information about each one such as the owner and availability.
+Lists the currently available models, and provides information about each one such as the owner and availability.
 
 ```dart
- List<OpenAIModelModel> models = await OpenAI.instance.model.list();
- OpenAIModelModel firstModel = models.first;
-
- print(firstModel.id); // ...
+List<OpenAIModelModel> models = await OpenAI.instance.model.list();
+OpenAIModelModel firstModel = models.first;
+ 
+print(firstModel.id); // ...
+print(firstModel.permission); // ...
 ```
 
-### Retrieve model.
+### Retrieve model
 
 Retrieves a single model by its id and gets additional pieces of information about it.
 
 ```dart
- OpenAIModelModel model = await OpenAI.instance.model.retrieve("text-davinci-003");
- print(model.id);
+OpenAIModelModel model = await OpenAI.instance.model.retrieve("text-davinci-003");
+
+print(model.ownedBy); // ...
 ```
 
-If the model id does not exist, a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
+If the model id you provided does not exist or isn't available for your account, a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/models)
 
 </br>
 
+### Delete fine tuned models
+
+OpenAI offers [fine tuning](https://platform.openai.com/docs/guides/fine-tuning) feature, which you can make use of it with this package [here](#fine-tunes).
+
+However, if it happen that you want to delete a fine tuned model, you can use the `delete()` method:
+
+```dart
+bool isDeleted = await OpenAI.instance.model.delete("fine-tune-id");
+
+print(isDeleted); // ...
+
+```
+
 ## Completions
 
 ### Create completion
 
-Creates a Completion based on the provided properties `model`, `prompt` & other properties.
+Creates a predicted completion based on the provided `model`, `prompt` & other properties asynchronously.
 
 ```dart
 OpenAICompletionModel completion = await OpenAI.instance.completion.create(
   model: "text-davinci-003",
-  prompt: "Dart is a progr",
+  prompt: "Dart is a program",
   maxTokens: 20,
   temperature: 0.5,
   n: 1,
   stop: ["\n"],
   echo: true,
+  seed: 42,
+  bestOf: 2,
 );
+
+print(completion.choices.first.text); // ...
+print(completion.systemFingerprint); // ...
+print(completion.id); // ...
+
 ```
 
-if the request failed (as an example, if you did pass an invalid model id...), a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
+if the request failed (as an example, if you did pass an invalid `model`...), a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
 
 ### Create Completion Stream
 
-In addition to calling the `OpenAI.instance.completion.create()` which is a `Future` and will not return an actual value until the completion is ended, you can get a `Stream` of values as they are generated:
+In addition to calling the `OpenAI.instance.completion.create()` which is a `Future` (asynchronous) and will not return an actual value until the full completion is generated, you can get a `Stream` of them as they happen to be generated:
 
 ```dart
 Stream<OpenAIStreamCompletionModel> completionStream = OpenAI.instance.completion.createStream(
@@ -202,13 +242,20 @@ Stream<OpenAIStreamCompletionModel> completionStream = OpenAI.instance.completio
   maxTokens: 100,
   temperature: 0.5,
   topP: 1,
- );
+  seed: 42,
+  stop: '###',
+  n: 2,
+);
 
 completionStream.listen((event) {
- final firstCompletionChoice = event.choices.first;
- print(firstCompletionChoice.text); // ...
+  final firstCompletionChoice = event.choices.first;
+
+  print(firstCompletionChoice.index); // ...
+  print(firstCompletionChoice.text); // ...
 });
 ```
+
+**Useful: Check also the `createStreamText()` method**
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/completions)
 
