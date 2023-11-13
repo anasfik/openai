@@ -265,39 +265,94 @@ completionStream.listen((event) {
 
 ### Create chat completion
 
-Creates a completion for the chat message, note you need to set each message as a `OpenAIChatCompletionChoiceMessageModel` object.
+Creates a predicted completion for a chat message(s), from the provided properties:
 
 ```dart
-OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
-    model: "gpt-3.5-turbo",
-    messages: [
-      OpenAIChatCompletionChoiceMessageModel(
-        content: "hello, what is Flutter and Dart ?",
-        role: OpenAIChatMessageRole.user,
-        ),
-    ],
+// the system message that will be sent to the request.
+final systemMessage = OpenAIChatCompletionChoiceMessageModel(
+  content: [
+    OpenAIChatCompletionChoiceMessageContentItemModel.text(
+      "return any message you are given as JSON.",
+    ),
+  ],
+  role: OpenAIChatMessageRole.assistant,
 );
+
+  // the user message that will be sent to the request.
+ final userMessage = OpenAIChatCompletionChoiceMessageModel(
+   content: [
+     OpenAIChatCompletionChoiceMessageContentItemModel.text(
+       "Hello, I am a chatbot created by OpenAI. How are you today?",
+     ),
+
+     //! image url contents are allowed only for models with image support such gpt-4.
+     OpenAIChatCompletionChoiceMessageContentItemModel.imageUrl(
+       "https://placehold.co/600x400",
+     ),
+   ],
+   role: OpenAIChatMessageRole.user,
+ );
+
+// all messages to be sent.
+final requestMessages = [
+  systemMessage,
+  userMessage,
+];
+
+// the actual request.
+OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
+  model: "gpt-3.5-turbo-1106",
+  responseFormat: {"type": "json_object"},
+  seed: 6,
+  messages: requestMessages,
+  temperature: 0.2,
+  maxTokens: 500,
+  toolChoice: "auto",
+  tools: [/* tools if you have any */],
+);
+
+print(chatCompletion.choices.first.message); // ...
+print(chatCompletion.systemFingerprint); // ...
+print(chatCompletion.usage.promptTokens); // ...
+print(chatCompletion.id); // ...
 ```
 
 ### Create a chat completion stream
 
-in addition to calling `OpenAI.instance.chat.create()` which is a `Future` and will resolve only after the whole chat is generated, you can get a `Stream` of results:
+In addition to calling `OpenAI.instance.chat.create()` which is a `Future` (asynchronous) and will resolve only after the whole chat is generated, you can get a `Stream` of them as they happen to be generated:
 
 ```dart
-Stream<OpenAIStreamChatCompletionModel> chatStream = OpenAI.instance.chat.createStream(
-    model: "gpt-3.5-turbo",
-    messages: [
-      OpenAIChatCompletionChoiceMessageModel(
-        content: "hello",
-        role: OpenAIChatMessageRole.user,
-      )
-    ],
-  );
+// The user message to be sent to the request.
+final userMessage = OpenAIChatCompletionChoiceMessageModel(
+  content: [
+    OpenAIChatCompletionChoiceMessageContentItemModel.text(
+      "Hello my friend!",
+    ),
+  ],
+  role: OpenAIChatMessageRole.user,
+);
 
-chatStream.listen((streamChatCompletion) {
+// The request to be sent.
+final chatStream = OpenAI.instance.chat.createStream(
+  model: "gpt-3.5-turbo",
+  messages: [
+    userMessage,
+  ],
+  toolChoice: "none",
+  seed: 423,
+  n: 2,
+);
+
+// Listen to the stream.
+chatStream.listen(
+  (streamChatCompletion) {
     final content = streamChatCompletion.choices.first.delta.content;
     print(content);
-});
+  },
+  onDone: () {
+    print("Done");
+  },
+);
 ```
 
 </br>

@@ -6,19 +6,24 @@ void main() {
   // Set the OpenAI API key from the .env file.
   OpenAI.apiKey = Env.apiKey;
 
+  final userMessage = OpenAIChatCompletionChoiceMessageModel(
+    content: [
+      OpenAIChatCompletionChoiceMessageContentItemModel.text(
+        "Hello my friend!",
+      ),
+    ],
+    role: OpenAIChatMessageRole.user,
+  );
+
   // Creates A Stream Of Chat Completions.
   final chatStream = OpenAI.instance.chat.createStream(
     model: "gpt-3.5-turbo",
     messages: [
-      OpenAIChatCompletionChoiceMessageModel(
-        content: [
-          OpenAIChatCompletionChoiceMessageContentItemModel.text(
-            "Hello",
-          ),
-        ],
-        role: OpenAIChatMessageRole.user,
-      )
+      userMessage,
     ],
+    toolChoice: "none",
+    seed: 423,
+    n: 2,
   );
 
   // Listen to the stream.
