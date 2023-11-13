@@ -425,18 +425,7 @@ final message = chat.choices.first.message;
   }
 ```
 
-The `tools` parameter can be set to a specific function name to force the model to use that function:
-```dart
-functionCall: FunctionCall.forFunction('get_current_weather')
-```
-
-You can access the results in the `paramters` field of the `function_call` field.
-
-```dart
-FunctionCallResponse? response = chatCompletion.choices.first.message.functionCall;
-String? functionName = response?.name;
-Map<String, dynamic>? functionParameters = response?.parameters;
-```e
+Learn more from [here](https://platform.openai.com/docs/api-reference/chat/create).
 
 ## Edits
 
@@ -446,12 +435,17 @@ Creates an edited version of the given prompt based on the used model.
 
 ```dart
 OpenAIEditModel edit = await OpenAI.instance.edit.create(
-model: "text-davinci-edit-001";
-instruction: "remote all '!'from input text",
-input: "Hello!!, I! need to be ! somethi!ng"
-n: 1,
-temperature: 0.8,
+  model: "text-davinci-edit-001";
+  instruction: "remote all '!'from input text",
+  input: "Hello!!, I! need to be ! somethi!ng"
+  n: 1,
+  temperature: 0.8,
 );
+
+// Prints the choices.
+for (int index = 0; index < edit.choices.length; index++) {
+  print(edit.choices[index].text);
+}
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/edits)
