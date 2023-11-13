@@ -465,6 +465,12 @@ Generates a new image based on a prompt given.
   size: OpenAIImageSize.size1024,
   responseFormat: OpenAIImageResponseFormat.url,
 );
+
+// Printing the output to the console.
+for (int index = 0; index < image.data.length; index++) {
+  final currentItem = image.data[index];
+  print(currentItem.url);
+}
 ```
 
 ### Create image edit
@@ -472,14 +478,19 @@ Generates a new image based on a prompt given.
 Creates an edited or extended image given an original image and a prompt.
 
 ```dart
-OpenAiImageEditModel imageEdit = await OpenAI.instance.image.edit(
- image: File(/* IMAGE PATH HERE */),
- mask: File(/* MASK PATH HERE */),
- prompt: "mask the image with a dinosaur",
- n: 1,
- size: OpenAIImageSize.size1024,
- responseFormat: OpenAIImageResponseFormat.url,
+OpenAIImageModel imageEdits = await OpenAI.instance.image.edit(
+  prompt: 'mask the image with color red',
+  image: File(/* IMAGE PATH HERE */),
+  mask: File(/* MASK PATH HERE */),
+  n: 1,
+  size: OpenAIImageSize.size1024,
+  responseFormat: OpenAIImageResponseFormat.b64Json,
 );
+
+for (int index = 0; index < imageEdits.data.length; index++) {
+  final currentItem = imageEdits.data[index];
+  print(currentItem.b64Json);
+}
 ```
 
 ### Create image variation
@@ -487,12 +498,20 @@ OpenAiImageEditModel imageEdit = await OpenAI.instance.image.edit(
 Creates a variation of a given image.
 
 ```dart
-OpenAIImageVariationModel imageVariation = await OpenAI.instance.image.variation(
- image: File(/* IMAGE PATH HERE */),
- n: 1,
- size: OpenAIImageSize.size1024,
- responseFormat: OpenAIImageResponseFormat.url,
+// Creates the Image Variation
+final imageVariations = await OpenAI.instance.image.variation(
+  model: "dall-e-2",
+  image: File("dart.png"),
+  n: 4,
+  size: OpenAIImageSize.size512,
+  responseFormat: OpenAIImageResponseFormat.url,
 );
+
+ // Prints the output to the console.
+for (var index = 0; index < imageVariations.data.length; index++) {
+  final currentItem = imageVariations.data[index];
+  print(currentItem.url);
+}
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/images)

@@ -22,7 +22,10 @@ Future<void> main() async {
   );
 
   // Printing the output to the console.
-  print(image.data.first.url);
+  for (int index = 0; index < image.data.length; index++) {
+    final currentItem = image.data[index];
+    print(currentItem.url);
+  }
 
   // create a moderation
   final moderation = await OpenAI.instance.moderation.create(
