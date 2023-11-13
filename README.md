@@ -1,6 +1,6 @@
 # NEW: ChatGPT & Whisper APIs are [added](#chat-chatgpt) to the library and can be used directly.
 
-<br>
+</br>
 <p align="center">
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/anasfik/openai">
 <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/anasfik/openai">
@@ -588,7 +588,7 @@ to get access to the translation API, and translate an audio file to english, yo
 OpenAIAudioModel translation = await OpenAI.instance.audio.createTranslation(
   file: File(/* THE FILE PATH*/),
   model: "whisper-1",
-  responseFormat: OpenAIAudioResponseFormat.text,
+  responseFormat: OpenAIAudioResponseFo rmat.text,
 );
 
 // print the translation.
@@ -744,7 +744,7 @@ print(deleted); // ...
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/fine-tunes)
 
 </br>
- 
+
 ## Moderations
 
 ### Create moderation
@@ -762,7 +762,7 @@ print(moderation.results.first.categories.hate); // ...
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/moderations)
 
-<br>
+</br>
 
 ## Error Handling
 
@@ -781,10 +781,10 @@ try {
 }
 ```
 
-<br>
-<br>
+</br>
+</br>
 
-#### Want To Help ?
+### Want To Help ?
 
 Please, Just remember that any kind of help related to these tasks are welcome, for the sake of the community.
 
@@ -792,3 +792,5 @@ Please, Just remember that any kind of help related to these tasks are welcome, 
 - Code Refactoring: I know this is my job not yours :), but if you can and want, you're more than welcome.
 - Reviewing code: if it happens that there is a better way to make something happen in the SDK, please just let me know.
 - if you tried any sample of use cases, examples of yours and wanted to include it in the examples/, please go ahead.
+- Mention any updates if they exists in the API, Dart, a certain package, or even Flutter that relates to this package.
+- [Donate to the project](https://github.com/sponsors/anasfik), it will help me to keep working on it, and make it better.
