@@ -178,6 +178,8 @@ void main() {
 }
 ```
 
+Now, tha package will use the js fetch client for web with [fetch_client](https://pub.dev/packages/fetch_client) package, and the http package for all other IO platforms such as Android, iOS, MacOS, Linux, Windows..
+
 ## Models
 
 ### List Models
