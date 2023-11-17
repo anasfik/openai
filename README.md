@@ -144,7 +144,7 @@ If you don't belong actually to any organization, you can just ignore this secti
 
 </br>
 
-### Settings a default request timeout.
+### Settings a default request timeout
 
 The package make use if the [http](https://pub.dev/packages/http) to make requests, this one have a default timeout of 30 seconds, this means that any requests that takes more than 30 seconds will be cancelled, and a exception will be thrown, to chenge that you will need to set your own default timeout:
 
@@ -162,6 +162,22 @@ You can change the base url used in the package to your own, this can be helpful
 OpenAI.baseUrl = "https://api.openai.com/v1"; // the default one.
 ```
 
+### Enable debugging and logs
+You can make the package logs the operations flows and steps by setting the `showLogs`:
+  
+```dart
+OpenAI.showLogs = true;
+```
+
+This will only log the requests steps such when the request started and finished, when the decoding started...
+
+But if you want to log raw responses that are returned from the API (JSON, RAW...), you can set the `showResponsesLogs` to `true`:
+
+```dart
+OpenAI.showResponsesLogs = true;
+```
+
+This will log the raw responses that are returned from the API, such when the request is successful, or when it failed. (This don't include the stream responses).
 
 ## Models
 
