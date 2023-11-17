@@ -45,6 +45,9 @@ final class OpenAI extends OpenAIClientBase {
   /// {@macro openai_config_requests_timeOut}
   static Duration get requestsTimeOut => OpenAIConfig.requestsTimeOut;
 
+  /// {@macro openai_config_is_web}
+  static bool get isWeb => OpenAIConfig.isWeb;
+
   /// The [OpenAIModel] instance, used to access the model endpoints.
   /// Please, refer to the Models page from the official OpenAI documentation website in order to know what models are available and what's the use case of every model.
   OpenAIModel get model => OpenAIModel();
@@ -136,6 +139,18 @@ final class OpenAI extends OpenAIClientBase {
   /// ```
   static set showLogs(bool newValue) {
     OpenAILogger.isActive = newValue;
+  }
+
+  /// Wether the package is running on the web or not, example of this is the use of Flutter web.
+  ///
+  /// By default it is set to [false].
+  ///
+  /// ```dart
+  /// OpenAI.isWeb = kIsWeb;
+  /// ```
+  ///
+  static set isWeb(bool newValue) {
+    OpenAIConfig.isWeb = newValue;
   }
 
   // /// Sets the given [client] as the new client that will be used in the requests made by the package.

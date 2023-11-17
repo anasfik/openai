@@ -3,10 +3,6 @@ import "dart:convert";
 import "dart:io";
 import "package:dart_openai/src/core/constants/config.dart";
 import "package:dart_openai/src/core/utils/extensions.dart";
-// ignore: unused_import
-import "package:dart_openai/src/core/utils/http_client_web.dart"
-    if (dart.library.js) "package:dart_openai/src/core/utils/http_client_web.dart"
-    if (dart.library.io) "package:dart_openai/src/core/utils/http_client_io.dart";
 
 import 'package:dart_openai/dart_openai.dart';
 import "package:dart_openai/src/core/builder/headers.dart";
@@ -15,6 +11,7 @@ import "package:http/http.dart" as http;
 import "package:meta/meta.dart";
 
 import '../constants/strings.dart';
+import "../utils/streaming_http_client.dart";
 
 /// Handling exceptions returned by OpenAI Stream API.
 final class _OpenAIChatStreamSink implements EventSink<String> {
@@ -140,7 +137,7 @@ abstract class OpenAINetworkingClient {
   }) {
     final controller = StreamController<T>();
 
-    final clientForUse = client ?? http.Client();
+    final clientForUse = client ?? _streamingHttpClient();
 
     final uri = Uri.parse(from);
 
@@ -336,7 +333,7 @@ abstract class OpenAINetworkingClient {
     final controller = StreamController<T>();
 
     try {
-      final clientForUse = client ?? http.Client();
+      final clientForUse = client ?? _streamingHttpClient();
 
       final uri = Uri.parse(to);
 
@@ -660,5 +657,13 @@ abstract class OpenAINetworkingClient {
 
   static bool doesErrorExists(Map<String, dynamic> decodedResponseBody) {
     return decodedResponseBody[OpenAIStrings.errorFieldKey] != null;
+  }
+
+  static http.Client _streamingHttpClient() {
+    if (OpenAIConfig.isWeb) {
+      return createWebClient();
+    } else {
+      return createIoClient();
+    }
   }
 }

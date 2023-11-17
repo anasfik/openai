@@ -63,6 +63,7 @@ void main() async {
       // ! this is to reset the base URL to the default one.
       OpenAI.baseUrl = OpenAIStrings.defaultBaseUrl;
     });
+
     test("switching showing logs", () {
       OpenAI.showLogs = true;
       expect(OpenAILogger.isActive, isTrue);
@@ -80,18 +81,30 @@ void main() async {
     });
 
     test("requests timeout", () {
-      OpenAIConfig.requestsTimeOut = Duration(seconds: 10);
+      final tS = 10;
+
+      OpenAIConfig.requestsTimeOut = Duration(seconds: tS);
 
       expect(
         OpenAIConfig.requestsTimeOut.inMilliseconds,
-        Duration(seconds: 10).inMilliseconds,
+        Duration(seconds: tS).inMilliseconds,
       );
 
       //! return to the default timeout.
 
       OpenAIConfig.requestsTimeOut = OpenAIConfig.defaultRequestsTimeOut;
     });
+
+    test('declaring web environment for the package', () {
+      OpenAI.isWeb = true;
+
+      expect(OpenAI.isWeb, isTrue);
+
+      // ! this is to reset the isWeb to the default one.
+      OpenAI.isWeb = false;
+    });
   });
+
   group('models', () {
     test(
       'list models',

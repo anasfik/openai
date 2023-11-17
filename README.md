@@ -162,6 +162,22 @@ You can change the base url used in the package to your own, this can be helpful
 OpenAI.baseUrl = "https://api.openai.com/v1"; // the default one.
 ```
 
+### Configure the package for web environment (Flutter Web)
+
+because the package uses the [http](https://pub.dev/packages/http) package, the streaming functionality will not work as expected for the Streaming methods, to get over this, you will need to let the package knows that you are using it in a web environment, Flutter as example exposes the `kIsWeb` property that you can use to check if you are in a web environment or not, just assign it to `OpenAI.isWeb`
+
+```dart
+// import it from flutter/foundation.dart
+import 'package:flutter/foundation.dart' show kIsWeb;
+
+void main() {
+  // ...
+  OpenAI.isWeb = kIsWeb;
+
+  runApp(MyApp());
+}
+```
+
 ## Models
 
 ### List Models

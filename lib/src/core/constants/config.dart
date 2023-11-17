@@ -21,6 +21,11 @@ abstract class OpenAIConfig {
   /// {@endtemplate}
   static String? _baseUrl;
 
+  /// {@template openai_config_is_web}
+  /// This is a flag that indicates if the library is running on the web or not.
+  /// {@endtemplate}
+  static bool _isWeb = false;
+
   /// This is the version of the API.
   static String get version => OpenAIStrings.version;
 
@@ -30,9 +35,18 @@ abstract class OpenAIConfig {
     return _baseUrl ?? OpenAIStrings.defaultBaseUrl;
   }
 
+  /// {@macro openai_config_is_web}
+  static bool get isWeb => _isWeb;
+
   @internal
   static set baseUrl(String? baseUrl) {
     _baseUrl = baseUrl;
     OpenAILogger.logBaseUrl(_baseUrl);
+  }
+
+  @internal
+  static set isWeb(bool isWeb) {
+    _isWeb = isWeb;
+    OpenAILogger.logIsWeb(_isWeb);
   }
 }

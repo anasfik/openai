@@ -146,4 +146,8 @@ abstract final class OpenAILogger {
   static void requestsTimeoutChanged(Duration requestsTimeOut) {
     return log("requests timeout changed to $requestsTimeOut");
   }
+
+  static void logIsWeb(bool isWeb) {
+    return log("isWeb set to $isWeb");
+  }
 }
