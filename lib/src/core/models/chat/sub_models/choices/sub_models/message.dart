@@ -106,7 +106,7 @@ final class OpenAIChatCompletionChoiceMessageModel {
         OpenAIChatCompletionChoiceMessageContentItemModel.text(fieldData),
       ];
     } else if (fieldData is List) {
-      return (fieldData as List).map(
+      return (fieldData).map(
         (item) {
           if (item is! Map) {
             throw Exception('Invalid content item');

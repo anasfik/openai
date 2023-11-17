@@ -1,5 +1,4 @@
 import 'package:dart_openai/dart_openai.dart';
-import 'package:example/env/env.dart';
 
 void main() async {
   Stream<OpenAIStreamCompletionModel> completionStream =

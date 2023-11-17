@@ -1,6 +1,5 @@
 import 'package:dart_openai/dart_openai.dart';
 
-import '../../../../sub_models/choices/sub_models/sub_models/tool_call.dart';
 
 /// {@template openai_stream_chat_completion_choice_delta_model}
 /// This contains the [role] and [content] of the choice of the chat response.
@@ -94,7 +93,7 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
         OpenAIChatCompletionChoiceMessageContentItemModel.text(fieldData),
       ];
     } else if (fieldData is List) {
-      return (fieldData as List).map(
+      return (fieldData).map(
         (item) {
           if (item is! Map) {
             throw Exception('Invalid content item');
