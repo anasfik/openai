@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.4
+
+- Exposed field for configuring the package to use fetch_client instead of http_client for making requests in web apps (flutter web, etc..)
+
 ## 4.1.3
 
 - Added Audio Speech method in the Audio module with its docs, example code.
