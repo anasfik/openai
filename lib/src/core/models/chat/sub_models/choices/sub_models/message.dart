@@ -13,6 +13,7 @@ final class OpenAIChatCompletionChoiceMessageModel {
   final OpenAIChatMessageRole role;
 
   //! TODO: add the possibility to include images in the message content, see docs and do a non-breaking change.
+
   /// The [content] of the message.
   final List<OpenAIChatCompletionChoiceMessageContentItemModel>? content;
 
@@ -99,7 +100,7 @@ final class OpenAIChatCompletionChoiceMessageModel {
 
   static List<OpenAIChatCompletionChoiceMessageContentItemModel>
       dynamicContentFromField(
-    dynamic fieldData,
+    fieldData,
   ) {
     if (fieldData is String) {
       return [

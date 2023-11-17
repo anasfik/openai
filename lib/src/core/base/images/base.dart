@@ -34,12 +34,12 @@ extension StyleToStingExtension on OpenAIImageStyle {
     return name;
 
     // ! pretty sure this will be needed in the future in case of adding more styles that can't be got from the `name` field.
-    switch (this) {
-      case OpenAIImageStyle.vivid:
-        return "vivid";
-      case OpenAIImageStyle.natural:
-        return "natural";
-    }
+    // switch (this) {
+    //   case OpenAIImageStyle.vivid:
+    //     return "vivid";
+    //   case OpenAIImageStyle.natural:
+    //     return "natural";
+    // }
   }
 }
 
@@ -48,10 +48,10 @@ extension QualityToStingExtension on OpenAIImageQuality {
     return name;
 
     // ! pretty sure this will be needed in the future in case of adding more qualities that can't be got from the `name` field.
-    switch (this) {
-      case OpenAIImageQuality.hd:
-        return "hd";
-    }
+    // switch (this) {
+    //   case OpenAIImageQuality.hd:
+    //     return "hd";
+    // }
   }
 }
 

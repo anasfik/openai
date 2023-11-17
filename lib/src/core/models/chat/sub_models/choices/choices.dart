@@ -5,7 +5,7 @@ import 'sub_models/message.dart';
 /// {@endtemplate}
 final class OpenAIChatCompletionChoiceModel {
   /// The [index] of the choice.
-  final dynamic index;
+  final index;
 
   /// The [message] of the choice.
   final OpenAIChatCompletionChoiceMessageModel message;
