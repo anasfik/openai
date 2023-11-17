@@ -1,11 +1,8 @@
 # Changelog
 
-## 4.1.5
-
-- Removed the exposed field for configuring the package to use fetch_client instead of http_client manually withe is `isWeb` field, in favor of using `dart.library.js` and `dart.library.io` conditional imports to automatically detect the platform and use the appropriate client for it.
-
 ## 4.1.4
 
+- Removed the exposed field for configuring the package to use fetch_client instead of http_client manually withe is `isWeb` field, in favor of using `dart.library.js` and `dart.library.io` conditional imports to automatically detect the platform and use the appropriate client for it.
 - Exposed field for configuring the package to use fetch_client instead of http_client for making requests in web apps (flutter web, etc..)
 
 ## 4.1.3

@@ -171,7 +171,7 @@ OpenAI.showLogs = true;
 
 This will only log the requests steps such when the request started and finished, when the decoding started...
 
-But if you want to log raw responses that are returned from the API (JSON, RAW...), you can set the `showResponsesLogs` to `true`:
+But if you want to log raw responses that are returned from the API (JSON, RAW...), you can set the `showResponsesLogs`:
 
 ```dart
 OpenAI.showResponsesLogs = true;
@@ -605,15 +605,14 @@ to get access to the translation API, and translate an audio file to english, yo
 OpenAIAudioModel translation = await OpenAI.instance.audio.createTranslation(
   file: File(/* THE FILE PATH*/),
   model: "whisper-1",
-  responseFormat: OpenAIAudioResponseFo rmat.text,
+  responseFormat: OpenAIAudioResponseFormat.text,
 );
 
 // print the translation.
 print(translation.text);
 ```
 
-Learn more from [here](C:\projects\Flutter_and_Dart\openai
-).
+Learn more from [here](https://platform.openai.com/docs/api-reference/audio/createTranslation).
 
 </br>
 

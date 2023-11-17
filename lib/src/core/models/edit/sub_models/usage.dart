@@ -18,7 +18,7 @@ final class OpenAIEditModelUsage {
   int get hashCode =>
       promptTokens.hashCode ^ completionTokens.hashCode ^ totalTokens.hashCode;
 
-  /// {@template openai_edit_model_usage}
+  /// {@macro openai_edit_model_usage}
   const OpenAIEditModelUsage({
     required this.promptTokens,
     required this.completionTokens,
@@ -27,6 +27,7 @@ final class OpenAIEditModelUsage {
 
   /// {@template openai_edit_model_usage}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEditModelUsage] object.
+  /// {@endtemplate}
   factory OpenAIEditModelUsage.fromMap(Map<String, dynamic> json) {
     return OpenAIEditModelUsage(
       promptTokens: json['prompt_tokens'],
