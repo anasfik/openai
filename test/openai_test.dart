@@ -95,14 +95,14 @@ void main() async {
       OpenAIConfig.requestsTimeOut = OpenAIConfig.defaultRequestsTimeOut;
     });
 
-    test('declaring web environment for the package', () {
-      OpenAI.isWeb = true;
+    // test('declaring web environment for the package', () {
+    //   OpenAI.isWeb = true;
 
-      expect(OpenAI.isWeb, isTrue);
+    //   expect(OpenAI.isWeb, isTrue);
 
-      // ! this is to reset the isWeb to the default one.
-      OpenAI.isWeb = false;
-    });
+    //   // ! this is to reset the isWeb to the default one.
+    //   OpenAI.isWeb = false;
+    // });
   });
 
   group('models', () {

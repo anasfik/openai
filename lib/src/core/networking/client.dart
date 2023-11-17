@@ -11,7 +11,10 @@ import "package:http/http.dart" as http;
 import "package:meta/meta.dart";
 
 import '../constants/strings.dart';
-import "../utils/streaming_http_client.dart";
+
+import "../utils/streaming_http_client_default.dart"
+    if (dart.library.js) 'package:dart_openai/src/core/utils/streaming_http_client_web.dart'
+    if (dart.library.io) 'package:dart_openai/src/core/utils/streaming_http_client_io.dart';
 
 /// Handling exceptions returned by OpenAI Stream API.
 final class _OpenAIChatStreamSink implements EventSink<String> {
@@ -98,6 +101,8 @@ abstract class OpenAINetworkingClient {
             .get(uri, headers: headers)
             .timeout(OpenAIConfig.requestsTimeOut)
         : await client.get(uri, headers: headers);
+
+    OpenAILogger.logResponseBody(response);
 
     if (returnRawResponse) {
       return response.body as T;
@@ -295,6 +300,8 @@ abstract class OpenAINetworkingClient {
             .timeout(OpenAIConfig.requestsTimeOut)
         : await client.post(uri, headers: headers, body: handledBody);
 
+    OpenAILogger.logResponseBody(response);
+
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
     OpenAILogger.startingDecoding();
@@ -467,6 +474,8 @@ abstract class OpenAINetworkingClient {
 
     final String encodedBody = await response.stream.bytesToString();
 
+    OpenAILogger.logResponseBody(response);
+
     final Map<String, dynamic> decodedBody = decodeToMap(encodedBody);
 
     OpenAILogger.decodedSuccessfully();
@@ -518,6 +527,8 @@ abstract class OpenAINetworkingClient {
 
     final String encodedBody = await response.stream.bytesToString();
 
+    OpenAILogger.logResponseBody(response);
+
     final Map<String, dynamic> decodedBody = decodeToMap(encodedBody);
 
     OpenAILogger.decodedSuccessfully();
@@ -563,6 +574,8 @@ abstract class OpenAINetworkingClient {
 
     final http.StreamedResponse response =
         await request.send().timeout(OpenAIConfig.requestsTimeOut);
+
+    OpenAILogger.logResponseBody(response);
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
@@ -612,6 +625,8 @@ abstract class OpenAINetworkingClient {
             .timeout(OpenAIConfig.requestsTimeOut)
         : await client.delete(uri, headers: headers);
 
+    OpenAILogger.logResponseBody(response);
+
     OpenAILogger.requestToWithStatusCode(from, response.statusCode);
 
     OpenAILogger.startingDecoding();
@@ -660,10 +675,6 @@ abstract class OpenAINetworkingClient {
   }
 
   static http.Client _streamingHttpClient() {
-    if (OpenAIConfig.isWeb) {
-      return createWebClient();
-    } else {
-      return createIoClient();
-    }
+    return createClient();
   }
 }

@@ -1,7 +1,7 @@
-import 'package:dart_openai/dart_openai.dart';
+// import 'package:dart_openai/dart_openai.dart';
 
-void main() {
-  OpenAI.isWeb = true;
+// void main() {
+//   OpenAI.isWeb = true;
 
-  print(OpenAI.isWeb);
-}
+//   print(OpenAI.isWeb);
+// }

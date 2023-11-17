@@ -1,5 +1,6 @@
 import 'dart:developer' as dev;
 
+import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 
 import '../constants/strings.dart';
@@ -8,25 +9,62 @@ import '../constants/strings.dart';
 @immutable
 @internal
 abstract final class OpenAILogger {
-  /// This represents the default value of the logger active state.
+  /// {@template openai_logger_is_active}
+  /// Wether the to show operations flow logger is active or not.
+  /// {@endtemplate}
   static bool _isActive = true;
 
+  /// {@template openai_logger_show_responses_logs}
+  /// Wether to show operations response bodies in logs or not.
+  /// {@endtemplate}
+  static bool _showResponsesLogs = false;
+
+  /// {@macro openai_logger_is_active}
   static bool get isActive => _isActive;
+
+  /// {@macro openai_logger_show_responses_logs}
+  static bool get showResponsesLogs => _showResponsesLogs;
 
   /// Changes the logger active state.
   ///
   /// if true, the logger will log messages.
   /// If false, the logger will not log messages.
   ///
-  /// The default value is [_isActive].
+  /// The default value is [true].
   static set isActive(bool newValue) {
     _isActive = newValue;
+  }
+
+  /// Changes the logger show responses logs state.
+  ///
+  /// if true, the logger will log responses bodies.
+  /// If false, the logger will not log responses bodies.
+  ///
+  /// The default value is [false].
+  static set showResponsesLogs(bool newValue) {
+    _showResponsesLogs = newValue;
   }
 
   /// Logs a message, if the logger is active.
   static void log(String message, [Object? error]) {
     if (_isActive) {
       dev.log(message, name: OpenAIStrings.openai, error: error);
+    }
+  }
+
+  /// Logs the response of a request, if the logger is active.
+  static Future<void> logResponseBody(response) async {
+    if (_isActive && _showResponsesLogs) {
+      if (response is Response) {
+        dev.log(response.body.toString(), name: OpenAIStrings.openai);
+      } else if (response is StreamedResponse) {
+        final asString = await response.stream.bytesToString();
+
+        dev.log(
+          asString,
+          name: OpenAIStrings.openai,
+        );
+      }
     }
   }
 
