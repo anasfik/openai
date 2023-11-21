@@ -140,7 +140,7 @@ base class RequestFunctionMessage
   Map<String, dynamic> toMap() {
     return {
       "role": role.name,
-      "content": content,
+      "content": content?.map((toolCall) => toolCall.toMap()).toList(),
       "tool_call_id": toolCallId,
     };
   }

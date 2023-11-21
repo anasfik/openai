@@ -50,6 +50,7 @@ Future<void> main() async {
     print(assistantMsg1.content);
     return;
   }
+
   final funcCall = toolCalls.first.function;
 
   final weather = getCurrentWeather(
