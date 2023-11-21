@@ -31,6 +31,7 @@ abstract class BaseApiUrlBuilder {
     return apiLink;
   }
 
+  // This is used to handle the endpoints that don't start with a slash.
   static String _handleEndpointsStarting(String endpoint) {
     return endpoint.startsWith("/") ? endpoint : "/$endpoint";
   }

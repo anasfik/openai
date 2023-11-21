@@ -6,6 +6,7 @@ import 'env/env.dart';
 
 Future<void> main() async {
   OpenAI.apiKey = Env.apiKey;
+  OpenAI.showResponsesLogs = true;
 
   final function = OpenAIFunctionModel.withParameters(
     name: "getCurrentWeather",

@@ -8,6 +8,9 @@ import 'package:meta/meta.dart';
 @immutable
 @internal
 abstract class OpenAIConfig {
+  /// {@template openai_config_default_requests_timeOut}
+  /// The default maximum duration a request can take, this will be applied to all requests, defaults to 30 seconds.
+  /// {@endtemplate}
   static final defaultRequestsTimeOut = Duration(seconds: 30);
 
   /// {@template openai_config_requests_timeOut}
@@ -21,12 +24,9 @@ abstract class OpenAIConfig {
   /// {@endtemplate}
   static String? _baseUrl;
 
-  // /// {@template openai_config_is_web}
-  // /// This is a flag that indicates if the library is running on the web or not.
-  // /// {@endtemplate}
-  // static bool _isWeb = false;
-
+  /// {@template openai_config_version}
   /// This is the version of the API.
+  /// {@endtemplate}
   static String get version => OpenAIStrings.version;
 
   /// {@macro openai_config_base_url}
@@ -35,18 +35,9 @@ abstract class OpenAIConfig {
     return _baseUrl ?? OpenAIStrings.defaultBaseUrl;
   }
 
-  // /// {@macro openai_config_is_web}
-  // static bool get isWeb => _isWeb;
-
   @internal
   static set baseUrl(String? baseUrl) {
     _baseUrl = baseUrl;
     OpenAILogger.logBaseUrl(_baseUrl);
   }
-
-  // @internal
-  // static set isWeb(bool isWeb) {
-  //   _isWeb = isWeb;
-  //   OpenAILogger.logIsWeb(_isWeb);
-  // }
 }

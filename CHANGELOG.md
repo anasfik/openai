@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.0.0
+
+- Bug fix in the `RequestFunctionMessage`'s `toMap()` method.
+- Minor changes
+- Add/Improvements to the documentation.
+- Notifications about breaking changes in the chat completions methods in favor of OpenAI Vision feature support, JSON mode..
+
 ## 4.1.4
 
 - Removed the exposed field for configuring the package to use fetch_client instead of http_client manually withe is `isWeb` field, in favor of using `dart.library.js` and `dart.library.io` conditional imports to automatically detect the platform and use the appropriate client for it.

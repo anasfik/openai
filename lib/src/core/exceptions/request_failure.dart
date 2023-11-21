@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-/// {@template request_failure}
+/// {@template http_request_failure_exception}
 /// This exception is thrown when a request fails, from the API.
 /// {@endtemplate}
 @immutable
@@ -11,11 +11,11 @@ class RequestFailedException implements Exception {
   /// The status code of the request that failed, if any.
   final int statusCode;
 
-  /// {@macro request_failure}
+  /// {@macro http_request_failure_exception}
   RequestFailedException(this.message, this.statusCode);
 
   @override
   String toString() {
-    return 'RequestFailedException{message: $message, statusCode: $statusCode}';
+    return 'RequestFailedException(message: $message, statusCode: $statusCode)';
   }
 }
