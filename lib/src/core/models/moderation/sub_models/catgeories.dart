@@ -1,5 +1,8 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_moderation_result_categories_model}
+///  This class is used to represent an OpenAI moderation job result categories.
+/// {@endtemplate}
 @immutable
 final class OpenAIModerationResultCategoriesModel {
   /// The hate category.
@@ -56,6 +59,7 @@ final class OpenAIModerationResultCategoriesModel {
 
   /// Whether the moderation request is not safe or not.
   bool get isNotSafe => !isSafe;
+
   @override
   int get hashCode {
     return hate.hashCode ^
