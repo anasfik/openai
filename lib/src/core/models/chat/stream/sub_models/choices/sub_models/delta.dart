@@ -1,5 +1,6 @@
 import 'package:dart_openai/dart_openai.dart';
 
+import '../../../../etc/message_adapter.dart';
 
 /// {@template openai_stream_chat_completion_choice_delta_model}
 /// This contains the [role] and [content] of the choice of the chat response.
@@ -11,13 +12,17 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
   /// The [content] of the message.
   final List<OpenAIChatCompletionChoiceMessageContentItemModel>? content;
 
-//
+  /// The [toolCalls] of the message.
   final List<OpenAIResponseToolCall>? toolCalls;
 
-  // /// The function that the model is requesting to call.
-  // final StreamFunctionCallResponse? functionCall;
+  /// Weither the message have a role or not.
+  bool get haveToolCalls => toolCalls != null;
 
-  bool get hasToolCalls => toolCalls != null;
+  /// Weither the message have a role or not.
+  bool get haveRole => role != null;
+
+  /// Weither the message have a content or not.
+  bool get haveContent => content != null;
 
   @override
   int get hashCode {
@@ -41,7 +46,8 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
               .firstWhere((role) => role.name == json['role'])
           : null,
       content: json['content'] != null
-          ? dynamicContentFromField(json['content'])
+          ? OpenAIMessageDynamicContentFromFieldAdapter.dynamicContentFromField(
+              json['content'])
           : null,
       toolCalls: json['tool_calls'] != null
           ? (json['tool_calls'] as List)
@@ -82,32 +88,5 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
         other.role == role &&
         other.content == content &&
         other.toolCalls == toolCalls;
-  }
-
-  static List<OpenAIChatCompletionChoiceMessageContentItemModel>
-      dynamicContentFromField(
-    dynamic fieldData,
-  ) {
-    if (fieldData is String) {
-      return [
-        OpenAIChatCompletionChoiceMessageContentItemModel.text(fieldData),
-      ];
-    } else if (fieldData is List) {
-      return (fieldData).map(
-        (item) {
-          if (item is! Map) {
-            throw Exception('Invalid content item');
-          } else {
-            final asMap = item as Map<String, dynamic>;
-
-            return OpenAIChatCompletionChoiceMessageContentItemModel.fromMap(
-              asMap,
-            );
-          }
-        },
-      ).toList();
-    } else {
-      throw Exception('Invalid content');
-    }
   }
 }

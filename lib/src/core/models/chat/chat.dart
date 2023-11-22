@@ -8,15 +8,15 @@ export 'sub_models/usage.dart';
 export 'sub_models/choices/choices.dart';
 export 'stream/chat.dart';
 
-/// {@template openai_chat_completion}
+/// {@template openai_chat_completion_model}
 /// This class represents the chat completion response model of the OpenAI API, which is used and get returned while using the [OpenAIChat] methods.
 /// {@endtemplate}
 @immutable
 final class OpenAIChatCompletionModel {
-  /// The [id] of the chat completion.
+  /// The [id]entifier of the chat completion.
   final String id;
 
-  /// The date and time when the chat completion is [created].
+  /// The date and time when the chat completion was [created].
   final DateTime created;
 
   /// The [choices] of the chat completion.
@@ -31,12 +31,19 @@ final class OpenAIChatCompletionModel {
   /// Weither the chat completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;
 
+  /// Weither the chat completion have system fingerprint.
+  bool get haveSystemFingerprint => systemFingerprint != null;
+
   @override
   int get hashCode {
-    return id.hashCode ^ created.hashCode ^ choices.hashCode ^ usage.hashCode;
+    return id.hashCode ^
+        created.hashCode ^
+        choices.hashCode ^
+        usage.hashCode ^
+        systemFingerprint.hashCode;
   }
 
-  /// {@macro openai_chat_completion}
+  /// {@macro openai_chat_completion_model}
   const OpenAIChatCompletionModel({
     required this.id,
     required this.created,
@@ -51,7 +58,7 @@ final class OpenAIChatCompletionModel {
       id: json['id'],
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
       choices: (json['choices'] as List)
-          .map((e) => OpenAIChatCompletionChoiceModel.fromMap(e))
+          .map((choice) => OpenAIChatCompletionChoiceModel.fromMap(choice))
           .toList(),
       usage: OpenAIChatCompletionUsageModel.fromMap(json['usage']),
       systemFingerprint: json['system_fingerprint'],

@@ -24,9 +24,15 @@ final class OpenAIStreamChatCompletionModel {
   /// Wether the chat completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;
 
+  /// Wether the chat completion have a [systemFingerprint] or not.
+  bool get haveSystemFingerprint => systemFingerprint != null;
+
   @override
   int get hashCode {
-    return id.hashCode ^ created.hashCode ^ choices.hashCode;
+    return id.hashCode ^
+        created.hashCode ^
+        choices.hashCode ^
+        systemFingerprint.hashCode;
   }
 
   /// {@macro openai_stream_chat_completion}
@@ -51,6 +57,8 @@ final class OpenAIStreamChatCompletionModel {
       systemFingerprint: json['system_fingerprint'],
     );
   }
+
+//! This don't need toMap()?
 
   @override
   String toString() {

@@ -14,6 +14,9 @@ final class OpenAIStreamChatCompletionChoiceModel {
   /// The [finishReason] of the choice.
   final String? finishReason;
 
+  /// Weither the choice have a finish reason or not.
+  bool get hasFinishReason => finishReason != null;
+
   @override
   int get hashCode {
     return index.hashCode ^ delta.hashCode ^ finishReason.hashCode;
