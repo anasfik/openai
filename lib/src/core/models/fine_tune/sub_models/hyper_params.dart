@@ -17,6 +17,18 @@ final class OpenAIFineTuneHyperParamsModel {
   /// The prompt loss weight used for fine-tuning.
   final double? promptLossWeight;
 
+  /// Weither the hyper-parameters have a batch size.
+  bool get haveBatchSize => batchSize != null;
+
+  /// Weither the hyper-parameters have a learning rate multiplier.
+  bool get haveLearningRateMultiplier => learningRateMultiplier != null;
+
+  /// Weither the hyper-parameters have a number of epochs.
+  bool get haveNEpochs => nEpochs != null;
+
+  /// Weither the hyper-parameters have a prompt loss weight.
+  bool get havePromptLossWeight => promptLossWeight != null;
+
   @override
   int get hashCode {
     return batchSize.hashCode ^
