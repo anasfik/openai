@@ -23,6 +23,9 @@ final class OpenAIEmbeddingsModel {
   /// Weither the embeddings have at least one item in [data].
   bool get haveData => data.isNotEmpty;
 
+  /// Weither the embeddings have a usage information.
+  bool get haveUsage => usage != null;
+
   @override
   int get hashCode => data.hashCode ^ model.hashCode ^ usage.hashCode;
 

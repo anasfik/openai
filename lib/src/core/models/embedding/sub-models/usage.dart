@@ -11,6 +11,12 @@ final class OpenAIEmbeddingsUsageModel {
   /// The total number of tokens in the prompt and completion.
   final int? totalTokens;
 
+  /// Weither the usage have a prompt tokens information.
+  bool get havePromptTokens => promptTokens != null;
+
+  /// Weither the usage have a total tokens information.
+  bool get haveTotalTokens => totalTokens != null;
+
   @override
   int get hashCode => promptTokens.hashCode ^ totalTokens.hashCode;
 

@@ -12,6 +12,9 @@ final class OpenAIEmbeddingsDataModel {
   /// The index of the text.
   final int index;
 
+  /// Weither the embeddings have at least one item in [embeddings].
+  bool get haveEmbeddings => embeddings.isNotEmpty;
+
   @override
   int get hashCode => embeddings.hashCode ^ index.hashCode;
 
