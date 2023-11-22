@@ -161,7 +161,7 @@ abstract class OpenAINetworkingClient {
 
     clientForUse
         .send(request)
-        .timeout(OpenAIConfig.requestsTimeOut)
+        // .timeout(OpenAIConfig.requestsTimeOut)
         .then((streamedResponse) {
       streamedResponse.stream.listen(
         (value) {
@@ -366,7 +366,15 @@ abstract class OpenAINetworkingClient {
 
       OpenAILogger.logStartRequest(to);
 
-      clientForUse.send(request).timeout(OpenAIConfig.requestsTimeOut).then(
+      clientForUse
+          .send(request)
+          // .timeout(
+          //   OpenAIConfig.requestsTimeOut,
+          //   onTimeout: () {
+          //     throw TimeoutException("Request timed out");
+          //   },
+          // )
+          .then(
         (respond) {
           OpenAILogger.startReadStreamResponse();
 
