@@ -159,7 +159,10 @@ abstract class OpenAINetworkingClient {
       ]);
     }
 
-    clientForUse.send(request).then((streamedResponse) {
+    clientForUse
+        .send(request)
+        .timeout(OpenAIConfig.requestsTimeOut)
+        .then((streamedResponse) {
       streamedResponse.stream.listen(
         (value) {
           final data = utf8.decode(value);
@@ -362,7 +365,8 @@ abstract class OpenAINetworkingClient {
       }
 
       OpenAILogger.logStartRequest(to);
-      clientForUse.send(request).then(
+
+      clientForUse.send(request).timeout(OpenAIConfig.requestsTimeOut).then(
         (respond) {
           OpenAILogger.startReadStreamResponse();
 
