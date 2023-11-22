@@ -1,11 +1,14 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_model_model_permission}
+///  This class is used to represent an OpenAI model permission.
+/// {@endtemplate}
 @immutable
 final class OpenAIModelModelPermission {
-  /// The ID of the permission.
+  /// The [id]entifier of the permission.
   final String? id;
 
-  /// The time the permission was created.
+  /// The time the permission was [created].
   final DateTime? created;
 
   /// Whether the permission allows the user to create engines.

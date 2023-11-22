@@ -1,18 +1,30 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_image_data_model}
+/// This class is used to represent an OpenAI image data.
+/// {@endtemplate}
 @immutable
 final class OpenAIImageData {
-  /// The URL of the image.
+  /// The [URL] of the image.
   final String? url;
 
-  /// the [OpenAIImageResponseFormat] b64Json data
+  /// The  [b64Json] data.
   final String? b64Json;
 
-  ///
+  /// The revised prompt.
   final String? revisedPrompt;
 
+  /// Weither the image have a [URL] result.
+  bool get haveUrl => url != null;
+
+  /// Weither the image have a [b64Json] result.
+  bool get haveB64Json => b64Json != null;
+
+  /// Weither the image have a revised prompt.
+  bool get haveRevisedPrompt => revisedPrompt != null;
+
   @override
-  int get hashCode => url.hashCode;
+  int get hashCode => url.hashCode ^ b64Json.hashCode ^ revisedPrompt.hashCode;
 
   /// This class is used to represent an OpenAI image data.
   const OpenAIImageData({

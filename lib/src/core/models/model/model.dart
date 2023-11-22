@@ -3,21 +3,27 @@ import 'package:meta/meta.dart';
 
 import 'sub_models/permission.dart';
 
+/// {@template openai_model_model}
+///  This class is used to represent an OpenAI model.
+/// {@endtemplate}
 @immutable
 final class OpenAIModelModel {
-  /// The ID of the model.
+  /// The [id]entifier of the model.
   final String id;
 
   /// The name of the organization that owns the model.
   final String ownedBy;
 
-  /// The permissions of the model.
+  /// The [permission]s of the model.
   final List<OpenAIModelModelPermission>? permission;
 
-  @override
-  int get hashCode => id.hashCode ^ ownedBy.hashCode;
+  /// Weither the model have at least one permission in [permission].
+  bool get havePermission => permission != null;
 
-  /// This class is used to represent an OpenAI model.
+  @override
+  int get hashCode => id.hashCode ^ ownedBy.hashCode ^ permission.hashCode;
+
+  /// {@macro openai_model_model}
   const OpenAIModelModel({
     required this.id,
     required this.ownedBy,
@@ -43,7 +49,8 @@ final class OpenAIModelModel {
   }
 
   @override
-  String toString() => 'OpenAIModelModel(id: $id, ownedBy: $ownedBy)';
+  String toString() =>
+      'OpenAIModelModel(id: $id, ownedBy: $ownedBy, permission: $permission)';
 
   @override
   bool operator ==(covariant OpenAIModelModel other) {

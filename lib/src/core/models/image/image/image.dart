@@ -6,11 +6,14 @@ export 'sub_models/data.dart';
 
 @immutable
 final class OpenAIImageModel {
-  /// The time the image was created.
+  /// The time the image was [created].
   final DateTime created;
 
   /// The data of the image.
   final List<OpenAIImageData> data;
+
+  /// Weither the image have some [data].
+  bool get haveData => data.isNotEmpty;
 
   @override
   int get hashCode => created.hashCode ^ data.hashCode;
