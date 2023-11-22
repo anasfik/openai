@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 import '../../core/base/images/base.dart';
 import '../../core/constants/strings.dart';
 
-import '../../core/models/image/enum.dart';
+import '../../core/enum.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;

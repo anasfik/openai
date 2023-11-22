@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../../models/image/enum.dart';
+import '../../../enum.dart';
 import '../../../models/image/image/image.dart';
 
 abstract class EditInterface {

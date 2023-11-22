@@ -8,6 +8,6 @@ export 'tool/tool.dart';
 export 'image/image/image.dart';
 export 'model/model.dart';
 export 'moderation/moderation.dart';
-export 'image/enum.dart';
+export '../enum.dart';
 export 'chat/chat.dart';
 export 'audio/audio.dart';

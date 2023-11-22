@@ -1,4 +1,4 @@
-import '../../../models/image/enum.dart';
+import '../../../enum.dart';
 import '../../../models/image/image/image.dart';
 
 import 'package:http/http.dart' as http;
