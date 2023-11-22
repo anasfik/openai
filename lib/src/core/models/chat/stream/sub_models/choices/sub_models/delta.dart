@@ -47,7 +47,8 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
           : null,
       content: json['content'] != null
           ? OpenAIMessageDynamicContentFromFieldAdapter.dynamicContentFromField(
-              json['content'])
+              json['content'],
+            )
           : null,
       toolCalls: json['tool_calls'] != null
           ? (json['tool_calls'] as List)
