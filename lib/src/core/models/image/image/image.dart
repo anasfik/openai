@@ -9,6 +9,8 @@ final class OpenAIImageModel {
   /// The time the image was [created].
   final DateTime created;
 
+  final Map<String, dynamic> json;
+
   /// The data of the image.
   final List<OpenAIImageData> data;
 
@@ -22,6 +24,7 @@ final class OpenAIImageModel {
   const OpenAIImageModel({
     required this.created,
     required this.data,
+    required this.json,
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIImageModel] object.
@@ -31,6 +34,7 @@ final class OpenAIImageModel {
       data: (json['data'] as List)
           .map((e) => OpenAIImageData.fromMap(e))
           .toList(),
+      json: json,
     );
   }
 
