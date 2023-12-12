@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'sub_models/data.dart';
@@ -36,6 +38,10 @@ final class OpenAIImageModel {
           .toList(),
       json: json,
     );
+  }
+
+  String toJsonString() {
+    return jsonEncode(json);
   }
 
   @override
