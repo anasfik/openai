@@ -69,6 +69,13 @@ Consider helping this project you too.
   - [x] With events `Stream` responses.
 - [x] [Moderation](#moderations)
 
+### [Support Azure OpenAI API](#support-azure-openai)
+- [x] [Chat (chatGPT)](#chat-chatgpt)
+  - [x] With `Stream` responses.
+- [ ] [Completions](#completions)
+- [ ] [Images](#images)
+- [ ] ....
+
 ## 💫 Testing Progress (100 %)
 
 - [x] [Authentication](#authentication)
@@ -164,7 +171,7 @@ OpenAI.baseUrl = "https://api.openai.com/v1"; // the default one.
 
 ### Enable debugging and logs
 You can make the package logs the operations flows and steps by setting the `showLogs`:
-  
+
 ```dart
 OpenAI.showLogs = true;
 ```
@@ -179,6 +186,18 @@ OpenAI.showResponsesLogs = true;
 
 This will log the raw responses that are returned from the API, such when the request is successful, or when it failed. (This don't include the stream responses).
 
+### Support Azure OpenAI
+```dart
+AzureOpenAI.apiKey = 'Your key';
+AzureOpenAI.baseURL = 'the endpoint of your resource.';
+final azureOpenAI = AzureOpenAI.instance;
+Stream<OpenAIStreamChatCompletionModel> chatCompletionStream =
+          azureOpenAI.chat.createStream(
+            model: 'deployment name of your model'
+            ...
+          );
+```
+
 ## Models
 
 ### List Models
@@ -188,7 +207,7 @@ Lists the currently available models, and provides information about each one su
 ```dart
 List<OpenAIModelModel> models = await OpenAI.instance.model.list();
 OpenAIModelModel firstModel = models.first;
- 
+
 print(firstModel.id); // ...
 print(firstModel.permission); // ...
 ```
