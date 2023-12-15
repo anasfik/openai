@@ -1,3 +1,4 @@
+import 'package:dart_openai/src/core/constants/config.dart';
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 
@@ -64,10 +65,20 @@ abstract class HeadersBuilder {
       ...headers,
       ..._additionalHeadersToRequests,
       if (isOrganizationSet) 'OpenAI-Organization': organization!,
-      "Authorization": "Bearer $apiKey",
+      //"Authorization": "Bearer $apiKey",
+      ...authorizationHeader(),
     };
 
     return headers;
+  }
+
+  @internal
+  static Map<String, String> authorizationHeader() {
+    if (OpenAIConfig.aiType == OpenAIType.azure) {
+      return {"api-key": "$apiKey"};
+    }
+
+    return {"Authorization": "Bearer $apiKey"};
   }
 
   /// Will save the given [headers] to the [_additionalHeadersToRequests] map. so it will be used in all requests.

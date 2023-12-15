@@ -21,24 +21,24 @@ import 'model/model.dart';
 /// final openai = OpenAI.instance;
 /// ```
 @immutable
-final class OpenAI extends OpenAIClientBase {
-  /// The singleton instance of [OpenAI].
-  static final OpenAI _instance = OpenAI._();
+final class AzureOpenAI extends OpenAIClientBase {
+  /// The singleton instance of [AzureOpenAI].
+  static final AzureOpenAI _instance = AzureOpenAI._();
 
   /// The API key used to authenticate the requests.
   static String? _internalApiKey;
 
-  /// The singleton instance of [OpenAI], make sure to call the [OpenAI.initialize] method before accessing [instance], otherwise it will throw an [Exception].
+  /// The singleton instance of [AzureOpenAI], make sure to call the [AzureOpenAI.initialize] method before accessing [instance], otherwise it will throw an [Exception].
   /// A [MissingApiKeyException] will be thrown, if the API key is not set.
-  static OpenAI get instance {
+  static AzureOpenAI get instance {
     if (_internalApiKey == null) {
       throw MissingApiKeyException("""
       You must set the api key before accessing the instance of this class.
       Example:
-      OpenAI.apiKey = "Your API Key";
+      AzureOpenAI.apiKey = "Your API Key";
       """);
     }
-    OpenAIConfig.aiType = OpenAIType.openai;
+    OpenAIConfig.aiType = OpenAIType.azure;
 
     return _instance;
   }
@@ -51,37 +51,37 @@ final class OpenAI extends OpenAIClientBase {
 
   /// The [OpenAIModel] instance, used to access the model endpoints.
   /// Please, refer to the Models page from the official OpenAI documentation website in order to know what models are available and what's the use case of every model.
-  OpenAIModel get model => OpenAIModel();
+  // OpenAIModel get model => OpenAIModel();
 
   /// The [OpenAICompletion] instance, used to access the completion endpoints.
-  OpenAICompletion get completion => OpenAICompletion();
+  // OpenAICompletion get completion => OpenAICompletion();
 
   /// The [OpenAIEdits] instance, used to access the edits endpoints.
-  OpenAIEdits get edit => OpenAIEdits();
+  // OpenAIEdits get edit => OpenAIEdits();
 
   /// The [OpenAIImages] instance, used to access the images endpoints.
-  OpenAIImages get image => OpenAIImages();
+  // OpenAIImages get image => OpenAIImages();
 
   /// The [OpenAIEmbedding] instance, used to access the embeddings endpoints.
-  OpenAIEmbedding get embedding => OpenAIEmbedding();
+  // OpenAIEmbedding get embedding => OpenAIEmbedding();
 
   /// The [OpenAIFiles] instance, used to access the files endpoints.
-  OpenAIFiles get file => OpenAIFiles();
+  // OpenAIFiles get file => OpenAIFiles();
 
   /// The [OpenAIFineTunes] instance, used to access the fine-tunes endpoints.
-  OpenAIFineTunes get fineTune => OpenAIFineTunes();
+  // OpenAIFineTunes get fineTune => OpenAIFineTunes();
 
   /// The [OpenAIModeration] instance, used to access the moderation endpoints.
-  OpenAIModeration get moderation => OpenAIModeration();
+  // OpenAIModeration get moderation => OpenAIModeration();
 
   /// The [OpenAIChat] instance, used to access the chat endpoints.
   OpenAIChat get chat => OpenAIChat();
 
   /// The [OpenAIAudio] instance, used to access the audio endpoints.
-  OpenAIAudio get audio => OpenAIAudio();
+  // OpenAIAudio get audio => OpenAIAudio();
 
   /// The organization id, if set, it will be used in all the requests to the OpenAI API.
-  static String? get organization => HeadersBuilder.organization;
+  // static String? get organization => HeadersBuilder.organization;
 
   /// The base API url, by default it is set to the OpenAI API url.
   /// You can change it by calling the [OpenAI.baseUrl] setter.
@@ -107,7 +107,12 @@ final class OpenAI extends OpenAIClientBase {
   /// ```dart
   /// OpenAI.apiKey = "YOUR_API_KEY";
   /// ```
+  // static set apiKey(String apiKey) {
+  //   HeadersBuilder.apiKey = apiKey;
+  //   _internalApiKey = apiKey;
+  // }
   static set apiKey(String apiKey) {
+    // HeadersBuilder.includeHeaders({'api-key': apiKey});
     HeadersBuilder.apiKey = apiKey;
     _internalApiKey = apiKey;
   }
@@ -125,9 +130,9 @@ final class OpenAI extends OpenAIClientBase {
   /// ```dart
   /// OpenAI.organization = "YOUR_ORGANIZATION_ID";
   /// ```
-  static set organization(String? organizationId) {
-    HeadersBuilder.organization = organizationId;
-  }
+  // static set organization(String? organizationId) {
+  //   HeadersBuilder.organization = organizationId;
+  // }
 
   /// This controls whether to log steps inside the process of making a request, this helps debugging and pointing where something went wrong.
   /// This uses  [dart:developer] internally, so it will show anyway only while debugging code.
@@ -178,7 +183,7 @@ final class OpenAI extends OpenAIClientBase {
   // }
 
   /// The constructor of [OpenAI]. It is private, so you can only access the instance by calling the [OpenAI.instance] getter.
-  OpenAI._();
+  AzureOpenAI._();
 
   /// Adds the given [headers] to all future requests made using the package.
   ///

@@ -1,5 +1,6 @@
-import 'package:dart_openai/src/core/builder/base_api_url.dart';
-import 'package:dart_openai/src/core/networking/client.dart';
+import '../../core/builder/base_api_url.dart';
+import '../../core/constants/config.dart';
+import '../../core/networking/client.dart';
 
 import '../../core/base/chat/chat.dart';
 import '../../core/constants/strings.dart';
@@ -85,9 +86,9 @@ interface class OpenAIChat implements OpenAIChatBase {
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.build(endpoint, null, null, model),
       body: {
-        "model": model,
+        if (OpenAIType.openai == OpenAIConfig.aiType) "model": model,
         "messages": messages.map((message) => message.toMap()).toList(),
         if (tools != null)
           "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
@@ -178,9 +179,9 @@ interface class OpenAIChat implements OpenAIChatBase {
     http.Client? client,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.build(endpoint, null, null, model),
       body: {
-        "model": model,
+        if (OpenAIType.openai == OpenAIConfig.aiType) "model": model,
         "stream": true,
         "messages": messages.map((message) => message.toMap()).toList(),
         if (tools != null)
@@ -225,9 +226,9 @@ interface class OpenAIChat implements OpenAIChatBase {
     int? seed,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.build(endpoint, null, null, model),
       body: {
-        "model": model,
+        if (OpenAIType.openai == OpenAIConfig.aiType) "model": model,
         "stream": true,
         "messages": messages.map((message) => message.toMap()).toList(),
         if (tools != null)
