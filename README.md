@@ -69,8 +69,8 @@ Consider helping this project you too.
   - [x] With events `Stream` responses.
 - [x] [Moderation](#moderations)
 
-### [Support Azure OpenAI API](#support-azure-openai)
-- [x] [Chat (chatGPT)](#chat-chatgpt)
+### Support Azure OpenAI API
+- [x] [Chat (chatGPT)](#support-azure-openai)
   - [x] With `Stream` responses.
 - [ ] [Completions](#completions)
 - [ ] [Images](#images)
