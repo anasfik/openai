@@ -11,3 +11,13 @@ extension StringExtension on String {
     }
   }
 }
+
+extension DateTimeExt on DateTime {
+  String toAzureAPIVersionString() {
+    final day = this.day.toString().padLeft(2, "0");
+    final month = this.month.toString().padLeft(2, "0");
+    final year = this.year.toString().padLeft(4, "0");
+
+    return "${year}-${month}-${day}";
+  }
+}

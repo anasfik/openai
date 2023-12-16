@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 /// {@endtemplate}
 @immutable
 @protected
-interface class OpenAICompletion implements OpenAICompletionBase {
+base class OpenAICompletion implements OpenAICompletionBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.completion;
 
@@ -92,7 +92,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
   /// ```
   @override
   Future<OpenAICompletionModel> create({
-    required String model,
+    required String? model,
     prompt,
     String? suffix,
     int? maxTokens,
@@ -123,7 +123,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     return await OpenAINetworkingClient.post<OpenAICompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
-        "model": model,
+        if (model != null) "model": model,
         if (prompt != null) "prompt": prompt,
         if (suffix != null) "suffix": suffix,
         if (maxTokens != null) "max_tokens": maxTokens,
@@ -217,7 +217,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
 
   @override
   Stream<OpenAIStreamCompletionModel> createStream({
-    required String model,
+    required String? model,
     prompt,
     String? suffix,
     int? maxTokens,
@@ -238,7 +238,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     return OpenAINetworkingClient.postStream<OpenAIStreamCompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
-        "model": model,
+        if (model != null) "model": model,
         'stream': true,
         if (prompt != null) "prompt": prompt,
         if (suffix != null) "suffix": suffix,
@@ -333,7 +333,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
   /// ```
   @override
   Stream<String> createStreamText({
-    required String model,
+    required String? model,
     prompt,
     String? suffix,
     int? maxTokens,

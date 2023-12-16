@@ -74,13 +74,23 @@ abstract final class OpenAILogger {
   }
 
   /// Logs that an api key is being set, if the logger is active.
-  static void logAPIKey([String? apiKey]) {
+  static void logAPIKey(
+    String? apiKey, {
+    bool isAzureOpenAI = false,
+  }) {
     if (apiKey != null && isValidApiKey(apiKey)) {
       final hiddenApiKey = apiKey.replaceRange(0, apiKey.length - 5, '****');
       log("api key set to $hiddenApiKey");
     } else {
       log("api key is set but not valid");
     }
+
+    log("API key is set to ${isAzureOpenAI ? 'Azure ' : ''}OpenAI");
+  }
+
+  /// Logs that an azure api key is being set, if the logger is active.
+  static void logAzureAPIKey(String? azureApiKey) {
+    logAPIKey(azureApiKey, isAzureOpenAI: true);
   }
 
   /// simple check for api key validity

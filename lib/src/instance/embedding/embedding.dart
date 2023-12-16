@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 /// {@endtemplate}
 @immutable
 @protected
-interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
+base class OpenAIEmbedding implements OpenAIEmbeddingBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.embeddings;
 
@@ -45,7 +45,7 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
   ///```
   @override
   Future<OpenAIEmbeddingsModel> create({
-    required String model,
+    required String? model,
     required input,
     String? user,
     http.Client? client,
@@ -61,7 +61,7 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
       },
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
-        "model": model,
+        if (model != null) "model": model,
         if (input != null) "input": input,
         if (user != null) "user": user,
       },

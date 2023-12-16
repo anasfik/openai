@@ -1,4 +1,5 @@
 import 'package:dart_openai/src/core/constants/strings.dart';
+import 'package:dart_openai/src/core/utils/extensions.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:meta/meta.dart';
 
@@ -47,5 +48,35 @@ abstract class OpenAIConfig {
   static set baseUrl(String? baseUrl) {
     _baseUrl = baseUrl;
     OpenAILogger.logBaseUrl(_baseUrl);
+  }
+}
+
+abstract class AzureOpenAIConfig {
+  static String? resourceName;
+  static String? deploymentName;
+  static DateTime? apiVersion;
+
+  static String buildUrlForResource({
+    required String resourceEndpoint,
+  }) {
+    assert(resourceName != null, "resourceName is null");
+    assert(deploymentName != null, "deploymentName is null");
+    assert(apiVersion != null, "apiVersion is null");
+
+    final apiVersionAsString = apiVersion!.toAzureAPIVersionString();
+
+    dynamic ensuredEndpoint = resourceEndpoint.split("");
+
+    if (ensuredEndpoint.last == "/") {
+      ensuredEndpoint.removeLast();
+    }
+
+    if (ensuredEndpoint.first == "/") {
+      ensuredEndpoint.removeAt(0);
+    }
+
+    ensuredEndpoint = ensuredEndpoint.join("");
+
+    return "https://${resourceName!}.openai.azure.com/openai/deployments/${deploymentName!}/${ensuredEndpoint}?api-version=${apiVersionAsString}";
   }
 }

@@ -1,6 +1,11 @@
+
 import '../../core/builder/base_api_url.dart';
 import '../../core/constants/config.dart';
 import '../../core/networking/client.dart';
+
+
+import 'package:meta/meta.dart';
+
 
 import '../../core/base/chat/chat.dart';
 import '../../core/constants/strings.dart';
@@ -13,7 +18,7 @@ import 'package:http/http.dart' as http;
 /// {@template openai_chat}
 /// This class is responsible for handling all chat requests, such as creating a chat completion for the message(s).
 /// {@endtemplate}
-interface class OpenAIChat implements OpenAIChatBase {
+base class OpenAIChat implements OpenAIChatBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.chat;
 
@@ -68,7 +73,7 @@ interface class OpenAIChat implements OpenAIChatBase {
   /// ```
   @override
   Future<OpenAIChatCompletionModel> create({
-    required String model,
+    required String? model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
     List<OpenAIToolModel>? tools,
     toolChoice,
@@ -161,7 +166,7 @@ interface class OpenAIChat implements OpenAIChatBase {
 
   @override
   Stream<OpenAIStreamChatCompletionModel> createStream({
-    required String model,
+    required String? model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
     List<OpenAIToolModel>? tools,
     toolChoice,
