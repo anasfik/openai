@@ -60,7 +60,7 @@ final class AzureOpenAI extends OpenAIClientBase {
   // OpenAIEdits get edit => OpenAIEdits();
 
   /// The [OpenAIImages] instance, used to access the images endpoints.
-  // OpenAIImages get image => OpenAIImages();
+  OpenAIImages get image => OpenAIImages();
 
   /// The [OpenAIEmbedding] instance, used to access the embeddings endpoints.
   // OpenAIEmbedding get embedding => OpenAIEmbedding();
@@ -120,6 +120,10 @@ final class AzureOpenAI extends OpenAIClientBase {
   /// This is used to set the base url of the OpenAI API, by default it is set to [OpenAIConfig.baseUrl].
   static set baseUrl(String baseUrl) {
     OpenAIConfig.baseUrl = baseUrl;
+  }
+
+  static set apiVersion(String apiVersion) {
+    OpenAIConfig.azureApiVersion = apiVersion;
   }
 
   /// If you have multiple organizations, you can set it's id with this.

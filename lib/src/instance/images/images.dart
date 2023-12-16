@@ -6,6 +6,7 @@ import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:meta/meta.dart';
 
 import '../../core/base/images/base.dart';
+import '../../core/constants/config.dart';
 import '../../core/constants/strings.dart';
 
 import '../../core/enum.dart';
@@ -87,10 +88,10 @@ interface class OpenAIImages implements OpenAIImagesBase {
     final String generations = "/generations";
 
     return await OpenAINetworkingClient.post(
-      to: BaseApiUrlBuilder.build(endpoint + generations),
+      to: BaseApiUrlBuilder.build(endpoint + generations, null, null, model),
       onSuccess: (json) => OpenAIImageModel.fromMap(json),
       body: {
-        if (model != null) "model": model,
+        if (OpenAIType.openai == OpenAIConfig.aiType) "model": model,
         "prompt": prompt,
         if (n != null) "n": n,
         if (size != null) "size": size.value,
@@ -172,7 +173,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIImageModel.fromMap(response);
       },
-      to: BaseApiUrlBuilder.build(endpoint + edit),
+      to: BaseApiUrlBuilder.build(endpoint + edit, null, null, model),
     );
   }
 
@@ -234,7 +235,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIImageModel.fromMap(response);
       },
-      to: BaseApiUrlBuilder.build(endpoint + variations),
+      to: BaseApiUrlBuilder.build(endpoint + variations, null, null, model),
     );
   }
 }
