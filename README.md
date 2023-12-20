@@ -325,7 +325,6 @@ OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
   messages: requestMessages,
   temperature: 0.2,
   maxTokens: 500,
-  toolChoice: "auto",
 );
 
 print(chatCompletion.choices.first.message); // ...
