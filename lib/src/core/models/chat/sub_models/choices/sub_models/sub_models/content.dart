@@ -46,7 +46,7 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
     String imageUrl,
   ) {
     return OpenAIChatCompletionChoiceMessageContentItemModel._(
-      type: 'image',
+      type: 'image_url',
       imageUrl: imageUrl,
     );
   }
@@ -71,9 +71,12 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
         other.imageUrl == imageUrl;
   }
 
-  //! TODO: make a dynamic toString method for different types of content items.
   @override
-  String toString() {
-    return 'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type, text: $text, imageUrl: $imageUrl)';
-  }
+  String toString() => switch (type) {
+        'text' =>
+          'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type, text: $text)',
+        'image' =>
+          'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type, imageUrl: $imageUrl)',
+        _ => 'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type)',
+      };
 }
