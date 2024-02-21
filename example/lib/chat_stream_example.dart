@@ -6,7 +6,7 @@ void main() async {
   OpenAI.apiKey = Env.apiKey;
 
   final chatStream = OpenAI.instance.chat.createStream(
-    model: "gpt-3.5-turbo",
+    model: "gpt-3.5-turbfqfqo",
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
         content: [
@@ -35,7 +35,15 @@ void main() async {
     ],
   );
 
-  chatStream.listen((event) {
-    print(event.choices.first.delta.content);
-  });
+  chatStream.listen(
+    (event) {
+      print(event.choices.first.delta.content);
+    },
+    onError: (e) {
+      print("Error, $e");
+    },
+    onDone: () {
+      print("Done");
+    },
+  );
 }

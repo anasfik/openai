@@ -329,8 +329,6 @@ void main() async {
     );
 
     test('create with a stream', () async {
-      OpenAI.apiKey = "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";
-
       final chatStream = OpenAI.instance.chat.createStream(
         model: "gpt-3.5-turbo",
         messages: [
