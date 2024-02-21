@@ -91,8 +91,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         "messages": messages.map((message) => message.toMap()).toList(),
         if (tools != null)
           "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
-        if (toolChoice != null)
-          "tool_choice": toolChoice is String ? toolChoice : toolChoice.value,
+        if (toolChoice != null) "tool_choice": toolChoice,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
@@ -233,7 +232,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         "messages": messages.map((message) => message.toMap()).toList(),
         if (tools != null)
           "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
-        if (toolChoice != null) "tool_choice": toolChoice.value,
+        if (toolChoice != null) "tool_choice": toolChoice,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
