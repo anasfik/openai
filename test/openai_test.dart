@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as dev;
+import 'package:collection/collection.dart';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:dart_openai/src/core/builder/headers.dart';
 import 'package:dart_openai/src/core/constants/config.dart';
@@ -16,15 +17,9 @@ void main() async {
   final exampleImageFile = await getFileFromUrl(
     "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png",
   );
-  final audioExampleFile = await getFileFromUrl(
-    "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
-    fileExtension: "mp3",
-  );
 
   final imageFileExample = await exampleImageFile;
   final maskFileExample = await exampleImageFile;
-
-  String? modelExampleId;
 
   String? fileIdFromFilesApi;
 
@@ -106,6 +101,8 @@ void main() async {
   });
 
   group('models', () {
+    String? modelExampleId;
+
     test(
       'list models',
       () async {
@@ -118,16 +115,21 @@ void main() async {
           expect(models.first.id, isNotNull);
           expect(models.first.id, isA<String>());
 
-          if (models.first.permission != null) {
-            expect(
-              models.first.permission,
-              isA<List<OpenAIModelModelPermission>>(),
-            );
+          final someModel = models.first;
+
+          if (someModel.permission != null &&
+              someModel.permission!.isNotEmpty) {
+            final permission = someModel.permission!.first;
+
+            expect(permission, isA<OpenAIModelModelPermission>());
+
+            expect(permission.id, isNotNull);
           }
 
-          // trying to get the "text-davinci-003" model id.
           modelExampleId = models
-              .firstWhere((element) => element.id.contains("davinci-003"))
+              .firstWhereOrNull(
+                (element) => element.id.contains("gpt-3"),
+              )!
               .id;
         }
       },
@@ -138,6 +140,7 @@ void main() async {
         modelExampleId != null,
         "please set a model id that is not null, or let the previous test run first to get a model id example",
       );
+
       final model = await OpenAI.instance.model.retrieve(modelExampleId!);
 
       expect(model, isA<OpenAIModelModel>());
@@ -149,15 +152,23 @@ void main() async {
           model.permission,
           isA<List<OpenAIModelModelPermission>>(),
         );
+
+        if (model.permission!.isNotEmpty) {
+          final permission = model.permission!.first;
+
+          expect(permission, isA<OpenAIModelModelPermission>());
+
+          expect(permission.id, isNotNull);
+        }
       }
     });
   });
+
   group('completions', () {
     test('create', () async {
       final OpenAICompletionModel completion =
           await OpenAI.instance.completion.create(
-        // in case the previous test didn't run, we will use a default model id.
-        model: modelExampleId ?? "text-davinci-003",
+        model: "davinci-002",
         prompt: "Dart tests are made to ensure that a function w",
         maxTokens: 5,
         temperature: 0.9,
@@ -178,7 +189,7 @@ void main() async {
       final Stream<OpenAIStreamCompletionModel> completion =
           OpenAI.instance.completion.createStream(
         // in case the previous test didn't run, we will use a default model id.
-        model: modelExampleId ?? "text-davinci-003",
+        model: "davinci-002",
         prompt: "Dart tests are made to ensure that a function w",
         maxTokens: 5,
         temperature: 0.9,
@@ -219,7 +230,16 @@ void main() async {
         chatCompletion.choices.first.message,
         isA<OpenAIChatCompletionChoiceMessageModel>(),
       );
-      expect(chatCompletion.choices.first.message.content, isA<String>());
+      expect(
+        chatCompletion.choices.first.message.content,
+        isA<List<OpenAIChatCompletionChoiceMessageContentItemModel>>(),
+      );
+      expect(
+        chatCompletion.choices.first.message.content!
+            .map((e) => e.text)
+            .isEmpty,
+        isFalse,
+      );
     });
 
     test(
@@ -233,7 +253,7 @@ void main() async {
 
         final OpenAIChatCompletionModel chatCompletion =
             await OpenAI.instance.chat.create(
-          model: "gpt-3.5-turbo-0613",
+          model: "gpt-3.5-turbo",
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
               content: [
@@ -314,20 +334,7 @@ void main() async {
       });
     });
   });
-  group('edits', () {
-    // ! temporary disabled, because the API have on this and throws an unexpected error from OpenAI end.
-    test('create', () async {
-      final OpenAIEditModel edit = await OpenAI.instance.edit.create(
-        model: "text-davinci-edit-001",
-        instruction: "remove the word 'made' from the text",
-        input: "I made something, idk man",
-      );
-      expect(edit, isA<OpenAIEditModel>());
-      expect(edit.choices.first, isA<OpenAIEditModelChoice>());
-      expect(edit.choices.first.text, isNotNull);
-      expect(edit.choices.first.text, isA<String>());
-    });
-  });
+
   group('images', () {
     test('create', () async {
       final OpenAIImageModel image = await OpenAI.instance.image.create(
@@ -371,6 +378,11 @@ void main() async {
 
   group('audio', () {
     test("create transcription", () async {
+      final audioExampleFile = await getFileFromUrl(
+        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
+        fileExtension: "mp3",
+      );
+
       final transcription = await OpenAI.instance.audio.createTranscription(
         file: audioExampleFile,
         model: "whisper-1",
@@ -381,6 +393,11 @@ void main() async {
       expect(transcription.text, isA<String>());
     });
     test("create translation", () async {
+      final audioExampleFile = await getFileFromUrl(
+        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
+        fileExtension: "mp3",
+      );
+
       final translation = await OpenAI.instance.audio.createTranslation(
         file: audioExampleFile,
         model: "whisper-1",

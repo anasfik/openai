@@ -39,7 +39,7 @@ final class OpenAIModelModel {
             .map((e) =>
                 OpenAIModelModelPermission.fromMap(e as Map<String, dynamic>))
             .toList()
-        : null; // Alternatively, use<OpenAIModelModelPermission>[] instead of null, if you want an empty list.
+        : <OpenAIModelModelPermission>[];
 
     return OpenAIModelModel(
       id: json['id'],
