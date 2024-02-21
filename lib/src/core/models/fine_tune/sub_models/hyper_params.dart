@@ -37,7 +37,7 @@ final class OpenAIFineTuneHyperParamsModel {
         promptLossWeight.hashCode;
   }
 
-  /// {@template openai_fine_tune_hyper_params_model}
+  /// {@macro openai_fine_tune_hyper_params_model}
   const OpenAIFineTuneHyperParamsModel({
     required this.batchSize,
     required this.learningRateMultiplier,
@@ -45,8 +45,9 @@ final class OpenAIFineTuneHyperParamsModel {
     required this.promptLossWeight,
   });
 
-  /// {@template openai_fine_tune_hyper_params_model}
+  /// {@template openai_fine_tune_hyper_params_model_fromMap}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFineTuneHyperParamsModel] object.
+  /// {@endtemplate}
   factory OpenAIFineTuneHyperParamsModel.fromMap(Map<String, dynamic> json) {
     return OpenAIFineTuneHyperParamsModel(
       batchSize: json['batch_size'],
