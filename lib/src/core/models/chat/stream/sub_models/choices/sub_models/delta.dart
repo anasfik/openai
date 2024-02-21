@@ -10,7 +10,7 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
   final OpenAIChatMessageRole? role;
 
   /// The [content] of the message.
-  final List<OpenAIChatCompletionChoiceMessageContentItemModel>? content;
+  final List<OpenAIChatCompletionChoiceMessageContentItemModel?>? content;
 
   /// The [toolCalls] of the message.
   final List<OpenAIResponseToolCall>? toolCalls;

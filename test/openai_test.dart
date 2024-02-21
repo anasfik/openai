@@ -1,5 +1,6 @@
 // ignore_for_file: avoid-passing-async-when-sync-expected
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as dev;
@@ -185,10 +186,9 @@ void main() async {
       expect(completion.choices.first.text, isA<String?>());
     });
 
-    test('create with a stream', () {
-      final Stream<OpenAIStreamCompletionModel> completion =
+    test('create with a stream', () async {
+      final Stream<OpenAIStreamCompletionModel> completionStream =
           OpenAI.instance.completion.createStream(
-        // in case the previous test didn't run, we will use a default model id.
         model: "davinci-002",
         prompt: "Dart tests are made to ensure that a function w",
         maxTokens: 5,
@@ -199,7 +199,22 @@ void main() async {
         bestOf: 1,
         n: 1,
       );
-      expect(completion, isA<Stream<OpenAIStreamCompletionModel>>());
+
+      final completer = Completer<bool>();
+      expect(completionStream, isA<Stream<OpenAIStreamCompletionModel>>());
+
+      completionStream.listen(
+        (event) {
+          var val = event.choices.first.text;
+
+          expect(val, isA<String>());
+        },
+        onDone: () {
+          completer.complete(true);
+        },
+      );
+
+      await completer.future;
     });
   });
 
@@ -313,7 +328,9 @@ void main() async {
       },
     );
 
-    test('create with a stream', () {
+    test('create with a stream', () async {
+      OpenAI.apiKey = "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";
+
       final chatStream = OpenAI.instance.chat.createStream(
         model: "gpt-3.5-turbo",
         messages: [
@@ -327,11 +344,23 @@ void main() async {
           ),
         ],
       );
+      final completer = Completer<bool>();
+
       expect(chatStream, isA<Stream<OpenAIStreamChatCompletionModel>>());
-      chatStream.listen((streamEvent) {
-        expect(streamEvent, isA<OpenAIStreamChatCompletionModel>());
-        expect(streamEvent.choices.first.delta.content, isA<String?>());
-      });
+      chatStream.listen(
+        (streamEvent) {
+          expect(streamEvent, isA<OpenAIStreamChatCompletionModel>());
+          expect(streamEvent.choices.first.delta.content,
+              isA<List<OpenAIChatCompletionChoiceMessageContentItemModel>?>());
+          expect(streamEvent.choices.first.delta.content?.first?.text,
+              isA<String?>());
+        },
+        onDone: () {
+          completer.complete(true);
+        },
+      );
+
+      await completer.future;
     });
   });
 

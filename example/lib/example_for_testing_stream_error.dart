@@ -60,8 +60,8 @@ Stream<ItemBodyCompletion> itemBodyCompletionStream(
   bodyCompletion.listen((event) {
     final content = event.choices[0].delta.content;
 
-    return content != null && content.first.text != null
-        ? stream.add(ItemBodyCompletion(body: content.first.text!))
+    return content != null && content.first?.text != null
+        ? stream.add(ItemBodyCompletion(body: content.first!.text!))
         : () {};
   }, onDone: () {
     stream.close();

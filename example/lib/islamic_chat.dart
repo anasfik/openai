@@ -19,6 +19,6 @@ Future<void> main() async {
   );
 
   chatStream.listen((event) {
-    print(event.choices.first.delta.content?.map((e) => e.toMap()));
+    print(event.choices.first.delta.content?.map((e) => e?.toMap()));
   });
 }
