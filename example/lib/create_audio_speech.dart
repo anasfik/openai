@@ -9,9 +9,9 @@ void main() async {
   // The speech request.
   File speechFile = await OpenAI.instance.audio.createSpeech(
     model: "tts-1",
-    input: "Say my name is ",
+    input: "it is what it is.",
     voice: "nova",
-    responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
+    responseFormat: OpenAIAudioSpeechResponseFormat.opus,
     outputDirectory: await Directory("speechOutput").create(),
     outputFileName: DateTime.now().microsecondsSinceEpoch.toString(),
   );

@@ -17,7 +17,7 @@ Future<void> main() async {
       'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
     ),
     model: "whisper-1",
-    responseFormat: OpenAIAudioResponseFormat.srt,
+    responseFormat: OpenAIAudioResponseFormat.text,
   );
 
   // print the transcription.

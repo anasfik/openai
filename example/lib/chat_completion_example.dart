@@ -22,9 +22,9 @@ void main() async {
       ),
 
       //! image url contents are allowed only for models with image support
-      OpenAIChatCompletionChoiceMessageContentItemModel.imageUrl(
-        "https://placehold.co/600x400",
-      ),
+      // OpenAIChatCompletionChoiceMessageContentItemModel.imageUrl(
+      //   "https://placehold.co/600x400",
+      // ),
     ],
     role: OpenAIChatMessageRole.user,
   );
@@ -41,8 +41,11 @@ void main() async {
     messages: requestMessages,
     temperature: 0.2,
     maxTokens: 500,
-    toolChoice: "auto",
-    tools: [/* tools if you have any */],
+
+    // uncomment and set your own properties if you want to use tool choices feature..
+
+    // toolChoice: "auto",
+    // tools: [],
   );
 
   print(chatCompletion.choices.first.message); //

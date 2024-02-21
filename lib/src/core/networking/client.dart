@@ -255,8 +255,10 @@ abstract class OpenAINetworkingClient {
 
       OpenAILogger.requestFinishedSuccessfully();
 
+      final fileTypeHeader = "content-type";
+
       final fileExtensionFromBodyResponseFormat =
-          response.headers["response_format"] ?? "mp3";
+          response.headers[fileTypeHeader]?.split("/")?.last ?? "mp3";
 
       final fileName =
           outputFileName + "." + fileExtensionFromBodyResponseFormat;
@@ -277,6 +279,7 @@ abstract class OpenAINetworkingClient {
         response.bodyBytes,
         mode: FileMode.write,
       );
+
       OpenAILogger.fileContentWrittenSuccessfully(fileName);
 
       return onFileResponse(file);

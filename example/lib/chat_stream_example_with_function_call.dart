@@ -7,8 +7,6 @@ import 'env/env.dart';
 void main() async {
   OpenAI.apiKey = Env.apiKey;
 
-  final ourMockMethodName = "fastestCarInTheWorldInTheYear";
-
   final chatStream = OpenAI.instance.chat.createStream(
     model: "gpt-3.5-turbo",
     messages: [
@@ -25,11 +23,11 @@ void main() async {
       OpenAIToolModel(
         type: "function",
         function: OpenAIFunctionModel.withParameters(
-          name: ourMockMethodName,
+          name: "fastestCarInTheWorldInTheYear",
           parameters: [
             OpenAIFunctionProperty.integer(
               name: "year",
-              description: "The year to get the fastest car in",
+              description: "The year to get the fastest car in the world for.",
             ),
           ],
         ),
@@ -52,7 +50,7 @@ void main() async {
       stringBuf.write(args);
     }
   }, onDone: () {
-    if (functionNameMapper.containsKey(ourMockMethodName)) {
+    if (functionNameMapper.containsKey("fastestCarInTheWorldInTheYear")) {
       final fullResponse = stringBuf.toString();
 
       print(fullResponse);

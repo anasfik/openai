@@ -46,7 +46,7 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
     String imageUrl,
   ) {
     return OpenAIChatCompletionChoiceMessageContentItemModel._(
-      type: 'image',
+      type: 'image_url',
       imageUrl: imageUrl,
     );
   }
