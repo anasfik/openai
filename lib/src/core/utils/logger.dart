@@ -56,15 +56,13 @@ abstract final class OpenAILogger {
   }
 
   /// Logs the response of a request, if the logger is active.
-  static Future<void> logResponseBody(response) async {
+  static void logResponseBody(response) {
     if (_isActive && _showResponsesLogs) {
       if (response is Response) {
         dev.log(response.body.toString(), name: OpenAIStrings.openai);
-      } else if (response is StreamedResponse) {
-        final asString = await response.stream.bytesToString();
-
+      } else {
         dev.log(
-          asString,
+          response.toString(),
           name: OpenAIStrings.openai,
         );
       }
