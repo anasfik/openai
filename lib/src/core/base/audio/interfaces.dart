@@ -20,6 +20,7 @@ abstract class CreateInterface {
     OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
     String? language,
+    List<OpenAIAudioTimestampGranularity>? timestamp_granularities,
   });
 
   Future<OpenAIAudioModel> createTranslation({

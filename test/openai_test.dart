@@ -376,9 +376,21 @@ void main() async {
         model: "whisper-1",
         responseFormat: OpenAIAudioResponseFormat.json,
       );
+      expect(transcription, isA<OpenAIAudioModel>());
+      expect(transcription.text, isA<String>());
+    });
+
+    test("create transcription with timestamp granularity", () async {
+      final transcription = await OpenAI.instance.audio.createTranscription(
+        file: audioExampleFile,
+        model: "whisper-1",
+        responseFormat: OpenAIAudioResponseFormat.verbose_json,
+        timestamp_granularities: [OpenAIAudioTimestampGranularity.word],
+      );
 
       expect(transcription, isA<OpenAIAudioModel>());
       expect(transcription.text, isA<String>());
+      expect(transcription.words, isA<List>());
     });
     test("create translation", () async {
       final translation = await OpenAI.instance.audio.createTranslation(

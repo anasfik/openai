@@ -34,6 +34,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   ///
   /// [language] is the language of the input audio. Supplying the input language in **ISO-639-1** format will improve accuracy and latency.
   ///
+  /// [timestamp_granularities] The timestamp granularities to populate for this transcription. response_format must be set verbose_json to use timestamp granularities. Either: word or segment, both doesnt work.
+  ///
   /// Example:
   /// ```dart
   /// final transcription = await openai.audio.createTranscription(
@@ -52,6 +54,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
     String? language,
+    List<OpenAIAudioTimestampGranularity>? timestamp_granularities,
   }) async {
     return await OpenAINetworkingClient.fileUpload(
       file: file,
@@ -62,6 +65,9 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         if (responseFormat != null) "response_format": responseFormat.name,
         if (temperature != null) "temperature": temperature.toString(),
         if (language != null) "language": language,
+        if (timestamp_granularities != null)
+          "timestamp_granularities[]":
+              timestamp_granularities.map((e) => e.name).join(","),
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIAudioModel.fromMap(response);
