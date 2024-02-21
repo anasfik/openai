@@ -27,6 +27,7 @@ void main() async {
       // ),
     ],
     role: OpenAIChatMessageRole.user,
+    name: "anas",
   );
 
   final requestMessages = [
