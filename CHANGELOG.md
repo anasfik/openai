@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.1.0
+
+- Massive issues fixes related to incorrecr use of types, model fields..., audio transcription file streaming error handling, and more.
+
+- Support for newer fields & options for the chat completions API, like `name` for messages.
+
+- Support for audio transcription granularity.
+
+- General improvements, and more tests.
+
 ## 5.0.0
 
 - Bug fix in the `RequestFunctionMessage`'s `toMap()` method.
@@ -15,7 +25,7 @@
 ## 4.1.3
 
 - Added Audio Speech method in the Audio module with its docs, example code.
-- Migrated for the deprecated _`functions`_and `function_call` th the use of new fields such `tools`.. in the chat API, confirmed that it works on both asynchronous and stream responses.
+- Migrated for the deprecated \_`functions`\_and `function_call` th the use of new fields such `tools`.. in the chat API, confirmed that it works on both asynchronous and stream responses.
 - Exposed API for controlling the requests time out for all internal client methods.
 - Exposed multi content calls for chat completion API for image and text..
 
@@ -45,7 +55,7 @@
 ## 3.0.0
 
 - Added support for functions feature of the chat API.
-- Bugs fixes.  
+- Bugs fixes.
 
 ## 2.0.1
 

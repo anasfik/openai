@@ -258,7 +258,7 @@ abstract class OpenAINetworkingClient {
       final fileTypeHeader = "content-type";
 
       final fileExtensionFromBodyResponseFormat =
-          response.headers[fileTypeHeader]?.split("/")?.last ?? "mp3";
+          response.headers[fileTypeHeader]?.split("/").last ?? "mp3";
 
       final fileName =
           outputFileName + "." + fileExtensionFromBodyResponseFormat;
@@ -399,17 +399,23 @@ abstract class OpenAINetworkingClient {
                   final statusCode = respond.statusCode;
                   final exception = RequestFailedException(message, statusCode);
 
-                  yield* Stream<T>.error(error); // Error cases sent from openai
+                  yield* Stream<T>.error(
+                    exception,
+                  ); // Error cases sent from openai
                 }
               }
             } // end of await for
           } catch (error, stackTrace) {
             yield* Stream<T>.error(
-                error, stackTrace); // Error cases in handling stream
+              error,
+              stackTrace,
+            ); // Error cases in handling stream
           }
         } catch (error, stackTrace) {
-          yield* Stream<T>.error(error,
-              stackTrace); // Error cases in decoding stream from response
+          yield* Stream<T>.error(
+            error,
+            stackTrace,
+          ); // Error cases in decoding stream from response
         }
       } catch (e) {
         yield* Stream<T>.error(e); // Error cases in getting response
