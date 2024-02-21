@@ -424,7 +424,7 @@ final chat = await OpenAI.instance.chat.create(
 final message = chat.choices.first.message;
 
 // Wether the message has a tool call.
-  if (message.hasToolCalls) {
+  if (message.haveToolCalls) {
   final call = message.toolCalls!.first;
 
     // Wether the tool call is the one we sent.
