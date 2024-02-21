@@ -12,6 +12,8 @@ enum OpenAIImageQuality { hd }
 
 enum OpenAIImageResponseFormat { url, b64Json }
 
+enum OpenAIAudioTimestampGranularity { word, segment }
+
 enum OpenAIAudioResponseFormat { json, text, srt, verbose_json, vtt }
 
 enum OpenAIAudioSpeechResponseFormat { mp3, opus, aac, flac }
