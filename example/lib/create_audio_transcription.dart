@@ -17,11 +17,13 @@ Future<void> main() async {
       'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
     ),
     model: "whisper-1",
-    responseFormat: OpenAIAudioResponseFormat.text,
+    responseFormat: OpenAIAudioResponseFormat.verbose_json,
+    timestamp_granularities: [OpenAIAudioTimestampGranularity.segment],
   );
 
   // print the transcription.
   print(transcription.text);
+  print(transcription.segments?.map((e) => e.end));
 }
 
 Future<File> getFileFromUrl(String networkUrl) async {

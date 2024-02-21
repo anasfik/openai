@@ -393,6 +393,11 @@ void main() async {
     });
 
     test("create transcription with timestamp granularity", () async {
+      final audioExampleFile = await getFileFromUrl(
+        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
+        fileExtension: "mp3",
+      );
+
       final transcription = await OpenAI.instance.audio.createTranscription(
         file: audioExampleFile,
         model: "whisper-1",
