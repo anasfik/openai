@@ -590,9 +590,12 @@ void main() async {
 File jsonLFileExample() {
   final file = File("example.jsonl");
   file.writeAsStringSync(
-    jsonEncode(
-        {"prompt": "<prompt text>", "completion": "<ideal generated text>"}),
+    jsonEncode({
+      "prompt": "<prompt text>",
+      "completion": "<ideal generated text>",
+    }),
   );
+
   return file;
 }
 
@@ -604,5 +607,6 @@ Future<File> getFileFromUrl(
   final uniqueImageName = DateTime.now().microsecondsSinceEpoch;
   final file = File("$uniqueImageName.$fileExtension");
   await file.writeAsBytes(response.bodyBytes);
+
   return file;
 }
