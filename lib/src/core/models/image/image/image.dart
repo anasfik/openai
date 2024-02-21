@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'sub_models/data.dart';
@@ -6,11 +8,16 @@ export 'sub_models/data.dart';
 
 @immutable
 final class OpenAIImageModel {
-  /// The time the image was created.
+  /// The time the image was [created].
   final DateTime created;
+
+  final Map<String, dynamic> json;
 
   /// The data of the image.
   final List<OpenAIImageData> data;
+
+  /// Weither the image have some [data].
+  bool get haveData => data.isNotEmpty;
 
   @override
   int get hashCode => created.hashCode ^ data.hashCode;
@@ -19,6 +26,7 @@ final class OpenAIImageModel {
   const OpenAIImageModel({
     required this.created,
     required this.data,
+    required this.json,
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIImageModel] object.
@@ -28,7 +36,12 @@ final class OpenAIImageModel {
       data: (json['data'] as List)
           .map((e) => OpenAIImageData.fromMap(e))
           .toList(),
+      json: json,
     );
+  }
+
+  String toJsonString() {
+    return jsonEncode(json);
   }
 
   @override

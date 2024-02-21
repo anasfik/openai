@@ -1,39 +1,78 @@
 # Changelog
+
+## 5.0.0
+
+- Bug fix in the `RequestFunctionMessage`'s `toMap()` method.
+- Minor changes
+- Add/Improvements to the documentation.
+- Notifications about breaking changes in the chat completions methods in favor of OpenAI Vision feature support, JSON mode..
+
+## 4.1.4
+
+- Removed the exposed field for configuring the package to use fetch_client instead of http_client manually withe is `isWeb` field, in favor of using `dart.library.js` and `dart.library.io` conditional imports to automatically detect the platform and use the appropriate client for it.
+- Exposed field for configuring the package to use fetch_client instead of http_client for making requests in web apps (flutter web, etc..)
+
+## 4.1.3
+
+- Added Audio Speech method in the Audio module with its docs, example code.
+- Migrated for the deprecated _`functions`_and `function_call` th the use of new fields such `tools`.. in the chat API, confirmed that it works on both asynchronous and stream responses.
+- Exposed API for controlling the requests time out for all internal client methods.
+- Exposed multi content calls for chat completion API for image and text..
+
+## 4.1.2
+
+- Disabled a print method that was used for debugging purposes.
+
+## 4.1.1
+
+- Fixed the non applied `n` field in image variation method.
+- Exposed non-breaking `model` field for other image APIs methods.
+
+## 4.1.0
+
+- Bugs & issues fixes.
+- Followed up with more changes in the OpenAI API.
+- Added more documentation for the package.
+- Added more examples for the package.
+- Added more tests for the package.
+
 ## 4.0.0
- - Migrated internal packages to latest versions such as http.
- - Bug fixes to new functions API
- - Minor edits to docs, package members.
- 
+
+- Migrated internal packages to latest versions such as http.
+- Bug fixes to new functions API
+- Minor edits to docs, package members.
+
 ## 3.0.0
- - Added support for functions feature of the chat API.
- - Bugs fixes.  
+
+- Added support for functions feature of the chat API.
+- Bugs fixes.  
 
 ## 2.0.1
 
- - Formated unformatted files.
+- Formated unformatted files.
 
 ## 2.0.0
 
- - Exposing of custom thttp client for methods - Fixed issue related to streams that uses a custom http client
- 
- ## 1.9.93
+- Exposing of custom thttp client for methods- Fixed issue related to streams that uses a custom http client.
 
+## 1.9.93
 
- - Added custom HTTP client options for all the package APIs that requires one.
+- Added custom HTTP client options for all the package APIs that requires one.
+
 ## 1.9.92
 
- - exposed an external method for inclusing custom headers to the requests.
+- exposed an external method for inclusing custom headers to the requests.
+
+## 1.9.91
+
+- Fixed minor issue.
 
 ## 1.9.9
-
- - Fixed minor issue.
-
-## 1.9.9
-
 
 - More refatocration for the packages services.
 - Fixes some minor issues with the logging service.
 - Removed repeated constants, code.
+
 ## 1.9.8
 
 - Fixed the non catched error for stream functionality of chat completions and completions.

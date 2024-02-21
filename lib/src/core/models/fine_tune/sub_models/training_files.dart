@@ -5,20 +5,23 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @immutable
 final class OpenAIFineTuneTrainingFilesModel {
-  /// The id of the file.
+  /// The [id]entifier of the file.
   final String id;
 
-  /// The number of bytes in the file.
+  /// The size of the file in [bytes].
   final int bytes;
 
-  /// The time the file was created.
+  /// The time the file was [created].
   final DateTime createdAt;
 
   /// The name of the file.
   final String filename;
 
-  /// The purpose of the file.
+  /// The [purpose] of the file.
   final String? purpose;
+
+  /// Weither the file have a purpose.
+  bool get havePurpose => purpose != null;
 
   @override
   int get hashCode {

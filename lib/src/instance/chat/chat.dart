@@ -1,11 +1,16 @@
-import 'package:dart_openai/src/core/builder/base_api_url.dart';
-import 'package:dart_openai/src/core/networking/client.dart';
+
+import '../../core/builder/base_api_url.dart';
+import '../../core/constants/config.dart';
+import '../../core/networking/client.dart';
+
+
 import 'package:meta/meta.dart';
+
 
 import '../../core/base/chat/chat.dart';
 import '../../core/constants/strings.dart';
 import '../../core/models/chat/chat.dart';
-import '../../core/models/functions/functions.dart';
+import '../../core/models/tool/tool.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;
@@ -70,8 +75,8 @@ base class OpenAIChat implements OpenAIChatBase {
   Future<OpenAIChatCompletionModel> create({
     required String? model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<OpenAIFunctionModel>? functions,
-    FunctionCall? functionCall,
+    List<OpenAIToolModel>? tools,
+    toolChoice,
     double? temperature,
     double? topP,
     int? n,
@@ -81,18 +86,18 @@ base class OpenAIChat implements OpenAIChatBase {
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
     String? user,
+    Map<String, String>? responseFormat,
+    int? seed,
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.build(endpoint, null, null, model),
       body: {
-        if (model != null) "model": model,
+        if (OpenAIType.openai == OpenAIConfig.aiType) "model": model,
         "messages": messages.map((message) => message.toMap()).toList(),
-        if (functions != null)
-          "functions": functions
-              .map((function) => function.toMap())
-              .toList(growable: false),
-        if (functionCall != null) "function_call": functionCall.value,
+        if (tools != null)
+          "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
+        if (toolChoice != null) "tool_choice": toolChoice.value,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
@@ -102,6 +107,8 @@ base class OpenAIChat implements OpenAIChatBase {
         if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
+        if (seed != null) "seed": seed,
+        if (responseFormat != null) "response_format": responseFormat,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIChatCompletionModel.fromMap(response);
@@ -161,8 +168,8 @@ base class OpenAIChat implements OpenAIChatBase {
   Stream<OpenAIStreamChatCompletionModel> createStream({
     required String? model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<OpenAIFunctionModel>? functions,
-    FunctionCall? functionCall,
+    List<OpenAIToolModel>? tools,
+    toolChoice,
     double? temperature,
     double? topP,
     int? n,
@@ -171,20 +178,20 @@ base class OpenAIChat implements OpenAIChatBase {
     double? presencePenalty,
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
+    Map<String, String>? responseFormat,
+    int? seed,
     String? user,
     http.Client? client,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.build(endpoint, null, null, model),
       body: {
-        if (model != null) "model": model,
+        if (OpenAIType.openai == OpenAIConfig.aiType) "model": model,
         "stream": true,
         "messages": messages.map((message) => message.toMap()).toList(),
-        if (functions != null)
-          "functions": functions
-              .map((function) => function.toMap())
-              .toList(growable: false),
-        if (functionCall != null) "function_call": functionCall.value,
+        if (tools != null)
+          "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
+        if (toolChoice != null) "tool_choice": toolChoice,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
@@ -194,6 +201,8 @@ base class OpenAIChat implements OpenAIChatBase {
         if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
+        if (seed != null) "seed": seed,
+        if (responseFormat != null) "response_format": responseFormat,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamChatCompletionModel.fromMap(response);
@@ -206,8 +215,8 @@ base class OpenAIChat implements OpenAIChatBase {
   Stream<OpenAIStreamChatCompletionModel> createRemoteFunctionStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
-    List<dynamic>? functions,
-    FunctionCall? functionCall,
+    List<OpenAIToolModel>? tools,
+    toolChoice,
     double? temperature,
     double? topP,
     int? n,
@@ -218,15 +227,18 @@ base class OpenAIChat implements OpenAIChatBase {
     Map<String, dynamic>? logitBias,
     String? user,
     http.Client? client,
+    Map<String, String>? responseFormat,
+    int? seed,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.build(endpoint, null, null, model),
       body: {
-        "model": model,
+        if (OpenAIType.openai == OpenAIConfig.aiType) "model": model,
         "stream": true,
         "messages": messages.map((message) => message.toMap()).toList(),
-        if (functions != null) "functions": functions,
-        if (functionCall != null) "function_call": functionCall.value,
+        if (tools != null)
+          "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
+        if (toolChoice != null) "tool_choice": toolChoice.value,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
@@ -236,6 +248,8 @@ base class OpenAIChat implements OpenAIChatBase {
         if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
+        if (seed != null) "seed": seed,
+        if (responseFormat != null) "response_format": responseFormat,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamChatCompletionModel.fromMap(response);

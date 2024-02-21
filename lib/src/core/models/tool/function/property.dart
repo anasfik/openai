@@ -1,62 +1,40 @@
-import 'dart:convert';
-
-import 'package:meta/meta.dart';
-
-@immutable
-class OpenAIFunctionModel {
-  /// The name of the function to be called. Must be a-z, A-Z, 0-9, or contain
-  /// underscores and dashes, with a maximum length of 64.
-  final String name;
-
-  /// The description of what the function does.
-  final String? description;
-
-  /// The parameters the functions accepts, described as a
-  /// [JSON Schema](https://json-schema.org/understanding-json-schema) object.
-  final Map<String, dynamic> parametersSchema;
-
-  const OpenAIFunctionModel({
-    required this.name,
-    required this.parametersSchema,
-    this.description,
-  });
-
-  factory OpenAIFunctionModel.withParameters({
-    required String name,
-    String? description,
-    required Iterable<OpenAIFunctionProperty> parameters,
-  }) {
-    return OpenAIFunctionModel(
-      name: name,
-      description: description,
-      parametersSchema: OpenAIFunctionProperty.object(
-        name: '',
-        properties: parameters,
-      ).typeMap(),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      if (description != null) 'description': description,
-      'parameters': parametersSchema,
-    };
-  }
-}
-
+/// {@template openai_function_property}
+/// This class is used to represent an OpenAI function property.
+/// {@endtemplate}
 class OpenAIFunctionProperty {
+  /// an integer type.
   static const functionTypeInteger = 'integer';
+
+  /// A string type.
   static const functionTypeString = 'string';
+
+  /// A boolean type.
   static const functionTypeBoolean = 'boolean';
+
+  /// A number type.
   static const functionTypeNumber = 'number';
+
+  /// An array (List) type.
   static const functionTypeArray = 'array';
+
+  /// An object (Map) type.
   static const functionTypeObject = 'object';
 
+  /// The name of the property.
   final String name;
+
+  /// Weither the property is required.
   final bool isRequired;
+
+  /// The type of the property.
   final Map<String, dynamic> _typeMap;
 
+  @override
+  int get hashCode {
+    return name.hashCode ^ _typeMap.hashCode ^ isRequired.hashCode;
+  }
+
+  /// {@macro openai_function_property}
   const OpenAIFunctionProperty({
     required this.name,
     required Map<String, dynamic> typeMap,
@@ -64,12 +42,14 @@ class OpenAIFunctionProperty {
     List<String>? requiredProperties,
   }) : _typeMap = typeMap;
 
+  /// {@macro openai_function_property}
+  /// This a factory constructor that allows you to create a new function property with a primitive type.
   factory OpenAIFunctionProperty.primitive({
     required String name,
     String? description,
     bool isRequired = false,
     required String type,
-    List<dynamic>? enumValues,
+    List? enumValues,
   }) {
     return OpenAIFunctionProperty(
       name: name,
@@ -82,6 +62,8 @@ class OpenAIFunctionProperty {
     );
   }
 
+  /// {@macro openai_function_property}
+  /// This a factory constructor that allows you to create a new function property with a string type.
   factory OpenAIFunctionProperty.string({
     required String name,
     String? description,
@@ -97,6 +79,8 @@ class OpenAIFunctionProperty {
     );
   }
 
+  /// {@macro openai_function_property}
+  /// This a factory constructor that allows you to create a new function property with a boolean type.
   factory OpenAIFunctionProperty.boolean({
     required String name,
     String? description,
@@ -110,6 +94,8 @@ class OpenAIFunctionProperty {
     );
   }
 
+  /// {@macro openai_function_property}
+  /// This a factory constructor that allows you to create a new function property with an integer type.
   factory OpenAIFunctionProperty.integer({
     required String name,
     String? description,
@@ -123,6 +109,8 @@ class OpenAIFunctionProperty {
     );
   }
 
+  /// {@macro openai_function_property}
+  /// This a factory constructor that allows you to create a new function property with a number type.
   factory OpenAIFunctionProperty.number({
     required String name,
     String? description,
@@ -136,6 +124,8 @@ class OpenAIFunctionProperty {
     );
   }
 
+  /// {@macro openai_function_property}
+  /// This a factory constructor that allows you to create a new function property with an array (List) type.
   factory OpenAIFunctionProperty.array({
     required String name,
     String? description,
@@ -153,6 +143,8 @@ class OpenAIFunctionProperty {
     );
   }
 
+  /// {@macro openai_function_property}
+  /// This a factory constructor that allows you to create a new function property with an object (Map) type.
   factory OpenAIFunctionProperty.object({
     required String name,
     String? description,
@@ -180,118 +172,21 @@ class OpenAIFunctionProperty {
     );
   }
 
-  @override
-  int get hashCode {
-    return name.hashCode ^ _typeMap.hashCode;
-  }
-
+  /// The type entry of the property.
   MapEntry<String, Map<String, dynamic>> typeEntry() {
     return MapEntry(name, _typeMap);
   }
 
+  /// The type map of the property.
   Map<String, dynamic> typeMap() {
     return _typeMap;
   }
 
+  /// This method is used to convert a [OpenAIFunctionProperty] object to a [Map<String, dynamic>] object.
   Map<String, dynamic> toMap() {
     return {
       'name': name,
       ..._typeMap,
     };
   }
-}
-
-/// Controls how the model responds to function calls.
-@immutable
-class FunctionCall {
-  /// Force the model to respond to the end-user instead of calling a function.
-  static const none = FunctionCall._(value: 'none');
-
-  /// The model can pick between an end-user or calling a function.
-  static const auto = FunctionCall._(value: 'auto');
-
-  final value;
-
-  const FunctionCall._({required this.value});
-
-  /// Specifying a particular function forces the model to call that function.
-  factory FunctionCall.forFunction(String functionName) {
-    return FunctionCall._(value: {
-      'name': functionName,
-    });
-  }
-}
-
-@immutable
-class FunctionCallResponse {
-  /// The name of the function that the model wants to call.
-  final String? name;
-
-  /// The arguments that the model wants to pass to the function.
-  final Map<String, dynamic>? arguments;
-
-  const FunctionCallResponse({
-    required this.name,
-    required this.arguments,
-  });
-
-  factory FunctionCallResponse.fromMap(Map<String, dynamic> map) {
-    final argsField = map['arguments'];
-
-    Map<String, dynamic> arguments;
-
-    try {
-      arguments = jsonDecode(argsField);
-    } catch (e) {
-      arguments = {};
-    }
-
-    return FunctionCallResponse(
-      name: map['name'],
-      arguments: arguments,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'arguments': json.encode(arguments),
-    };
-  }
-
-  @override
-  String toString() =>
-      'FunctionCallResponse(name: $name, arguments: $arguments)';
-}
-
-@immutable
-class StreamFunctionCallResponse {
-  /// The name of the function that the model wants to call.
-  final String? name;
-
-  /// The arguments that the model wants to pass to the function.
-  final String? arguments;
-
-  const StreamFunctionCallResponse({
-    required this.name,
-    required this.arguments,
-  });
-
-  factory StreamFunctionCallResponse.fromMap(Map<String, dynamic> map) {
-    return StreamFunctionCallResponse(
-      name: map['name'],
-      arguments: map['arguments'],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'arguments': arguments,
-    };
-  }
-
-  @override
-  String toString() =>
-      'StreamFunctionCallResponse(name: $name, arguments: $arguments)';
 }

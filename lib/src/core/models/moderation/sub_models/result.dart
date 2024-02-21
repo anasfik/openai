@@ -6,6 +6,9 @@ import 'catgeories_scores.dart';
 export 'catgeories.dart';
 export 'catgeories_scores.dart';
 
+/// {@template openai_moderation_result_model}
+///  This class is used to represent an OpenAI moderation job result.
+/// {@endtemplate}
 @immutable
 final class OpenAIModerationResultModel {
   /// The categories of the moderation job.
@@ -21,7 +24,7 @@ final class OpenAIModerationResultModel {
   int get hashCode =>
       categories.hashCode ^ categoryScores.hashCode ^ flagged.hashCode;
 
-  /// This class is used to represent an OpenAI moderation job result.
+  /// {@macro openai_moderation_result_model}
   const OpenAIModerationResultModel({
     required this.categories,
     required this.categoryScores,

@@ -21,7 +21,7 @@ Future<void> main() async {
   );
 
   // print the transcription.
-  print(transcription);
+  print(transcription.text);
 }
 
 Future<File> getFileFromUrl(String networkUrl) async {

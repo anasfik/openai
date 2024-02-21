@@ -6,13 +6,13 @@ import 'package:meta/meta.dart';
 @immutable
 final class OpenAICompletionModelUsage {
   /// The number of tokens in the prompt.
-  final int? promptTokens;
+  final int promptTokens;
 
   /// The number of tokens in the completion.
-  final int? completionTokens;
+  final int completionTokens;
 
   /// The total number of tokens in the prompt and completion.
-  final int? totalTokens;
+  final int totalTokens;
 
   @override
   int get hashCode =>

@@ -13,7 +13,11 @@ Future<void> main() async {
     model: "gpt-3.5-turbo",
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
-        content: "Hello, can you say: 'You are Anas'",
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "Hello, can you say: 'You are Anas'",
+          ),
+        ],
         role: OpenAIChatMessageRole.user,
       ),
     ],

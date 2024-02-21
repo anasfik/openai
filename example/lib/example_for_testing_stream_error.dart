@@ -37,21 +37,32 @@ Stream<ItemBodyCompletion> itemBodyCompletionStream(
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
         role: OpenAIChatMessageRole.system,
-        content: system,
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(system),
+        ],
       ),
       OpenAIChatCompletionChoiceMessageModel(
         role: OpenAIChatMessageRole.user,
-        content: user,
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(user),
+        ],
       ),
       OpenAIChatCompletionChoiceMessageModel(
         role: OpenAIChatMessageRole.assistant,
-        content: assistant,
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(assistant),
+        ],
       ),
     ],
   );
   final stream = StreamController<ItemBodyCompletion>();
+
   bodyCompletion.listen((event) {
-    return stream.add(ItemBodyCompletion(body: event.choices[0].delta.content));
+    final content = event.choices[0].delta.content;
+
+    return content != null && content.first.text != null
+        ? stream.add(ItemBodyCompletion(body: content.first.text!))
+        : () {};
   }, onDone: () {
     stream.close();
   }, onError: (e) {

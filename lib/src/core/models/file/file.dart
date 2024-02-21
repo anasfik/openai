@@ -5,19 +5,19 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @immutable
 final class OpenAIFileModel {
-  /// The ID of the file. This is used to reference the file in other API calls.
+  /// The [id]entifier of the file. This is used to reference the file in other API calls.
   final String id;
 
-  /// The size of the file in bytes.
+  /// The size of the file in [bytes].
   final int bytes;
 
-  /// The date the file was created.
+  /// The date the file was [created].
   final DateTime createdAt;
 
   /// The name of the file.
   final String fileName;
 
-  /// The purpose of the file.
+  /// The [purpose] of the file.
   final String purpose;
 
   @override

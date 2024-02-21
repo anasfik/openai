@@ -21,7 +21,7 @@ Future<void> main() async {
   );
 
   // print the translation.
-  print(translation);
+  print(translation.text);
 }
 
 Future<File> getFileFromUrl(

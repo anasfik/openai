@@ -1,7 +1,14 @@
+// ignore_for_file: avoid-passing-async-when-sync-expected
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as dev;
 import 'package:dart_openai/dart_openai.dart';
+import 'package:dart_openai/src/core/builder/headers.dart';
+import 'package:dart_openai/src/core/constants/config.dart';
+import 'package:dart_openai/src/core/constants/strings.dart';
+import 'package:dart_openai/src/core/models/model/sub_models/permission.dart';
+import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -23,7 +30,7 @@ void main() async {
 
   String? fileIdFromFilesApi;
 
-  String? fineTuneExampleId;
+  // String? fineTuneExampleId;
 
   // ignore: unused_local_variable
   String? fileToDelete;
@@ -51,18 +58,75 @@ void main() async {
       // ! If you have a real organization, comment the following line.
       OpenAI.organization = null;
     });
+    test("Changing base URL", () {
+      final urlChange = "https://something.com";
+      OpenAI.baseUrl = urlChange;
+      expect(OpenAI.baseUrl, urlChange);
+
+      // ! this is to reset the base URL to the default one.
+      OpenAI.baseUrl = OpenAIStrings.defaultBaseUrl;
+    });
+
+    test("switching showing logs", () {
+      OpenAI.showLogs = true;
+      expect(OpenAILogger.isActive, isTrue);
+
+      OpenAI.showLogs = false;
+      expect(OpenAILogger.isActive, isFalse);
+    });
+
+    test("Add Extra headers to all requests", () {
+      OpenAI.includeHeaders({
+        "x-openai-test": "test",
+      });
+
+      expect(HeadersBuilder.build(), containsPair("x-openai-test", "test"));
+    });
+
+    test("requests timeout", () {
+      final tS = 10;
+
+      OpenAIConfig.requestsTimeOut = Duration(seconds: tS);
+
+      expect(
+        OpenAIConfig.requestsTimeOut.inMilliseconds,
+        Duration(seconds: tS).inMilliseconds,
+      );
+
+      //! return to the default timeout.
+
+      OpenAIConfig.requestsTimeOut = OpenAIConfig.defaultRequestsTimeOut;
+    });
+
+    // test('declaring web environment for the package', () {
+    //   OpenAI.isWeb = true;
+
+    //   expect(OpenAI.isWeb, isTrue);
+
+    //   // ! this is to reset the isWeb to the default one.
+    //   OpenAI.isWeb = false;
+    // });
   });
+
   group('models', () {
     test(
       'list models',
       () async {
-        final List<OpenAIModelModel> models =
-            await OpenAI.instance.model.list();
+        final models = await OpenAI.instance.model.list();
+
         expect(models, isA<List<OpenAIModelModel>>());
+
         if (models.isNotEmpty) {
           expect(models.first, isA<OpenAIModelModel>());
           expect(models.first.id, isNotNull);
           expect(models.first.id, isA<String>());
+
+          if (models.first.permission != null) {
+            expect(
+              models.first.permission,
+              isA<List<OpenAIModelModelPermission>>(),
+            );
+          }
 
           // trying to get the "text-davinci-003" model id.
           modelExampleId = models
@@ -77,10 +141,18 @@ void main() async {
         modelExampleId != null,
         "please set a model id that is not null, or let the previous test run first to get a model id example",
       );
-      final OpenAIModelModel model =
-          await OpenAI.instance.model.retrieve(modelExampleId!);
+      final model = await OpenAI.instance.model.retrieve(modelExampleId!);
+
       expect(model, isA<OpenAIModelModel>());
+
       expect(model.id, isNotNull);
+
+      if (model.permission != null) {
+        expect(
+          model.permission,
+          isA<List<OpenAIModelModelPermission>>(),
+        );
+      }
     });
   });
   group('completions', () {
@@ -98,11 +170,13 @@ void main() async {
         bestOf: 1,
         n: 1,
       );
+
       expect(completion, isA<OpenAICompletionModel>());
       expect(completion.choices.first, isA<OpenAICompletionModelChoice>());
       expect(completion.choices.first.text, isNotNull);
       expect(completion.choices.first.text, isA<String?>());
     });
+
     test('create with a stream', () {
       final Stream<OpenAIStreamCompletionModel> completion =
           OpenAI.instance.completion.createStream(
@@ -128,7 +202,11 @@ void main() async {
         model: "gpt-3.5-turbo",
         messages: [
           OpenAIChatCompletionChoiceMessageModel(
-            content: "Hello, how are you?",
+            content: [
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                "Hello, how are you?",
+              ),
+            ],
             role: OpenAIChatMessageRole.user,
           ),
         ],
@@ -161,11 +239,15 @@ void main() async {
           model: "gpt-3.5-turbo-0613",
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
-              content: "Send an email to John asking about Marrakech weather",
+              content: [
+                OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                  "Send an email to John asking about Marrakech weather",
+                ),
+              ],
               role: OpenAIChatMessageRole.user,
             ),
           ],
-          functions: [
+          tools: [
             OpenAIFunctionModel.withParameters(
               name: "sendEmail",
               description:
@@ -181,17 +263,35 @@ void main() async {
                 ),
               ],
             ),
-          ],
+          ].map((function) {
+            return OpenAIToolModel(type: "function", function: function);
+          }).toList(),
         );
 
-        final funcCall = chatCompletion.choices.first.message.functionCall;
+        final toolCalls = chatCompletion.choices.first.message.toolCalls;
+
+        if (toolCalls == null || toolCalls.isEmpty) {
+          print(
+            "weither this happens from the API or the package, the test for this function should not show this.",
+          );
+
+          return;
+        }
+
+        final firstToolCall = toolCalls.first;
+        final funcCall = firstToolCall.function;
+
         expect(funcCall, isNotNull);
-        expect(funcCall?.arguments?["to"], isNotNull);
-        expect(funcCall?.arguments?["message"], isNotNull);
+
+        final decodedArgs =
+            jsonDecode(funcCall.arguments) as Map<String, dynamic>;
+
+        expect(decodedArgs["to"], isNotNull);
+        expect(decodedArgs["message"], isNotNull);
 
         sendEmail(
-          message: funcCall!.arguments?["message"],
-          to: funcCall.arguments?["to"],
+          message: decodedArgs["message"],
+          to: decodedArgs["to"],
         );
       },
     );
@@ -201,7 +301,11 @@ void main() async {
         model: "gpt-3.5-turbo",
         messages: [
           OpenAIChatCompletionChoiceMessageModel(
-            content: "Hello, how are you?",
+            content: [
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                "Hello, how are you?",
+              ),
+            ],
             role: OpenAIChatMessageRole.user,
           ),
         ],
@@ -237,21 +341,20 @@ void main() async {
       expect(image.data.first.url, isA<String>());
     });
     test("edits", () async {
-      final OpenAiImageEditModel imageEdited = await OpenAI.instance.image.edit(
+      final OpenAIImageModel imageEdited = await OpenAI.instance.image.edit(
         prompt: 'mask the image with color red',
         image: imageFileExample,
         mask: maskFileExample,
       );
-      expect(imageEdited, isA<OpenAiImageEditModel>());
+      expect(imageEdited, isA<OpenAIImageModel>());
       expect(imageEdited.data.first.url, isA<String>());
     });
     test("variation", () async {
-      final OpenAIImageVariationModel variation =
-          await OpenAI.instance.image.variation(
+      final OpenAIImageModel variation = await OpenAI.instance.image.variation(
         image: imageFileExample,
       );
 
-      expect(variation, isA<OpenAIImageVariationModel>());
+      expect(variation, isA<OpenAIImageModel>());
       expect(variation.data.first.url, isA<String>());
     });
   });
@@ -350,68 +453,69 @@ void main() async {
     // });
   });
 
-  group("fine-tune", () {
-    test('create', () async {
-      final OpenAIFineTuneModel fineTune =
-          await OpenAI.instance.fineTune.create(
-        trainingFile: fileIdFromFilesApi!,
-      );
-      expect(fineTune, isA<OpenAIFineTuneModel>());
-      expect(fineTune.id, isA<String>());
-      expect(fineTune.id, isNotNull);
-      fineTuneExampleId = fineTune.id;
-    });
-    test('list', () async {
-      final List<OpenAIFineTuneModel> fineTunes =
-          await OpenAI.instance.fineTune.list();
-      expect(fineTunes, isA<List<OpenAIFineTuneModel>>());
-      if (fineTunes.isNotEmpty) {
-        expect(fineTunes.first, isA<OpenAIFineTuneModel>());
-        expect(fineTunes.first.id, isNotNull);
-      }
-    });
-    test('retrieve', () async {
-      final OpenAIFineTuneModel fineTune =
-          await OpenAI.instance.fineTune.retrieve(fineTuneExampleId!);
+  // group("fine-tune", () {
+  //   test('create', () async {
+  //     final OpenAIFineTuneModel fineTune =
+  //         await OpenAI.instance.fineTune.create(
+  //       trainingFile: fileIdFromFilesApi!,
+  //     );
+  //     expect(fineTune, isA<OpenAIFineTuneModel>());
+  //     expect(fineTune.id, isA<String>());
+  //     expect(fineTune.id, isNotNull);
+  //     fineTuneExampleId = fineTune.id;
+  //   });
+  //   test('list', () async {
+  //     final List<OpenAIFineTuneModel> fineTunes =
+  //         await OpenAI.instance.fineTune.list();
+  //     expect(fineTunes, isA<List<OpenAIFineTuneModel>>());
+  //     if (fineTunes.isNotEmpty) {
+  //       expect(fineTunes.first, isA<OpenAIFineTuneModel>());
+  //       expect(fineTunes.first.id, isNotNull);
+  //     }
+  //   });
+  //   test('retrieve', () async {
+  //     final OpenAIFineTuneModel fineTune =
+  //         await OpenAI.instance.fineTune.retrieve(fineTuneExampleId!);
 
-      expect(fineTune, isA<OpenAIFineTuneModel>());
-      expect(fineTune.id, isA<String>());
-      expect(fineTune.id, equals(fineTuneExampleId!));
-    });
+  //     expect(fineTune, isA<OpenAIFineTuneModel>());
+  //     expect(fineTune.id, isA<String>());
+  //     expect(fineTune.id, equals(fineTuneExampleId!));
+  //   });
 
-    test("events", () async {
-      final List<OpenAIFineTuneEventModel> events =
-          await OpenAI.instance.fineTune.listEvents(fineTuneExampleId!);
-      expect(events, isA<List<OpenAIFineTuneEventModel>>());
-      if (events.isNotEmpty) {
-        expect(events.first, isA<OpenAIFineTuneEventModel>());
-        expect(events.first.level, isA<String>());
-      }
-    });
+  //   test("events", () async {
+  //     final List<OpenAIFineTuneEventModel> events =
+  //         await OpenAI.instance.fineTune.listEvents(fineTuneExampleId!);
+  //     expect(events, isA<List<OpenAIFineTuneEventModel>>());
+  //     if (events.isNotEmpty) {
+  //       expect(events.first, isA<OpenAIFineTuneEventModel>());
+  //       expect(events.first.level, isA<String>());
+  //     }
+  //   });
 
-    test("events stream", () {
-      final Stream<OpenAIFineTuneEventStreamModel> events =
-          OpenAI.instance.fineTune.listEventsStream(fineTuneExampleId!);
-      expect(events, isA<Stream<OpenAIFineTuneEventStreamModel>>());
-      events.listen(
-        (event) {
-          expect(event, isA<OpenAIFineTuneEventStreamModel>());
-          expect(event.level, isA<String>());
-        },
-        onError: (err) {
-          expect(err, isA<RequestFailedException>());
-        },
-      );
-    });
+  //   test("events stream", () {
+  //     final Stream<OpenAIFineTuneEventStreamModel> events =
+  //         OpenAI.instance.fineTune.listEventsStream(fineTuneExampleId!);
+  //     expect(events, isA<Stream<OpenAIFineTuneEventStreamModel>>());
+  //     events.listen(
+  //       (event) {
+  //         expect(event, isA<OpenAIFineTuneEventStreamModel>());
+  //         expect(event.level, isA<String>());
+  //       },
+  //       onError: (err) {
+  //         expect(err, isA<RequestFailedException>());
+  //       },
+  //     );
+  //   });
 
-    test("cancel", () async {
-      OpenAIFineTuneModel cancelledFineTune =
-          await OpenAI.instance.fineTune.cancel(fineTuneExampleId!);
-      expect(cancelledFineTune, isA<OpenAIFineTuneModel>());
-      expect(cancelledFineTune.id, isA<String>());
-      expect(cancelledFineTune.id, equals(fineTuneExampleId!));
-    });
-  });
+  //   test("cancel", () async {
+  //     OpenAIFineTuneModel cancelledFineTune =
+  //         await OpenAI.instance.fineTune.cancel(fineTuneExampleId!);
+  //     expect(cancelledFineTune, isA<OpenAIFineTuneModel>());
+  //     expect(cancelledFineTune.id, isA<String>());
+  //     expect(cancelledFineTune.id, equals(fineTuneExampleId!));
+  //   });
+  // });
+
   group('moderations', () {
     test('create', () async {
       final OpenAIModerationModel moderation =

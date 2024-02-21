@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-/// {@template openai_audio}
+/// {@template openai_audio_model}
 /// This class represents the audio model of the OpenAI API, which is used and get returned while using the [OpenAIAudio] methods.
 /// {@endtemplate}
 @immutable
@@ -12,8 +12,10 @@ final class OpenAIAudioModel {
   @override
   int get hashCode => text.hashCode;
 
-  /// {@macro openai_audio}
-  const OpenAIAudioModel({required this.text});
+  /// {@macro openai_audio_model}
+  const OpenAIAudioModel({
+    required this.text,
+  });
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIAudioModel] object.
   factory OpenAIAudioModel.fromMap(Map<String, dynamic> json) {

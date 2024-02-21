@@ -17,6 +17,12 @@ final class OpenAIStreamCompletionModelChoice {
   /// The reason the completion finished.
   final String? finishReason;
 
+  /// Weither the choice have log probabilities.
+  bool get haveLogprobs => logprobs != null;
+
+  /// Weither the choice have a finish reason.
+  bool get haveFinishReason => finishReason != null;
+
   @override
   int get hashCode {
     return text.hashCode ^

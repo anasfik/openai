@@ -11,10 +11,16 @@ final class OpenAIEmbeddingsUsageModel {
   /// The total number of tokens in the prompt and completion.
   final int? totalTokens;
 
+  /// Weither the usage have a prompt tokens information.
+  bool get havePromptTokens => promptTokens != null;
+
+  /// Weither the usage have a total tokens information.
+  bool get haveTotalTokens => totalTokens != null;
+
   @override
   int get hashCode => promptTokens.hashCode ^ totalTokens.hashCode;
 
-  /// {@template openai_embeddings_usage_model}
+  /// {@macro openai_embeddings_usage_model}
   const OpenAIEmbeddingsUsageModel({
     required this.promptTokens,
     required this.totalTokens,
@@ -22,6 +28,7 @@ final class OpenAIEmbeddingsUsageModel {
 
   /// {@template openai_embeddings_usage_model}
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEmbeddingsUsageModel] object.
+  /// {@endtemplate}
   factory OpenAIEmbeddingsUsageModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsUsageModel(
       promptTokens: map['prompt_tokens'] as int,

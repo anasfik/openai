@@ -38,9 +38,16 @@ final class OpenAI extends OpenAIClientBase {
       OpenAI.apiKey = "Your API Key";
       """);
     }
+    OpenAIConfig.aiType = OpenAIType.openai;
 
     return _instance;
   }
+
+  /// {@macro openai_config_requests_timeOut}
+  static Duration get requestsTimeOut => OpenAIConfig.requestsTimeOut;
+
+  // /// {@macro openai_config_is_web}
+  // static bool get isWeb => OpenAIConfig.isWeb;
 
   /// The [OpenAIModel] instance, used to access the model endpoints.
   /// Please, refer to the Models page from the official OpenAI documentation website in order to know what models are available and what's the use case of every model.
@@ -79,6 +86,12 @@ final class OpenAI extends OpenAIClientBase {
   /// The base API url, by default it is set to the OpenAI API url.
   /// You can change it by calling the [OpenAI.baseUrl] setter.
   static String get baseUrl => OpenAIConfig.baseUrl;
+
+  /// {@macro openai_config_requests_timeOut}
+  static set requestsTimeOut(Duration requestsTimeOut) {
+    OpenAIConfig.requestsTimeOut = requestsTimeOut;
+    OpenAILogger.requestsTimeoutChanged(requestsTimeOut);
+  }
 
   // /// The HTTP client that will be used to make the requests to the OpenAI API.
   // /// you can set yout own client, or just set to [null] to use the default client.
@@ -127,6 +140,31 @@ final class OpenAI extends OpenAIClientBase {
   static set showLogs(bool newValue) {
     OpenAILogger.isActive = newValue;
   }
+
+  /// This controls whether to log responses bodies or not.
+  /// This uses  [dart:developer] internally, so it will show anyway only while debugging code.
+  ///
+  /// By default it is set to [false].
+  ///
+  /// Example:
+  /// ```dart
+  /// OpenAI.showResponsesLogs = true;
+  /// ```
+  static set showResponsesLogs(bool showResponsesLogs) {
+    OpenAILogger.showResponsesLogs = showResponsesLogs;
+  }
+
+  // /// Wether the package is running on the web or not, example of this is the use of Flutter web.
+  // ///
+  // /// By default it is set to [false].
+  // ///
+  // /// ```dart
+  // /// OpenAI.isWeb = kIsWeb;
+  // /// ```
+  // ///
+  // static set isWeb(bool newValue) {
+  //   OpenAIConfig.isWeb = newValue;
+  // }
 
   // /// Sets the given [client] as the new client that will be used in the requests made by the package.
   // ///

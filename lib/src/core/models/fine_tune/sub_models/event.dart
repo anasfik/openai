@@ -5,14 +5,20 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @immutable
 final class OpenAIFineTuneEventModel {
-  /// The date the event was created.
+  /// The date the event was [created].
   final DateTime createdAt;
 
-  /// The level of the event.
+  /// The [level] of the event.
   final String? level;
 
-  /// The message of the event.
+  /// The [message] of the event.
   final String? message;
+
+  /// Weither the event have a level.
+  bool get haveLevel => level != null;
+
+  /// Weither the event have a message.
+  bool get haveMessage => message != null;
 
   @override
   int get hashCode => createdAt.hashCode ^ level.hashCode ^ message.hashCode;

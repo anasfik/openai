@@ -9,12 +9,19 @@ void main() async {
     model: "gpt-3.5-turbo",
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
-        content:
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
             "You are a Moroccon guy who lives in Morocco and knows how to speak in Darija",
+          ),
+        ],
         role: OpenAIChatMessageRole.system,
       ),
       OpenAIChatCompletionChoiceMessageModel(
-        content: "salam",
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "salam",
+          ),
+        ],
         role: OpenAIChatMessageRole.user,
       ),
     ],

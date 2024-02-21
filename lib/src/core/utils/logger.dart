@@ -1,5 +1,6 @@
 import 'dart:developer' as dev;
 
+import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 
 import '../constants/strings.dart';
@@ -8,23 +9,62 @@ import '../constants/strings.dart';
 @immutable
 @internal
 abstract final class OpenAILogger {
-  /// This represents the default value of the logger active state.
+  /// {@template openai_logger_is_active}
+  /// Wether the to show operations flow logger is active or not.
+  /// {@endtemplate}
   static bool _isActive = true;
+
+  /// {@template openai_logger_show_responses_logs}
+  /// Wether to show operations response bodies in logs or not.
+  /// {@endtemplate}
+  static bool _showResponsesLogs = false;
+
+  /// {@macro openai_logger_is_active}
+  static bool get isActive => _isActive;
+
+  /// {@macro openai_logger_show_responses_logs}
+  static bool get showResponsesLogs => _showResponsesLogs;
 
   /// Changes the logger active state.
   ///
   /// if true, the logger will log messages.
   /// If false, the logger will not log messages.
   ///
-  /// The default value is [_isActive].
+  /// The default value is [true].
   static set isActive(bool newValue) {
     _isActive = newValue;
+  }
+
+  /// Changes the logger show responses logs state.
+  ///
+  /// if true, the logger will log responses bodies.
+  /// If false, the logger will not log responses bodies.
+  ///
+  /// The default value is [false].
+  static set showResponsesLogs(bool newValue) {
+    _showResponsesLogs = newValue;
   }
 
   /// Logs a message, if the logger is active.
   static void log(String message, [Object? error]) {
     if (_isActive) {
       dev.log(message, name: OpenAIStrings.openai, error: error);
+    }
+  }
+
+  /// Logs the response of a request, if the logger is active.
+  static Future<void> logResponseBody(response) async {
+    if (_isActive && _showResponsesLogs) {
+      if (response is Response) {
+        dev.log(response.body.toString(), name: OpenAIStrings.openai);
+      } else if (response is StreamedResponse) {
+        final asString = await response.stream.bytesToString();
+
+        dev.log(
+          asString,
+          name: OpenAIStrings.openai,
+        );
+      }
     }
   }
 
@@ -39,7 +79,7 @@ abstract final class OpenAILogger {
     bool isAzureOpenAI = false,
   }) {
     if (apiKey != null && isValidApiKey(apiKey)) {
-      final hiddenApiKey = apiKey.replaceRange(0, apiKey.length - 10, '****');
+      final hiddenApiKey = apiKey.replaceRange(0, apiKey.length - 5, '****');
       log("api key set to $hiddenApiKey");
     } else {
       log("api key is set but not valid");
@@ -115,5 +155,47 @@ abstract final class OpenAILogger {
       final entry = additionalHeadersToRequests.entries.elementAt(index);
       log("header ${entry.key}:${entry.value} will be added to all requets");
     }
+  }
+
+  static void startingTryCheckingForError() {
+    return log("starting to check for error in the response.");
+  }
+
+  static void errorFoundInRequest() {
+    return log("error found in request, throwing exception");
+  }
+
+  static void unexpectedResponseGotten() {
+    return log(
+      "unexpected response gotten, this means that a change is made to the api, please open an issue on github",
+    );
+  }
+
+  static void noErrorFound() {
+    return log("Good, no error found in response.");
+  }
+
+  static void creatingFile(String fileName) {
+    return log("creating output file: $fileName");
+  }
+
+  static void fileCreatedSuccessfully(String fileName) {
+    return log("file $fileName created successfully");
+  }
+
+  static void writingFileContent(String fileName) {
+    return log("writing content to file $fileName");
+  }
+
+  static void fileContentWrittenSuccessfully(String fileName) {
+    return log("content written to file $fileName successfully");
+  }
+
+  static void requestsTimeoutChanged(Duration requestsTimeOut) {
+    return log("requests timeout changed to $requestsTimeOut");
+  }
+
+  static void logIsWeb(bool isWeb) {
+    return log("isWeb set to $isWeb");
   }
 }

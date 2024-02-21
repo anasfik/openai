@@ -1,5 +1,8 @@
 import 'package:meta/meta.dart';
 
+/// {@template openai_moderation_result_scores_model}
+///  This class is used to represent an OpenAI moderation job result scores.
+/// {@endtemplate}
 @immutable
 final class OpenAIModerationResultScoresModel {
   /// The hate score of the moderation job.

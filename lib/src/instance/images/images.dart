@@ -6,11 +6,10 @@ import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:meta/meta.dart';
 
 import '../../core/base/images/base.dart';
+import '../../core/constants/config.dart';
 import '../../core/constants/strings.dart';
-import '../../core/models/image/edit/image_edit.dart';
 
-import '../../core/models/image/enum.dart';
-import '../../core/models/image/variation/variation.dart';
+import '../../core/enum.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;
@@ -31,6 +30,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
 
   /// This function creates an image based on a given prompt.
   ///
+  /// [model] is the model to use for generating the image.
+  ///
   ///
   /// [prompt] is a text description of the desired image(s). The maximum length is 1000 characters.
   ///
@@ -38,16 +39,27 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// [n] is the number of images to generate. Must be between 1 and 10.
   ///
   ///
-  /// [size] is the size of the generated images. Must be one of :
+  /// [size] is the size of the generated images, each OpenAI model has a different set of available/allowed sizes:
+  ///
+  /// `dall-e-2` model only:
   /// - `OpenAIImageSize.size256`
   /// - `OpenAIImageSize.size512`
+  /// `dall-e-2` or `dall-e-3` model:
   /// - `OpenAIImageSize.size1024`
-  ///
+  /// `dall-e-3` model only:
+  /// - `OpenAIImageSize.size1792Horizontal`
+  /// - `OpenAIImageSize.size1792Vertical`
   ///
   /// [responseFormat] is the format in which the generated images are returned. Must be one of :
   /// - `OpenAIImageResponseFormat.url`
   /// - `OpenAIImageResponseFormat.b64Json`
   ///
+  /// [style] is the style of the generated images and is only available for the `dall-e-3` model. Must be one of:
+  /// - `OpenAIImageStyle.vivid`
+  /// - `OpenAIImageStyle.natural`
+  ///
+  /// [quality] is the quality of the generated images and is only available for the `dall-e-3` model. Must be one of:
+  /// - `OpenAIImageQuality.hd`
   ///
   /// [user] is the user ID to associate with the request. This is used to prevent abuse of the API.
   ///
@@ -63,9 +75,12 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///```
   @override
   Future<OpenAIImageModel> create({
+    String? model,
     required String prompt,
     int? n,
     OpenAIImageSize? size,
+    OpenAIImageStyle? style,
+    OpenAIImageQuality? quality,
     OpenAIImageResponseFormat? responseFormat,
     String? user,
     http.Client? client,
@@ -73,12 +88,15 @@ interface class OpenAIImages implements OpenAIImagesBase {
     final String generations = "/generations";
 
     return await OpenAINetworkingClient.post(
-      to: BaseApiUrlBuilder.build(endpoint + generations),
+      to: BaseApiUrlBuilder.build(endpoint + generations, null, null, model),
       onSuccess: (json) => OpenAIImageModel.fromMap(json),
       body: {
+        if (OpenAIType.openai == OpenAIConfig.aiType) "model": model,
         "prompt": prompt,
         if (n != null) "n": n,
         if (size != null) "size": size.value,
+        if (style != null) "style": style.value,
+        if (quality != null) "quality": quality.value,
         if (responseFormat != null) "response_format": responseFormat.value,
         if (user != null) "user": user,
       },
@@ -87,6 +105,9 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }
 
   /// Creates an edited or extended image given an original image and a prompt.
+  ///
+  /// [model] is the model to use for generating the image.
+  ///
   ///
   /// [image] to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
   ///
@@ -116,7 +137,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///
   /// Example:
   ///```dart
-  /// OpenAiImageEditModel imageEdit = await OpenAI.instance.image.edit(
+  /// OpenAIImageModel imageEdit = await OpenAI.instance.image.edit(
   ///  file: File(/* IMAGE PATH HERE */),
   ///  mask: File(/* MASK PATH HERE */),
   ///  prompt: "mask the image with a dinosaur in the image",
@@ -126,7 +147,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// );
   ///```
   @override
-  Future<OpenAiImageEditModel> edit({
+  Future<OpenAIImageModel> edit({
+    String? model,
     required File image,
     File? mask,
     required String prompt,
@@ -136,10 +158,12 @@ interface class OpenAIImages implements OpenAIImagesBase {
     String? user,
   }) async {
     final String edit = "/edits";
-    return await OpenAINetworkingClient.imageEditForm<OpenAiImageEditModel>(
+
+    return await OpenAINetworkingClient.imageEditForm<OpenAIImageModel>(
       image: image,
       mask: mask,
       body: {
+        if (model != null) "model": model,
         "prompt": prompt,
         if (n != null) "n": n.toString(),
         if (size != null) "size": size.value,
@@ -147,13 +171,16 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAiImageEditModel.fromMap(response);
+        return OpenAIImageModel.fromMap(response);
       },
-      to: BaseApiUrlBuilder.build(endpoint + edit),
+      to: BaseApiUrlBuilder.build(endpoint + edit, null, null, model),
     );
   }
 
   /// Creates a variation of a given image.
+  ///
+  ///
+  /// [model] is the model to use for generating the image.
   ///
   ///
   /// [image] to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
@@ -178,7 +205,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///
   /// Example:
   /// ```dart
-  /// OpenAIImageVariationModel imageVariation = await OpenAI.instance.image.variation(
+  /// OpenAIImageModel imageVariation = await OpenAI.instance.image.variation(
   /// image: File(/* IMAGE PATH HERE */),
   /// n: 1,
   /// size: OpenAIImageSize.size1024,
@@ -186,7 +213,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// );
   /// ```
   @override
-  Future<OpenAIImageVariationModel> variation({
+  Future<OpenAIImageModel> variation({
+    String? model,
     required File image,
     int? n,
     OpenAIImageSize? size,
@@ -195,19 +223,19 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }) async {
     final String variations = "/variations";
 
-    return await OpenAINetworkingClient.imageVariationForm<
-        OpenAIImageVariationModel>(
+    return await OpenAINetworkingClient.imageVariationForm<OpenAIImageModel>(
       image: image,
       body: {
+        if (model != null) "model": model,
         if (n != null) "n": n.toString(),
         if (size != null) "size": size.value,
         if (responseFormat != null) "response_format": responseFormat.value,
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIImageVariationModel.fromMap(response);
+        return OpenAIImageModel.fromMap(response);
       },
-      to: BaseApiUrlBuilder.build(endpoint + variations),
+      to: BaseApiUrlBuilder.build(endpoint + variations, null, null, model),
     );
   }
 }

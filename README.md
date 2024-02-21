@@ -1,6 +1,6 @@
 # NEW: ChatGPT & Whisper APIs are [added](#chat-chatgpt) to the library and can be used directly.
 
-<br>
+</br>
 <p align="center">
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/anasfik/openai">
 <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/anasfik/openai">
@@ -17,7 +17,7 @@
 
 </br>
 
-<h3>Help this grow and get discovered by other devs with a ⭐ star.</h3>
+<h3>Help this grow and get discovered by people who might need it by starring it ⭐.</h3>
 
 </br>
 </br>
@@ -35,9 +35,13 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 </br>
 <i>OpenAI does not have any official Dart library.</I>
 
-### Note:
+### Thanks:
 
-Please note that this client SDK connects directly to [OpenAI APIs](https://platform.openai.com/docs/introduction/overview) using HTTP requests.
+Thanks to the contributors & sponsors of this project that it exists and is still maintained:
+- [Sponsors](https://github.com/sponsors/anasfik)
+- [Contributors](https://github.com/anasfik/openai/graphs/contributors)
+
+Consider helping this project you too.
 
 ## ✨ Key Features
 
@@ -45,6 +49,7 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - Authorize just once, use it anywhere and at any time in your application.
 - Developer-friendly.
 - `Stream` functionality for completions API & fine-tune events API.
+- Ready examples/snippets for almost everything implmented in the package at `/example` folder.
 
 ## 👑 Code Progress (100 %)
 
@@ -54,6 +59,7 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
   - [x] With `Stream` responses.
 - [x] [Chat (chatGPT)](#chat-chatgpt)
   - [x] With `Stream` responses.
+  - [x] [Tools](#tools-new-implementation-of-functions-calling)
 - [x] [Edits](#edits)
 - [x] [Images](#images)
 - [x] [Embeddings](#embeddings)
@@ -62,6 +68,13 @@ Please note that this client SDK connects directly to [OpenAI APIs](https://plat
 - [x] [Fine-tunes](#fine-tunes)
   - [x] With events `Stream` responses.
 - [x] [Moderation](#moderations)
+
+### Support Azure OpenAI API
+- [x] [Chat (chatGPT)](#support-azure-openai)
+  - [x] With `Stream` responses.
+- [ ] [Completions](#completions)
+- [ ] [Images](#images)
+- [ ] ....
 
 ## 💫 Testing Progress (100 %)
 
@@ -93,9 +106,9 @@ For the full documentation about all members this library offers, [check here](h
 
 The OpenAI API uses API keys for authentication. you can get your account API key by visiting [API keys](https://platform.openai.com/account/api-keys) of your account.
 
-We highly recommend loading your secret key at runtime from a `.env` file, you can use the [envied](https://pub.dev/packages/envied) package.
+We highly recommend loading your secret key at runtime from a `.env` file, you can use the [envied](https://pub.dev/packages/envied) package or any other package that does the same job.
 
-```
+```env
 // .env
 OPEN_AI_API_KEY=<REPLACE WITH YOUR API KEY>
 ```
@@ -115,7 +128,7 @@ abstract class Env {
 ```dart
 // lib/main.dart
 void main() {
- OpenAI.apiKey = Env.apiKey; // Initializes the package with that API key
+ OpenAI.apiKey = Env.apiKey; // Initializes the package with that API key, all methods now are ready for use.
  // ..
 }
 ```
@@ -138,57 +151,126 @@ If you don't belong actually to any organization, you can just ignore this secti
 
 </br>
 
+### Settings a default request timeout
+
+The package make use if the [http](https://pub.dev/packages/http) to make requests, this one have a default timeout of 30 seconds, this means that any requests that takes more than 30 seconds will be cancelled, and a exception will be thrown, to chenge that you will need to set your own default timeout:
+
+```dart
+OpenAI.requestsTimeOut = Duration(seconds: 60); // 60 seconds.
+```
+
+And now, the time consuming methods will wait for 60 seconds to get a response before throwing an exception.
+
+### Setting your own base url
+
+You can change the base url used in the package to your own, this can be helpful if you want to proxy the requests to the OpenAI API, or if you want to use your own server as a proxy to the OpenAI API.
+
+```dart
+OpenAI.baseUrl = "https://api.openai.com/v1"; // the default one.
+```
+
+### Enable debugging and logs
+You can make the package logs the operations flows and steps by setting the `showLogs`:
+
+```dart
+OpenAI.showLogs = true;
+```
+
+This will only log the requests steps such when the request started and finished, when the decoding started...
+
+But if you want to log raw responses that are returned from the API (JSON, RAW...), you can set the `showResponsesLogs`:
+
+```dart
+OpenAI.showResponsesLogs = true;
+```
+
+This will log the raw responses that are returned from the API, such when the request is successful, or when it failed. (This don't include the stream responses).
+
+### Support Azure OpenAI
+```dart
+AzureOpenAI.apiKey = 'Your key';
+AzureOpenAI.baseURL = 'the endpoint of your resource.';
+final azureOpenAI = AzureOpenAI.instance;
+Stream<OpenAIStreamChatCompletionModel> chatCompletionStream =
+          azureOpenAI.chat.createStream(
+            model: 'deployment name of your model'
+            ...
+          );
+```
+
 ## Models
 
 ### List Models
 
-Lists the currently available models, and provides basic information about each one such as the owner and availability.
+Lists the currently available models, and provides information about each one such as the owner and availability.
 
 ```dart
- List<OpenAIModelModel> models = await OpenAI.instance.model.list();
- OpenAIModelModel firstModel = models.first;
+List<OpenAIModelModel> models = await OpenAI.instance.model.list();
+OpenAIModelModel firstModel = models.first;
 
- print(firstModel.id); // ...
+print(firstModel.id); // ...
+print(firstModel.permission); // ...
 ```
 
-### Retrieve model.
+### Retrieve model
 
 Retrieves a single model by its id and gets additional pieces of information about it.
 
 ```dart
- OpenAIModelModel model = await OpenAI.instance.model.retrieve("text-davinci-003");
- print(model.id);
+OpenAIModelModel model = await OpenAI.instance.model.retrieve("text-davinci-003");
+
+print(model.ownedBy); // ...
 ```
 
-If the model id does not exist, a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
+If the model id you provided does not exist or isn't available for your account, a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/models)
 
 </br>
 
+### Delete fine tuned models
+
+OpenAI offers [fine tuning](https://platform.openai.com/docs/guides/fine-tuning) feature, which you can make use of it with this package [here](#fine-tunes).
+
+However, if it happen that you want to delete a fine tuned model, you can use the `delete()` method:
+
+```dart
+bool isDeleted = await OpenAI.instance.model.delete("fine-tune-id");
+
+print(isDeleted); // ...
+
+```
+
 ## Completions
 
 ### Create completion
 
-Creates a Completion based on the provided properties `model`, `prompt` & other properties.
+Creates a predicted completion based on the provided `model`, `prompt` & other properties asynchronously.
 
 ```dart
 OpenAICompletionModel completion = await OpenAI.instance.completion.create(
   model: "text-davinci-003",
-  prompt: "Dart is a progr",
+  prompt: "Dart is a program",
   maxTokens: 20,
   temperature: 0.5,
   n: 1,
   stop: ["\n"],
   echo: true,
+  seed: 42,
+  bestOf: 2,
 );
+
+print(completion.choices.first.text); // ...
+print(completion.systemFingerprint); // ...
+print(completion.id); // ...
+
 ```
 
-if the request failed (as an example, if you did pass an invalid model id...), a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
+if the request failed (as an example, if you did pass an invalid `model`...), a `RequestFailedException` will be thrown, check [Error Handling](#error-handling) section.
 
 ### Create Completion Stream
 
-In addition to calling the `OpenAI.instance.completion.create()` which is a `Future` and will not return an actual value until the completion is ended, you can get a `Stream` of values as they are generated:
+In addition to calling the `OpenAI.instance.completion.create()` which is a `Future` (asynchronous) and will not return an actual value until the full completion is generated, you can get a `Stream` of them as they happen to be generated:
 
 ```dart
 Stream<OpenAIStreamCompletionModel> completionStream = OpenAI.instance.completion.createStream(
@@ -197,13 +279,20 @@ Stream<OpenAIStreamCompletionModel> completionStream = OpenAI.instance.completio
   maxTokens: 100,
   temperature: 0.5,
   topP: 1,
- );
+  seed: 42,
+  stop: '###',
+  n: 2,
+);
 
 completionStream.listen((event) {
- final firstCompletionChoice = event.choices.first;
- print(firstCompletionChoice.text); // ...
+  final firstCompletionChoice = event.choices.first;
+
+  print(firstCompletionChoice.index); // ...
+  print(firstCompletionChoice.text); // ...
 });
 ```
+
+**Useful: Check also the `createStreamText()` method**
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/completions)
 
@@ -213,93 +302,166 @@ completionStream.listen((event) {
 
 ### Create chat completion
 
-Creates a completion for the chat message, note you need to set each message as a `OpenAIChatCompletionChoiceMessageModel` object.
+Creates a predicted completion for a chat message(s), from the provided properties:
 
 ```dart
-OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
-    model: "gpt-3.5-turbo",
-    messages: [
-      OpenAIChatCompletionChoiceMessageModel(
-        content: "hello, what is Flutter and Dart ?",
-        role: OpenAIChatMessageRole.user,
-        ),
-    ],
+// the system message that will be sent to the request.
+final systemMessage = OpenAIChatCompletionChoiceMessageModel(
+  content: [
+    OpenAIChatCompletionChoiceMessageContentItemModel.text(
+      "return any message you are given as JSON.",
+    ),
+  ],
+  role: OpenAIChatMessageRole.assistant,
 );
+
+  // the user message that will be sent to the request.
+ final userMessage = OpenAIChatCompletionChoiceMessageModel(
+   content: [
+     OpenAIChatCompletionChoiceMessageContentItemModel.text(
+       "Hello, I am a chatbot created by OpenAI. How are you today?",
+     ),
+
+     //! image url contents are allowed only for models with image support such gpt-4.
+     OpenAIChatCompletionChoiceMessageContentItemModel.imageUrl(
+       "https://placehold.co/600x400",
+     ),
+   ],
+   role: OpenAIChatMessageRole.user,
+ );
+
+// all messages to be sent.
+final requestMessages = [
+  systemMessage,
+  userMessage,
+];
+
+// the actual request.
+OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
+  model: "gpt-3.5-turbo-1106",
+  responseFormat: {"type": "json_object"},
+  seed: 6,
+  messages: requestMessages,
+  temperature: 0.2,
+  maxTokens: 500,
+  toolChoice: "auto",
+);
+
+print(chatCompletion.choices.first.message); // ...
+print(chatCompletion.systemFingerprint); // ...
+print(chatCompletion.usage.promptTokens); // ...
+print(chatCompletion.id); // ...
 ```
 
 ### Create a chat completion stream
 
-in addition to calling `OpenAI.instance.chat.create()` which is a `Future` and will resolve only after the whole chat is generated, you can get a `Stream` of results:
+In addition to calling `OpenAI.instance.chat.create()` which is a `Future` (asynchronous) and will resolve only after the whole chat is generated, you can get a `Stream` of them as they happen to be generated:
 
 ```dart
-Stream<OpenAIStreamChatCompletionModel> chatStream = OpenAI.instance.chat.createStream(
-    model: "gpt-3.5-turbo",
-    messages: [
-      OpenAIChatCompletionChoiceMessageModel(
-        content: "hello",
-        role: OpenAIChatMessageRole.user,
-      )
-    ],
-  );
+// The user message to be sent to the request.
+final userMessage = OpenAIChatCompletionChoiceMessageModel(
+  content: [
+    OpenAIChatCompletionChoiceMessageContentItemModel.text(
+      "Hello my friend!",
+    ),
+  ],
+  role: OpenAIChatMessageRole.user,
+);
 
-chatStream.listen((streamChatCompletion) {
+// The request to be sent.
+final chatStream = OpenAI.instance.chat.createStream(
+  model: "gpt-3.5-turbo",
+  messages: [
+    userMessage,
+  ],
+  seed: 423,
+  n: 2,
+);
+
+// Listen to the stream.
+chatStream.listen(
+  (streamChatCompletion) {
     final content = streamChatCompletion.choices.first.delta.content;
     print(content);
-});
+  },
+  onDone: () {
+    print("Done");
+  },
+);
 ```
 
 </br>
 
-### Functions
+### Tools ( new implementation of functions calling)
 
-You can use the chat functions interface with both the `Stream` and `Future` interface.
-(Note that functions requires at least model `gpt-3.5-turbo-0613`)
-Request:
+The chat API offer the `tools` feature which allows for calling functions from the chat API, this feature is implemented in the package, and can be used like the following, please note that this is just a showcase, and you should handle the edge cases in your app such when there is no tool call, or when the tool call is not the one you sent, etc...:
 
 ```dart
-OpenAIChatCompletionModel chatCompletion =
-    await OpenAI.instance.chat.create(
-      model: 'gpt-3.5-turbo-0613',
-      messages: [
-          OpenAIChatCompletionChoiceMessageModel(
-              content: "What's the weather like in Boston?",
-              role: OpenAIChatMessageRole.user,
-          )
-      ],
-      temperature: 0,
-      functions: [
-              OpenAIFunctionModel.withParameters(
-                name: 'get_current_weather',
-                description: 'Get the current weather in a given location',
-                parameters: [
-                  OpenAIFunctionProperty.string(
-                    name: 'location',
-                    description: 'The city and state, e.g. San Francisco, CA',
-                    isRequired: true,
-                  ),
-                  OpenAIFunctionProperty.string(
-                    name: 'unit',
-                    enumValues: ['celsius', 'fahrenheit']
-                  ),
-                ],
-              ),
-            ],
-      functionCall: FunctionCall.auto,
-    );
+ OpenAI.apiKey = Env.apiKey;
+
+// The function to be called by the tool.
+void sumNumbers(int number1, int number2) {
+  print("Your sum answer is ${number1 + number2}");
+}
+
+// The tool object that wilm be sent to the API.
+final sumNumbersTool = OpenAIToolModel(
+    type: "function",
+  function: OpenAIFunctionModel.withParameters(
+    name: "sumOfTwoNumbers",
+    parameters: [
+      OpenAIFunctionProperty.integer(
+        name: "number1",
+        description: "The first number to add",
+      ),
+      OpenAIFunctionProperty.integer(
+        name: "number2",
+        description: "The second number to add",
+      ),
+    ],
+  ),
+);
+
+  // The user text message that will be sent to the API.
+final userMessage = OpenAIChatCompletionChoiceMessageModel(
+    content: [
+    OpenAIChatCompletionChoiceMessageContentItemModel.text(
+        "What is the sum of 9996 and 3?",
+      ),
+  ],
+    role: OpenAIChatMessageRole.user,
+);
+
+  // The actual call.
+final chat = await OpenAI.instance.chat.create(
+    model: "gpt-3.5-turbo",
+    messages: [userMessage],
+    tools: [sumNumbersTool],
+);
+
+// ! This handling is only for showcase and not completed as edge cases will not be handled that you should handle in your app.
+
+final message = chat.choices.first.message;
+
+// Wether the message has a tool call.
+  if (message.hasToolCalls) {
+  final call = message.toolCalls!.first;
+
+    // Wether the tool call is the one we sent.
+  if (call.function.name == "sumOfTwoNumbers") {
+      // decode the arguments from the tool call.
+    final decodedArgs = jsonDecode(call.function.arguments);
+
+    final number1 = decodedArgs["number1"];
+    final number2 = decodedArgs["number2"];
+
+    // Call the function with the arguments.
+    sumNumbers(number1, number2);
+  }
+  }
 ```
 
-The `functionalCall` parameter can be set to a specific function name to force the model to use that function:
-```dart
-functionCall: FunctionCall.forFunction('get_current_weather')
-```
-
-You can access the results in the `paramters` field of the `function_call` field.
-
-```dart
-FunctionCallResponse? response = chatCompletion.choices.first.message.functionCall;
-String? functionName = response?.name;
-Map<String, dynamic>? functionParameters = response?.parameters;
-```
+Learn more from [here](https://platform.openai.com/docs/api-reference/chat/create).
 
 ## Edits
 
@@ -309,12 +471,17 @@ Creates an edited version of the given prompt based on the used model.
 
 ```dart
 OpenAIEditModel edit = await OpenAI.instance.edit.create(
-model: "text-davinci-edit-001";
-instruction: "remote all '!'from input text",
-input: "Hello!!, I! need to be ! somethi!ng"
-n: 1,
-temperature: 0.8,
+  model: "text-davinci-edit-001";
+  instruction: "remote all '!'from input text",
+  input: "Hello!!, I! need to be ! somethi!ng"
+  n: 1,
+  temperature: 0.8,
 );
+
+// Prints the choices.
+for (int index = 0; index < edit.choices.length; index++) {
+  print(edit.choices[index].text);
+}
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/edits)
@@ -334,6 +501,12 @@ Generates a new image based on a prompt given.
   size: OpenAIImageSize.size1024,
   responseFormat: OpenAIImageResponseFormat.url,
 );
+
+// Printing the output to the console.
+for (int index = 0; index < image.data.length; index++) {
+  final currentItem = image.data[index];
+  print(currentItem.url);
+}
 ```
 
 ### Create image edit
@@ -341,14 +514,19 @@ Generates a new image based on a prompt given.
 Creates an edited or extended image given an original image and a prompt.
 
 ```dart
-OpenAiImageEditModel imageEdit = await OpenAI.instance.image.edit(
- image: File(/* IMAGE PATH HERE */),
- mask: File(/* MASK PATH HERE */),
- prompt: "mask the image with a dinosaur",
- n: 1,
- size: OpenAIImageSize.size1024,
- responseFormat: OpenAIImageResponseFormat.url,
+OpenAIImageModel imageEdits = await OpenAI.instance.image.edit(
+  prompt: 'mask the image with color red',
+  image: File(/* IMAGE PATH HERE */),
+  mask: File(/* MASK PATH HERE */),
+  n: 1,
+  size: OpenAIImageSize.size1024,
+  responseFormat: OpenAIImageResponseFormat.b64Json,
 );
+
+for (int index = 0; index < imageEdits.data.length; index++) {
+  final currentItem = imageEdits.data[index];
+  print(currentItem.b64Json);
+}
 ```
 
 ### Create image variation
@@ -356,12 +534,20 @@ OpenAiImageEditModel imageEdit = await OpenAI.instance.image.edit(
 Creates a variation of a given image.
 
 ```dart
-OpenAIImageVariationModel imageVariation = await OpenAI.instance.image.variation(
- image: File(/* IMAGE PATH HERE */),
- n: 1,
- size: OpenAIImageSize.size1024,
- responseFormat: OpenAIImageResponseFormat.url,
+// Creates the Image Variation
+final imageVariations = await OpenAI.instance.image.variation(
+  model: "dall-e-2",
+  image: File("dart.png"),
+  n: 4,
+  size: OpenAIImageSize.size512,
+  responseFormat: OpenAIImageResponseFormat.url,
 );
+
+ // Prints the output to the console.
+for (var index = 0; index < imageVariations.data.length; index++) {
+  final currentItem = imageVariations.data[index];
+  print(currentItem.url);
+}
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/images)
@@ -375,42 +561,77 @@ Get a vector representation of a given input that can be easily consumed by mach
 ### Create embeddings
 
 ```dart
-OpenAIEmbeddingsModel embeddings = await OpenAI.instance.embedding.create(
- model: "text-embedding-ada-002",
- input: "This is a text input just to test",
+final embedding = await OpenAI.instance.embedding.create(
+  model: "text-embedding-ada-002",
+  input: "This is a sample text",
 );
+
+for (int index = 0; index < embedding.data.length; index++) {
+  final currentItem = embedding.data[index];
+  print(currentItem);
+}
 ```
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/embeddings)
 
 </br>
 
-# Audio
+## Audio
 
-## Create transcription
+### Create Speech
 
-for transcribing an audio `File`, you can use the `createTranscription()` method directly by providing the `file` property:
+For creating a speech from a text, you can use the `createSpeech()` method directly by providing the required params:
+
+```dart
+// The speech request.
+File speechFile = await OpenAI.instance.audio.createSpeech(
+  model: "tts-1",
+  input: "Say my name is Anas",
+  voice: "nova",
+  responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
+  outputDirectory: await Directory("speechOutput").create(),
+  outputFileName: "anas",
+);
+
+// The file result.
+print(speechFile.path);
+```
+
+**Note: the `outputDirectory` and `outputFileName` are helpers for this method, you can use them to save the audio file to a specific directory with a specific name, with the file extension being extracted from the `responseFormat`. if you don't want to use them, just ignore it, and the audio file will be saved to the default directory of your app, with the `output` file name.**
+
+The example snippet above will place a generated `anas.mp3` in the `speechOutput` directory in your project.
+
+### Create transcription
+
+For transcribing an audio `File`, you can use the `createTranscription()` method directly by providing the `file` property:
 
 ```dart
 OpenAIAudioModel transcription = OpenAI.instance.audio.createTranscription(
-  file: /* THE AUDIO FILE HERE */,
+  file: File(/* THE FILE PATH*/),
   model: "whisper-1",
   responseFormat: OpenAIAudioResponseFormat.json,
 );
+
+// print the transcription.
+print(transcription.text);
 ```
 
-## Create translation
+### Create translation
 
 to get access to the translation API, and translate an audio file to english, you can use the `createTranslation()` method, by providing the `file`` property:
 
 ```dart
 OpenAIAudioModel translation = await OpenAI.instance.audio.createTranslation(
-  file: /* THE AUDIO FILE HERE */,
+  file: File(/* THE FILE PATH*/),
   model: "whisper-1",
   responseFormat: OpenAIAudioResponseFormat.text,
-
 );
+
+// print the translation.
+print(translation.text);
 ```
+
+Learn more from [here](https://platform.openai.com/docs/api-reference/audio/createTranslation).
 
 </br>
 
@@ -558,7 +779,7 @@ print(deleted); // ...
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/fine-tunes)
 
 </br>
- 
+
 ## Moderations
 
 ### Create moderation
@@ -576,7 +797,7 @@ print(moderation.results.first.categories.hate); // ...
 
 [Learn More From Here.](https://platform.openai.com/docs/api-reference/moderations)
 
-<br>
+</br>
 
 ## Error Handling
 
@@ -594,6 +815,7 @@ try {
  print(e.statusCode);
 }
 ```
+
 
 # Azure OpenAI
 if you want to use Azure OpenAI service instead of the direct OpenAI APIs, you will only need to use `AzureOpenAI` instead of `OpenAI` in your code, this will provide you with the same package interface for the availabe methods, However you will need to configure the REST API and use Your Azure OpenAI API key instead of the OpenAI API key.
@@ -632,7 +854,8 @@ Learn more about the [Azure OpenAI endpoints & REST API](https://azure.microsoft
 <br>
 <br>
 
-#### Want To Help ?
+
+### Want To Help ?
 
 Please, Just remember that any kind of help related to these tasks are welcome, for the sake of the community.
 
@@ -640,3 +863,5 @@ Please, Just remember that any kind of help related to these tasks are welcome, 
 - Code Refactoring: I know this is my job not yours :), but if you can and want, you're more than welcome.
 - Reviewing code: if it happens that there is a better way to make something happen in the SDK, please just let me know.
 - if you tried any sample of use cases, examples of yours and wanted to include it in the examples/, please go ahead.
+- Mention any updates if they exists in the API, Dart, a certain package, or even Flutter that relates to this package.
+- [Donate to the project](https://github.com/sponsors/anasfik), it will help me to keep working on it, and make it better.

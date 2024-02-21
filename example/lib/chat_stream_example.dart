@@ -9,16 +9,27 @@ void main() async {
     model: "gpt-3.5-turbo",
     messages: [
       OpenAIChatCompletionChoiceMessageModel(
-        content: "Hello, can you say: 'You are Anas'",
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "Hello, can you say: 'You are Anas'",
+          ),
+        ],
         role: OpenAIChatMessageRole.user,
       ),
       OpenAIChatCompletionChoiceMessageModel(
-        content: "You are Anas",
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "You are Anas",
+          ),
+        ],
         role: OpenAIChatMessageRole.assistant,
       ),
       OpenAIChatCompletionChoiceMessageModel(
-        content:
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
             "Now I want you to repeat it, but change the word 'Anas' to 'Mohamed'",
+          ),
+        ],
         role: OpenAIChatMessageRole.user,
       ),
     ],

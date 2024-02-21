@@ -5,13 +5,13 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @immutable
 final class OpenAIFineTuneEventStreamModel {
-  /// The level of the event.
+  /// The [level] of the event.
   final String level;
 
-  /// The message of the event.
+  /// The [message] of the event.
   final String message;
 
-  /// The time the event was created.
+  /// The time the event was [created].
   final DateTime createdAt;
 
   @override
