@@ -82,6 +82,8 @@ interface class OpenAIChat implements OpenAIChatBase {
     String? user,
     Map<String, String>? responseFormat,
     int? seed,
+    bool? logprobs,
+    int? topLogprobs,
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post(
@@ -103,6 +105,8 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (user != null) "user": user,
         if (seed != null) "seed": seed,
         if (responseFormat != null) "response_format": responseFormat,
+        if (logprobs != null) "logprobs": logprobs,
+        if (topLogprobs != null) "top_logprobs": topLogprobs,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIChatCompletionModel.fromMap(response);

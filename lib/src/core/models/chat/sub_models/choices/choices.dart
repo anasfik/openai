@@ -1,3 +1,4 @@
+import 'sub_models/log_probs/log_probs.dart';
 import 'sub_models/message.dart';
 
 /// {@template openai_chat_completion_choice}
@@ -15,6 +16,9 @@ final class OpenAIChatCompletionChoiceModel {
   /// The [finishReason] of the choice.
   final String? finishReason;
 
+  /// The log probability of the choice.
+  final OpenAIChatCompletionChoiceLogProbsModel? logprobs;
+
   /// Weither the choice have a finish reason.
   bool get haveFinishReason => finishReason != null;
 
@@ -28,6 +32,7 @@ final class OpenAIChatCompletionChoiceModel {
     required this.index,
     required this.message,
     required this.finishReason,
+    required this.logprobs,
   });
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceModel] object.
@@ -39,6 +44,9 @@ final class OpenAIChatCompletionChoiceModel {
           : int.tryParse(json['index'].toString()) ?? json['index'],
       message: OpenAIChatCompletionChoiceMessageModel.fromMap(json['message']),
       finishReason: json['finish_reason'],
+      logprobs: json['logprobs'] != null
+          ? OpenAIChatCompletionChoiceLogProbsModel.fromMap(json['logprobs'])
+          : null,
     );
   }
 
@@ -48,6 +56,7 @@ final class OpenAIChatCompletionChoiceModel {
       "index": index,
       "message": message.toMap(),
       "finish_reason": finishReason,
+      "logprobs": logprobs?.toMap(),
     };
   }
 
