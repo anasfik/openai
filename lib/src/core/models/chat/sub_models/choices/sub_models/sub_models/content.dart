@@ -15,6 +15,8 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
   /// The image url object.
   final Map<String, dynamic>? imageUrl;
 
+  final String? imageBase64;
+
   @override
   int get hashCode => type.hashCode ^ text.hashCode ^ imageUrl.hashCode ^ url.hashCode;
 
@@ -24,6 +26,8 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
     this.text,
     this.imageUrl,
     this.url
+    this.imageBase64,
+
   });
 
   /// This is used to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceMessageContentItemModel] object.
@@ -35,6 +39,8 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
       text: asMap['text'],
       imageUrl: asMap['image_url'],
       url: asMap['url']
+      imageBase64: asMap['imageBase64'],
+
     );
   }
 
@@ -56,12 +62,22 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
     );
   }
 
+  factory OpenAIChatCompletionChoiceMessageContentItemModel.imageBase64(
+    String imageBase64,
+  ) {
+    return OpenAIChatCompletionChoiceMessageContentItemModel._(
+      type: 'image_base64',
+      imageBase64: imageBase64,
+    );
+  }
+
   /// This method used to convert the [OpenAIChatCompletionChoiceMessageContentItemModel] to a [Map<String, dynamic>] object.
   Map<String, dynamic> toMap() {
     return {
       "type": type,
       if (text != null) "text": text,
       if (imageUrl != null) "image_url": imageUrl,
+      if (imageBase64 != null) "image_url": {"url": "data:image/jpeg;base64,${imageBase64}"}
     };
   }
 
@@ -73,7 +89,8 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
 
     return other.type == type &&
         other.text == text &&
-        other.imageUrl == imageUrl;
+        other.imageUrl == imageUrl &&
+        other.imageBase64 == imageBase64;
   }
 
   @override
@@ -82,6 +99,8 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
           'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type, text: $text)',
         'image' =>
           'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type, imageUrl: $imageUrl)',
+          'image_base64' =>
+          'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type, imageBase64: $imageBase64)',
         _ => 'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type)',
       };
 }
