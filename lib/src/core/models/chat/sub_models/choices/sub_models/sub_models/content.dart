@@ -10,19 +10,24 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
   final String? text;
 
   /// The image url content of the item.
-  final String? imageUrl;
+  final String? url;
+
+  /// The image url object.
+  final Map<String, dynamic>? imageUrl;
 
   final String? imageBase64;
 
   @override
-  int get hashCode => type.hashCode ^ text.hashCode ^ imageUrl.hashCode;
+  int get hashCode => type.hashCode ^ text.hashCode ^ imageUrl.hashCode ^ url.hashCode;
 
   /// {@macro openai_chat_completion_choice_message_content_item_model}
   OpenAIChatCompletionChoiceMessageContentItemModel._({
     required this.type,
     this.text,
     this.imageUrl,
+    this.url
     this.imageBase64,
+
   });
 
   /// This is used to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceMessageContentItemModel] object.
@@ -33,7 +38,9 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
       type: asMap['type'],
       text: asMap['text'],
       imageUrl: asMap['image_url'],
+      url: asMap['url']
       imageBase64: asMap['imageBase64'],
+
     );
   }
 
@@ -51,7 +58,7 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
   ) {
     return OpenAIChatCompletionChoiceMessageContentItemModel._(
       type: 'image_url',
-      imageUrl: imageUrl,
+      imageUrl: {'url': imageUrl},
     );
   }
 
