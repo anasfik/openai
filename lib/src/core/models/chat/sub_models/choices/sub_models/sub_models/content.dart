@@ -9,25 +9,20 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
   /// The text content of the item.
   final String? text;
 
-  /// The image url content of the item.
-  final String? url;
-
   /// The image url object.
   final Map<String, dynamic>? imageUrl;
 
   final String? imageBase64;
 
   @override
-  int get hashCode => type.hashCode ^ text.hashCode ^ imageUrl.hashCode ^ url.hashCode;
+  int get hashCode => type.hashCode ^ text.hashCode ^ imageUrl.hashCode;
 
   /// {@macro openai_chat_completion_choice_message_content_item_model}
   OpenAIChatCompletionChoiceMessageContentItemModel._({
     required this.type,
     this.text,
     this.imageUrl,
-    this.url
     this.imageBase64,
-
   });
 
   /// This is used to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceMessageContentItemModel] object.
@@ -38,9 +33,7 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
       type: asMap['type'],
       text: asMap['text'],
       imageUrl: asMap['image_url'],
-      url: asMap['url']
       imageBase64: asMap['imageBase64'],
-
     );
   }
 
@@ -77,7 +70,8 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
       "type": type,
       if (text != null) "text": text,
       if (imageUrl != null) "image_url": imageUrl,
-      if (imageBase64 != null) "image_url": {"url": "data:image/jpeg;base64,${imageBase64}"}
+      if (imageBase64 != null)
+        "image_url": {"url": "data:image/jpeg;base64,${imageBase64}"}
     };
   }
 
@@ -99,7 +93,7 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
           'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type, text: $text)',
         'image' =>
           'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type, imageUrl: $imageUrl)',
-          'image_base64' =>
+        'image_base64' =>
           'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type, imageBase64: $imageBase64)',
         _ => 'OpenAIChatCompletionChoiceMessageContentItemModel(type: $type)',
       };
