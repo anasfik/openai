@@ -28,7 +28,7 @@ final class OpenAI extends OpenAIClientBase {
   /// The API key used to authenticate the requests.
   static String? _internalApiKey;
 
-  /// The singleton instance of [OpenAI], make sure to call the [OpenAI.initialize] method before accessing [instance], otherwise it will throw an [Exception].
+  /// The singleton instance of [OpenAI], make sure to set your OpenAI API key via the [OpenAI.apiKey] setter before accessing the [OpenAI.instance], otherwise it will throw an [Exception].
   /// A [MissingApiKeyException] will be thrown, if the API key is not set.
   static OpenAI get instance {
     if (_internalApiKey == null) {
