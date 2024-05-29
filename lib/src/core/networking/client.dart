@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:convert";
 import "dart:io";
+import "dart:typed_data";
 import "package:dart_openai/src/core/constants/config.dart";
 import "package:dart_openai/src/core/utils/extensions.dart";
 
@@ -206,6 +207,55 @@ abstract class OpenAINetworkingClient {
     Map<String, dynamic>? body,
     http.Client? client,
   }) async {
+
+    var response = await postAndGetResponse(to: to, body: body, client: client);
+
+    final fileTypeHeader = "content-type";
+
+    final fileExtensionFromBodyResponseFormat =
+        response.headers[fileTypeHeader]?.split("/").last ?? "mp3";
+
+    final fileName =
+        outputFileName + "." + fileExtensionFromBodyResponseFormat;
+
+    File file = File(
+      "${outputDirectory != null ? outputDirectory.path : ''}" +
+          "/" +
+          fileName,
+    );
+
+    OpenAILogger.creatingFile(fileName);
+
+    await file.create();
+    OpenAILogger.fileCreatedSuccessfully(fileName);
+    OpenAILogger.writingFileContent(fileName);
+
+    file = await file.writeAsBytes(
+      response.bodyBytes,
+      mode: FileMode.write,
+    );
+
+    OpenAILogger.fileContentWrittenSuccessfully(fileName);
+
+    return onFileResponse(file);
+  }
+
+
+  static Future<Uint8List> postAndGetBytes({
+    required String to,
+    Map<String, dynamic>? body,
+    http.Client? client,
+  }) async {
+
+    var response = await postAndGetResponse(to: to, body: body, client: client);
+    return response.bodyBytes;
+  }
+
+  static Future<http.Response> postAndGetResponse({
+    required String to,
+    Map<String, dynamic>? body,
+    http.Client? client,
+  }) async {
     OpenAILogger.logStartRequest(to);
 
     final uri = Uri.parse(to);
@@ -255,34 +305,7 @@ abstract class OpenAINetworkingClient {
 
       OpenAILogger.requestFinishedSuccessfully();
 
-      final fileTypeHeader = "content-type";
-
-      final fileExtensionFromBodyResponseFormat =
-          response.headers[fileTypeHeader]?.split("/").last ?? "mp3";
-
-      final fileName =
-          outputFileName + "." + fileExtensionFromBodyResponseFormat;
-
-      File file = File(
-        "${outputDirectory != null ? outputDirectory.path : ''}" +
-            "/" +
-            fileName,
-      );
-
-      OpenAILogger.creatingFile(fileName);
-
-      await file.create();
-      OpenAILogger.fileCreatedSuccessfully(fileName);
-      OpenAILogger.writingFileContent(fileName);
-
-      file = await file.writeAsBytes(
-        response.bodyBytes,
-        mode: FileMode.write,
-      );
-
-      OpenAILogger.fileContentWrittenSuccessfully(fileName);
-
-      return onFileResponse(file);
+      return response;
     }
   }
 

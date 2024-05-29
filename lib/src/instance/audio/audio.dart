@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 
@@ -149,6 +151,26 @@ interface class OpenAIAudio implements OpenAIAudioBase {
       },
       outputFileName: outputFileName,
       outputDirectory: outputDirectory,
+    );
+  }
+
+  @override
+  Future<Uint8List> createSpeechBytes({
+    required String model,
+    required String input,
+    required String voice,
+    OpenAIAudioSpeechResponseFormat? responseFormat,
+    double? speed,
+  }) async {
+    return await OpenAINetworkingClient.postAndGetBytes(
+      to: BaseApiUrlBuilder.build(endpoint + "/speech"),
+      body: {
+        "model": model,
+        "input": input,
+        "voice": voice,
+        if (responseFormat != null) "response_format": responseFormat.name,
+        if (speed != null) "speed": speed,
+      },
     );
   }
 }

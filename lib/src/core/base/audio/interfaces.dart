@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import '../../../../dart_openai.dart';
 
@@ -11,6 +12,14 @@ abstract class CreateInterface {
     double? speed,
     String outputFileName = "output",
     Directory? outputDirectory,
+  });
+
+  Future<Uint8List> createSpeechBytes({
+    required String model,
+    required String input,
+    required String voice,
+    OpenAIAudioSpeechResponseFormat? responseFormat,
+    double? speed,
   });
 
   Future<OpenAIAudioModel> createTranscription({
