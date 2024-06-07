@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 
-import 'sub_models/choices/choices.dart';
+import 'sub_models/usage.dart';
 
 export 'sub_models/choices/choices.dart';
 export 'sub_models/usage.dart';
@@ -20,6 +20,9 @@ final class OpenAIStreamChatCompletionModel {
 
   /// This fingerprint represents the backend configuration that the model runs with.
   final String? systemFingerprint;
+
+  /// An optional field that will only be present when you set `streamOptions: {"include_usage": true}` in your request. When present, it contains a null value except for the last chunk which contains the token usage statistics for the entire request.
+  final OpenAIStreamChatCompletionUsageModel? usage;
 
   /// Wether the chat completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;
@@ -41,6 +44,7 @@ final class OpenAIStreamChatCompletionModel {
     required this.created,
     required this.choices,
     required this.systemFingerprint,
+    this.usage,
   });
 
   /// {@macro openai_stream_chat_completion}
@@ -55,6 +59,9 @@ final class OpenAIStreamChatCompletionModel {
           )
           .toList(),
       systemFingerprint: json['system_fingerprint'],
+      usage: json['usage'] != null
+          ? OpenAIStreamChatCompletionUsageModel.fromMap(json['usage'])
+          : null,
     );
   }
 
