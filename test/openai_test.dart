@@ -331,6 +331,9 @@ void main() async {
     test('create with a stream', () async {
       final chatStream = OpenAI.instance.chat.createStream(
         model: "gpt-3.5-turbo",
+        streamOptions: {
+          "include_usage": true,
+        },
         messages: [
           OpenAIChatCompletionChoiceMessageModel(
             content: [
@@ -352,6 +355,13 @@ void main() async {
               isA<List<OpenAIChatCompletionChoiceMessageContentItemModel>?>());
           expect(streamEvent.choices.first.delta.content?.first?.text,
               isA<String?>());
+          if (streamEvent.usage != null) {
+            final u = streamEvent.usage!;
+            expect(u, isA<OpenAIStreamChatCompletionUsageModel>());
+            expect(u.promptTokens, greaterThan(0));
+            expect(u.completionTokens, greaterThan(0));
+            expect(u.totalTokens, equals(u.promptTokens + u.completionTokens));
+          }
         },
         onDone: () {
           completer.complete(true);
