@@ -154,7 +154,7 @@ final class OpenAI extends OpenAIClientBase {
     OpenAILogger.showResponsesLogs = showResponsesLogs;
   }
 
-  // /// Wether the package is running on the web or not, example of this is the use of Flutter web.
+  // /// Whether the package is running on the web or not, example of this is the use of Flutter web.
   // ///
   // /// By default it is set to [false].
   // ///
