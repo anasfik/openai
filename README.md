@@ -146,7 +146,7 @@ If you don't belong actually to any organization, you can just ignore this secti
 
 ### Settings a default request timeout
 
-The package make use if the [http](https://pub.dev/packages/http) to make requests, this one have a default timeout of 30 seconds, this means that any requests that takes more than 30 seconds will be cancelled, and a exception will be thrown, to chenge that you will need to set your own default timeout:
+The package make use if the [http](https://pub.dev/packages/http) to make requests, this one have a default timeout of 30 seconds, this means that any requests that takes more than 30 seconds will be cancelled, and a exception will be thrown, to change that you will need to set your own default timeout:
 
 ```dart
 OpenAI.requestsTimeOut = Duration(seconds: 60); // 60 seconds.
