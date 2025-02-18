@@ -80,7 +80,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
     String? user,
-    Map<String, String>? responseFormat,
+    Map<String, dynamic>? responseFormat,
     int? seed,
     bool? logprobs,
     int? topLogprobs,
