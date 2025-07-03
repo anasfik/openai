@@ -450,6 +450,70 @@ void main() async {
       expect(translation, isA<OpenAIAudioModel>());
       expect(translation.text, isA<String>());
     });
+
+    test("create transcription with auto chunking strategy", () async {
+      // Arrange
+      final audioExampleFile = await getFileFromUrl(
+        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
+        fileExtension: "mp3",
+      );
+      final chunkingStrategy = OpenAIAudioChunkingConfig.auto();
+
+      // Act
+      final transcription = await OpenAI.instance.audio.createTranscription(
+        file: audioExampleFile,
+        model: "whisper-1",
+        chunkingStrategy: chunkingStrategy,
+      );
+
+      // Assert
+      expect(transcription, isA<OpenAIAudioModel>());
+      expect(transcription.text, isA<String>());
+    });
+
+    test("create transcription with server VAD chunking strategy", () async {
+      // Arrange
+      final audioExampleFile = await getFileFromUrl(
+        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
+        fileExtension: "mp3",
+      );
+      final chunkingStrategy = OpenAIAudioChunkingConfig.serverVad(
+        prefixPaddingMs: 200,
+        silenceDurationMs: 500,
+        threshold: 0.1,
+      );
+
+      // Act
+      final transcription = await OpenAI.instance.audio.createTranscription(
+        file: audioExampleFile,
+        model: "whisper-1",
+        chunkingStrategy: chunkingStrategy,
+      );
+
+      // Assert
+      expect(transcription, isA<OpenAIAudioModel>());
+      expect(transcription.text, isA<String>());
+    });
+
+    test("create translation with auto chunking strategy", () async {
+      // Arrange
+      final audioExampleFile = await getFileFromUrl(
+        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
+        fileExtension: "mp3",
+      );
+      final chunkingStrategy = OpenAIAudioChunkingConfig.auto();
+
+      // Act
+      final translation = await OpenAI.instance.audio.createTranslation(
+        file: audioExampleFile,
+        model: "whisper-1",
+        chunkingStrategy: chunkingStrategy,
+      );
+
+      // Assert
+      expect(translation, isA<OpenAIAudioModel>());
+      expect(translation.text, isA<String>());
+    });
   });
 
   group("files", () {

@@ -21,6 +21,7 @@ abstract class CreateInterface {
     double? temperature,
     String? language,
     List<OpenAIAudioTimestampGranularity>? timestamp_granularities,
+    OpenAIAudioChunkingConfig? chunkingStrategy,
   });
 
   Future<OpenAIAudioModel> createTranslation({
@@ -29,5 +30,6 @@ abstract class CreateInterface {
     String? prompt,
     OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
+    OpenAIAudioChunkingConfig? chunkingStrategy,
   });
 }
