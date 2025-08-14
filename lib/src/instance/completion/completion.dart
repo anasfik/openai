@@ -109,6 +109,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     String? user,
     http.Client? client,
     int? seed,
+    Map<String, dynamic>? extraParams,
   }) async {
     assert(
       prompt is String || prompt is List<String> || prompt == null,
@@ -126,7 +127,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
         "model": model,
         if (prompt != null) "prompt": prompt,
         if (suffix != null) "suffix": suffix,
-        if (maxTokens != null) "max_tokens": maxTokens,
+        if (maxTokens != null) "max_completion_tokens": maxTokens,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
@@ -139,6 +140,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
         if (seed != null) "seed": seed,
+        ...?extraParams,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAICompletionModel.fromMap(response);
@@ -234,6 +236,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     String? user,
     http.Client? client,
     int? seed,
+    Map<String, dynamic>? extraParams,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamCompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
@@ -242,7 +245,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
         'stream': true,
         if (prompt != null) "prompt": prompt,
         if (suffix != null) "suffix": suffix,
-        if (maxTokens != null) "max_tokens": maxTokens,
+        if (maxTokens != null) "max_completion_tokens": maxTokens,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
@@ -255,6 +258,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
         if (seed != null) "seed": seed,
+        ...?extraParams,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamCompletionModel.fromMap(response);
