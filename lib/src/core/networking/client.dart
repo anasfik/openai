@@ -354,7 +354,7 @@ abstract class OpenAINetworkingClient {
 
       OpenAILogger.logStartRequest(to);
       try {
-        final respond = await clientForUse.send(request);
+        final respond = await clientForUse.send(request).timeout(OpenAIConfig.requestsTimeOut);
 
         try {
           OpenAILogger.startReadStreamResponse();
