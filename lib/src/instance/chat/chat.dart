@@ -182,6 +182,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     int? seed,
     String? user,
     http.Client? client,
+    Map<String, dynamic>? streamOptions,
     Map<String, dynamic>? extraParams,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
@@ -204,7 +205,9 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (user != null) "user": user,
         if (seed != null) "seed": seed,
         if (responseFormat != null) "response_format": responseFormat,
+        if (streamOptions != null && streamOptions.isNotEmpty) "stream_options": streamOptions,
         ...?extraParams,
+
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamChatCompletionModel.fromMap(response);
