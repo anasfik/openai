@@ -85,6 +85,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     bool? logprobs,
     int? topLogprobs,
     http.Client? client,
+    Map<String, dynamic>? extraParams,
   }) async {
     return await OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.build(endpoint),
@@ -98,7 +99,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
         if (stop != null) "stop": stop,
-        if (maxTokens != null) "max_tokens": maxTokens,
+        if (maxTokens != null) "max_completion_tokens": maxTokens,
         if (presencePenalty != null) "presence_penalty": presencePenalty,
         if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
         if (logitBias != null) "logit_bias": logitBias,
@@ -107,6 +108,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (responseFormat != null) "response_format": responseFormat,
         if (logprobs != null) "logprobs": logprobs,
         if (topLogprobs != null) "top_logprobs": topLogprobs,
+        ...?extraParams,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIChatCompletionModel.fromMap(response);
@@ -180,6 +182,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     int? seed,
     String? user,
     http.Client? client,
+    Map<String, dynamic>? extraParams,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
@@ -194,13 +197,14 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
         if (stop != null) "stop": stop,
-        if (maxTokens != null) "max_tokens": maxTokens,
+        if (maxTokens != null) "max_completion_tokens": maxTokens,
         if (presencePenalty != null) "presence_penalty": presencePenalty,
         if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
         if (seed != null) "seed": seed,
         if (responseFormat != null) "response_format": responseFormat,
+        ...?extraParams,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamChatCompletionModel.fromMap(response);
@@ -227,6 +231,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     http.Client? client,
     Map<String, String>? responseFormat,
     int? seed,
+    Map<String, dynamic>? extraParams,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
       to: BaseApiUrlBuilder.build(endpoint),
@@ -241,13 +246,14 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,
         if (stop != null) "stop": stop,
-        if (maxTokens != null) "max_tokens": maxTokens,
+        if (maxTokens != null) "max_completion_tokens": maxTokens,
         if (presencePenalty != null) "presence_penalty": presencePenalty,
         if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
         if (logitBias != null) "logit_bias": logitBias,
         if (user != null) "user": user,
         if (seed != null) "seed": seed,
         if (responseFormat != null) "response_format": responseFormat,
+        ...?extraParams,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamChatCompletionModel.fromMap(response);
