@@ -178,7 +178,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     double? presencePenalty,
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
-    Map<String, String>? responseFormat,
+    Map<String, dynamic>? responseFormat,
     int? seed,
     String? user,
     http.Client? client,
@@ -229,7 +229,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     Map<String, dynamic>? logitBias,
     String? user,
     http.Client? client,
-    Map<String, String>? responseFormat,
+    Map<String, dynamic>? responseFormat,
     int? seed,
     Map<String, dynamic>? extraParams,
   }) {

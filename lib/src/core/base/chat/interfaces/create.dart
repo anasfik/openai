@@ -19,7 +19,7 @@ abstract class CreateInterface {
     Map<String, dynamic>? logitBias,
     String? user,
     http.Client? client,
-    Map<String, String>? responseFormat,
+    Map<String, dynamic>? responseFormat,
     int? seed,
   });
 
@@ -36,7 +36,7 @@ abstract class CreateInterface {
     double? presencePenalty,
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
-    Map<String, String>? responseFormat,
+    Map<String, dynamic>? responseFormat,
     String? user,
     http.Client? client,
     int? seed,
@@ -57,7 +57,7 @@ abstract class CreateInterface {
     Map<String, dynamic>? logitBias,
     String? user,
     http.Client? client,
-    Map<String, String>? responseFormat,
+    Map<String, dynamic>? responseFormat,
     int? seed,
   });
 }
