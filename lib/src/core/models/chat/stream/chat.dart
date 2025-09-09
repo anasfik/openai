@@ -21,10 +21,10 @@ final class OpenAIStreamChatCompletionModel {
   /// This fingerprint represents the backend configuration that the model runs with.
   final String? systemFingerprint;
 
-  /// Wether the chat completion have at least one choice in [choices].
+  /// Whether the chat completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;
 
-  /// Wether the chat completion have a [systemFingerprint] or not.
+  /// Whether the chat completion have a [systemFingerprint] or not.
   bool get haveSystemFingerprint => systemFingerprint != null;
 
   @override

@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 
+import 'dart:convert';
 import 'dart:io';
 
 import '../../../dart_openai.dart';
@@ -36,6 +39,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   ///
   /// [timestamp_granularities] The timestamp granularities to populate for this transcription. response_format must be set verbose_json to use timestamp granularities. Either: word or segment, both doesnt work.
   ///
+  /// [chunkingStrategy] The chunking strategy to use for processing the audio file. Can be "auto" or server VAD configuration.
+  ///
   /// Example:
   /// ```dart
   /// final transcription = await openai.audio.createTranscription(
@@ -44,6 +49,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   /// prompt: "This is a prompt",
   /// responseFormat: OpenAIAudioResponseFormat.srt,
   /// temperature: 0.5,
+  /// chunkingStrategy: OpenAIAudioChunkingConfig.auto(),
   /// );
   /// ```
   @override
@@ -55,6 +61,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     double? temperature,
     String? language,
     List<OpenAIAudioTimestampGranularity>? timestamp_granularities,
+    OpenAIAudioChunkingConfig? chunkingStrategy,
   }) async {
     return await OpenAINetworkingClient.fileUpload(
       file: file,
@@ -68,6 +75,11 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         if (timestamp_granularities != null)
           "timestamp_granularities[]":
               timestamp_granularities.map((e) => e.name).join(","),
+        if (chunkingStrategy != null)
+          "chunking_strategy":
+              chunkingStrategy.type == OpenAIAudioChunkingStrategy.auto
+                  ? "auto"
+                  : jsonEncode(chunkingStrategy.toMap()),
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIAudioModel.fromMap(response);
@@ -90,6 +102,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   ///
   /// [temperature] is the sampling temperature for the request.
   ///
+  /// [chunkingStrategy] The chunking strategy to use for processing the audio file. Can be "auto" or server VAD configuration.
+  ///
   /// Example:
   /// ```dart
   /// final translation = await openai.audio.createTranslation(
@@ -97,6 +111,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   /// model: "whisper-1",
   /// prompt: "This is a prompt",
   /// responseFormat: OpenAIAudioResponseFormat.text,
+  /// chunkingStrategy: OpenAIAudioChunkingConfig.auto(),
   /// );
   /// ```
   @override
@@ -106,6 +121,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     String? prompt,
     OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
+    OpenAIAudioChunkingConfig? chunkingStrategy,
   }) async {
     return await OpenAINetworkingClient.fileUpload(
       file: file,
@@ -115,6 +131,11 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         if (prompt != null) "prompt": prompt,
         if (responseFormat != null) "response_format": responseFormat.name,
         if (temperature != null) "temperature": temperature.toString(),
+        if (chunkingStrategy != null)
+          "chunking_strategy":
+              chunkingStrategy.type == OpenAIAudioChunkingStrategy.auto
+                  ? "auto"
+                  : jsonEncode(chunkingStrategy.toMap()),
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIAudioModel.fromMap(response);
@@ -149,6 +170,26 @@ interface class OpenAIAudio implements OpenAIAudioBase {
       },
       outputFileName: outputFileName,
       outputDirectory: outputDirectory,
+    );
+  }
+
+  @override
+  Future<Uint8List> createSpeechBytes({
+    required String model,
+    required String input,
+    required String voice,
+    OpenAIAudioSpeechResponseFormat? responseFormat,
+    double? speed,
+  }) async {
+    return await OpenAINetworkingClient.postAndGetBytes(
+      to: BaseApiUrlBuilder.build(endpoint + "/speech"),
+      body: {
+        "model": model,
+        "input": input,
+        "voice": voice,
+        if (responseFormat != null) "response_format": responseFormat.name,
+        if (speed != null) "speed": speed,
+      },
     );
   }
 }

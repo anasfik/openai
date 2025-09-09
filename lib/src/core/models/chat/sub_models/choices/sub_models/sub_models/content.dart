@@ -65,13 +65,15 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
   }
 
   /// This method used to convert the [OpenAIChatCompletionChoiceMessageContentItemModel] to a [Map<String, dynamic>] object.
-  Map<String, dynamic> toMap() {
+  Object? toMap({bool single = false}) {
+    if (text != null && single) return text;
+
     return {
       "type": type,
       if (text != null) "text": text,
-      if (imageUrl != null) "image_url": imageUrl,
+      if (imageUrl != null) "image_url": { "url": imageUrl },
       if (imageBase64 != null)
-        "image_url": {"url": "data:image/jpeg;base64,${imageBase64}"}
+        "image_url": {"url": "data:image/jpeg;base64,${imageBase64}"},
     };
   }
 

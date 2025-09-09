@@ -146,7 +146,7 @@ If you don't belong actually to any organization, you can just ignore this secti
 
 ### Settings a default request timeout
 
-The package make use if the [http](https://pub.dev/packages/http) to make requests, this one have a default timeout of 30 seconds, this means that any requests that takes more than 30 seconds will be cancelled, and a exception will be thrown, to chenge that you will need to set your own default timeout:
+The package make use if the [http](https://pub.dev/packages/http) to make requests, this one have a default timeout of 30 seconds, this means that any requests that takes more than 30 seconds will be cancelled, and a exception will be thrown, to change that you will need to set your own default timeout:
 
 ```dart
 OpenAI.requestsTimeOut = Duration(seconds: 60); // 60 seconds.
@@ -423,11 +423,11 @@ final chat = await OpenAI.instance.chat.create(
 
 final message = chat.choices.first.message;
 
-// Wether the message has a tool call.
+// Whether the message has a tool call.
   if (message.haveToolCalls) {
   final call = message.toolCalls!.first;
 
-    // Wether the tool call is the one we sent.
+    // Whether the tool call is the one we sent.
   if (call.function.name == "sumOfTwoNumbers") {
       // decode the arguments from the tool call.
     final decodedArgs = jsonDecode(call.function.arguments);

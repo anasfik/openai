@@ -64,9 +64,15 @@ final class OpenAIChatCompletionChoiceMessageModel {
 
 // This method used to convert the [OpenAIChatCompletionChoiceMessageModel] to a [Map<String, dynamic>] object.
   Map<String, dynamic> toMap() {
+    final content_ = () {
+      if (content?.length == 1) return content?.first.toMap(single: true);
+
+      return content?.map((contentItem) => contentItem.toMap()).toList();
+    }();
+
     return {
       "role": role.name,
-      "content": content?.map((contentItem) => contentItem.toMap()).toList(),
+      "content": content_,
       if (toolCalls != null && role == OpenAIChatMessageRole.assistant)
         "tool_calls": toolCalls!.map((toolCall) => toolCall.toMap()).toList(),
       if (name != null) "name": name,

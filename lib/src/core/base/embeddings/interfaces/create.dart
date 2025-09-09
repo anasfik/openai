@@ -7,6 +7,7 @@ abstract class CreateInterface {
     required String model,
     required input,
     String? user,
+    int? dimensions,
     http.Client? client,
   });
 }
