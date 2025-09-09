@@ -35,6 +35,8 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
   /// [user] is the user ID to associate with the request. This is used to prevent abuse of the API.
   ///
   /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+  ///
+  /// [dimensions] is the number of dimensions the resulting output embeddings should have. Only supported in text-embedding-3 and later models.
 
   /// Example:
   ///```dart
@@ -48,6 +50,7 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
     required String model,
     required input,
     String? user,
+    int? dimensions,
     http.Client? client,
   }) async {
     assert(
@@ -64,6 +67,7 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
         "model": model,
         if (input != null) "input": input,
         if (user != null) "user": user,
+        if (dimensions != null) "dimensions": dimensions,
       },
     );
   }
