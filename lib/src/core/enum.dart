@@ -18,4 +18,6 @@ enum OpenAIAudioResponseFormat { json, text, srt, verbose_json, vtt }
 
 enum OpenAIAudioSpeechResponseFormat { mp3, opus, aac, flac }
 
+enum OpenAIAudioChunkingStrategy { auto, server_vad }
+
 enum OpenAIChatMessageRole { system, user, assistant, function, tool }
