@@ -411,6 +411,19 @@ void main() async {
       expect(embedding.data.first, isA<OpenAIEmbeddingsDataModel>());
       expect(embedding.data.first.embeddings, isA<List<double>>());
     });
+
+    test('create with smaller dimensions', () async {
+      final OpenAIEmbeddingsModel embedding =
+      await OpenAI.instance.embedding.create(
+        model: "text-embedding-3-large",
+        input: "This is a sample text",
+        dimensions: 1000,
+      );
+      expect(embedding, isA<OpenAIEmbeddingsModel>());
+      expect(embedding.data.first, isA<OpenAIEmbeddingsDataModel>());
+      expect(embedding.data.first.embeddings, isA<List<double>>());
+      expect(embedding.data.first.embeddings.length, 1000);
+    });
   });
 
   group('audio', () {
@@ -457,6 +470,70 @@ void main() async {
         model: "whisper-1",
       );
 
+      expect(translation, isA<OpenAIAudioModel>());
+      expect(translation.text, isA<String>());
+    });
+
+    test("create transcription with auto chunking strategy", () async {
+      // Arrange
+      final audioExampleFile = await getFileFromUrl(
+        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
+        fileExtension: "mp3",
+      );
+      final chunkingStrategy = OpenAIAudioChunkingConfig.auto();
+
+      // Act
+      final transcription = await OpenAI.instance.audio.createTranscription(
+        file: audioExampleFile,
+        model: "whisper-1",
+        chunkingStrategy: chunkingStrategy,
+      );
+
+      // Assert
+      expect(transcription, isA<OpenAIAudioModel>());
+      expect(transcription.text, isA<String>());
+    });
+
+    test("create transcription with server VAD chunking strategy", () async {
+      // Arrange
+      final audioExampleFile = await getFileFromUrl(
+        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
+        fileExtension: "mp3",
+      );
+      final chunkingStrategy = OpenAIAudioChunkingConfig.serverVad(
+        prefixPaddingMs: 200,
+        silenceDurationMs: 500,
+        threshold: 0.1,
+      );
+
+      // Act
+      final transcription = await OpenAI.instance.audio.createTranscription(
+        file: audioExampleFile,
+        model: "whisper-1",
+        chunkingStrategy: chunkingStrategy,
+      );
+
+      // Assert
+      expect(transcription, isA<OpenAIAudioModel>());
+      expect(transcription.text, isA<String>());
+    });
+
+    test("create translation with auto chunking strategy", () async {
+      // Arrange
+      final audioExampleFile = await getFileFromUrl(
+        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
+        fileExtension: "mp3",
+      );
+      final chunkingStrategy = OpenAIAudioChunkingConfig.auto();
+
+      // Act
+      final translation = await OpenAI.instance.audio.createTranslation(
+        file: audioExampleFile,
+        model: "whisper-1",
+        chunkingStrategy: chunkingStrategy,
+      );
+
+      // Assert
       expect(translation, isA<OpenAIAudioModel>());
       expect(translation.text, isA<String>());
     });

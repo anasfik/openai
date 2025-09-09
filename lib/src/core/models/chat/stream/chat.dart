@@ -27,7 +27,7 @@ final class OpenAIStreamChatCompletionModel {
   /// Wether the chat completion have at least one choice in [choices].
   bool get haveChoices => choices.isNotEmpty;
 
-  /// Wether the chat completion have a [systemFingerprint] or not.
+  /// Whether the chat completion have a [systemFingerprint] or not.
   bool get haveSystemFingerprint => systemFingerprint != null;
 
   @override
