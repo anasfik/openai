@@ -69,7 +69,7 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
     return {
       "type": type,
       if (text != null) "text": text,
-      if (imageUrl != null) "image_url": imageUrl,
+      if (imageUrl != null) "image_url": { "url": imageUrl },
       if (imageBase64 != null)
         "image_url": {"url": "data:image/jpeg;base64,${imageBase64}"}
     };
