@@ -13,12 +13,12 @@ abstract final class OpenAILogger {
   static const int _kValidApiKeyLength = 10;
 
   /// {@template openai_logger_is_active}
-  /// Wether the to show operations flow logger is active or not.
+  /// Whether the to show operations flow logger is active or not.
   /// {@endtemplate}
   static bool _isActive = true;
 
   /// {@template openai_logger_show_responses_logs}
-  /// Wether to show operations response bodies in logs or not.
+  /// Whether to show operations response bodies in logs or not.
   /// {@endtemplate}
   static bool _showResponsesLogs = false;
 
