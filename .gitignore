@@ -11,3 +11,5 @@ env.g.dart
 *.mp3
 *.png
 .idea/
+
+example/lib/maintainer_dartpad.dart
