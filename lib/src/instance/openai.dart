@@ -1,3 +1,4 @@
+import 'package:dart_openai/src/instance/responses/responses.dart';
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/instance/edits/edits.dart';
 import 'package:dart_openai/src/instance/moderations/moderations.dart';
@@ -54,6 +55,9 @@ final class OpenAI extends OpenAIClientBase {
 
   /// The [OpenAICompletion] instance, used to access the completion endpoints.
   OpenAICompletion get completion => OpenAICompletion();
+
+  /// The [OpenAIResponses] instance, used to access the completion endpoints.
+  OpenAIResponses get responses => OpenAIResponses();
 
   /// The [OpenAIEdits] instance, used to access the edits endpoints.
   OpenAIEdits get edit => OpenAIEdits();
