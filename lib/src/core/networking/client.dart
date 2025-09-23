@@ -242,6 +242,7 @@ abstract class OpenAINetworkingClient {
     http.Client? client,
   }) async {
     var response = await postAndGetResponse(to: to, body: body, client: client);
+
     return response.bodyBytes;
   }
 

@@ -7,7 +7,8 @@ abstract class CreateInterface {
   Future<File> createSpeech({
     required String model,
     required String input,
-    required String voice,
+    required OpenAIAudioVoice voice,
+    String? instructions,
     OpenAIAudioSpeechResponseFormat? responseFormat,
     double? speed,
     String outputFileName = "output",
@@ -17,9 +18,12 @@ abstract class CreateInterface {
   Future<Uint8List> createSpeechBytes({
     required String model,
     required String input,
-    required String voice,
+    required OpenAIAudioVoice voice,
+    String? instructions,
     OpenAIAudioSpeechResponseFormat? responseFormat,
     double? speed,
+    String outputFileName = "output",
+    Directory? outputDirectory,
   });
 
   Future<OpenAIAudioModel> createTranscription({

@@ -150,7 +150,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   Future<File> createSpeech({
     required String model,
     required String input,
-    required String voice,
+    required OpenAIAudioVoice voice,
+    String? instructions,
     OpenAIAudioSpeechResponseFormat? responseFormat,
     double? speed,
     String outputFileName = "output",
@@ -161,7 +162,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
       body: {
         "model": model,
         "input": input,
-        "voice": voice,
+        "voice": voice.name,
+        if (instructions != null) "instructions": instructions,
         if (responseFormat != null) "response_format": responseFormat.name,
         if (speed != null) "speed": speed,
       },
@@ -177,16 +179,20 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   Future<Uint8List> createSpeechBytes({
     required String model,
     required String input,
-    required String voice,
+    required OpenAIAudioVoice voice,
+    String? instructions,
     OpenAIAudioSpeechResponseFormat? responseFormat,
     double? speed,
+    String outputFileName = "output",
+    Directory? outputDirectory,
   }) async {
     return await OpenAINetworkingClient.postAndGetBytes(
       to: BaseApiUrlBuilder.build(endpoint + "/speech"),
       body: {
         "model": model,
         "input": input,
-        "voice": voice,
+        "voice": voice.name,
+        if (instructions != null) "instructions": instructions,
         if (responseFormat != null) "response_format": responseFormat.name,
         if (speed != null) "speed": speed,
       },
