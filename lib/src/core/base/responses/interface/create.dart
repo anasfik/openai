@@ -1,14 +1,14 @@
 import 'package:dart_openai/src/core/models/responses/responses.dart';
 
 abstract class CreateInterface {
-  Future<OpenAIResponseModel> create({
+  Future<OpenAiResponse> create({
+    required input,
     bool? background,
     conversation,
     List? inlcude,
-    input,
     String? instructions,
     int? maxOutputTokens,
-    int? oolCalls,
+    int? maxToolCalls,
     Map<String, dynamic> metadata,
     String? model,
     bool? parallelToolCalls,

@@ -1,3 +1,4 @@
+import 'package:dart_openai/src/instance/conversations/conversations.dart';
 import 'package:dart_openai/src/instance/responses/responses.dart';
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/instance/edits/edits.dart';
@@ -56,9 +57,6 @@ final class OpenAI extends OpenAIClientBase {
   /// The [OpenAICompletion] instance, used to access the completion endpoints.
   OpenAICompletion get completion => OpenAICompletion();
 
-  /// The [OpenAIResponses] instance, used to access the completion endpoints.
-  OpenAIResponses get responses => OpenAIResponses();
-
   /// The [OpenAIEdits] instance, used to access the edits endpoints.
   OpenAIEdits get edit => OpenAIEdits();
 
@@ -82,6 +80,12 @@ final class OpenAI extends OpenAIClientBase {
 
   /// The [OpenAIAudio] instance, used to access the audio endpoints.
   OpenAIAudio get audio => OpenAIAudio();
+
+  /// The [OpenAIResponses] instance
+  OpenAIResponses get responses => OpenAIResponses();
+
+  /// The [OpenAIConversations] instance
+  OpenAIConversations get conversations => OpenAIConversations();
 
   /// The organization id, if set, it will be used in all the requests to the OpenAI API.
   static String? get organization => HeadersBuilder.organization;

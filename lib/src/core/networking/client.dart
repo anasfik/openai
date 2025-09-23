@@ -207,7 +207,6 @@ abstract class OpenAINetworkingClient {
     Map<String, dynamic>? body,
     http.Client? client,
   }) async {
-
     var response = await postAndGetResponse(to: to, body: body, client: client);
 
     final fileTypeHeader = "content-type";
@@ -215,13 +214,10 @@ abstract class OpenAINetworkingClient {
     final fileExtensionFromBodyResponseFormat =
         response.headers[fileTypeHeader]?.split("/").last ?? "mp3";
 
-    final fileName =
-        outputFileName + "." + fileExtensionFromBodyResponseFormat;
+    final fileName = outputFileName + "." + fileExtensionFromBodyResponseFormat;
 
     File file = File(
-      "${outputDirectory != null ? outputDirectory.path : ''}" +
-          "/" +
-          fileName,
+      "${outputDirectory != null ? outputDirectory.path : ''}" + "/" + fileName,
     );
 
     OpenAILogger.creatingFile(fileName);
@@ -240,13 +236,11 @@ abstract class OpenAINetworkingClient {
     return onFileResponse(file);
   }
 
-
   static Future<Uint8List> postAndGetBytes({
     required String to,
     Map<String, dynamic>? body,
     http.Client? client,
   }) async {
-
     var response = await postAndGetResponse(to: to, body: body, client: client);
     return response.bodyBytes;
   }
@@ -377,7 +371,9 @@ abstract class OpenAINetworkingClient {
 
       OpenAILogger.logStartRequest(to);
       try {
-        final respond = await clientForUse.send(request).timeout(OpenAIConfig.requestsTimeOut);
+        final respond = await clientForUse
+            .send(request)
+            .timeout(OpenAIConfig.requestsTimeOut);
 
         try {
           OpenAILogger.startReadStreamResponse();

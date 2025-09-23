@@ -1,3 +1,4 @@
+import 'package:dart_openai/src/core/base/entity/interfaces/enpoint.dart';
 import 'package:dart_openai/src/core/base/responses/interface/cancel.dart';
 import 'package:dart_openai/src/core/base/responses/interface/create.dart';
 import 'package:dart_openai/src/core/base/responses/interface/delete.dart';
@@ -8,4 +9,5 @@ abstract class OpenAIResponsesBase
         CreateInterface,
         GetInterface,
         DeleteInterface,
-        CancelInterface {}
+        CancelInterface,
+        EndpointInterface {}

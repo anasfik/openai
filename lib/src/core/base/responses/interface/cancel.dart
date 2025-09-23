@@ -1,7 +1,7 @@
 import 'package:dart_openai/src/core/models/responses/responses.dart';
 
 abstract class CancelInterface {
-  Future<OpenAIResponseModel> cancel({
+  Future<OpenAiResponse> cancel({
     required String responseId,
   });
 }

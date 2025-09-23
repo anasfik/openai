@@ -2,6 +2,12 @@
 /// The class holding all endpoints for the API that are used.
 /// {@endtemplate}
 class OpenAIApisEndpoints {
+  ///
+  final conversations = "/conversations";
+
+  ///
+  final responses = "/responses";
+
   /// none.
   final completion = "/completions";
 
