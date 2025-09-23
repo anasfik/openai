@@ -56,12 +56,12 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   Future<OpenAIAudioModel> createTranscription({
     required File file,
     required String model,
+    OpenAIAudioChunkingConfig? chunkingStrategy,
+    String? language,
     String? prompt,
     OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
-    String? language,
-    List<OpenAIAudioTimestampGranularity>? timestamp_granularities,
-    OpenAIAudioChunkingConfig? chunkingStrategy,
+    List<OpenAIAudioTimestampGranularity>? timestampGranularities,
   }) async {
     return await OpenAINetworkingClient.fileUpload(
       file: file,
@@ -72,9 +72,9 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         if (responseFormat != null) "response_format": responseFormat.name,
         if (temperature != null) "temperature": temperature.toString(),
         if (language != null) "language": language,
-        if (timestamp_granularities != null)
+        if (timestampGranularities != null)
           "timestamp_granularities[]":
-              timestamp_granularities.map((e) => e.name).join(","),
+              timestampGranularities.map((e) => e.name).join(","),
         if (chunkingStrategy != null)
           "chunking_strategy":
               chunkingStrategy.type == OpenAIAudioChunkingStrategy.auto
@@ -121,7 +121,6 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     String? prompt,
     OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
-    OpenAIAudioChunkingConfig? chunkingStrategy,
   }) async {
     return await OpenAINetworkingClient.fileUpload(
       file: file,
@@ -131,16 +130,19 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         if (prompt != null) "prompt": prompt,
         if (responseFormat != null) "response_format": responseFormat.name,
         if (temperature != null) "temperature": temperature.toString(),
-        if (chunkingStrategy != null)
-          "chunking_strategy":
-              chunkingStrategy.type == OpenAIAudioChunkingStrategy.auto
-                  ? "auto"
-                  : jsonEncode(chunkingStrategy.toMap()),
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIAudioModel.fromMap(response);
       },
       responseMapAdapter: (res) {
+        try {
+          final decoded = jsonDecode(res);
+
+          if (decoded is Map<String, dynamic> && decoded.containsKey('text')) {
+            return decoded;
+          }
+        } catch (e) {}
+
         return {"text": res};
       },
     );

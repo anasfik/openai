@@ -11,7 +11,7 @@ final class OpenAIAudioModel {
   final String? task;
   final String? language;
   final double? duration;
-
+  final Usage? usage;
   final List<Word>? words;
   final List<Segment>? segments;
 
@@ -26,6 +26,7 @@ final class OpenAIAudioModel {
     this.duration,
     this.words,
     this.segments,
+    this.usage,
   });
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIAudioModel] object.
@@ -41,6 +42,7 @@ final class OpenAIAudioModel {
       segments: json['segments'] != null
           ? List<Segment>.from(json['segments'].map((x) => Segment.fromMap(x)))
           : null,
+      usage: json['usage'] != null ? Usage.fromMap(json['usage']) : null,
     );
   }
 
@@ -192,5 +194,22 @@ final class Segment {
         other.avg_logprob == avg_logprob &&
         other.compression_ratio == compression_ratio &&
         other.no_speech_prob == no_speech_prob;
+  }
+}
+
+class Usage {
+  final int seconds;
+  final String type;
+
+  const Usage({
+    required this.seconds,
+    required this.type,
+  });
+
+  factory Usage.fromMap(Map<String, dynamic> json) {
+    return Usage(
+      seconds: json['seconds'],
+      type: json['type'],
+    );
   }
 }

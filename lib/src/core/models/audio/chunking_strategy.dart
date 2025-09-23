@@ -73,7 +73,7 @@ abstract class OpenAIAudioChunkingConfig {
 final class OpenAIAudioChunkingConfigAuto extends OpenAIAudioChunkingConfig {
   /// {@macro openai_audio_chunking_config_auto}
   const OpenAIAudioChunkingConfigAuto()
-    : super(type: OpenAIAudioChunkingStrategy.auto);
+      : super(type: OpenAIAudioChunkingStrategy.auto);
 
   @override
   Map<String, dynamic> toMap() {

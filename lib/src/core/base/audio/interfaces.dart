@@ -33,7 +33,7 @@ abstract class CreateInterface {
     OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
     String? language,
-    List<OpenAIAudioTimestampGranularity>? timestamp_granularities,
+    List<OpenAIAudioTimestampGranularity>? timestampGranularities,
     OpenAIAudioChunkingConfig? chunkingStrategy,
   });
 
@@ -43,6 +43,5 @@ abstract class CreateInterface {
     String? prompt,
     OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
-    OpenAIAudioChunkingConfig? chunkingStrategy,
   });
 }
