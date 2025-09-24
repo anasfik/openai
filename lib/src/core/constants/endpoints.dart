@@ -3,6 +3,9 @@
 /// {@endtemplate}
 class OpenAIApisEndpoints {
   ///
+  final evals = "/evals";
+
+  ///
   final conversations = "/conversations";
 
   ///

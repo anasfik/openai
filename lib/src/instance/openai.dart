@@ -1,4 +1,5 @@
 import 'package:dart_openai/src/instance/conversations/conversations.dart';
+import 'package:dart_openai/src/instance/evals/evals.dart';
 import 'package:dart_openai/src/instance/responses/responses.dart';
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/instance/edits/edits.dart';
@@ -65,6 +66,9 @@ final class OpenAI extends OpenAIClientBase {
 
   /// The [OpenAIEmbedding] instance, used to access the embeddings endpoints.
   OpenAIEmbedding get embedding => OpenAIEmbedding();
+
+  ///
+  OpenAIEvals get evals => OpenAIEvals();
 
   /// The [OpenAIFiles] instance, used to access the files endpoints.
   OpenAIFiles get file => OpenAIFiles();

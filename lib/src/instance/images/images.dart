@@ -74,13 +74,18 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///```
   @override
   Future<OpenAIImageModel> create({
-    String? model,
     required String prompt,
+    String? background,
+    String? model,
+    String? moderation,
     int? n,
-    OpenAIImageSize? size,
-    OpenAIImageStyle? style,
-    OpenAIImageQuality? quality,
+    int? outputCompression,
+    String? outputFormat,
+    int? partialImages,
+    String? quality,
     OpenAIImageResponseFormat? responseFormat,
+    OpenAIImageSize? size,
+    String? style,
     String? user,
     http.Client? client,
   }) async {
@@ -94,10 +99,14 @@ interface class OpenAIImages implements OpenAIImagesBase {
         "prompt": prompt,
         if (n != null) "n": n,
         if (size != null) "size": size.value,
-        if (style != null) "style": style.value,
-        if (quality != null) "quality": quality.value,
         if (responseFormat != null) "response_format": responseFormat.value,
         if (user != null) "user": user,
+        if (background != null) "background": background,
+        if (moderation != null) "moderation": moderation,
+        if (outputCompression != null) "output_compression": outputCompression,
+        if (outputFormat != null) "output_format": outputFormat,
+        if (partialImages != null) "partial_images": partialImages,
+        if (style != null) "style": style,
       },
       client: client,
     );
@@ -147,13 +156,19 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///```
   @override
   Future<OpenAIImageModel> edit({
-    String? model,
     required File image,
-    File? mask,
     required String prompt,
+    String? background,
+    String? inputFidelity,
+    File? mask,
+    String? model,
     int? n,
-    OpenAIImageSize? size,
+    int? outputCompression,
+    String? outputFormat,
+    int? partialImages,
+    String? quality,
     OpenAIImageResponseFormat? responseFormat,
+    OpenAIImageSize? size,
     String? user,
   }) async {
     final String edit = "/edits";
@@ -167,6 +182,13 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (n != null) "n": n.toString(),
         if (size != null) "size": size.value,
         if (responseFormat != null) "response_format": responseFormat.value,
+        if (background != null) "background": background,
+        if (inputFidelity != null) "input_fidelity": inputFidelity,
+        if (outputCompression != null)
+          "output_compression": outputCompression.toString(),
+        if (outputFormat != null) "output_format": outputFormat,
+        if (partialImages != null) "partial_images": partialImages.toString(),
+        if (quality != null) "quality": quality,
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
@@ -212,17 +234,18 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// );
   /// ```
   @override
-  Future<OpenAIImageModel> variation({
-    String? model,
+  Future<List<OpenAIImageModel>> variation({
     required File image,
+    String? model,
     int? n,
-    OpenAIImageSize? size,
     OpenAIImageResponseFormat? responseFormat,
+    OpenAIImageSize? size,
     String? user,
   }) async {
     final String variations = "/variations";
 
-    return await OpenAINetworkingClient.imageVariationForm<OpenAIImageModel>(
+    return await OpenAINetworkingClient.imageVariationForm<
+        List<OpenAIImageModel>>(
       image: image,
       body: {
         if (model != null) "model": model,
@@ -232,7 +255,17 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIImageModel.fromMap(response);
+        if (response.containsKey("data")) {
+          return [
+            ...(response["data"] as List).map(
+              (e) => OpenAIImageModel.fromMap(e),
+            ),
+          ];
+        }
+
+        return [
+          OpenAIImageModel.fromMap(response),
+        ];
       },
       to: BaseApiUrlBuilder.build(endpoint + variations),
     );
