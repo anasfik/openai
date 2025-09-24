@@ -11,7 +11,7 @@ final class OpenAIAudioModel {
   final String? task;
   final String? language;
   final double? duration;
-  final Usage? usage;
+  final OpenAIAudioModelUsage? usage;
   final List<Word>? words;
   final List<Segment>? segments;
 
@@ -42,7 +42,9 @@ final class OpenAIAudioModel {
       segments: json['segments'] != null
           ? List<Segment>.from(json['segments'].map((x) => Segment.fromMap(x)))
           : null,
-      usage: json['usage'] != null ? Usage.fromMap(json['usage']) : null,
+      usage: json['usage'] != null
+          ? OpenAIAudioModelUsage.fromMap(json['usage'])
+          : null,
     );
   }
 
@@ -197,17 +199,17 @@ final class Segment {
   }
 }
 
-class Usage {
+class OpenAIAudioModelUsage {
   final int seconds;
   final String type;
 
-  const Usage({
+  const OpenAIAudioModelUsage({
     required this.seconds,
     required this.type,
   });
 
-  factory Usage.fromMap(Map<String, dynamic> json) {
-    return Usage(
+  factory OpenAIAudioModelUsage.fromMap(Map<String, dynamic> json) {
+    return OpenAIAudioModelUsage(
       seconds: json['seconds'],
       type: json['type'],
     );
