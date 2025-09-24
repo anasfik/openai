@@ -18,7 +18,7 @@ Future<void> main() async {
     ),
     model: "whisper-1",
     responseFormat: OpenAIAudioResponseFormat.verbose_json,
-    timestamp_granularities: [OpenAIAudioTimestampGranularity.segment],
+    timestampGranularities: [OpenAIAudioTimestampGranularity.segment],
   );
 
   // print the transcription.

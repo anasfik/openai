@@ -10,7 +10,7 @@ void main() async {
   File speechFile = await OpenAI.instance.audio.createSpeech(
     model: "tts-1",
     input: "it is what it is.",
-    voice: "nova",
+    voice: OpenAIAudioVoice.nova,
     responseFormat: OpenAIAudioSpeechResponseFormat.opus,
     outputDirectory: await Directory("speechOutput").create(),
     outputFileName: DateTime.now().microsecondsSinceEpoch.toString(),

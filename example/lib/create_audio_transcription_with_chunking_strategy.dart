@@ -53,7 +53,6 @@ Future<void> main() async {
       'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
     ),
     model: "whisper-1",
-    chunkingStrategy: OpenAIAudioChunkingConfig.auto(),
   );
   print(
       "Translation with chunking: ${translation.text.substring(0, 100)}...\n");

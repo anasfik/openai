@@ -18,8 +18,10 @@ Future<void> main() async {
     responseFormat: OpenAIImageResponseFormat.url,
   );
 
-  for (var index = 0; index < imageVariations.data.length; index++) {
-    final currentItem = imageVariations.data[index];
+  final list = imageVariations.firstOrNull?.data ?? [];
+
+  for (var index = 0; index < list.length; index++) {
+    final currentItem = list[index];
     print(currentItem.url);
   }
 }
