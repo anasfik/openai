@@ -45,7 +45,7 @@ interface class OpenAIModeration implements OpenAIModerationBase {
   /// ```
   @override
   Future<OpenAIModerationModel> create({
-    required String input,
+    required  input,
     String? model,
     http.Client? client,
   }) async {

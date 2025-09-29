@@ -1,3 +1,4 @@
+import 'package:dart_openai/src/core/base/graders/graders.dart';
 import 'package:dart_openai/src/core/models/graders/grader.dart';
 import 'package:dart_openai/src/core/models/graders/label_model_grader.dart';
 import 'package:dart_openai/src/core/models/graders/multi_grader.dart';
@@ -5,8 +6,9 @@ import 'package:dart_openai/src/core/models/graders/python_grader.dart';
 import 'package:dart_openai/src/core/models/graders/score_model_grader.dart';
 import 'package:dart_openai/src/core/models/graders/string_check_grader.dart';
 import 'package:dart_openai/src/core/models/graders/text_similarity_grader.dart';
+import 'package:meta/meta.dart';
 
-class OpenAIGraders implements OpenAIGradersBase {
+class OpenAIGraders {
   static StringCheckGrader stringCheckGrader({
     required String input,
     required String name,
@@ -103,11 +105,28 @@ class OpenAIGraders implements OpenAIGradersBase {
     );
   }
 
-  /// beta ùethods, planned to implement only if/when they are stable.
-
-  Future<dynamic> runGrader({
+  /// beta methods, planned to implement only if/when they are stable.
+  @protected
+  @internal
+  @sealed
+  Future runGrader({
+    // ignore: avoid-unused-parameters
     required OpenAiGeneralGrader grader,
+    // ignore: avoid-unused-parameters
     required String modelSample,
+    // ignore: avoid-unused-parameters
     Map<String, dynamic>? item,
-  });
+  }) async {
+    throw UnimplementedError();
+  }
+
+  @protected
+  @internal
+  @sealed
+  Future validateGrader({
+    // ignore: avoid-unused-parameters
+    required OpenAiGeneralGrader grader,
+  }) async {
+    throw UnimplementedError();
+  }
 }

@@ -5,14 +5,32 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @immutable
 final class OpenAIModerationResultCategoriesModel {
+  /// The harassment category.
+  final bool harassment;
+
+  /// The harassment and threatening category.
+  final bool harassmentAndThreatening;
+
   /// The hate category.
   final bool hate;
 
   /// The hate and threatening category.
   final bool hateAndThreatening;
 
+  /// The illicit category.
+  final bool illicit;
+
+  /// The illicit and violent category.
+  final bool illicitAndViolent;
+
   /// The self harm category.
   final bool selfHarm;
+
+  /// The self harm and instructions category.
+  final bool selfHarmAndInstructions;
+
+  /// The self harm intent category.
+  final bool selfHarmIntent;
 
   /// The sexual category.
   final bool sexual;
@@ -26,14 +44,32 @@ final class OpenAIModerationResultCategoriesModel {
   /// The violence and graphic category.
   final bool violenceAndGraphic;
 
+  /// Whether harassment is detected or not.
+  bool get isHarassment => harassment;
+
+  /// Whether harassment and threatening is detected or not.
+  bool get isHarassmentAndThreatening => harassmentAndThreatening;
+
   /// Whether hate is detected or not.
   bool get isHate => hate;
 
   /// Whether hate and threatening is detected or not.
   bool get isHateAndThreatening => hateAndThreatening;
 
+  /// Whether illicit is detected or not.
+  bool get isIllicit => illicit;
+
+  /// Whether illicit and violent is detected or not.
+  bool get isIllicitAndViolent => illicitAndViolent;
+
   /// Whether self harm is detected or not.
   bool get isSelfHarm => selfHarm;
+
+  /// Whether self harm and instructions is detected or not.
+  bool get isSelfHarmAndInstructions => selfHarmAndInstructions;
+
+  /// Whether self harm intent is detected or not.
+  bool get isSelfHarmIntent => selfHarmIntent;
 
   /// Whether sexual is detected or not.
   bool get isSexual => sexual;
@@ -55,21 +91,16 @@ final class OpenAIModerationResultCategoriesModel {
       !sexual &&
       !sexualAndMinors &&
       !violence &&
-      !violenceAndGraphic;
+      !violenceAndGraphic &&
+      !harassment &&
+      !harassmentAndThreatening &&
+      !illicit &&
+      !illicitAndViolent &&
+      !selfHarmAndInstructions &&
+      !selfHarmIntent;
 
   /// Whether the moderation request is not safe or not.
   bool get isNotSafe => !isSafe;
-
-  @override
-  int get hashCode {
-    return hate.hashCode ^
-        hateAndThreatening.hashCode ^
-        selfHarm.hashCode ^
-        sexual.hashCode ^
-        sexualAndMinors.hashCode ^
-        violence.hashCode ^
-        violenceAndGraphic.hashCode;
-  }
 
   /// This class is used to represent an OpenAI moderation job result categories.
   const OpenAIModerationResultCategoriesModel({
@@ -80,6 +111,12 @@ final class OpenAIModerationResultCategoriesModel {
     required this.sexualAndMinors,
     required this.violence,
     required this.violenceAndGraphic,
+    required this.harassment,
+    required this.harassmentAndThreatening,
+    required this.illicit,
+    required this.illicitAndViolent,
+    required this.selfHarmAndInstructions,
+    required this.selfHarmIntent,
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModerationResultCategoriesModel] object.
@@ -94,24 +131,12 @@ final class OpenAIModerationResultCategoriesModel {
       sexualAndMinors: json['sexual/minors'],
       violence: json['violence'],
       violenceAndGraphic: json['violence/graphic'],
+      harassment: json['harassment'],
+      harassmentAndThreatening: json['harassment/threatening'],
+      illicit: json['illicit'],
+      illicitAndViolent: json['illicit/violent'],
+      selfHarmAndInstructions: json['self-harm/instructions'],
+      selfHarmIntent: json['self-harm/intent'],
     );
-  }
-
-  @override
-  String toString() {
-    return 'OpenAIModerationResultCategoriesModel(hate: $hate, hateAndThreatening: $hateAndThreatening, selfHarm: $selfHarm, sexual: $sexual, sexualAndMinors: $sexualAndMinors, violence: $violence, violenceAndGraphic: $violenceAndGraphic)';
-  }
-
-  @override
-  bool operator ==(covariant OpenAIModerationResultCategoriesModel other) {
-    if (identical(this, other)) return true;
-
-    return other.hate == hate &&
-        other.hateAndThreatening == hateAndThreatening &&
-        other.selfHarm == selfHarm &&
-        other.sexual == sexual &&
-        other.sexualAndMinors == sexualAndMinors &&
-        other.violence == violence &&
-        other.violenceAndGraphic == violenceAndGraphic;
   }
 }

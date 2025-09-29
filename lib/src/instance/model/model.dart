@@ -58,11 +58,11 @@ interface class OpenAIModel implements OpenAIModelBase {
   /// ```
   @override
   Future<OpenAIModelModel> retrieve(
-    String id, {
+    String model, {
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.get<OpenAIModelModel>(
-      from: BaseApiUrlBuilder.build(endpoint, id),
+      from: BaseApiUrlBuilder.build(endpoint, model),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIModelModel.fromMap(response);
       },
@@ -80,10 +80,10 @@ interface class OpenAIModel implements OpenAIModelBase {
   /// ```
   @override
   Future<bool> delete(
-    String fineTuneId, {
+    String model, {
     http.Client? client,
   }) async {
-    final String fineTuneModelDelete = "$endpoint/$fineTuneId";
+    final String fineTuneModelDelete = "$endpoint/$model";
 
     return await OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.build(fineTuneModelDelete),

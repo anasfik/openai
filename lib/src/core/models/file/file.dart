@@ -14,6 +14,9 @@ final class OpenAIFileModel {
   /// The date the file was [created].
   final DateTime createdAt;
 
+  /// The date the file [expiresAt].
+  final DateTime? expiresAt;
+
   /// The name of the file.
   final String fileName;
 
@@ -36,6 +39,7 @@ final class OpenAIFileModel {
     required this.createdAt,
     required this.fileName,
     required this.purpose,
+    required this.expiresAt,
   });
 
   /// {@macro openai_file_model}
@@ -47,6 +51,9 @@ final class OpenAIFileModel {
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
       fileName: map['filename'] as String,
       purpose: map['purpose'] as String,
+      expiresAt: map['expires_at'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['expires_at'] as int)
+          : null,
     );
   }
 

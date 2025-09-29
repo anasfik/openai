@@ -1,7 +1,10 @@
+import 'package:dart_openai/src/instance/batch/batch.dart';
 import 'package:dart_openai/src/instance/conversations/conversations.dart';
 import 'package:dart_openai/src/instance/evals/evals.dart';
 import 'package:dart_openai/src/instance/graders/graders.dart';
 import 'package:dart_openai/src/instance/responses/responses.dart';
+import 'package:dart_openai/src/instance/uploads/uploads.dart';
+import 'package:dart_openai/src/instance/vector_stores/vector_stores.dart';
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/instance/edits/edits.dart';
 import 'package:dart_openai/src/instance/moderations/moderations.dart';
@@ -74,14 +77,23 @@ final class OpenAI extends OpenAIClientBase {
   ///
   OpenAIGraders get graders => OpenAIGraders();
 
+  ///
+  OpenAIBatch get batch => OpenAIBatch();
+
   /// The [OpenAIFiles] instance, used to access the files endpoints.
   OpenAIFiles get file => OpenAIFiles();
+
+  ///
+  OpenAIUploads get uploads => OpenAIUploads();
 
   /// The [OpenAIFineTunes] instance, used to access the fine-tunes endpoints.
   OpenAIFineTunes get fineTune => OpenAIFineTunes();
 
   /// The [OpenAIModeration] instance, used to access the moderation endpoints.
   OpenAIModeration get moderation => OpenAIModeration();
+
+  ///
+  OpenAIVectorStores get vectorStores => OpenAIVectorStores();
 
   /// The [OpenAIChat] instance, used to access the chat endpoints.
   OpenAIChat get chat => OpenAIChat();

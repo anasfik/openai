@@ -1,5 +1,7 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/models/file/expires_after.dart';
 import 'package:dart_openai/src/core/models/file/file.dart';
+import 'package:dart_openai/src/core/models/file/file_list.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:meta/meta.dart';
 
@@ -33,16 +35,29 @@ interface class OpenAIFiles implements OpenAIFilesBase {
   /// print(files.first.id);
   ///```
   @override
-  Future<List<OpenAIFileModel>> list({
+  Future<OpenAIFileListModel> list({
+    String? after,
+    int? limit,
+    String? order,
+    String? purpose,
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.get(
-      from: BaseApiUrlBuilder.build(endpoint),
+      from: BaseApiUrlBuilder.build(
+        endpoint,
+        null,
+        Uri(
+          queryParameters: {
+            if (after != null) "after": after,
+            if (limit != null) "limit": limit.toString(),
+            if (order != null) "order": order,
+            if (purpose != null) "purpose": purpose,
+          },
+        ).query,
+      ),
       client: client,
       onSuccess: (Map<String, dynamic> response) {
-        final List filesList = response["data"];
-
-        return filesList.map((e) => OpenAIFileModel.fromMap(e)).toList();
+        return OpenAIFileListModel.fromMap(response);
       },
     );
   }
@@ -111,11 +126,13 @@ interface class OpenAIFiles implements OpenAIFilesBase {
   Future<OpenAIFileModel> upload({
     required File file,
     required String purpose,
+    OpenAIFileExpiresAfter? expiresAfter,
   }) async {
     return await OpenAINetworkingClient.fileUpload(
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
         "purpose": purpose,
+        // if (expiresAfter != null) "expires_after": expiresAfter.toMap(),
       },
       file: file,
       onSuccess: (Map<String, dynamic> response) {

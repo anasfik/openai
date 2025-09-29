@@ -5,37 +5,44 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @immutable
 final class OpenAIModerationResultScoresModel {
-  /// The hate score of the moderation job.
+  /// The harassment category.
+  final double harassment;
+
+  /// The harassment and threatening category.
+  final double harassmentAndThreatening;
+
+  /// The hate category.
   final double hate;
 
-  /// The hate and threatening score of the moderation job.
+  /// The hate and threatening category.
   final double hateAndThreatening;
 
-  /// The self harm score of the moderation job.
+  /// The illicit category.
+  final double illicit;
+
+  /// The illicit and violent category.
+  final double illicitAndViolent;
+
+  /// The self harm category.
   final double selfHarm;
 
-  /// The sexual score of the moderation job.
+  /// The self harm and instructions category.
+  final double selfHarmAndInstructions;
+
+  /// The self harm intent category.
+  final double selfHarmIntent;
+
+  /// The sexual category.
   final double sexual;
 
-  /// The sexual and minors score of the moderation job.
+  /// The sexual and minors category.
   final double sexualAndMinors;
 
-  /// The violence score of the moderation job.
+  /// The violence category.
   final double violence;
 
-  /// The violence and graphic score of the moderation job.
+  /// The violence and graphic category.
   final double violenceAndGraphic;
-
-  @override
-  int get hashCode {
-    return hate.hashCode ^
-        hateAndThreatening.hashCode ^
-        selfHarm.hashCode ^
-        sexual.hashCode ^
-        sexualAndMinors.hashCode ^
-        violence.hashCode ^
-        violenceAndGraphic.hashCode;
-  }
 
   /// This class is used to represent an OpenAI moderation job result scores.
   const OpenAIModerationResultScoresModel({
@@ -46,6 +53,12 @@ final class OpenAIModerationResultScoresModel {
     required this.sexualAndMinors,
     required this.violence,
     required this.violenceAndGraphic,
+    required this.harassment,
+    required this.harassmentAndThreatening,
+    required this.illicit,
+    required this.illicitAndViolent,
+    required this.selfHarmAndInstructions,
+    required this.selfHarmIntent,
   });
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModerationResultScoresModel] object.
@@ -60,24 +73,12 @@ final class OpenAIModerationResultScoresModel {
       sexualAndMinors: json['sexual/minors'],
       violence: json['violence'],
       violenceAndGraphic: json['violence/graphic'],
+      harassment: json['harassment'],
+      harassmentAndThreatening: json['harassment/threatening'],
+      illicit: json['illicit'],
+      illicitAndViolent: json['illicit/violent'],
+      selfHarmAndInstructions: json['self-harm/instructions'],
+      selfHarmIntent: json['self-harm/intent'],
     );
-  }
-
-  @override
-  String toString() {
-    return 'OpenAIModerationResultScoresModel(hate: $hate, hateAndThreatening: $hateAndThreatening, selfHarm: $selfHarm, sexual: $sexual, sexualAndMinors: $sexualAndMinors, violence: $violence, violenceAndGraphic: $violenceAndGraphic)';
-  }
-
-  @override
-  bool operator ==(covariant OpenAIModerationResultScoresModel other) {
-    if (identical(this, other)) return true;
-
-    return other.hate == hate &&
-        other.hateAndThreatening == hateAndThreatening &&
-        other.selfHarm == selfHarm &&
-        other.sexual == sexual &&
-        other.sexualAndMinors == sexualAndMinors &&
-        other.violence == violence &&
-        other.violenceAndGraphic == violenceAndGraphic;
   }
 }
