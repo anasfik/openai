@@ -6,7 +6,7 @@ import 'package:dart_openai/src/core/models/graders/score_model_grader.dart';
 import 'package:dart_openai/src/core/models/graders/string_check_grader.dart';
 import 'package:dart_openai/src/core/models/graders/text_similarity_grader.dart';
 
-class OpenAIGraders {
+class OpenAIGraders implements OpenAIGradersBase {
   static StringCheckGrader stringCheckGrader({
     required String input,
     required String name,
@@ -102,4 +102,12 @@ class OpenAIGraders {
       calculateOutput: calculateOutput,
     );
   }
+
+  /// beta ùethods, planned to implement only if/when they are stable.
+
+  Future<dynamic> runGrader({
+    required OpenAiGeneralGrader grader,
+    required String modelSample,
+    Map<String, dynamic>? item,
+  });
 }

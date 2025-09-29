@@ -17,7 +17,7 @@
 
 </br>
 
-<h3>Help this grow and get discovered by people who might need it by starring it ⭐.</h3>
+<h3><b>The project is under rework and maintaining again, new version release 6.0.0 coming soon.</b></h3>
 
 </br>
 </br>
@@ -38,6 +38,7 @@ The package is designed to be lightweight and easy to use, so you can focus on b
 ### Thanks:
 
 Thanks to the contributors & sponsors of this project that it exists and is still maintained:
+
 - [Sponsors](https://github.com/sponsors/anasfik)
 - [Contributors](https://github.com/anasfik/openai/graphs/contributors)
 
@@ -163,8 +164,9 @@ OpenAI.baseUrl = "https://api.openai.com/v1"; // the default one.
 ```
 
 ### Enable debugging and logs
+
 You can make the package logs the operations flows and steps by setting the `showLogs`:
-  
+
 ```dart
 OpenAI.showLogs = true;
 ```
@@ -188,7 +190,7 @@ Lists the currently available models, and provides information about each one su
 ```dart
 List<OpenAIModelModel> models = await OpenAI.instance.model.list();
 OpenAIModelModel firstModel = models.first;
- 
+
 print(firstModel.id); // ...
 print(firstModel.permission); // ...
 ```
