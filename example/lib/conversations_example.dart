@@ -19,8 +19,6 @@ void main() async {
   // Created Conversation
   print("Created Conversation: $createdConversation");
 
-  await Future.delayed(Duration(seconds: 3));
-
   final gotConversation = await OpenAI.instance.conversations.get(
     conversationId: createdConversation.id,
   );

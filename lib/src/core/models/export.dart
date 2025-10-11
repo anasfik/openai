@@ -12,3 +12,5 @@ export '../enum.dart';
 export 'chat/chat.dart';
 export 'audio/audio.dart';
 export 'audio/chunking_strategy.dart';
+export 'conversation/conversation.dart';
+export 'conversation/conversation_item.dart';
