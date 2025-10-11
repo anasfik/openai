@@ -10,7 +10,7 @@ abstract class ListItemsInterface {
   /// [limit] - The maximum number of items to return (default: 20, max: 100).
   /// [order] - The order to sort items by (asc or desc, default: desc).
   /// [after] - The ID of the item to start after for pagination.
-  /// [before] - The ID of the item to end before for pagination.
+  /// [include] - Optional list of fields to include in the response.
   /// 
   /// Returns an [OpenAIConversationItemsResponse] with pagination metadata.
   Future<OpenAIConversationItemsResponse> listItems({
@@ -18,6 +18,6 @@ abstract class ListItemsInterface {
     int? limit,
     String? order,
     String? after,
-    String? before,
+    List<String>? include,
   });
 }

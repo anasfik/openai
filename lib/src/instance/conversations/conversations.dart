@@ -2,6 +2,7 @@ import 'package:dart_openai/src/core/base/conversations/conversations.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/conversation/conversation.dart';
+import 'package:dart_openai/src/core/models/conversation/conversation_item.dart';
 import 'package:dart_openai/src/core/models/conversation/conversation_items_response.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
@@ -83,33 +84,69 @@ class OpenAIConversations extends OpenAIConversationsBase {
     int? limit,
     String? order,
     String? after,
-    String? before,
+    List<String>? include,
   }) async {
-    // Build query parameters
-    final Map<String, String> queryParams = {};
-    if (limit != null) {
-      queryParams['limit'] = limit.toString();
-    }
-    if (order != null) {
-      queryParams['order'] = order;
-    }
-    if (after != null) {
-      queryParams['after'] = after;
-    }
-    if (before != null) {
-      queryParams['before'] = before;
-    }
+    final Map<String, String> queryParams = {
+      if (limit != null) 'limit': limit.toString(),
+      if (order != null) 'order': order,
+      if (after != null) 'after': after,
+      if (include != null) 'include': include.join(","),
+    };
 
     // Build the endpoint URL with conversation ID and items path
-    final itemsEndpoint = '$endpoint/$conversationId/items';
-    
+    final itemsEndpoint = '$endpoint';
+
     return await OpenAINetworkingClient.get<OpenAIConversationItemsResponse>(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: itemsEndpoint,
+        id: "$conversationId/items",
         query: queryParams,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIConversationItemsResponse.fromMap(response);
+      },
+    );
+  }
+
+  @override
+  Future<OpenAIConversationItemsResponse> createItems({
+    required String conversationId,
+    required List<Map<String, dynamic>> items,
+    List<String>? include,
+  }) async {
+    return await OpenAINetworkingClient.post<OpenAIConversationItemsResponse>(
+      to: BaseApiUrlBuilder.buildWithQuery(
+        endpoint: endpoint,
+        id: conversationId + "/items",
+        query: {
+          if (include != null) 'include': include.join(","),
+        },
+      ),
+      body: {
+        'items': items,
+      },
+      onSuccess: (Map<String, dynamic> response) {
+        return OpenAIConversationItemsResponse.fromMap(response);
+      },
+    );
+  }
+
+  @override
+  Future<OpenAIConversationItem> getItem({
+    required String conversationId,
+    required String itemId,
+    List<String>? include,
+  }) async {
+    return await OpenAINetworkingClient.get<OpenAIConversationItem>(
+      from: BaseApiUrlBuilder.buildWithQuery(
+        endpoint: endpoint,
+        id: "$conversationId/items/$itemId",
+        query: {
+          if (include != null) 'include': include.join(","),
+        },
+      ),
+      onSuccess: (Map<String, dynamic> response) {
+        return OpenAIConversationItem.fromMap(response);
       },
     );
   }

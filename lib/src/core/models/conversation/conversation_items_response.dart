@@ -30,7 +30,7 @@ class OpenAIConversationItemsResponse {
     final List<Map<String, dynamic>> itemsData = data is List
         ? data.cast<Map<String, dynamic>>()
         : <Map<String, dynamic>>[];
-    
+
     return OpenAIConversationItemsResponse(
       data: itemsData
           .map((Map<String, dynamic> item) => OpenAIConversationItem.fromMap(item))
