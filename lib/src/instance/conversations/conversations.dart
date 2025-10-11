@@ -2,7 +2,6 @@ import 'package:dart_openai/src/core/base/conversations/conversations.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/conversation/conversation.dart';
-import 'package:dart_openai/src/core/models/conversation/conversation_item.dart';
 import 'package:dart_openai/src/core/models/conversation/conversation_items_response.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
@@ -132,12 +131,12 @@ class OpenAIConversations extends OpenAIConversationsBase {
   }
 
   @override
-  Future<OpenAIConversationItem> getItem({
+  Future getItem({
     required String conversationId,
     required String itemId,
     List<String>? include,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIConversationItem>(
+    return await OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: endpoint,
         id: "$conversationId/items/$itemId",
@@ -146,7 +145,25 @@ class OpenAIConversations extends OpenAIConversationsBase {
         },
       ),
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIConversationItem.fromMap(response);
+        return response;
+      },
+    );
+  }
+
+  @override
+  Future<void> deleteItem({
+    required String conversationId,
+    required String itemId,
+  }) async {
+    OpenAINetworkingClient.delete(
+      from: BaseApiUrlBuilder.build(
+        endpoint,
+        "$conversationId/items/$itemId",
+      ),
+      onSuccess: (Map<String, dynamic> response) {
+        final deleted = response["deleted"];
+
+        return deleted is bool && deleted;
       },
     );
   }

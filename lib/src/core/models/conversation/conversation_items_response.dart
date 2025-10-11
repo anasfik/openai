@@ -1,11 +1,9 @@
-import 'package:dart_openai/src/core/models/conversation/conversation_item.dart';
-
 /// {@template openai_conversation_items_response}
 /// A model representing the response from the conversations list-items API.
 /// {@endtemplate}
 class OpenAIConversationItemsResponse {
   /// The list of conversation items.
-  final List<OpenAIConversationItem> data;
+  final List data;
 
   /// Whether there are more items available.
   final bool hasMore;
@@ -26,15 +24,10 @@ class OpenAIConversationItemsResponse {
 
   /// Creates a new [OpenAIConversationItemsResponse] from a JSON map.
   factory OpenAIConversationItemsResponse.fromMap(Map<String, dynamic> json) {
-    final Object? data = json['data'];
-    final List<Map<String, dynamic>> itemsData = data is List
-        ? data.cast<Map<String, dynamic>>()
-        : <Map<String, dynamic>>[];
+    final data = json["data"];
 
     return OpenAIConversationItemsResponse(
-      data: itemsData
-          .map((Map<String, dynamic> item) => OpenAIConversationItem.fromMap(item))
-          .toList(),
+      data: data,
       hasMore: json['has_more'] as bool? ?? false,
       firstId: json['first_id'] as String?,
       lastId: json['last_id'] as String?,
@@ -53,7 +46,7 @@ class OpenAIConversationItemsResponse {
 
   /// Creates a copy of this [OpenAIConversationItemsResponse] with the given fields replaced.
   OpenAIConversationItemsResponse copyWith({
-    List<OpenAIConversationItem>? data,
+    List? data,
     bool? hasMore,
     String? firstId,
     String? lastId,

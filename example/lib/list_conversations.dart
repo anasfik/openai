@@ -30,6 +30,15 @@ void main() async {
 
   final retrievedConversationItem = await OpenAI.instance.conversations.getItem(
     conversationId: conversationId,
-    itemId: conversationItems.data.first["id"],
+    itemId: (conversationItems.data.first as Map<String, dynamic>)["id"],
   );
+
+  print(retrievedConversationItem);
+
+  await OpenAI.instance.conversations.deleteItem(
+    conversationId: conversationId,
+    itemId: (conversationItems.data.first as Map<String, dynamic>)["id"],
+  );
+
+  print("Deleted Conversation Item Successfully");
 }
