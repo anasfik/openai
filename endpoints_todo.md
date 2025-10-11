@@ -2,14 +2,14 @@
 
 This document tracks the implementation status of all OpenAI API endpoints in the Dart OpenAI package.
 
-## 📊 Overall Progress: 65% Complete
+## 📊 Overall Progress: 67% Complete
 
 **Breakdown:**
 - ✅ **Core APIs**: 100% Complete (Chat, Completions, Images, Audio, Files, etc.)
 - ✅ **Legacy APIs**: 100% Complete (Edits, Old Fine-tuning)
 - ⚠️ **Newer APIs**: 20% Complete (Batch, Vector Stores have stub implementations only)
 - ❌ **Latest APIs**: 0% Complete (Assistants, Threads, Runs, New Fine-tuning)
-- 🔧 **Additional APIs**: 100% Complete (Responses - Official, Conversations, Evals, Graders, Uploads - Custom)
+- 🔧 **Additional APIs**: 100% Complete (Responses - Official, Conversations ✅, Evals, Graders, Uploads - Custom)
 
 ---
 
@@ -221,6 +221,8 @@ This document tracks the implementation status of all OpenAI API endpoints in th
 - [x] **Retrieve Conversation** - ✅ Implemented (Custom)
 - [x] **Update Conversation** - ✅ Implemented (Custom)
 - [x] **Delete Conversation** - ✅ Implemented (Custom)
+- [x] **Get Conversation Items** - ✅ Implemented (Custom)
+- [x] **Get Conversation Item** - ✅ Implemented (Custom)
 
 ### Evals API (Custom - Stub Implementation)
 - [~] **Create Eval** - ⚠️ Stub Implementation (Throws UnimplementedError)
