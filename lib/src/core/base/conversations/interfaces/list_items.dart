@@ -1,4 +1,4 @@
-import 'package:dart_openai/src/core/models/conversation/conversation_item.dart';
+import 'package:dart_openai/src/core/models/conversation/conversation_items_response.dart';
 
 /// {@template openai_conversations_list_items_interface}
 /// Interface for listing conversation items.
@@ -8,12 +8,16 @@ abstract class ListItemsInterface {
   /// 
   /// [conversationId] - The ID of the conversation to list items for.
   /// [limit] - The maximum number of items to return (default: 20, max: 100).
-  /// [offset] - The number of items to skip for pagination (default: 0).
+  /// [order] - The order to sort items by (asc or desc, default: desc).
+  /// [after] - The ID of the item to start after for pagination.
+  /// [before] - The ID of the item to end before for pagination.
   /// 
-  /// Returns a list of [OpenAIConversationItem] objects.
-  Future<List<OpenAIConversationItem>> listItems({
+  /// Returns an [OpenAIConversationItemsResponse] with pagination metadata.
+  Future<OpenAIConversationItemsResponse> listItems({
     required String conversationId,
     int? limit,
-    int? offset,
+    String? order,
+    String? after,
+    String? before,
   });
 }

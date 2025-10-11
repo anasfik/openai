@@ -14,3 +14,4 @@ export 'audio/audio.dart';
 export 'audio/chunking_strategy.dart';
 export 'conversation/conversation.dart';
 export 'conversation/conversation_item.dart';
+export 'conversation/conversation_items_response.dart';

@@ -2,7 +2,7 @@ import 'package:dart_openai/src/core/base/conversations/conversations.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/conversation/conversation.dart';
-import 'package:dart_openai/src/core/models/conversation/conversation_item.dart';
+import 'package:dart_openai/src/core/models/conversation/conversation_items_response.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:meta/meta.dart';
@@ -78,39 +78,38 @@ class OpenAIConversations extends OpenAIConversationsBase {
   }
 
   @override
-  Future<List<OpenAIConversationItem>> listItems({
+  Future<OpenAIConversationItemsResponse> listItems({
     required String conversationId,
     int? limit,
-    int? offset,
+    String? order,
+    String? after,
+    String? before,
   }) async {
     // Build query parameters
     final Map<String, String> queryParams = {};
     if (limit != null) {
       queryParams['limit'] = limit.toString();
     }
-    if (offset != null) {
-      queryParams['offset'] = offset.toString();
+    if (order != null) {
+      queryParams['order'] = order;
+    }
+    if (after != null) {
+      queryParams['after'] = after;
+    }
+    if (before != null) {
+      queryParams['before'] = before;
     }
 
     // Build the endpoint URL with conversation ID and items path
     final itemsEndpoint = '$endpoint/$conversationId/items';
     
-    return await OpenAINetworkingClient.get<List<OpenAIConversationItem>>(
+    return await OpenAINetworkingClient.get<OpenAIConversationItemsResponse>(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: itemsEndpoint,
         query: queryParams,
       ),
       onSuccess: (Map<String, dynamic> response) {
-        final Object? data = response['data'];
-        if (data is! List) {
-          return <OpenAIConversationItem>[];
-        }
-        final List<Object?> itemsData = data;
-        return itemsData
-            .whereType<Map<String, Object?>>()
-            .map<OpenAIConversationItem>((Map<String, Object?> item) => 
-                OpenAIConversationItem.fromMap(Map<String, dynamic>.from(item)))
-            .toList();
+        return OpenAIConversationItemsResponse.fromMap(response);
       },
     );
   }
