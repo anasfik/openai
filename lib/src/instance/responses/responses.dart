@@ -98,24 +98,59 @@ class OpenAIResponses extends OpenAIResponsesBase {
   }) async {
     await OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.build(endpoint, responseId),
-      onSuccess: (Map<String, dynamic> response) {},
+      onSuccess: (Map<String, dynamic> response) {
+        final deleted = response["deleted"];
+
+        return deleted is bool && deleted;
+      },
     );
   }
 
   @override
   Future<OpenAiResponse> get({
     required String responseId,
-    List? include,
+    List<String>? include,
     bool? include_obfuscation,
     int? startingAfter,
   }) async {
     return await OpenAINetworkingClient.get<OpenAiResponse>(
-      from: BaseApiUrlBuilder.build(
-        endpoint,
-        responseId,
+      from: BaseApiUrlBuilder.buildWithQuery(
+        endpoint: endpoint,
+        id: responseId,
+        query: {
+          if (include != null) "include": include.join(","),
+          if (include_obfuscation != null)
+            "include_obfuscation": include_obfuscation.toString(),
+          if (startingAfter != null) "starting_after": startingAfter.toString(),
+        },
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAiResponse.fromMap(response);
+      },
+    );
+  }
+
+  @override
+  Future<OpenAiResponseInputItemsList> listInputItems({
+    required String responseId,
+    String? after,
+    List<String>? include,
+    int? limit,
+    String? order,
+  }) async {
+    return await OpenAINetworkingClient.get<OpenAiResponseInputItemsList>(
+      from: BaseApiUrlBuilder.buildWithQuery(
+        endpoint: endpoint,
+        id: responseId + '/input_items',
+        query: {
+          if (after != null) "after": after,
+          if (include != null) "include": include.join(","),
+          if (limit != null) "limit": limit.toString(),
+          if (order != null) "order": order,
+        },
+      ),
+      onSuccess: (Map<String, dynamic> response) {
+        return OpenAiResponseInputItemsList.fromMap(response);
       },
     );
   }

@@ -31,6 +31,30 @@ abstract class BaseApiUrlBuilder {
     return apiLink;
   }
 
+  static String buildWithQuery({
+    required String endpoint,
+    required Map<String, String> query,
+    String? id,
+  }) {
+    final baseUrl = OpenAIConfig.baseUrl;
+    final version = OpenAIConfig.version;
+    final usedEndpoint = _handleEndpointsStarting(endpoint);
+
+    String apiLink = "$baseUrl";
+    apiLink += "/$version";
+    apiLink += "$usedEndpoint";
+
+    if (id != null && id.isNotEmpty) {
+      apiLink = apiLink + "/$id";
+    }
+
+    if (query.isNotEmpty) {
+      apiLink += "?${Uri(queryParameters: query).toString()}";
+    }
+
+    return apiLink;
+  }
+
   // This is used to handle the endpoints that don't start with a slash.
   static String _handleEndpointsStarting(String endpoint) {
     return endpoint.startsWith("/") ? endpoint : "/$endpoint";
