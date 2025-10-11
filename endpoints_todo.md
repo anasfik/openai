@@ -9,7 +9,7 @@ This document tracks the implementation status of all OpenAI API endpoints in th
 - ✅ **Legacy APIs**: 100% Complete (Edits, Old Fine-tuning)
 - ⚠️ **Newer APIs**: 20% Complete (Batch, Vector Stores have stub implementations only)
 - ❌ **Latest APIs**: 0% Complete (Assistants, Threads, Runs, New Fine-tuning)
-- 🔧 **Custom APIs**: 100% Complete (Responses, Conversations, Evals, Graders, Uploads)
+- 🔧 **Additional APIs**: 100% Complete (Responses - Official, Conversations, Evals, Graders, Uploads - Custom)
 
 ---
 
@@ -206,23 +206,23 @@ This document tracks the implementation status of all OpenAI API endpoints in th
 
 ---
 
-## 🔧 Custom Implementations (Non-Standard)
+## 🔧 Additional Implementations
 
-### Responses API
-- [x] **Create Response** - ✅ Implemented (Custom)
-- [x] **List Responses** - ✅ Implemented (Custom)
-- [x] **Retrieve Response** - ✅ Implemented (Custom)
-- [x] **Update Response** - ✅ Implemented (Custom)
-- [x] **Delete Response** - ✅ Implemented (Custom)
+### Responses API (Official OpenAI)
+- [x] **Create Response** - ✅ Implemented (Official OpenAI API)
+- [x] **List Responses** - ✅ Implemented (Official OpenAI API)
+- [x] **Retrieve Response** - ✅ Implemented (Official OpenAI API)
+- [x] **Update Response** - ✅ Implemented (Official OpenAI API)
+- [x] **Delete Response** - ✅ Implemented (Official OpenAI API)
 
-### Conversations API
+### Conversations API (Custom)
 - [x] **Create Conversation** - ✅ Implemented (Custom)
 - [x] **List Conversations** - ✅ Implemented (Custom)
 - [x] **Retrieve Conversation** - ✅ Implemented (Custom)
 - [x] **Update Conversation** - ✅ Implemented (Custom)
 - [x] **Delete Conversation** - ✅ Implemented (Custom)
 
-### Evals API
+### Evals API (Custom - Stub Implementation)
 - [~] **Create Eval** - ⚠️ Stub Implementation (Throws UnimplementedError)
 - [~] **List Evals** - ⚠️ Stub Implementation (Throws UnimplementedError)
 - [~] **Retrieve Eval** - ⚠️ Stub Implementation (Throws UnimplementedError)
@@ -236,14 +236,14 @@ This document tracks the implementation status of all OpenAI API endpoints in th
 - [~] **Get Eval Run Output Items** - ⚠️ Stub Implementation (Throws UnimplementedError)
 - [~] **Get Eval Run Output Item** - ⚠️ Stub Implementation (Throws UnimplementedError)
 
-### Graders API
+### Graders API (Custom)
 - [x] **Create Grader** - ✅ Implemented (Custom)
 - [x] **List Graders** - ✅ Implemented (Custom)
 - [x] **Retrieve Grader** - ✅ Implemented (Custom)
 - [x] **Update Grader** - ✅ Implemented (Custom)
 - [x] **Delete Grader** - ✅ Implemented (Custom)
 
-### Uploads API
+### Uploads API (Custom)
 - [x] **Create Upload** - ✅ Implemented (Custom)
 - [x] **List Uploads** - ✅ Implemented (Custom)
 - [x] **Retrieve Upload** - ✅ Implemented (Custom)
@@ -317,12 +317,12 @@ The following APIs are **critical** and should be implemented as soon as possibl
 2. **Misleading Status**: Previous assessment incorrectly marked stub implementations as "implemented"
 3. **Missing Core APIs**: Assistants, Threads, Messages, Runs APIs are completely missing
 
-### Custom APIs (Not Official OpenAI)
-The package includes several custom APIs that are not part of the official OpenAI API:
-- **Responses API** - Custom response management (✅ Fully Implemented)
-- **Conversations API** - Custom conversation handling (✅ Fully Implemented)
+### Additional APIs
+The package includes several additional APIs:
+- **Responses API** - Official OpenAI API for response management (✅ Fully Implemented)
+- **Conversations API** - Custom conversation handling system (✅ Fully Implemented)
 - **Graders API** - Custom grading system (✅ Fully Implemented)
-- **Uploads API** - Custom upload management (✅ Fully Implemented)
+- **Uploads API** - Custom upload management system (✅ Fully Implemented)
 
 ### Stub Implementations (Need Real Implementation)
 - **Evals API** - Has interfaces and models but all methods throw UnimplementedError

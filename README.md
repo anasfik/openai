@@ -107,14 +107,14 @@ print(chatCompletion.choices.first.message.content);
 | **🛡️ Moderation** | ✅ Complete | Content policy classification |
 | **✏️ Edits** | ✅ Complete | Text editing (deprecated by OpenAI) |
 
-### 🔧 Custom APIs (100% Implemented)
+### 🔧 Additional APIs (100% Implemented)
 
 | API Category | Status | Description |
 |--------------|--------|-------------|
-| **📋 Responses** | ✅ Complete | Custom response management system |
-| **💭 Conversations** | ✅ Complete | Custom conversation handling |
+| **📋 Responses** | ✅ Complete | OpenAI Responses API with input-items support |
+| **💭 Conversations** | ✅ Complete | Custom conversation handling system |
 | **📊 Graders** | ✅ Complete | Custom grading system |
-| **📤 Uploads** | ✅ Complete | Custom upload management |
+| **📤 Uploads** | ✅ Complete | Custom upload management system |
 
 ### ⚠️ Stub Implementations (Need Real Implementation)
 
@@ -240,9 +240,9 @@ OpenAIAudioModel translation = await OpenAI.instance.audio.createTranslation(
 );
 ```
 
-### Custom APIs
+### Additional APIs
 
-#### 📋 Responses API
+#### 📋 Responses API (Official OpenAI)
 ```dart
 // Create response
 OpenAIResponseModel response = await OpenAI.instance.responses.create(
@@ -265,7 +265,7 @@ OpenAIResponseModel updatedResponse = await OpenAI.instance.responses.update(
 bool deleted = await OpenAI.instance.responses.delete("response-id");
 ```
 
-#### 💭 Conversations API
+#### 💭 Conversations API (Custom)
 ```dart
 // Create conversation
 OpenAIConversationModel conversation = await OpenAI.instance.conversations.create(
@@ -279,7 +279,7 @@ List<OpenAIConversationModel> conversations = await OpenAI.instance.conversation
 OpenAIConversationModel conversation = await OpenAI.instance.conversations.retrieve("conversation-id");
 ```
 
-#### 📊 Graders API
+#### 📊 Graders API (Custom)
 ```dart
 // Create grader
 OpenAIGraderModel grader = await OpenAI.instance.graders.create(
@@ -290,7 +290,7 @@ OpenAIGraderModel grader = await OpenAI.instance.graders.create(
 List<OpenAIGraderModel> graders = await OpenAI.instance.graders.list();
 ```
 
-#### 📤 Uploads API
+#### 📤 Uploads API (Custom)
 ```dart
 // Create upload
 OpenAIUploadModel upload = await OpenAI.instance.uploads.create(
