@@ -7,7 +7,7 @@ Future<void> main() async {
   OpenAI.apiKey = Env.apiKey;
 
   // List all files.
-  List<OpenAIFileModel> files = await OpenAI.instance.file.list();
+  final files = await OpenAI.instance.file.list();
 
   // Print the files.
   print(files);

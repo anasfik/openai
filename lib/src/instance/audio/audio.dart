@@ -53,7 +53,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   /// );
   /// ```
   @override
-  Future<OpenAIAudioModel> createTranscription({
+  Future<OpenAITranscriptionGeneralModel> createTranscription({
     required File file,
     required String model,
     OpenAIAudioChunkingConfig? chunkingStrategy,
@@ -62,6 +62,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
     List<OpenAIAudioTimestampGranularity>? timestampGranularities,
+    List<String>? include,
   }) async {
     return await OpenAINetworkingClient.fileUpload(
       file: file,
@@ -80,9 +81,13 @@ interface class OpenAIAudio implements OpenAIAudioBase {
               chunkingStrategy.type == OpenAIAudioChunkingStrategy.auto
                   ? "auto"
                   : jsonEncode(chunkingStrategy.toMap()),
+        if (include != null && include.isNotEmpty)
+          "include[]": include.join(","),
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIAudioModel.fromMap(response);
+        return responseFormat == OpenAIAudioResponseFormat.verbose_json
+            ? OpenAITranscriptionVerboseModel.fromMap(response)
+            : OpenAITranscriptionModel.fromMap(response);
       },
       responseMapAdapter: (res) {
         return {"text": res};
@@ -115,7 +120,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   /// );
   /// ```
   @override
-  Future<OpenAIAudioModel> createTranslation({
+  Future<String> createTranslation({
     required File file,
     required String model,
     String? prompt,
@@ -132,7 +137,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         if (temperature != null) "temperature": temperature.toString(),
       },
       onSuccess: (Map<String, dynamic> response) {
-        return OpenAIAudioModel.fromMap(response);
+        return response["text"] as String;
       },
       responseMapAdapter: (res) {
         try {
@@ -172,6 +177,9 @@ interface class OpenAIAudio implements OpenAIAudioBase {
       onFileResponse: (File res) {
         return res;
       },
+      outputFileExtension: responseFormat != null
+          ? responseFormat.name
+          : OpenAIAudioSpeechResponseFormat.mp3.name,
       outputFileName: outputFileName,
       outputDirectory: outputDirectory,
     );

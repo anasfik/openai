@@ -11,19 +11,28 @@ Future<void> main() async {
 // Set the OpenAI API key from the .env file.
   OpenAI.apiKey = Env.apiKey;
 
+  final textAudioFile =
+      "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3";
+
 // create the audio transcription.
   final transcription = await OpenAI.instance.audio.createTranscription(
-    file: await getFileFromUrl(
-      'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
-    ),
     model: "whisper-1",
+    file: await getFileFromUrl(textAudioFile),
+    include: ["logprobs"],
     responseFormat: OpenAIAudioResponseFormat.verbose_json,
-    timestampGranularities: [OpenAIAudioTimestampGranularity.segment],
+    language: "en",
+    prompt: "transcribe this audio with 0.5x speed",
   );
 
-  // print the transcription.
-  print(transcription.text);
-  print(transcription.segments?.map((e) => e.end));
+  if (transcription is OpenAITranscriptionModel) {
+    print(transcription.logprobs);
+    print(transcription.text);
+    print(transcription.usage);
+  } else if (transcription is OpenAITranscriptionVerboseModel) {
+    // print the transcription.
+    print(transcription.text);
+    print(transcription.segments?.map((e) => e.end));
+  }
 }
 
 Future<File> getFileFromUrl(String networkUrl) async {

@@ -6,14 +6,27 @@ import 'package:example/env/env.dart';
 void main() async {
   OpenAI.apiKey = Env.apiKey;
 
+  final outputDir = Directory('speechOutput');
+
+  final exists = await outputDir.exists();
+
+  final input = "I should've been strong";
+  final model = "tts-1";
+  final voice = OpenAIAudioVoice.fable;
+
+  final fileName = [
+    model,
+    DateTime.now().millisecond.toString(),
+  ].join('_');
+
   // The speech request.
   File speechFile = await OpenAI.instance.audio.createSpeech(
-    model: "tts-1",
-    input: "it is what it is.",
-    voice: OpenAIAudioVoice.nova,
-    responseFormat: OpenAIAudioSpeechResponseFormat.opus,
-    outputDirectory: await Directory("speechOutput").create(),
-    outputFileName: DateTime.now().microsecondsSinceEpoch.toString(),
+    model: model,
+    input: input,
+    voice: voice,
+    responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
+    outputDirectory: exists ? outputDir : await outputDir.create(),
+    outputFileName: fileName,
   );
 
   // The file result.

@@ -205,14 +205,16 @@ abstract class OpenAINetworkingClient {
     required String outputFileName,
     required Directory? outputDirectory,
     Map<String, dynamic>? body,
+    String? outputFileExtension,
     http.Client? client,
   }) async {
     var response = await postAndGetResponse(to: to, body: body, client: client);
 
     final fileTypeHeader = "content-type";
 
-    final fileExtensionFromBodyResponseFormat =
-        response.headers[fileTypeHeader]?.split("/").last ?? "mp3";
+    final fileExtensionFromBodyResponseFormat = outputFileExtension ??
+        response.headers[fileTypeHeader]?.split("/").last ??
+        "mp3";
 
     final fileName = outputFileName + "." + fileExtensionFromBodyResponseFormat;
 

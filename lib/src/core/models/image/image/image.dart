@@ -4,6 +4,33 @@ import 'sub_models/data.dart';
 
 export 'sub_models/data.dart';
 
+extension QualityToStingExtension on OpenAIImageQuality {
+  String get value {
+    return name;
+
+    // ! pretty sure this will be needed in the future in case of adding more qualities that can't be got from the `name` field.
+    // switch (this) {
+    //   case OpenAIImageQuality.hd:
+    //     return "hd";
+    // }
+  }
+}
+
+enum OpenAIImageModelOutputFormat {
+  png,
+  jpeg,
+  webp;
+}
+
+enum OpenAIImageQuality {
+  auto,
+  high,
+  medium,
+  low,
+  hd,
+  standard;
+}
+
 @immutable
 final class OpenAIImageModel {
   /// The time the image was [created].

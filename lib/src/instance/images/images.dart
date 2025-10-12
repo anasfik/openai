@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/enum.dart';
 import 'package:dart_openai/src/core/models/image/image/image.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:meta/meta.dart';
@@ -8,7 +9,6 @@ import 'package:meta/meta.dart';
 import '../../core/base/images/base.dart';
 import '../../core/constants/strings.dart';
 
-import '../../core/enum.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;
@@ -80,12 +80,12 @@ interface class OpenAIImages implements OpenAIImagesBase {
     String? moderation,
     int? n,
     int? outputCompression,
-    String? outputFormat,
+    OpenAIImageModelOutputFormat? outputFormat,
     int? partialImages,
-    String? quality,
+    OpenAIImageQuality? quality,
     OpenAIImageResponseFormat? responseFormat,
     OpenAIImageSize? size,
-    String? style,
+    OpenAIImageStyle? style,
     String? user,
     http.Client? client,
   }) async {
@@ -104,9 +104,9 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (background != null) "background": background,
         if (moderation != null) "moderation": moderation,
         if (outputCompression != null) "output_compression": outputCompression,
-        if (outputFormat != null) "output_format": outputFormat,
+        if (outputFormat != null) "output_format": outputFormat.name,
         if (partialImages != null) "partial_images": partialImages,
-        if (style != null) "style": style,
+        if (style != null) "style": style.name,
       },
       client: client,
     );
@@ -159,14 +159,14 @@ interface class OpenAIImages implements OpenAIImagesBase {
     required File image,
     required String prompt,
     String? background,
-    String? inputFidelity,
+    OpenAIImageInputFidelity? inputFidelity,
     File? mask,
     String? model,
     int? n,
     int? outputCompression,
-    String? outputFormat,
+    OpenAIImageModelOutputFormat? outputFormat,
     int? partialImages,
-    String? quality,
+    OpenAIImageQuality? quality,
     OpenAIImageResponseFormat? responseFormat,
     OpenAIImageSize? size,
     String? user,
@@ -183,12 +183,12 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (size != null) "size": size.value,
         if (responseFormat != null) "response_format": responseFormat.value,
         if (background != null) "background": background,
-        if (inputFidelity != null) "input_fidelity": inputFidelity,
+        if (inputFidelity != null) "input_fidelity": inputFidelity.name,
         if (outputCompression != null)
           "output_compression": outputCompression.toString(),
-        if (outputFormat != null) "output_format": outputFormat,
         if (partialImages != null) "partial_images": partialImages.toString(),
-        if (quality != null) "quality": quality,
+        if (outputFormat != null) "output_format": outputFormat.name,
+        if (quality != null) "quality": quality.value,
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {

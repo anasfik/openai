@@ -224,6 +224,9 @@ This document tracks the implementation status of all OpenAI API endpoints in th
 - [x] **Get Conversation Items** - ✅ Implemented (Custom)
 - [x] **Get Conversation Item** - ✅ Implemented (Custom)
 
+### Videos API (Custom)
+- [~] None
+
 ### Evals API (Custom - Stub Implementation)
 - [~] **Create Eval** - ⚠️ Stub Implementation (Throws UnimplementedError)
 - [~] **List Evals** - ⚠️ Stub Implementation (Throws UnimplementedError)

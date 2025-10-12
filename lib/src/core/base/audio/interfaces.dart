@@ -26,7 +26,7 @@ abstract class CreateInterface {
     Directory? outputDirectory,
   });
 
-  Future<OpenAIAudioModel> createTranscription({
+  Future<OpenAITranscriptionGeneralModel> createTranscription({
     required File file,
     required String model,
     String? prompt,
@@ -37,7 +37,7 @@ abstract class CreateInterface {
     OpenAIAudioChunkingConfig? chunkingStrategy,
   });
 
-  Future<OpenAIAudioModel> createTranslation({
+  Future<String> createTranslation({
     required File file,
     required String model,
     String? prompt,
