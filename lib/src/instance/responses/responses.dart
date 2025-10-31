@@ -57,6 +57,7 @@ class OpenAIResponses extends OpenAIResponsesBase {
         if (metadata != null) "metadata": metadata,
         if (model != null) "model": model,
         if (parallelToolCalls != null) "parallel_tool_calls": parallelToolCalls,
+        if (previousResponseId != null) "previous_response_id": previousResponseId,
         if (prompt != null) "prompt": prompt,
         if (promptCacheKey != null) "prompt_cache_key": promptCacheKey,
         if (reasoning != null) "reasoning": reasoning,
