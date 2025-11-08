@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.1
+
+- Fixed Image Edit's image mime type issue.
+
 ## 6.0.0
 
 -  Complete rewrite, retest and implementation for the package to match latest API changes from OpenAI including all new features and endpoints.

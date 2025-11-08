@@ -52,7 +52,7 @@ class OpenAiBatchModel {
     String? object,
     String? endpoint,
     String? model,
-    dynamic errors,
+    errors,
     String? inputFileId,
     String? completionWindow,
     String? status,

@@ -4,6 +4,7 @@ import "dart:io";
 import "dart:typed_data";
 import "package:dart_openai/src/core/constants/config.dart";
 import "package:dart_openai/src/core/utils/extensions.dart";
+import 'package:http_parser/http_parser.dart';
 
 import 'package:dart_openai/dart_openai.dart';
 import "package:dart_openai/src/core/builder/headers.dart";
@@ -466,7 +467,11 @@ abstract class OpenAINetworkingClient {
 
     request.headers.addAll(headers);
 
-    final file = await http.MultipartFile.fromPath("image", image.path);
+    final file = await http.MultipartFile.fromPath(
+      "image",
+      image.path,
+      contentType: mediaTypeFromFilePath(image.path),
+    );
 
     final maskFile = mask != null
         ? await http.MultipartFile.fromPath("mask", mask.path)
@@ -688,5 +693,24 @@ abstract class OpenAINetworkingClient {
 
   static http.Client _streamingHttpClient() {
     return createClient();
+  }
+
+  static MediaType? mediaTypeFromFilePath(String path) {
+    final extension = path.split('.').last.toLowerCase();
+    switch (extension) {
+      case 'png':
+        return MediaType('image', 'png');
+      case 'jpg':
+      case 'jpeg':
+        return MediaType('image', 'jpeg');
+      case 'gif':
+        return MediaType('image', 'gif');
+      case 'bmp':
+        return MediaType('image', 'bmp');
+      case 'webp':
+        return MediaType('image', 'webp');
+      default:
+        return null;
+    }
   }
 }
