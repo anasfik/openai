@@ -6,6 +6,8 @@ import 'sub-models/usage.dart';
 export 'sub-models/data.dart';
 export 'sub-models/usage.dart';
 
+enum EncodingFormat { float, base64 }
+
 /// {@template openai_embeddings_model}
 /// This class is used to represent an OpenAI embeddings request.
 /// {@endtemplate}

@@ -154,4 +154,43 @@ class OpenAIResponses extends OpenAIResponsesBase {
       },
     );
   }
+
+  @override
+  Future<int> getInputTokenCounts(
+    conversation,
+    input,
+    String? instructions,
+    String? model,
+    bool? parallelToolCalls,
+    String? previousResponseId,
+    reasoning,
+    text,
+    toolChoice,
+    List? tools,
+    String? truncation,
+  ) async {
+    return await OpenAINetworkingClient.post<int>(
+      to: BaseApiUrlBuilder.build(
+        endpoint,
+        'input_tokens',
+      ),
+      body: {
+        if (conversation != null) "conversation": conversation,
+        if (input != null) "input": input,
+        if (instructions != null) "instructions": instructions,
+        if (model != null) "model": model,
+        if (parallelToolCalls != null) "parallel_tool_calls": parallelToolCalls,
+        if (previousResponseId != null)
+          "previous_response_id": previousResponseId,
+        if (reasoning != null) "reasoning": reasoning,
+        if (text != null) "text": text,
+        if (toolChoice != null) "tool_choice": toolChoice,
+        if (tools != null) "tools": tools,
+        if (truncation != null) "truncation": truncation,
+      },
+      onSuccess: (Map<String, dynamic> response) {
+        return int.parse(response['input_tokens']);
+      },
+    );
+  }
 }

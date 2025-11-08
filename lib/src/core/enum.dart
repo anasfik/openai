@@ -19,6 +19,23 @@ enum OpenAIImageSize {
         return "1024x1792";
     }
   }
+
+  static OpenAIImageSize fromValue(String value) {
+    switch (value) {
+      case "256x256":
+        return OpenAIImageSize.size256;
+      case "512x512":
+        return OpenAIImageSize.size512;
+      case "1024x1024":
+        return OpenAIImageSize.size1024;
+      case "1792x1024":
+        return OpenAIImageSize.size1792Horizontal;
+      case "1024x1792":
+        return OpenAIImageSize.size1792Vertical;
+      default:
+        throw ArgumentError("Invalid value for OpenAIImageSize: $value");
+    }
+  }
 }
 
 enum OpenAIImageStyle {
@@ -44,10 +61,11 @@ enum OpenAIImageResponseFormat {
   }
 }
 
-
 enum OpenAIImageInputFidelity {
-  high, low; 
+  high,
+  low;
 }
+
 enum OpenAIAudioTimestampGranularity { word, segment }
 
 enum OpenAIAudioResponseFormat { json, text, srt, verbose_json, vtt }

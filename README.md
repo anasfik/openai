@@ -93,32 +93,32 @@ print(chatCompletion.choices.first.message.content);
 
 ## 📊 API Coverage (2025)
 
-| API feature | Status | Details |
-|--------------|--------|----------|
-| **📋 [Responses](#-responses)** | ✅ Complete | excluding stream functionality |
-| **💭 [Conversations](#-conversations)** | ✅ Complete | All |
-| **🎵 [Audio](#-audio)** | ✅ Complete | All |
-| **🎬 [Videos](#-videos)** | 🗓️ planned | - |
-| **🎨 [Images](#-images)** | ✅ Complete | All |
-| **🎨 [Images Streaaming](#-images-streaaming)** | 🗓️ planned | - |
-| **📊 [Embeddings](#-embeddings)** | ✅ Complete | All |
-| **⚖️ [Evals](#️-evals)** | 🗓️ planned | - |
-| **🔧 [Fine-tuning](#-fine-tuning)** | 🧩 70% Complete | missing newer endpoints |
-| **📊 [Graders](#-graders)** | ✅ Complete | All |
-| **📦 [Batch](#-batch)** | 🗓️ planned | - |
-| **📁 [Files](#-files)** | ✅ Complete | All |
-| **📤 [Uploads](#-uploads)** | 🗓️ planned | - |
-| **🤖 [Models](#-models)** | ✅ Complete | All |
-| **🛡️ [Moderation](#️-moderation)** | ✅ Complete | All|
-| **🗃️ [Vector Stores](#️-vector-stores)** | 🗓️ planned  | - |
-| **💬 ChatKit** | ❌ NOt planned  | Beta feature |
-| **📦 [Containers](#-containers)** | 🗓️ planned  | - |
-| **🕛 [Real-time](#-real-time)** | 🗓️ planned  | - |
-| **💬 [Chat Completions](#-chat-completions)** | ✅ Complete | excluding stream functionality |
-| **🤖 Assistants** | NOt planned | beta feature |
-| **🤖 [Administration](#-administration)** | 🗓️ planned | - |
-| **📝 Completions (Legacy)** | ✅ Complete | Create, Stream, Log probabilities |
-| **✏️ Edits (Legacy)** | ✅ Complete | Text editing (deprecated by OpenAI) |
+| API feature | Status | Details | Last Updated |
+|--------------|--------|----------| --------------|
+| **📋 [Responses](#-responses)** | ✅ Complete | All |  11-08-2025 17:33:39 |
+| **💭 [Conversations](#-conversations)** | ✅ Complete | All | 11-08-2025 17:38:56 |
+| **🎵 [Audio](#-audio)** | ✅ Complete | All | 11-08-2025 17:42:54 |
+| **🎬 [Videos](#-videos)** | 🗓️ planned | - ||
+| **🎨 [Images](#-images)** | ✅ Complete | All |  11-08-2025 17:53:45 |
+| **🎨 [Images Streaaming](#-images-streaaming)** | 🗓️ planned | - ||
+| **📊 [Embeddings](#-embeddings)** | ✅ Complete | All |  11-08-2025 17:56:30 |
+| **⚖️ [Evals](#️-evals)** | ✅ Complete | All |  11-08-2025 21:04:36 |
+| **🔧 [Fine-tuning](#-fine-tuning)** | 🧩 70% Complete | missing newer endpoints ||
+| **📊 [Graders](#-graders)** | ✅ Complete | All ||
+| **📦 [Batch](#-batch)** | 🗓️ planned | - ||
+| **📁 [Files](#-files)** | ✅ Complete | All ||
+| **📤 [Uploads](#-uploads)** | 🗓️ planned | - ||
+| **🤖 [Models](#-models)** | ✅ Complete | All ||
+| **🛡️ [Moderation](#️-moderation)** | ✅ Complete | All||
+| **🗃️ [Vector Stores](#️-vector-stores)** | 🗓️ planned  | - ||
+| **💬 ChatKit** | ❌ NOt planned  | Beta feature ||
+| **📦 [Containers](#-containers)** | 🗓️ planned  | - ||
+| **🕛 [Real-time](#-real-time)** | 🗓️ planned  | - ||
+| **💬 [Chat Completions](#-chat-completions)** | ✅ Complete | excluding stream functionality ||
+| **🤖 Assistants** | NOt planned | beta feature ||
+| **🤖 [Administration](#-administration)** | 🗓️ planned | - ||
+| **📝 Completions (Legacy)** | ✅ Complete | Create, Stream, Log probabilities ||
+| **✏️ Edits (Legacy)** | ✅ Complete | Text editing (deprecated by OpenAI) ||
 
 ---
 
@@ -146,12 +146,6 @@ await OpenAI.instance.responses.delete(
   responseId: "response-id-here",
 );
 
-// Update response
-OpenAIResponseModel updatedResponse = await OpenAI.instance.responses.update(
-  "response-id",
-  // ... update parameters
-);
-
 // Cancel response
 OpenAiResponse response = await OpenAI.instance.responses.cancel(
   responseId: "response-id-here",
@@ -163,6 +157,12 @@ OpenAiResponseInputItemsList response = await OpenAI.instance.responses.listInpu
   limit: 10, 
 );
 
+
+// Get input token counts
+int inputTokens = await OpenAI.instance.responses.getInputTokenCounts(
+  model: "gpt-5",
+  input: "Your input text here",
+);
 ```
 
 #### 💭 Conversations
@@ -170,9 +170,11 @@ OpenAiResponseInputItemsList response = await OpenAI.instance.responses.listInpu
 ```dart
 // Create conversation
 OpenAIConversation conversation = await OpenAI.instance.conversations.create(
-  items: [
-    // ...
-  ],
+  items: [{
+    "type": "message",
+    "role": "user",
+    "content": "Hello!",
+  }],
   metadata: {
     "key": "value",
     "another_key": "another_value",
@@ -318,7 +320,79 @@ OpenAIEmbeddingsModel embedding = await OpenAI.instance.embedding.create(
 
 #### ⚖️ Evals
 
-// (To be implemented)
+```dart
+// Create eval
+OpenAIEval eval = await OpenAI.instance.evals.create(
+  dataSourceConfig: RequestDatatSourceConfig.logs(),
+);
+
+// Get eval
+OpenAIEval eval = await OpenAI.instance.evals.get(
+  evalId: "eval-id-here",
+);
+
+// Update eval
+OpenAIEval updatedEval = await OpenAI.instance.evals.update(
+  evalId: "eval-id-here",
+  metadata: {
+    "key": "new_value",
+  },
+);
+
+// Delete eval
+ await OpenAI.instance.evals.delete(
+  evalId: "eval-id-here",
+);
+
+// List evals
+OpenAIEvalsList evalsList = await OpenAI.instance.evals.list(
+  limit: 10, 
+);
+
+// Get eval runs.
+OpenAIEvalRunsList evalRuns = await OpenAI.instance.evals.getRuns(
+  evalId: "eval-id-here",
+  limit: 3, 
+);
+
+// Get Eval run
+OpenAIEvalRun evalRun = await OpenAI.instance.evals.getRun(
+  evalId: "eval-id-here",
+  runId: "run-id-here",
+);
+
+// Create run
+OpenAIEvalRun createdRun = await OpenAI.instance.evals.createRun(
+  evalId: "eval-id-here",
+  dataSource: EvalRunDataSource.jsonl(),
+);
+
+// Cancel run
+OpenAIEvalRun canceledRun = await OpenAI.instance.evals.cancel(
+  evalId: "eval-id-here",
+  runId: "run-id-here",
+);
+
+// Delete run
+ await OpenAI.instance.evals.deleteRun(
+  evalId: "eval-id-here",
+  runId: "run-id-here",
+);
+
+// Get output item of eval run.
+OpenAIEvalRunOutputItem outputItem = await OpenAI.instance.evals.getEvalRunOutputItem(
+  evalId: "eval-id-here",
+  runId: "run-id-here",
+  outputItemIdn: "item-id-here",
+);
+
+// Get eval run output items.
+OpenAIEvalRunOutputItemsList outputItems = await OpenAI.instance.evals.getEvalRunOutputItems(
+  evalId: "eval-id-here",
+  runId: "run-id-here",
+  limit: 10,
+);
+```
 
 #### 🔧 Fine-tuning
 

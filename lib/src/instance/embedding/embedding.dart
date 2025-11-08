@@ -51,7 +51,7 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
     required input,
     String? user,
     int? dimensions,
-    String? encodingFormat,
+    EncodingFormat? encodingFormat,
     http.Client? client,
   }) async {
     assert(
@@ -69,7 +69,7 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
         if (input != null) "input": input,
         if (user != null) "user": user,
         if (dimensions != null) "dimensions": dimensions,
-        if (encodingFormat != null) "encoding_format": encodingFormat,
+        if (encodingFormat != null) "encoding_format": encodingFormat.name,
       },
     );
   }

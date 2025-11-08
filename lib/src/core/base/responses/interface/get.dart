@@ -15,4 +15,18 @@ abstract class GetInterface {
     int? limit,
     String? order,
   });
+
+  Future<int> getInputTokenCounts(
+    conversation,
+    input,
+    String? instructions,
+    String? model,
+    bool? parallelToolCalls,
+    String? previousResponseId,
+    reasoning,
+    text,
+    toolChoice,
+    List? tools,
+    String? truncation,
+  );
 }

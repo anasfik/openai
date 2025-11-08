@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 class RequestDatatSourceConfig {
   final String type;
 
@@ -24,6 +26,13 @@ class RequestDatatSourceConfig {
       metadata: metadata,
     );
   }
+
+  @mustBeOverridden
+  Map<String, dynamic> toMap() {
+    return {
+      "type": type,
+    };
+  }
 }
 
 class RequestCustomDataSourceConfig extends RequestDatatSourceConfig {
@@ -36,6 +45,7 @@ class RequestCustomDataSourceConfig extends RequestDatatSourceConfig {
     super.type = "custom",
   });
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       "type": type,
@@ -54,6 +64,7 @@ class RequestLogsDataSourceConfig extends RequestDatatSourceConfig {
     super.type = "logs",
   });
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       "type": type,

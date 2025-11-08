@@ -13,7 +13,7 @@ class OpenAIConversations extends OpenAIConversationsBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.conversations;
 
-  /// {@macro openai_converdsations}
+  /// {@macro openai_conversations}
   OpenAIConversations() {
     OpenAILogger.logEndpoint(endpoint);
   }

@@ -78,6 +78,21 @@ class EvalRunDataSource {
         );
     }
   }
+
+  Map<String, dynamic> toMap() {
+    switch (type) {
+      case 'jsonl':
+        return (this as JsonlRunDataSource).toJson();
+      case 'completions':
+        return (this as CompletionsRunDataSource).toJson();
+      case 'responses':
+        return (this as ResponsesRunDataSource).toJson();
+      default:
+        throw UnimplementedError(
+          'EvalRunDataSource type $type is not implemented',
+        );
+    }
+  }
 }
 
 class JsonlRunDataSource extends EvalRunDataSource {

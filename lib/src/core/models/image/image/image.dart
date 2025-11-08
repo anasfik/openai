@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dart_openai/src/core/enum.dart';
 import 'package:meta/meta.dart';
 import 'sub_models/data.dart';
 
@@ -37,14 +38,14 @@ final class OpenAIImageModel {
   final DateTime created;
 
   ///
-  final String background;
+  final String? background;
 
   ///
-  final String outputFormat;
+  final OpenAIImageModelOutputFormat? outputFormat;
 
-  final String quality;
+  final OpenAIImageQuality? quality;
 
-  final String size;
+  final OpenAIImageSize? size;
 
   final Usage? usage;
 
@@ -76,9 +77,18 @@ final class OpenAIImageModel {
           .map((e) => OpenAIImageData.fromMap(e))
           .toList(),
       background: json['background'] ?? '',
-      outputFormat: json['output_format'] ?? '',
-      quality: json['quality'] ?? '',
-      size: json['size'] ?? '',
+      outputFormat: json['output_format'] != null
+          ? OpenAIImageModelOutputFormat.values.firstWhere(
+              (e) => e.name == json['output_format'],
+            )
+          : null,
+      quality: json['quality'] != null
+          ? OpenAIImageQuality.values.firstWhere(
+              (e) => e.name == json['quality'],
+            )
+          : null,
+      size:
+          json['size'] != null ? OpenAIImageSize.fromValue(json['size']) : null,
       usage: json['usage'] != null ? Usage.fromMap(json['usage']) : null,
     );
   }

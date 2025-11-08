@@ -10,7 +10,7 @@ abstract class GetInterface {
     required String evalId,
   });
 
-  Future<OpenAIEvalsList> getEvals({
+  Future<OpenAIEvalsList> list({
     String? after,
     int? limit,
     String? order,

@@ -8,7 +8,7 @@ abstract class CreateInterface {
     required input,
     String? user,
     int? dimensions,
-    String? encodingFormat,
+    EncodingFormat? encodingFormat,
     http.Client? client,
   });
 }
