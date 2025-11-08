@@ -91,51 +91,32 @@ print(chatCompletion.choices.first.message.content);
 
 ---
 
-## 📊 API Coverage
+## 📊 API Coverage (2025)
 
-### ✅ Fully Implemented (100%)
-
-| API Category | Status | Features |
 |--------------|--------|----------|
-| **🤖 Models** | ✅ Complete | List, Retrieve, Delete fine-tuned models |
-| **💬 Chat Completions** | ✅ Complete | Create, Stream, Tools/Functions, Vision, JSON Mode |
-| **📝 Completions** | ✅ Complete | Create, Stream, Log probabilities |
-| **🎨 Images** | ✅ Complete | Generate, Edit, Variations |
-| **🎵 Audio** | ✅ Complete | Speech, Transcription, Translation |
-| **📁 Files** | ✅ Complete | Upload, List, Retrieve, Delete, Content |
-| **🔧 Fine-tunes (Legacy)** | ✅ Complete | Create, List, Retrieve, Cancel, Events, Stream |
-| **🛡️ Moderation** | ✅ Complete | Content policy classification |
-| **✏️ Edits** | ✅ Complete | Text editing (deprecated by OpenAI) |
-
-### 🔧 Additional APIs (100% Implemented)
-
-| API Category | Status | Description |
-|--------------|--------|-------------|
-| **📋 Responses** | ✅ Complete | OpenAI Responses API with input-items support |
-| **💭 Conversations** | ✅ Complete | Custom conversation handling system |
-| **📊 Graders** | ✅ Complete | Custom grading system |
-| **📤 Uploads** | ✅ Complete | Custom upload management system |
-
-### ⚠️ Stub Implementations (Need Real Implementation)
-
-| API Category | Status | Priority |
-|--------------|--------|----------|
-| **📊 Evals** | ⚠️ Stub | High - All methods throw `UnimplementedError` |
-| **📦 Batch** | ⚠️ Stub | High - All methods throw `UnimplementedError` |
-| **🗃️ Vector Stores** | ⚠️ Stub | High - All methods throw `UnimplementedError` |
-
-### ❌ Missing APIs (Not Implemented)
-
-| API Category | Status | Priority |
-|--------------|--------|----------|
-| **🤖 Assistants** | ❌ Missing | Critical - Core AI assistant functionality |
-| **🧵 Threads** | ❌ Missing | Critical - Conversation management |
-| **💬 Messages** | ❌ Missing | Critical - Message handling within threads |
-| **🏃 Runs** | ❌ Missing | Critical - Assistant execution |
-| **🔧 Fine-tuning (New)** | ❌ Missing | High - New fine-tuning API |
-| **🛠️ Tools** | ❌ Missing | Medium - Tool management |
-| **📋 Run Steps** | ❌ Missing | Medium - Run step tracking |
-| **📎 Message Files** | ❌ Missing | Medium - File attachments in messages |
+| **📋 Responses** | ✅ Complete | excluding stream functionality |
+| **💭 Conversations** | ✅ Complete All |
+| **🎵 Audio** | ✅ Complete | All |
+| **🎬Videos** | 🗓️ planned | - |
+| **🎨 Images** | ✅ Complete | excluding stream functionality |
+| **📊 Embeddings** | ✅ Complete | All |
+| **📊 Evals** | 🗓️ planned | - |
+| **🔧 Fine-tunes** | 🧩 70% Complete | missing newer endpoints |
+| **📊 Graders** | ✅ Complete All |
+| **📦 Batch** | 🗓️ planned | - |
+| **📁 Files** | ✅ Complete | All |
+| **📤 Uploads** | 🗓️ planned | - |
+| **🤖 Models** | ✅ Complete | All |
+| **🛡️ Moderation** | ✅ Complete | All|
+| **🗃️ Vector Stores** | 🗓️ planned  | - |
+| **💬 ChatKit** | ❌ NOt planned  | Beta feature |
+| **💬 Containers** | 🗓️ planned  | - |
+| **💬 Real-time** | 🗓️ planned  | - |
+| **💬 Chat Completions** | ✅ Complete | excluding stream functionality |
+| **🤖 Assistants** | NOt planned | beta feature |
+| **🤖 Administration** | 🗓️ planned | - |
+| **📝 Completions (Legacy)** | ✅ Complete | Create, Stream, Log probabilities |
+| **✏️ Edits (Legacy)** | ✅ Complete | Text editing (deprecated by OpenAI) |
 
 ---
 
