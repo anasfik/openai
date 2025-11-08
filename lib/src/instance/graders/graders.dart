@@ -1,4 +1,3 @@
-import 'package:dart_openai/src/core/base/graders/graders.dart';
 import 'package:dart_openai/src/core/models/graders/grader.dart';
 import 'package:dart_openai/src/core/models/graders/label_model_grader.dart';
 import 'package:dart_openai/src/core/models/graders/multi_grader.dart';
