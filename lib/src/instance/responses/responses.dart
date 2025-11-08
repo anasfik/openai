@@ -23,7 +23,7 @@ class OpenAIResponses extends OpenAIResponsesBase {
     String? model,
     bool? background,
     conversation,
-    List? inlcude,
+    List? include,
     String? instructions,
     int? maxOutputTokens,
     int? maxToolCalls,
@@ -49,7 +49,7 @@ class OpenAIResponses extends OpenAIResponsesBase {
       body: {
         if (background != null) "background": background,
         if (conversation != null) "conversation": conversation,
-        if (inlcude != null) "inlcude": inlcude,
+        if (include != null) "include": include,
         if (input != null) "input": input,
         if (instructions != null) "instructions": instructions,
         if (maxOutputTokens != null) "max_output_tokens": maxOutputTokens,
@@ -57,7 +57,8 @@ class OpenAIResponses extends OpenAIResponsesBase {
         if (metadata != null) "metadata": metadata,
         if (model != null) "model": model,
         if (parallelToolCalls != null) "parallel_tool_calls": parallelToolCalls,
-        if (previousResponseId != null) "previous_response_id": previousResponseId,
+        if (previousResponseId != null)
+          "previous_response_id": previousResponseId,
         if (prompt != null) "prompt": prompt,
         if (promptCacheKey != null) "prompt_cache_key": promptCacheKey,
         if (reasoning != null) "reasoning": reasoning,

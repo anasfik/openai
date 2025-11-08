@@ -5,7 +5,8 @@ import 'env/env.dart';
 Future<void> main() async {
   // Set the OpenAI API key from the .env file.
   OpenAI.apiKey = Env.apiKey;
-
+  OpenAI.requestsTimeOut = Duration(seconds: 60);
+  OpenAI.baseUrlVersion = "v1";
   // Start using!
   final completion = await OpenAI.instance.completion.create(
     model: "text-davinci-003",

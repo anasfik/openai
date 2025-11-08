@@ -100,6 +100,14 @@ abstract final class OpenAILogger {
     }
   }
 
+  static void logVersion([String? version]) {
+    if (version != null) {
+      log("API version set to $version");
+    } else {
+      log("API version is set");
+    }
+  }
+
   /// Logs that an organization id is being set, if the logger is active.
   static void logOrganization(String? organizationId) {
     log("organization id set to $organizationId");

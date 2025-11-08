@@ -6,6 +6,10 @@
 
 build/
 example/.env
+.env
+
+env.g.dart
+*.g.dart
 
 *.jsonl
 env.g.dart

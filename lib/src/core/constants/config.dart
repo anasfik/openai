@@ -23,11 +23,17 @@ abstract class OpenAIConfig {
   /// This is base API url for all the requests.
   /// {@endtemplate}
   static String? _baseUrl;
+  static String? _version;
 
   /// {@template openai_config_version}
   /// This is the version of the API.
   /// {@endtemplate}
-  static String get version => OpenAIStrings.version;
+  static String get version => _version ?? OpenAIStrings.version;
+
+  static set version(String version) {
+    _version = version;
+    OpenAILogger.logVersion(_version);
+  }
 
   /// {@macro openai_config_base_url}
   @internal

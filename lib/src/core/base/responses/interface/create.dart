@@ -5,7 +5,7 @@ abstract class CreateInterface {
     required input,
     bool? background,
     conversation,
-    List? inlcude,
+    List? include,
     String? instructions,
     int? maxOutputTokens,
     int? maxToolCalls,
