@@ -92,29 +92,31 @@ print(chatCompletion.choices.first.message.content);
 ---
 
 ## 📊 API Coverage (2025)
+
 | API feature | Status | Details |
 |--------------|--------|----------|
-| **📋 Responses** | ✅ Complete | excluding stream functionality |
-| **💭 Conversations** | ✅ Complete All |
-| **🎵 Audio** | ✅ Complete | All |
-| **🎬Videos** | 🗓️ planned | - |
-| **🎨 Images** | ✅ Complete | excluding stream functionality |
-| **📊 Embeddings** | ✅ Complete | All |
-| **📊 Evals** | 🗓️ planned | - |
-| **🔧 Fine-tunes** | 🧩 70% Complete | missing newer endpoints |
-| **📊 Graders** | ✅ Complete All |
-| **📦 Batch** | 🗓️ planned | - |
-| **📁 Files** | ✅ Complete | All |
-| **📤 Uploads** | 🗓️ planned | - |
-| **🤖 Models** | ✅ Complete | All |
-| **🛡️ Moderation** | ✅ Complete | All|
-| **🗃️ Vector Stores** | 🗓️ planned  | - |
+| **📋 [Responses](#-responses)** | ✅ Complete | excluding stream functionality |
+| **💭 [Conversations](#-conversations)** | ✅ Complete | All |
+| **🎵 [Audio](#-audio)** | ✅ Complete | All |
+| **🎬 [Videos](#-videos)** | 🗓️ planned | - |
+| **🎨 [Images](#-images)** | ✅ Complete | All |
+| **🎨 [Images Streaaming](#-images-streaaming)** | 🗓️ planned | - |
+| **📊 [Embeddings](#-embeddings)** | ✅ Complete | All |
+| **⚖️ [Evals](#️-evals)** | 🗓️ planned | - |
+| **🔧 [Fine-tuning](#-fine-tuning)** | 🧩 70% Complete | missing newer endpoints |
+| **📊 [Graders](#-graders)** | ✅ Complete | All |
+| **📦 [Batch](#-batch)** | 🗓️ planned | - |
+| **📁 [Files](#-files)** | ✅ Complete | All |
+| **📤 [Uploads](#-uploads)** | 🗓️ planned | - |
+| **🤖 [Models](#-models)** | ✅ Complete | All |
+| **🛡️ [Moderation](#️-moderation)** | ✅ Complete | All|
+| **🗃️ [Vector Stores](#️-vector-stores)** | 🗓️ planned  | - |
 | **💬 ChatKit** | ❌ NOt planned  | Beta feature |
-| **💬 Containers** | 🗓️ planned  | - |
-| **💬 Real-time** | 🗓️ planned  | - |
-| **💬 Chat Completions** | ✅ Complete | excluding stream functionality |
+| **📦 [Containers](#-containers)** | 🗓️ planned  | - |
+| **🕛 [Real-time](#-real-time)** | 🗓️ planned  | - |
+| **💬 [Chat Completions](#-chat-completions)** | ✅ Complete | excluding stream functionality |
 | **🤖 Assistants** | NOt planned | beta feature |
-| **🤖 Administration** | 🗓️ planned | - |
+| **🤖 [Administration](#-administration)** | 🗓️ planned | - |
 | **📝 Completions (Legacy)** | ✅ Complete | Create, Stream, Log probabilities |
 | **✏️ Edits (Legacy)** | ✅ Complete | Text editing (deprecated by OpenAI) |
 
@@ -124,7 +126,266 @@ print(chatCompletion.choices.first.message.content);
 
 ### Core APIs
 
+#### 📋 Responses
+
+```dart
+// Create response
+OpenAiResponse response = await OpenAI.instance.responses.create(
+  input: "Your input text here",  
+  model: "gpt-4",
+);
+
+// Get response
+OpenAiResponse response = await OpenAI.instance.responses.get(
+  responseId: "response-id-here",
+  startingAfter: 0, 
+);
+
+// Delete response
+await OpenAI.instance.responses.delete(
+  responseId: "response-id-here",
+);
+
+// Update response
+OpenAIResponseModel updatedResponse = await OpenAI.instance.responses.update(
+  "response-id",
+  // ... update parameters
+);
+
+// Cancel response
+OpenAiResponse response = await OpenAI.instance.responses.cancel(
+  responseId: "response-id-here",
+);
+
+// list input items
+OpenAiResponseInputItemsList response = await OpenAI.instance.responses.listInputItems(
+  responseId: "response-id-here",
+  limit: 10, 
+);
+
+```
+
+#### 💭 Conversations
+
+```dart
+// Create conversation
+OpenAIConversation conversation = await OpenAI.instance.conversations.create(
+  items: [
+    // ...
+  ],
+  metadata: {
+    "key": "value",
+    "another_key": "another_value",
+  },
+);
+
+
+// Get conversation
+OpenAIConversation conversation = await OpenAI.instance.conversations.get(
+  conversationId: "conversation-id-here",
+);
+
+// Update conversation
+OpenAIConversation updatedConversation = await OpenAI.instance.conversations.update(
+  conversationId: "conversation-id",
+  metadata: {
+    "key": "new_value",
+  },
+);
+
+// Delete conversation
+ await OpenAI.instance.conversations.delete(
+  conversationId: "conversation-id-here",
+);
+
+// list items
+OpenAIConversationItemsResponse itemsList = await OpenAI.instance.conversations.listItems(
+  conversationId: "conversation-id-here",
+  limit: 10, 
+);
+
+// Create item
+OpenAIConversationItem item = await OpenAI.instance.conversations.createItems(
+  conversationId: "conversation-id-here",
+  items: [
+    // ...
+  ],
+);
+
+// get item
+OpenAIConversationItem item = await OpenAI.instance.conversations.getItem(
+  conversationId: "conversation-id-here",
+  itemId: "item-id-here",
+);
+
+// delete item
+await OpenAI.instance.conversations.deleteItem(
+  conversationId: "conversation-id-here",
+  itemId: "item-id-here",
+);
+```
+
+#### 🎵 Audio
+
+```dart
+// Create speech
+File speechFile = await OpenAI.instance.audio.createSpeech(
+  model: "tts-1",
+  input: "Text to convert to speech",
+  voice: OpenAIAudioVoice.fable,
+  responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
+  outputDirectory: "/path/to/output/directory",
+  outputFileName: "output_speech.mp3",
+);
+
+
+// Transcribe audio
+OpenAITranscriptionGeneralModel transcription = await OpenAI.instance.audio.createTranscription(
+  model: "whisper-1",
+  file: File("path/to/audio.mp3"),
+  include: ["logprobs"],
+  responseFormat: OpenAIAudioResponseFormat.verbose_json,
+  language: "en",
+  prompt: "This is a sample prompt to guide transcription",
+);
+// Handling different transcription response formats
+if (transcription is OpenAITranscriptionModel) {
+  print(transcription.logprobs);
+  print(transcription.text);
+  print(transcription.usage);
+} else if (transcription is OpenAITranscriptionVerboseModel) {
+  // print the transcription.
+  print(transcription.text);
+  print(transcription.segments?.map((e) => e.end));
+}
+
+// Create Translation
+final translationText = await OpenAI.instance.audio.createTranslation(
+  file: File("path/to/audio.mp3"),
+  model: "whisper-1",
+  prompt: "use unusual english words",
+  responseFormat: OpenAIAudioResponseFormat.json,
+);
+
+```
+
+#### 🎬 Videos
+
+// (To be implemented)
+
+#### 🎨 Images
+
+```dart
+// Generate image
+OpenAIImageModel image = await OpenAI.instance.image.create(
+  model: "dall-e-3",
+  prompt: "image of a cat in a spaceship",
+  responseFormat: OpenAIImageResponseFormat.url,
+  size: OpenAIImageSize.size1024,
+  quality: OpenAIImageQuality.standard,
+  style: OpenAIImageStyle.vivid,
+);
+
+// Edit image
+OpenAIImageModel imageEdit = await OpenAI.instance.image.edit(
+  prompt: 'A fantasy landscape with mountains and a river',
+  image: File("path/to/image.png"),
+  size: OpenAIImageSize.size1024,
+  responseFormat: OpenAIImageResponseFormat.b64Json,
+);
+
+// Create variation
+List<OpenAIImageModel> imageVariation = await OpenAI.instance.image.variation(
+  model: "dall-e-2",
+  image: File("path/to/image.png"),
+  size: OpenAIImageSize.size512,
+  responseFormat: OpenAIImageResponseFormat.url,
+);
+```
+
+#### 🎨 Images Streaaming
+
+// (To be implemented)
+
+#### 📊 Embeddings
+
+```dart
+OpenAIEmbeddingsModel embedding = await OpenAI.instance.embedding.create(
+  model: "text-embedding-ada-002",
+  input: "This is a sample text",
+);
+```
+
+#### ⚖️ Evals
+
+// (To be implemented)
+
+#### 🔧 Fine-tuning
+
+// (To be implemented)
+
+#### 📊 Graders
+
+```dart
+
+// graders
+final grader = OpenAIGraders.stringCheckGrader(...);
+final grader2 = OpenAIGraders.textSimilarityGrader(...);
+final grader3 = OpenAIGraders.scoreModelGrader(...);
+final grader4 = OpenAIGraders.labelModelGrader(...);
+final grader5 = OpenAIGraders.pythonGrader(...);
+final grader6 = OpenAIGraders.multiGrader(...);
+
+// Run grader
+final grader = await OpenAI.instance.graders.runGrader(
+ grader: grader,
+ modelSample: "The model output to be graded", 
+);
+
+// Validate Grader
+final isValid = OpenAI.instance.graders.validateGrader(
+  grader: grader
+);
+```
+
+#### 📦 Batch
+
+// (To be implemented)
+
+#### 📁 Files
+
+```dart
+// Upload file
+OpenAIFileModel file = await OpenAI.instance.files.upload(
+  file: File("path/to/file.jsonl"),
+  purpose: OpenAIFilePurpose.fineTune,
+);
+
+// List files
+List<OpenAIFileModel> files = await OpenAI.instance.files.list(
+  limit: 10,
+);
+
+// Retrieve file
+OpenAIFileModel file = await OpenAI.instance.files.retrieve(
+   "file_id" 
+);
+
+// Delete file
+await OpenAI.instance.files.delete("file-id-here");
+
+// Retrieve file content
+final content = await OpenAI.instance.files.retrieveContent(
+  "file_id"
+);
+```
+
+#### 📤 Uploads
+
+// (To be implemented)
+
 #### 🤖 Models
+
 ```dart
 // List all available models
 List<OpenAIModelModel> models = await OpenAI.instance.model.list();
@@ -136,7 +397,30 @@ OpenAIModelModel model = await OpenAI.instance.model.retrieve("gpt-3.5-turbo");
 bool deleted = await OpenAI.instance.model.delete("fine-tuned-model-id");
 ```
 
+#### 🛡️ Moderation
+
+```dart
+// Create moderation
+OpenAIModerationModel moderation = await OpenAI.instance.moderation.create(
+  input: ["Text to classify for moderation"],
+  model: "omni-moderation-latest",
+);
+```
+
+#### 🗃️ Vector Stores
+
+// (To be implemented)
+
+#### 📦 Containers
+
+// (To be implemented)
+
+#### 🕛 Real-time
+
+// (To be implemented)
+
 #### 💬 Chat Completions
+
 ```dart
 // Basic chat completion
 OpenAIChatCompletionModel chat = await OpenAI.instance.chat.create(
@@ -167,189 +451,17 @@ chatStream.listen((event) {
 });
 ```
 
-#### 🎨 Images
-```dart
-// Generate image
-OpenAIImageModel image = await OpenAI.instance.image.create(
-  prompt: "A beautiful sunset over mountains",
-  n: 1,
-  size: OpenAIImageSize.size1024,
-  responseFormat: OpenAIImageResponseFormat.url,
-);
+#### 🤖 Administration
 
-// Edit image
-OpenAIImageModel editedImage = await OpenAI.instance.image.edit(
-  prompt: "Add a rainbow to the sky",
-  image: File("path/to/image.png"),
-  mask: File("path/to/mask.png"),
-  n: 1,
-  size: OpenAIImageSize.size1024,
-);
-
-// Create variation
-OpenAIImageModel variation = await OpenAI.instance.image.variation(
-  image: File("path/to/image.png"),
-  n: 3,
-  size: OpenAIImageSize.size512,
-);
-```
-
-#### 🎵 Audio
-```dart
-// Create speech
-File speechFile = await OpenAI.instance.audio.createSpeech(
-  model: "tts-1",
-  input: "Hello, this is a test",
-  voice: "nova",
-  responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
-  outputDirectory: Directory("output"),
-  outputFileName: "speech",
-);
-
-// Transcribe audio
-OpenAIAudioModel transcription = await OpenAI.instance.audio.createTranscription(
-  file: File("path/to/audio.mp3"),
-  model: "whisper-1",
-  responseFormat: OpenAIAudioResponseFormat.json,
-);
-
-// Translate audio
-OpenAIAudioModel translation = await OpenAI.instance.audio.createTranslation(
-  file: File("path/to/audio.mp3"),
-  model: "whisper-1",
-  responseFormat: OpenAIAudioResponseFormat.text,
-);
-```
-
-### Additional APIs
-
-#### 📋 Responses API (Official OpenAI)
-```dart
-// Create response
-OpenAIResponseModel response = await OpenAI.instance.responses.create(
-  // ... response parameters
-);
-
-// List responses
-List<OpenAIResponseModel> responses = await OpenAI.instance.responses.list();
-
-// Retrieve response
-OpenAIResponseModel response = await OpenAI.instance.responses.retrieve("response-id");
-
-// Update response
-OpenAIResponseModel updatedResponse = await OpenAI.instance.responses.update(
-  "response-id",
-  // ... update parameters
-);
-
-// Delete response
-bool deleted = await OpenAI.instance.responses.delete("response-id");
-```
-
-#### 💭 Conversations API (Custom)
-```dart
-// Create conversation
-OpenAIConversationModel conversation = await OpenAI.instance.conversations.create(
-  // ... conversation parameters
-);
-
-// List conversations
-List<OpenAIConversationModel> conversations = await OpenAI.instance.conversations.list();
-
-// Retrieve conversation
-OpenAIConversationModel conversation = await OpenAI.instance.conversations.retrieve("conversation-id");
-```
-
-#### 📊 Graders API (Custom)
-```dart
-// Create grader
-OpenAIGraderModel grader = await OpenAI.instance.graders.create(
-  // ... grader parameters
-);
-
-// List graders
-List<OpenAIGraderModel> graders = await OpenAI.instance.graders.list();
-```
-
-#### 📤 Uploads API (Custom)
-```dart
-// Create upload
-OpenAIUploadModel upload = await OpenAI.instance.uploads.create(
-  // ... upload parameters
-);
-
-// List uploads
-List<OpenAIUploadModel> uploads = await OpenAI.instance.uploads.list();
-```
+// (To be implemented)
 
 ---
 
-## 🛠️ Advanced Features
-
-### Tools/Functions Calling
-```dart
-// Define a tool
-final weatherTool = OpenAIToolModel(
-  type: "function",
-  function: OpenAIFunctionModel.withParameters(
-    name: "get_weather",
-    parameters: [
-      OpenAIFunctionProperty.string(
-        name: "location",
-        description: "The city to get weather for",
-      ),
-    ],
-  ),
-);
-
-// Use tool in chat
-final chat = await OpenAI.instance.chat.create(
-  model: "gpt-3.5-turbo",
-  messages: [
-    OpenAIChatCompletionChoiceMessageModel(
-      role: OpenAIChatMessageRole.user,
-      content: "What's the weather like in New York?",
-    ),
-  ],
-  tools: [weatherTool],
-);
-```
-
-### Vision Support
-```dart
-final chat = await OpenAI.instance.chat.create(
-  model: "gpt-4-vision-preview",
-  messages: [
-    OpenAIChatCompletionChoiceMessageModel(
-      role: OpenAIChatMessageRole.user,
-      content: [
-        OpenAIChatCompletionChoiceMessageContentItemModel.text("What's in this image?"),
-        OpenAIChatCompletionChoiceMessageContentItemModel.imageUrl("https://example.com/image.jpg"),
-      ],
-    ),
-  ],
-);
-```
-
-### JSON Mode
-```dart
-final chat = await OpenAI.instance.chat.create(
-  model: "gpt-3.5-turbo",
-  messages: [
-    OpenAIChatCompletionChoiceMessageModel(
-      role: OpenAIChatMessageRole.user,
-      content: "Return user data as JSON",
-    ),
-  ],
-  responseFormat: {"type": "json_object"},
-);
-```
-
----
 
 ## 🔧 Configuration
 
 ### Environment Variables
+
 ```dart
 // Using envied package
 @Envied(path: ".env")
@@ -365,6 +477,7 @@ void main() {
 ```
 
 ### Custom Configuration
+
 ```dart
 void main() {
   // Set API key
@@ -414,38 +527,22 @@ try {
 
 ---
 
-## 📈 Implementation Status
-
-### Overall Progress: 67% Complete
-
-- ✅ **Core APIs**: 100% Complete
-- ✅ **Legacy APIs**: 100% Complete  
-- ⚠️ **Newer APIs**: 20% Complete (stub implementations)
-- ❌ **Latest APIs**: 0% Complete (missing)
-- 🔧 **Custom APIs**: 100% Complete
-
-### Priority Implementation Roadmap
-
-1. **🔥 Critical**: Implement Assistants, Threads, Messages, Runs APIs
-2. **🚨 High**: Complete Batch, Vector Stores, Evals implementations
-3. **⚠️ Medium**: Add new Fine-tuning API, Tools management
-4. **📝 Low**: Add Run Steps, Message Files, Fine-tuning Checkpoints
-
----
-
 ## 🤝 Contributing
 
 We welcome contributions! Here's how you can help:
 
 ### 🐛 Bug Reports
-- Use GitHub Issues to report bugs
+
+- Use [GitHub Issues](https://github.com/anasfik/openai/issues) to report bugs
 - Include reproduction steps and environment details
 
 ### 💡 Feature Requests
-- Suggest new features via GitHub Issues
+
+- Suggest new features via [GitHub Issues](https://github.com/anasfik/openai/issues)
 - Check existing issues before creating new ones
 
 ### 🔧 Code Contributions
+
 - Fork the repository
 - Create a feature branch
 - Make your changes
@@ -453,11 +550,13 @@ We welcome contributions! Here's how you can help:
 - Submit a pull request
 
 ### 📚 Documentation
+
 - Help improve documentation
 - Add examples for missing features
 - Fix typos and improve clarity
 
 ### 💰 Sponsoring
+
 - [Sponsor the project](https://github.com/sponsors/anasfik)
 - Help maintain and improve the package
 
@@ -488,6 +587,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <div align="center">
+
 
 **Made with ❤️ by the Dart OpenAI community**
 
