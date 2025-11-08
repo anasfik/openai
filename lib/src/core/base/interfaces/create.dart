@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 abstract class CreateInterface {
   Future<OpenAICompletionModel> create({
     required String model,
-    prompt,
+    required prompt,
     String? suffix,
     int? maxTokens,
     double? temperature,

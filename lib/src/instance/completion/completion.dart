@@ -93,7 +93,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
   @override
   Future<OpenAICompletionModel> create({
     required String model,
-    prompt,
+    required prompt,
     String? suffix,
     int? maxTokens,
     double? temperature,
@@ -125,9 +125,9 @@ interface class OpenAICompletion implements OpenAICompletionBase {
       to: BaseApiUrlBuilder.build(endpoint),
       body: {
         "model": model,
-        if (prompt != null) "prompt": prompt,
+        "prompt": prompt,
         if (suffix != null) "suffix": suffix,
-        if (maxTokens != null) "max_completion_tokens": maxTokens,
+        if (maxTokens != null) "max_tokens": maxTokens,
         if (temperature != null) "temperature": temperature,
         if (topP != null) "top_p": topP,
         if (n != null) "n": n,

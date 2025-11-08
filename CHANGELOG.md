@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.2
+
+- Fix incorrect max_tokens field in the legacy completions API.
+
 ## 6.0.1
 
 - Fixed Image Edit's image mime type issue.
