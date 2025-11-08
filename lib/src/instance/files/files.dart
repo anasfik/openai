@@ -27,6 +27,41 @@ interface class OpenAIFiles implements OpenAIFilesBase {
     OpenAILogger.logEndpoint(endpoint);
   }
 
+  /// Upload a file that contains document(s) to be used across various endpoints/
+  /// features. Currently, the size of all the files uploaded by one organization can be
+  /// up to 1 GB. Please contact us if you need to increase the storage limit.
+  ///
+  /// [file] is the `jsonl` file to be uploaded, If the [purpose] is set to "fine-tune", each line is a JSON record with "prompt" and "completion.
+  ///
+  /// [purpose] Use "fine-tune" for Fine-tuning. This allows us to validate the format of the uploaded file.
+  ///
+  ///
+  /// Example:
+  /// ```dart
+  /// OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
+  /// file: File("/* FILE PATH HERE */"),
+  /// purpose: "fine-tuning",
+  /// );
+  /// ```
+  @override
+  Future<OpenAIFileModel> upload({
+    required File file,
+    required String purpose,
+    OpenAIFileExpiresAfter? expiresAfter,
+  }) async {
+    return await OpenAINetworkingClient.fileUpload(
+      to: BaseApiUrlBuilder.build(endpoint),
+      body: {
+        "purpose": purpose,
+        // if (expiresAfter != null) "expires_after": expiresAfter!.toMap(),
+      },
+      file: file,
+      onSuccess: (Map<String, dynamic> response) {
+        return OpenAIFileModel.fromMap(response);
+      },
+    );
+  }
+
   /// This method fetches for your files list that exists in your OPenAI account.
   ///
   /// Example:
@@ -43,17 +78,14 @@ interface class OpenAIFiles implements OpenAIFilesBase {
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.get(
-      from: BaseApiUrlBuilder.build(
-        endpoint,
-        null,
-        Uri(
-          queryParameters: {
-            if (after != null) "after": after,
-            if (limit != null) "limit": limit.toString(),
-            if (order != null) "order": order,
-            if (purpose != null) "purpose": purpose,
-          },
-        ).query,
+      from: BaseApiUrlBuilder.buildWithQuery(
+        endpoint: endpoint,
+        query: {
+          if (after != null) "after": after,
+          if (limit != null) "limit": limit.toString(),
+          if (order != null) "order": order,
+          if (purpose != null) "purpose": purpose,
+        },
       ),
       client: client,
       onSuccess: (Map<String, dynamic> response) {
@@ -103,41 +135,6 @@ interface class OpenAIFiles implements OpenAIFilesBase {
     return await OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.build(endpoint + fileIdEndpoint),
       returnRawResponse: true,
-    );
-  }
-
-  /// Upload a file that contains document(s) to be used across various endpoints/
-  /// features. Currently, the size of all the files uploaded by one organization can be
-  /// up to 1 GB. Please contact us if you need to increase the storage limit.
-  ///
-  /// [file] is the `jsonl` file to be uploaded, If the [purpose] is set to "fine-tune", each line is a JSON record with "prompt" and "completion.
-  ///
-  /// [purpose] Use "fine-tune" for Fine-tuning. This allows us to validate the format of the uploaded file.
-  ///
-  ///
-  /// Example:
-  /// ```dart
-  /// OpenAIFileModel uploadedFile = await OpenAI.instance.file.upload(
-  /// file: File("/* FILE PATH HERE */"),
-  /// purpose: "fine-tuning",
-  /// );
-  /// ```
-  @override
-  Future<OpenAIFileModel> upload({
-    required File file,
-    required String purpose,
-    OpenAIFileExpiresAfter? expiresAfter,
-  }) async {
-    return await OpenAINetworkingClient.fileUpload(
-      to: BaseApiUrlBuilder.build(endpoint),
-      body: {
-        "purpose": purpose,
-        // if (expiresAfter != null) "expires_after": expiresAfter.toMap(),
-      },
-      file: file,
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIFileModel.fromMap(response);
-      },
     );
   }
 

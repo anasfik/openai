@@ -1,8 +1,8 @@
 # Changelog
 
-## NEXT
+## 6.0.0
 
-- Support for logprobs in the chat completions API.
+-  Complete rewrite, retest and implementation for the package to match latest API changes from OpenAI including all new features and endpoints.
 
 - Bug fixes.
 

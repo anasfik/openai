@@ -6,4 +6,11 @@ class OpenAIFileExpiresAfter {
     required this.anchor,
     required this.seconds,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      "anchor": anchor,
+      "seconds": seconds,
+    };
+  }
 }

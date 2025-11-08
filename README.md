@@ -104,12 +104,12 @@ print(chatCompletion.choices.first.message.content);
 | **📊 [Embeddings](#-embeddings)** | ✅ Complete | All |  11-08-2025 17:56:30 |
 | **⚖️ [Evals](#️-evals)** | ✅ Complete | All |  11-08-2025 21:04:36 |
 | **🔧 [Fine-tuning](#-fine-tuning)** | 🧩 70% Complete | missing newer endpoints ||
-| **📊 [Graders](#-graders)** | ✅ Complete | All ||
+| **📊 [Graders](#-graders)** | ✅ Complete | All |  11-08-2025 21:46:48 |
 | **📦 [Batch](#-batch)** | 🗓️ planned | - ||
-| **📁 [Files](#-files)** | ✅ Complete | All ||
+| **📁 [Files](#-files)** | ✅ Complete | All | 11-08-2025 21:51:34|
 | **📤 [Uploads](#-uploads)** | 🗓️ planned | - ||
-| **🤖 [Models](#-models)** | ✅ Complete | All ||
-| **🛡️ [Moderation](#️-moderation)** | ✅ Complete | All||
+| **🤖 [Models](#-models)** | ✅ Complete | All | 11-08-2025 21:53:13 |
+| **🛡️ [Moderation](#️-moderation)** | ✅ Complete | All |  11-08-2025 21:54:01 |
 | **🗃️ [Vector Stores](#️-vector-stores)** | 🗓️ planned  | - ||
 | **💬 ChatKit** | ❌ NOt planned  | Beta feature ||
 | **📦 [Containers](#-containers)** | 🗓️ planned  | - ||
@@ -117,8 +117,8 @@ print(chatCompletion.choices.first.message.content);
 | **💬 [Chat Completions](#-chat-completions)** | ✅ Complete | excluding stream functionality ||
 | **🤖 Assistants** | NOt planned | beta feature ||
 | **🤖 [Administration](#-administration)** | 🗓️ planned | - ||
-| **📝 Completions (Legacy)** | ✅ Complete | Create, Stream, Log probabilities ||
-| **✏️ Edits (Legacy)** | ✅ Complete | Text editing (deprecated by OpenAI) ||
+| **📝 Completions (Legacy)** | ✅ Complete | All ||
+| **✏️ Edits (Legacy)** | ✅ Complete | All ||
 
 ---
 
@@ -432,7 +432,7 @@ final isValid = OpenAI.instance.graders.validateGrader(
 // Upload file
 OpenAIFileModel file = await OpenAI.instance.files.upload(
   file: File("path/to/file.jsonl"),
-  purpose: OpenAIFilePurpose.fineTune,
+  purpose: "assistants",
 );
 
 // List files
@@ -474,7 +474,6 @@ bool deleted = await OpenAI.instance.model.delete("fine-tuned-model-id");
 #### 🛡️ Moderation
 
 ```dart
-// Create moderation
 OpenAIModerationModel moderation = await OpenAI.instance.moderation.create(
   input: ["Text to classify for moderation"],
   model: "omni-moderation-latest",
