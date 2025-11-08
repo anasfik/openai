@@ -18,7 +18,7 @@ Future<void> main() async {
     responseFormat: OpenAIImageResponseFormat.url,
   );
 
-  final list = imageVariations.firstOrNull?.data ?? [];
+  final list = imageVariations;
 
   for (var index = 0; index < list.length; index++) {
     final currentItem = list[index];

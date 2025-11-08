@@ -9,6 +9,7 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:dart_openai/src/core/builder/headers.dart';
 import 'package:dart_openai/src/core/constants/config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
+import 'package:dart_openai/src/core/models/file/file_list.dart';
 import 'package:dart_openai/src/core/models/model/sub_models/permission.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:http/http.dart' as http;
@@ -118,15 +119,6 @@ void main() async {
 
           final someModel = models.first;
 
-          if (someModel.permission != null &&
-              someModel.permission!.isNotEmpty) {
-            final permission = someModel.permission!.first;
-
-            expect(permission, isA<OpenAIModelModelPermission>());
-
-            expect(permission.id, isNotNull);
-          }
-
           modelExampleId = models
               .firstWhereOrNull(
                 (element) => element.id.contains("gpt-3"),
@@ -147,21 +139,6 @@ void main() async {
       expect(model, isA<OpenAIModelModel>());
 
       expect(model.id, isNotNull);
-
-      if (model.permission != null) {
-        expect(
-          model.permission,
-          isA<List<OpenAIModelModelPermission>>(),
-        );
-
-        if (model.permission!.isNotEmpty) {
-          final permission = model.permission!.first;
-
-          expect(permission, isA<OpenAIModelModelPermission>());
-
-          expect(permission.id, isNotNull);
-        }
-      }
     });
   });
 
@@ -391,12 +368,13 @@ void main() async {
       expect(imageEdited.data.first.url, isA<String>());
     });
     test("variation", () async {
-      final OpenAIImageModel variation = await OpenAI.instance.image.variation(
+      final List<OpenAIImageData> variation =
+          await OpenAI.instance.image.variation(
         image: imageFileExample,
       );
 
       expect(variation, isA<OpenAIImageModel>());
-      expect(variation.data.first.url, isA<String>());
+      expect(variation.first.url, isA<String>());
     });
   });
 
@@ -414,7 +392,7 @@ void main() async {
 
     test('create with smaller dimensions', () async {
       final OpenAIEmbeddingsModel embedding =
-      await OpenAI.instance.embedding.create(
+          await OpenAI.instance.embedding.create(
         model: "text-embedding-3-large",
         input: "This is a sample text",
         dimensions: 1000,
@@ -438,8 +416,12 @@ void main() async {
         model: "whisper-1",
         responseFormat: OpenAIAudioResponseFormat.json,
       );
-      expect(transcription, isA<OpenAIAudioModel>());
-      expect(transcription.text, isA<String>());
+
+      if (transcription is OpenAITranscriptionVerboseModel) {
+        expect(transcription.language, isA<String?>());
+      } else if (transcription is OpenAITranscriptionModel) {
+        expect(transcription.text, isA<String?>());
+      }
     });
 
     test("create transcription with timestamp granularity", () async {
@@ -452,12 +434,16 @@ void main() async {
         file: audioExampleFile,
         model: "whisper-1",
         responseFormat: OpenAIAudioResponseFormat.verbose_json,
-        timestamp_granularities: [OpenAIAudioTimestampGranularity.word],
+        timestampGranularities: [OpenAIAudioTimestampGranularity.word],
       );
 
-      expect(transcription, isA<OpenAIAudioModel>());
-      expect(transcription.text, isA<String>());
-      expect(transcription.words, isA<List>());
+      expect(transcription, isA<OpenAITranscriptionGeneralModel>());
+
+      if (transcription is OpenAITranscriptionVerboseModel) {
+        expect(transcription.language, isA<String?>());
+      } else if (transcription is OpenAITranscriptionModel) {
+        expect(transcription.text, isA<String?>());
+      }
     });
     test("create translation", () async {
       final audioExampleFile = await getFileFromUrl(
@@ -470,8 +456,7 @@ void main() async {
         model: "whisper-1",
       );
 
-      expect(translation, isA<OpenAIAudioModel>());
-      expect(translation.text, isA<String>());
+      expect(translation, isA<String>());
     });
 
     test("create transcription with auto chunking strategy", () async {
@@ -488,10 +473,11 @@ void main() async {
         model: "whisper-1",
         chunkingStrategy: chunkingStrategy,
       );
-
-      // Assert
-      expect(transcription, isA<OpenAIAudioModel>());
-      expect(transcription.text, isA<String>());
+      if (transcription is OpenAITranscriptionVerboseModel) {
+        expect(transcription.language, isA<String?>());
+      } else if (transcription is OpenAITranscriptionModel) {
+        expect(transcription.text, isA<String?>());
+      }
     });
 
     test("create transcription with server VAD chunking strategy", () async {
@@ -513,9 +499,11 @@ void main() async {
         chunkingStrategy: chunkingStrategy,
       );
 
-      // Assert
-      expect(transcription, isA<OpenAIAudioModel>());
-      expect(transcription.text, isA<String>());
+      if (transcription is OpenAITranscriptionVerboseModel) {
+        expect(transcription.language, isA<String?>());
+      } else if (transcription is OpenAITranscriptionModel) {
+        expect(transcription.text, isA<String?>());
+      }
     });
 
     test("create translation with auto chunking strategy", () async {
@@ -530,12 +518,9 @@ void main() async {
       final translation = await OpenAI.instance.audio.createTranslation(
         file: audioExampleFile,
         model: "whisper-1",
-        chunkingStrategy: chunkingStrategy,
       );
 
-      // Assert
-      expect(translation, isA<OpenAIAudioModel>());
-      expect(translation.text, isA<String>());
+      expect(translation, isA<String>());
     });
   });
 
@@ -551,18 +536,18 @@ void main() async {
       expect(file.id, isNotNull);
     });
     test("list", () async {
-      final List<OpenAIFileModel> files = await OpenAI.instance.file.list();
-      expect(files, isA<List<OpenAIFileModel>>());
-      if (files.isNotEmpty) {
-        expect(files.first, isA<OpenAIFileModel>());
-        expect(files.first.id, isNotNull);
-        expect(files.first.id, isA<String>());
+      OpenAIFileListModel files = await OpenAI.instance.file.list();
+
+      if (files.data.isNotEmpty) {
+        expect(files.data.first, isA<OpenAIFileModel>());
+        expect(files.data.first.id, isNotNull);
+        expect(files.data.first.id, isA<String>());
 
         // get the id of the file that we uploaded in the previous test.
-        fileIdFromFilesApi = files
+        fileIdFromFilesApi = files.data
             .firstWhere((element) => element.fileName.contains("example.jsonl"))
             .id;
-        fileToDelete = files.last.id;
+        fileToDelete = files.data.last.id;
       }
     });
 

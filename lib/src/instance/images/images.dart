@@ -234,7 +234,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// );
   /// ```
   @override
-  Future<List<OpenAIImageModel>> variation({
+  Future<List<OpenAIImageData>> variation({
     required File image,
     String? model,
     int? n,
@@ -245,7 +245,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
     final String variations = "/variations";
 
     return await OpenAINetworkingClient.imageVariationForm<
-        List<OpenAIImageModel>>(
+        List<OpenAIImageData>>(
       image: image,
       body: {
         if (model != null) "model": model,
@@ -255,16 +255,10 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (user != null) "user": user,
       },
       onSuccess: (Map<String, dynamic> response) {
-        if (response.containsKey("data")) {
-          return [
-            ...(response["data"] as List).map(
-              (e) => OpenAIImageModel.fromMap(e),
-            ),
-          ];
-        }
-
         return [
-          OpenAIImageModel.fromMap(response),
+          ...(response["data"] as List).map(
+            (e) => OpenAIImageData.fromMap(e),
+          ),
         ];
       },
       to: BaseApiUrlBuilder.build(endpoint + variations),

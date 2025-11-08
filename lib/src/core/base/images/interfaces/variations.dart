@@ -3,7 +3,7 @@ import 'dart:io';
 import '../../../../../dart_openai.dart';
 
 abstract class VariationInterface {
-  Future<List<OpenAIImageModel>> variation({
+  Future<List<OpenAIImageData>> variation({
     required File image,
     int? n,
     OpenAIImageSize? size,
