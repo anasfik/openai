@@ -92,7 +92,7 @@ print(chatCompletion.choices.first.message.content);
 ---
 
 ## 📊 API Coverage (2025)
-
+| API feature | Status | Details |
 |--------------|--------|----------|
 | **📋 Responses** | ✅ Complete | excluding stream functionality |
 | **💭 Conversations** | ✅ Complete All |
