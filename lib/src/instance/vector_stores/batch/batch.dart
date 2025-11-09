@@ -5,7 +5,6 @@ import 'package:dart_openai/src/core/models/vector_stores/vectore_store_batch.da
 import 'package:dart_openai/src/core/models/vector_stores/vectore_store_batch_list.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/vector_stores/batch/batch.dart';
-import 'package:dart_openai/src/instance/openai.dart';
 
 class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
   @override
