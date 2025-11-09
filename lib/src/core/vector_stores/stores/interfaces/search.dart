@@ -1,9 +1,10 @@
 import 'package:dart_openai/src/core/models/vector_stores/search_filter.dart';
-import 'package:dart_openai/src/instance/responses/ranking_options.dart';
+import 'package:dart_openai/src/core/models/vector_stores/ranking_options.dart';
+import 'package:dart_openai/src/core/models/vector_stores/search_vector_store_list.dart';
 
 abstract class SearchInterface {
-  // no guides on how the response should be parsed.
-  Future<Map<String, dynamic>> search({
+  Future<SearchVectorStoreList> search({
+    required String vectorStoreId,
     required query,
     OpenAIVectorStoresSearchFilter? filters,
     int? maxNumResults,

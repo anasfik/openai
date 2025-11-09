@@ -19,6 +19,24 @@ class OpenAIVectorStoreChunkingStrategy {
       ),
     );
   }
+  factory OpenAIVectorStoreChunkingStrategy.fromMap(Map<String, dynamic> map) {
+    final type = map['type'];
+    switch (type) {
+      case 'auto':
+        return AutoOpenAIVectorStoreChunkingStrategy();
+      case 'static':
+        return StaticOpenAIVectorStoreChunkingStrategy(
+          static: StaticOpenAIVectorStoreChunkingStrategyStatic(
+            chunkOverlapTokens: map['static']['chunk_overlap_tokens'],
+            maxChunkSizeTokens: map['static']['max_chunk_size_tokens'],
+          ),
+        );
+      default:
+        throw UnimplementedError(
+          'Chunking strategy type $type is not implemented',
+        );
+    }
+  }
 
   Map<String, dynamic> toMap() {
     return {

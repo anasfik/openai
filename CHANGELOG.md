@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.1.0
+
+- Support for all Vector Store APIs
+
 ## 6.0.2
 
 - Fix incorrect max_tokens field in the legacy completions API.

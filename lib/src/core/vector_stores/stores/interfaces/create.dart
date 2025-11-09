@@ -9,5 +9,6 @@ abstract class CreateInterface {
     List<String>? fileIds,
     Map<String, dynamic>? metadata,
     String? name,
+    String? description,
   });
 }

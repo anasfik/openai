@@ -47,7 +47,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  dart_openai: ^6.0.0
+  dart_openai: 
 ```
 
 ### Basic Setup
@@ -110,12 +110,12 @@ print(chatCompletion.choices.first.message.content);
 | **📤 [Uploads](#-uploads)** | 🗓️ planned | - ||
 | **🤖 [Models](#-models)** | ✅ Complete | All | 11-08-2025 21:53:13 |
 | **🛡️ [Moderation](#️-moderation)** | ✅ Complete | All |  11-08-2025 21:54:01 |
-| **🗃️ [Vector Stores](#️-vector-stores)** | 🗓️ planned  | - ||
-| **💬 ChatKit** | ❌ NOt planned  | Beta feature ||
+| **🗃️ [Vector Stores](#️-vector-stores)** | ✅ Complete | All | 11-09-2025 17:39:26 |
+| **💬 ChatKit** | ❌ Not planned  | Beta feature ||
 | **📦 [Containers](#-containers)** | 🗓️ planned  | - ||
 | **🕛 [Real-time](#-real-time)** | 🗓️ planned  | - ||
 | **💬 [Chat Completions](#-chat-completions)** | ✅ Complete | excluding stream functionality ||
-| **🤖 Assistants** | NOt planned | beta feature ||
+| **🤖 Assistants** | ❌ Not planned | beta feature ||
 | **🤖 [Administration](#-administration)** | 🗓️ planned | - ||
 | **📝 Completions (Legacy)** | ✅ Complete | All ||
 | **✏️ Edits (Legacy)** | ✅ Complete | All ||
@@ -482,7 +482,147 @@ OpenAIModerationModel moderation = await OpenAI.instance.moderation.create(
 
 #### 🗃️ Vector Stores
 
-// (To be implemented)
+##### Vector Stores
+
+```dart
+// Create vector store
+  OpenAIVectorStoreModel vectorStore = await OpenAI.instance.vectorStores.vectorStores.create(
+    name: "example_vector_store",
+    chunkingStrategy: OpenAIVectorStoreChunkingStrategy.static(
+      chunkOverlapTokens: 300,
+      maxChunkSizeTokens: 750,
+    ),
+    expiresAfter: OpenAIVectorStoreExpiresAfter(
+      anchor: "last_active_at",
+      days: 1,
+    ),
+  ); 
+
+  // List vector stores
+ OpenAIVectorStoreListModel allVEctorStores = await OpenAI.instance.vectorStores.vectorStores.list(limit: 30);
+
+ // Get vector store
+ final firstVectorStoreAsync = await OpenAI.instance.vectorStores.vectorStores.get(
+   vectorStoreId: "vector_store_id",
+ );
+
+// Modify vector store
+final updatedVectorStore = await OpenAI.instance.vectorStores.vectorStores.modify(
+  vectorStoreId: "vector_store_id",
+  name: "updated_vector_store_name",
+);
+
+// Delete vector store
+await OpenAI.instance.vectorStores.vectorStores.delete(
+  vectorStoreId: "vector_store_id",
+);
+
+// search in vector store
+final searchVEctorStoreResult = await OpenAI.instance.vectorStores.vectorStores.search(
+   vectorStoreId: updatedVectorStore.id,
+   query: "example",
+   maxNumResults: 10,
+   filters: OpenAIVectorStoresSearchFilter.comparison(
+     type: "eq",
+     key: "metadata.example_key",
+     value: "example_value",
+   ),
+   rankingOptions: OpenAIVectorStoresRankingOptions(
+     ranker: "none",
+     scoreThreshold: 0,
+   ),
+);
+
+```
+
+##### Vector store files
+
+```dart
+
+// Create vector store file
+final createdVectorStoreFile = await OpenAI.instance.vectorStores.vectorStoresFiles.create(
+  vectorStoreId: "vector_store_id",
+  fileId: "file_id",
+  attributes: {
+    "chapter": "Chapter 1",
+  },
+  chunckingStrategy: OpenAIVectorStoreChunkingStrategy.static(
+    chunkOverlapTokens: 300,
+    maxChunkSizeTokens: 750,
+  ),
+);
+
+// List vector store files
+final vectorStoreFiles = await OpenAI.instance.vectorStores.vectorStoresFiles.list(
+  vectoreStoreId: "vector_store_id",
+  limit: 60,
+);
+
+// Get vector store file
+final vectorStoreFile = await OpenAI.instance.vectorStores.vectorStoresFiles.get(
+  fileId: "file_id",
+  vectorStoreId: "vector_store_id",
+);
+
+// Get vector store file content
+final vectorStoreFileContent = await OpenAI.instance.vectorStores.vectorStoresFiles.getContent(
+  fileId: "file_id",
+  vectorStoreId: "vector_store_id",
+);
+
+// Update vector store file
+final updatedVectorStoreFile = await OpenAI.instance.vectorStores.vectorStoresFiles.update(
+  fileId: "file_id",
+  vectorStoreId: "vector_store_id",
+  attributes: {
+    "chapter": "Updated Chapter 1",
+  },
+);
+
+// Delete vector store file
+await OpenAI.instance.vectorStores.vectorStoresFiles.delete(
+  fileId: "file_id",
+  vectorStoreId: "vector_store_id",
+);
+
+```
+
+##### Vector store file batches
+
+```dart
+
+// Create vector store file batch
+final vectoreStoreFileBatch = await OpenAI.instance.vectorStores.vectorStoreFileBatch.create(
+  vectorStoreId: "vector_store_id",
+  chunkingStrategy: OpenAIVectorStoreChunkingStrategy.static(
+    chunkOverlapTokens: 200,
+    maxChunkSizeTokens: 550,
+  ),
+  attributes: {
+    "batch_name": "My First Batch",
+  },
+  fileIds: ["file-abc123", "file-def456"],
+);
+
+// Get vector store file batch
+final batch = await OpenAI.instance.vectorStores.vectorStoreFileBatch.get(
+  batchId: "batch_id",
+  vectorStoreId: "vector_store_id",
+);
+
+// Cancel vector store file batch
+final cancelledBatch = await OpenAI.instance.vectorStores.vectorStoreFileBatch.cancel(
+  batchId: "batch_id",
+  vectorStoreId: "vector_store_id",
+);
+
+// List vector store files in a batch
+final vectorStoreBatchFiles = await OpenAI.instance.vectorStores.vectorStoreFileBatch.list(
+  vectorStoreId: "vector_store_id",
+  batchId: 'batch_id',
+);
+
+```
 
 #### 📦 Containers
 

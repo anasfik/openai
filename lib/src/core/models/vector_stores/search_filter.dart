@@ -15,6 +15,20 @@ class OpenAIVectorStoresSearchFilter {
       value: value,
     );
   }
+  factory OpenAIVectorStoresSearchFilter.compound({
+    required String type,
+    required List<OpenAIVectorStoresSearchFilter> filters,
+  }) {
+    return CompoundOpenAIVectorStoresSearchFilter(
+      type: type,
+      filters: filters,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    throw UnimplementedError(
+        'toMap() must be implemented in subclasses of OpenAIVectorStoresSearchFilter');
+  }
 }
 
 class ComparisonOpenAIVectorStoresSearchFilter

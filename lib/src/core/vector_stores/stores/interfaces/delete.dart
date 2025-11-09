@@ -1,5 +1,5 @@
 abstract class DeleteInterface {
-  Future<void> modify({
+  Future<void> delete({
     required String vectorStoreId,
   });
 }

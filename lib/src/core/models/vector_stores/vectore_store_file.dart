@@ -20,4 +20,21 @@ class OpenAIVectorStoreFileModel {
     required this.usageBytes,
     required this.status,
   });
+
+  factory OpenAIVectorStoreFileModel.fromMap(Map<String, dynamic> map) {
+    return OpenAIVectorStoreFileModel(
+      id: map['id'],
+      vectorStoreId: map['vector_store_id'],
+      attributes: map['attributes'],
+      chunkingStrategy: map['chunking_strategy'] != null
+          ? OpenAIVectorStoreChunkingStrategy.fromMap(
+              Map<String, dynamic>.from(map['chunking_strategy']),
+            )
+          : null,
+      createdAt: map['created_at'],
+      lastError: map['last_error'],
+      usageBytes: map['usage_bytes'],
+      status: map['status'],
+    );
+  }
 }

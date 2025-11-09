@@ -3,6 +3,9 @@
 /// {@endtemplate}
 class OpenAIApisEndpoints {
   ///
+  final vectorStores = "/vector_stores";
+
+  ///
   final evals = "/evals";
 
   ///

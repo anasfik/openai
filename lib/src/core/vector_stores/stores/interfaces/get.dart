@@ -6,7 +6,7 @@ abstract class GetInterface {
     required String vectorStoreId,
   });
 
-  Future<OpenAIVectorStoreListModel> getAll({
+  Future<OpenAIVectorStoreListModel> list({
     String? after,
     String? before,
     int? limit,

@@ -12,4 +12,19 @@ class OpenAIVectorStoreFileListModel {
     required this.lastId,
     required this.hasMore,
   });
+
+  factory OpenAIVectorStoreFileListModel.fromMap(
+    Map<String, dynamic> map,
+  ) {
+    return OpenAIVectorStoreFileListModel(
+      data: List<OpenAIVectorStoreFileModel>.from(
+        (map['data'] as List).map<OpenAIVectorStoreFileModel>(
+          (x) => OpenAIVectorStoreFileModel.fromMap(x),
+        ),
+      ),
+      firstId: map['first_id'],
+      lastId: map['last_id'],
+      hasMore: map['has_more'],
+    );
+  }
 }

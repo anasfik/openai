@@ -7,7 +7,7 @@ abstract class GetInterface {
     required String vectorStoreId,
   });
 
-  Future<OpenAIVectorStoreBatchListModel> getAll({
+  Future<OpenAIVectorStoreBatchListModel> list({
     required String batchId,
     required String vectorStoreId,
     String? after,

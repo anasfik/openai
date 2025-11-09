@@ -4,7 +4,7 @@ import 'package:dart_openai/src/core/models/vector_stores/vectore_store_batch.da
 abstract class CreateInterface {
   Future<OpenAIVectorStoreBatchModel> create({
     required String vectorStoreId,
-    required List<String> fileIds,
+    List<String>? fileIds,
     Map<String, dynamic>? attributes,
     OpenAIVectorStoreChunkingStrategy? chunkingStrategy,
   });
