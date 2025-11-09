@@ -1,7 +1,6 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/vector_stores/chunking_strategy.dart';
-import 'package:dart_openai/src/core/models/vector_stores/vector_store.dart';
 import 'package:dart_openai/src/core/models/vector_stores/vector_store_file_list.dart';
 import 'package:dart_openai/src/core/models/vector_stores/vectore_store_file.dart';
 import 'package:dart_openai/src/core/networking/client.dart';

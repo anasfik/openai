@@ -1,7 +1,6 @@
 import 'package:dart_openai/dart_openai.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
-import 'package:dart_openai/src/core/models/vector_stores/search_vector_store_list.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/vector_stores/stores/stores.dart';
 
