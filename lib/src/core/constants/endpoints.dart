@@ -2,6 +2,8 @@
 /// The class holding all endpoints for the API that are used.
 /// {@endtemplate}
 class OpenAIApisEndpoints {
+  final containers = "/containers";
+
   ///
   final vectorStores = "/vector_stores";
 

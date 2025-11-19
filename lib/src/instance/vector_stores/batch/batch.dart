@@ -4,7 +4,7 @@ import 'package:dart_openai/src/core/models/vector_stores/chunking_strategy.dart
 import 'package:dart_openai/src/core/models/vector_stores/vectore_store_batch.dart';
 import 'package:dart_openai/src/core/models/vector_stores/vectore_store_batch_list.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
-import 'package:dart_openai/src/core/vector_stores/batch/batch.dart';
+import 'package:dart_openai/src/core/base/vector_stores/batch/batch.dart';
 
 class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
   @override

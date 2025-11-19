@@ -52,3 +52,6 @@ export 'vector_stores/vectore_store_file.dart';
 export 'vector_stores/vectore_store_list.dart';
 export 'vector_stores/ranking_options.dart';
 export 'vector_stores/search_vector_store_list.dart';
+export 'containers/container.dart';
+export 'containers/containers_list.dart';
+export 'containers/expires_after.dart';

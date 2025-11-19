@@ -110,9 +110,9 @@ print(chatCompletion.choices.first.message.content);
 | **📤 [Uploads](#-uploads)** | 🗓️ planned | - ||
 | **🤖 [Models](#-models)** | ✅ Complete | All | 11-08-2025 21:53:13 |
 | **🛡️ [Moderation](#️-moderation)** | ✅ Complete | All |  11-08-2025 21:54:01 |
-| **🗃️ [Vector Stores](#️-vector-stores)** | ✅ Complete | All | 11-09-2025 17:39:26 |
+| **🗃️ [Vector Stores](#️-vector-stores)** | ✅ Complete | All | 11-19-2025 12:24:15 |
 | **💬 ChatKit** | ❌ Not planned  | Beta feature ||
-| **📦 [Containers](#-containers)** | 🗓️ planned  | - ||
+| **📦 [Containers](#containers)** | ✅ Complete | All | 11-19-2025 12:24:15 |
 | **🕛 [Real-time](#-real-time)** | 🗓️ planned  | - ||
 | **💬 [Chat Completions](#-chat-completions)** | ✅ Complete | excluding stream functionality ||
 | **🤖 Assistants** | ❌ Not planned | beta feature ||
@@ -626,7 +626,67 @@ final vectorStoreBatchFiles = await OpenAI.instance.vectorStores.vectorStoreFile
 
 #### 📦 Containers
 
-// (To be implemented)
+##### Containers
+
+```dart
+// Create container
+final container = await OpenAI.instance.container.containers.create(
+  name: "my special container",
+);
+
+// List containers
+final containers = await OpenAI.instance.container.containers.list(
+  limit: 20,
+);
+
+// Get container
+final firstContainer = await OpenAI.instance.container.containers.get(
+  containerId: "container_id",
+);
+
+// Delete container
+await OpenAI.instance.container.containers.delete(
+  containerId: "container_id",
+);
+
+```
+
+##### Container Files
+
+```dart
+// Create container file
+final containerFile = await OpenAI.instance.container.containerFiles.create(
+  file: File("path/to/file"),
+  containerId: "container_id",
+);
+
+// Get container file
+final gotContainerFile = await OpenAI.instance.container.containerFiles.get(
+  containerId: "container_id",
+  fileId: "file_id",
+);
+
+// Get container file content
+final gotContainerFileContent =
+    await OpenAI.instance.container.containerFiles.getContent(
+  containerId: "container_id",
+  fileId: "file_id",
+);
+
+// List container files
+final allContainerFiles = await OpenAI.instance.container.containerFiles.list(
+  containerId: "container_id",
+  limit: 20,
+);
+
+// Delete container file
+await OpenAI.instance.container.containerFiles.delete(
+  fileId: "file_id",
+  containerId: "container_id",
+);
+
+```
+
 
 #### 🕛 Real-time
 

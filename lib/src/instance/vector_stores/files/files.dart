@@ -4,7 +4,7 @@ import 'package:dart_openai/src/core/models/vector_stores/chunking_strategy.dart
 import 'package:dart_openai/src/core/models/vector_stores/vector_store_file_list.dart';
 import 'package:dart_openai/src/core/models/vector_stores/vectore_store_file.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
-import 'package:dart_openai/src/core/vector_stores/files/files.dart';
+import 'package:dart_openai/src/core/base/vector_stores/files/files.dart';
 
 class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
   @override
