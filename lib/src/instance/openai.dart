@@ -1,6 +1,5 @@
 import 'package:dart_openai/src/instance/batch/batch.dart';
 import 'package:dart_openai/src/instance/containers/container.dart';
-import 'package:dart_openai/src/instance/containers/containers.dart';
 import 'package:dart_openai/src/instance/conversations/conversations.dart';
 import 'package:dart_openai/src/instance/evals/evals.dart';
 import 'package:dart_openai/src/instance/graders/graders.dart';
