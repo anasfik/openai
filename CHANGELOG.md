@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.1.1
+
+- Support for containers & container files
+- Minor bug fixes and improvements.
+- Documentation updates.
+
 ## 6.1.0
 
 - Support for all Vector Store APIs
