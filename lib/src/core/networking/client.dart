@@ -121,12 +121,10 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
-      final message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
-
-      final exception = RequestFailedException(message, statusCode);
+      final exception = requestFailedExceptionFromMap(
+        decodedBody,
+        response.statusCode,
+      );
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -279,14 +277,10 @@ abstract class OpenAINetworkingClient {
 
       if (doesErrorExists(decodedBody)) {
         OpenAILogger.errorFoundInRequest();
-
-        final error = decodedBody[OpenAIStrings.errorFieldKey];
-
-        final message = error[OpenAIStrings.messageFieldKey];
-
-        final statusCode = response.statusCode;
-
-        final exception = RequestFailedException(message, statusCode);
+        final exception = requestFailedExceptionFromMap(
+          decodedBody,
+          response.statusCode,
+        );
         OpenAILogger.errorOcurred(exception);
 
         throw exception;
@@ -342,12 +336,10 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
-      final message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
-
-      final exception = RequestFailedException(message, statusCode);
+      final exception = requestFailedExceptionFromMap(
+        decodedBody,
+        response.statusCode,
+      );
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -387,6 +379,7 @@ abstract class OpenAINetworkingClient {
 
           try {
             String respondData = "";
+            var emittedData = false;
             await for (final value
                 in stream.where((event) => event.isNotEmpty)) {
               final data = value;
@@ -405,6 +398,7 @@ abstract class OpenAINetworkingClient {
                     break;
                   }
                   final decoded = jsonDecode(data) as Map<String, dynamic>;
+                  emittedData = true;
                   yield onSuccess(decoded);
                   continue;
                 }
@@ -415,19 +409,28 @@ abstract class OpenAINetworkingClient {
                 } catch (error) {/** ignore, data has not been received */}
 
                 if (doesErrorExists(decodedData)) {
-                  final error = decodedData[OpenAIStrings.errorFieldKey]
-                      as Map<String, dynamic>;
-                  var message = error[OpenAIStrings.messageFieldKey] as String;
-                  message = message.isEmpty ? jsonEncode(error) : message;
-                  final statusCode = respond.statusCode;
-                  final exception = RequestFailedException(message, statusCode);
+                  final exception = requestFailedExceptionFromMap(
+                    decodedData,
+                    respond.statusCode,
+                  );
 
                   yield* Stream<T>.error(
                     exception,
                   ); // Error cases sent from openai
+                  return;
                 }
               }
             } // end of await for
+
+            if (!emittedData &&
+                respond.statusCode >= HttpStatus.badRequest &&
+                respondData.trim().isNotEmpty) {
+              final exception = requestFailedExceptionFromRawBody(
+                respondData,
+                respond.statusCode,
+              );
+              yield* Stream<T>.error(exception);
+            }
           } catch (error, stackTrace) {
             yield* Stream<T>.error(
               error,
@@ -498,13 +501,10 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
-
-      final message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
-
-      final exception = RequestFailedException(message, statusCode);
+      final exception = requestFailedExceptionFromMap(
+        decodedBody,
+        response.statusCode,
+      );
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -551,12 +551,10 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
-      final message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
-
-      final exception = RequestFailedException(message, statusCode);
+      final exception = requestFailedExceptionFromMap(
+        decodedBody,
+        response.statusCode,
+      );
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -610,12 +608,10 @@ abstract class OpenAINetworkingClient {
 
     OpenAILogger.decodedSuccessfully();
     if (doesErrorExists(resultBody)) {
-      final Map<String, dynamic> error =
-          resultBody[OpenAIStrings.errorFieldKey];
-      final message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
-
-      final exception = RequestFailedException(message, statusCode);
+      final exception = requestFailedExceptionFromMap(
+        resultBody,
+        response.statusCode,
+      );
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -653,12 +649,10 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
 
     if (doesErrorExists(decodedBody)) {
-      final Map<String, dynamic> error =
-          decodedBody[OpenAIStrings.errorFieldKey];
-      final String message = error[OpenAIStrings.messageFieldKey];
-      final statusCode = response.statusCode;
-
-      final exception = RequestFailedException(message, statusCode);
+      final exception = requestFailedExceptionFromMap(
+        decodedBody,
+        response.statusCode,
+      );
       OpenAILogger.errorOcurred(exception);
 
       throw exception;
@@ -689,6 +683,58 @@ abstract class OpenAINetworkingClient {
 
   static bool doesErrorExists(Map<String, dynamic> decodedResponseBody) {
     return decodedResponseBody[OpenAIStrings.errorFieldKey] != null;
+  }
+
+  static RequestFailedException requestFailedExceptionFromMap(
+    Map<String, dynamic> decodedBody,
+    int statusCode,
+  ) {
+    final error = decodedBody[OpenAIStrings.errorFieldKey];
+    final fallbackMessage = jsonEncode(decodedBody);
+
+    if (error is Map<String, dynamic>) {
+      final message = error[OpenAIStrings.messageFieldKey]?.toString();
+
+      return RequestFailedException(
+        message == null || message.isEmpty ? jsonEncode(error) : message,
+        statusCode,
+      );
+    }
+
+    if (error is String && error.isNotEmpty) {
+      final path = decodedBody['path']?.toString();
+      final responseStatus = decodedBody['status'] ?? statusCode;
+
+      return RequestFailedException(
+        path == null ? error : '$error ($responseStatus @ $path)',
+        statusCode,
+      );
+    }
+
+    return RequestFailedException(fallbackMessage, statusCode);
+  }
+
+  static RequestFailedException requestFailedExceptionFromRawBody(
+    String responseBody,
+    int statusCode,
+  ) {
+    final trimmedBody = responseBody.trim();
+
+    if (trimmedBody.isEmpty) {
+      return RequestFailedException(
+        'Request failed with status code $statusCode',
+        statusCode,
+      );
+    }
+
+    try {
+      final decodedBody = decodeToMap(trimmedBody);
+      return doesErrorExists(decodedBody)
+          ? requestFailedExceptionFromMap(decodedBody, statusCode)
+          : RequestFailedException(jsonEncode(decodedBody), statusCode);
+    } on FormatException {
+      return RequestFailedException(trimmedBody, statusCode);
+    }
   }
 
   static http.Client _streamingHttpClient() {

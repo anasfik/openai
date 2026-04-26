@@ -240,6 +240,14 @@ File speechFile = await OpenAI.instance.audio.createSpeech(
   outputFileName: "output_speech.mp3",
 );
 
+// Create speech as bytes (useful on web or when you do not want a temp file)
+Uint8List speechBytes = await OpenAI.instance.audio.createSpeechBytes(
+  model: "tts-1",
+  input: "Text to convert to speech",
+  voice: OpenAIAudioVoice.fable,
+  responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
+);
+
 
 // Transcribe audio
 OpenAITranscriptionGeneralModel transcription = await OpenAI.instance.audio.createTranscription(
