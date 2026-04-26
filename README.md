@@ -248,6 +248,10 @@ Uint8List speechBytes = await OpenAI.instance.audio.createSpeechBytes(
   responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
 );
 
+// Note: tts-1 and tts-1-hd only support alloy, ash, coral, echo, fable,
+// nova, onyx, sage, and shimmer. Use gpt-4o-mini-tts for newer voices
+// such as ballad, verse, marin, and cedar.
+
 
 // Transcribe audio
 OpenAITranscriptionGeneralModel transcription = await OpenAI.instance.audio.createTranscription(

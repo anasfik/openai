@@ -41,3 +41,15 @@ Problem:
 Changes:
 - Confirmed the SDK already exposes `createSpeechBytes(...)` in [lib/src/instance/audio/audio.dart](./lib/src/instance/audio/audio.dart).
 - Documented `createSpeechBytes(...)` in [README.md](./README.md) so the in-memory byte API is visible in the public usage docs.
+
+## #224 - [Bug]: /v1/audio/speech endpoint (TTS) returns 400 Bad Request when using the 'ballad' voice
+
+Problem:
+- The SDK exposed newer built-in voices like `ballad`, but older speech models such as `tts-1` and `tts-1-hd` only support a smaller voice set.
+- That mismatch let unsupported combinations reach the API, which then failed with a backend 400 validation error.
+
+Changes:
+- Added model and voice compatibility validation in [lib/src/instance/audio/audio.dart](./lib/src/instance/audio/audio.dart) for `createSpeech(...)` and `createSpeechBytes(...)`.
+- The SDK now throws a clear local `ArgumentError` before sending a request when `tts-1` or `tts-1-hd` is paired with unsupported newer voices.
+- Documented the older models' supported voice set in [README.md](./README.md).
+- Added a regression test for the unsupported `tts-1` + `ballad` combination in [test/regressions_test.dart](./test/regressions_test.dart).

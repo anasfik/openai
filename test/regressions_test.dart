@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:dart_openai/src/core/enum.dart';
 import 'package:dart_openai/src/core/models/chat/sub_models/choices/sub_models/sub_models/content.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
+import 'package:dart_openai/src/instance/audio/audio.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -103,6 +105,26 @@ void main() {
             (error) => error.toString(),
             'message',
             contains('Not Found'),
+          ),
+        ),
+      );
+    });
+
+    test('rejects unsupported legacy TTS voice and model combinations',
+        () async {
+      final future = OpenAIAudio().createSpeechBytes(
+        model: 'tts-1',
+        input: 'Hello from ballad.',
+        voice: OpenAIAudioVoice.ballad,
+      );
+
+      await expectLater(
+        future,
+        throwsA(
+          isA<ArgumentError>().having(
+            (error) => error.message,
+            'message',
+            contains('not supported by tts-1'),
           ),
         ),
       );

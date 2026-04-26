@@ -14,6 +14,18 @@ import '../../core/utils/logger.dart';
 /// This class is responsible for handling all audio requests, such as creating a transcription or translation for a given audio file.
 /// {@endtemplate}
 interface class OpenAIAudio implements OpenAIAudioBase {
+  static const Set<OpenAIAudioVoice> _legacySpeechVoices = {
+    OpenAIAudioVoice.alloy,
+    OpenAIAudioVoice.ash,
+    OpenAIAudioVoice.coral,
+    OpenAIAudioVoice.echo,
+    OpenAIAudioVoice.fable,
+    OpenAIAudioVoice.nova,
+    OpenAIAudioVoice.onyx,
+    OpenAIAudioVoice.sage,
+    OpenAIAudioVoice.shimmer,
+  };
+
   @override
   String get endpoint => OpenAIStrings.endpoints.audio;
 
@@ -163,6 +175,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     String outputFileName = "output",
     Directory? outputDirectory,
   }) async {
+    _validateSpeechVoiceForModel(model: model, voice: voice);
+
     return await OpenAINetworkingClient.postAndExpectFileResponse(
       to: BaseApiUrlBuilder.build(endpoint + "/speech"),
       body: {
@@ -195,6 +209,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     String outputFileName = "output",
     Directory? outputDirectory,
   }) async {
+    _validateSpeechVoiceForModel(model: model, voice: voice);
+
     return await OpenAINetworkingClient.postAndGetBytes(
       to: BaseApiUrlBuilder.build(endpoint + "/speech"),
       body: {
@@ -206,5 +222,23 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         if (speed != null) "speed": speed,
       },
     );
+  }
+
+  static void _validateSpeechVoiceForModel({
+    required String model,
+    required OpenAIAudioVoice voice,
+  }) {
+    final normalizedModel = model.trim().toLowerCase();
+
+    if ((normalizedModel == 'tts-1' || normalizedModel == 'tts-1-hd') &&
+        !_legacySpeechVoices.contains(voice)) {
+      throw ArgumentError.value(
+        voice.name,
+        'voice',
+        '${voice.name} is not supported by $model. '
+            'Use one of alloy, ash, coral, echo, fable, nova, onyx, sage, or shimmer, '
+            'or switch to gpt-4o-mini-tts for newer voices such as ballad, verse, marin, or cedar.',
+      );
+    }
   }
 }
