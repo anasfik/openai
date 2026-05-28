@@ -13,6 +13,7 @@ import "package:http/http.dart" as http;
 import "package:meta/meta.dart";
 
 import '../constants/strings.dart';
+import '../utils/telemetry.dart';
 
 import "../utils/streaming_http_client_default.dart"
     if (dart.library.js) 'package:dart_openai/src/core/utils/streaming_http_client_web.dart'
@@ -386,7 +387,8 @@ abstract class OpenAINetworkingClient {
               respondData += data;
 
               final dataLines = data
-                  .split("\n")
+                  .split("
+")
                   .where((element) => element.isNotEmpty)
                   .toList();
 
