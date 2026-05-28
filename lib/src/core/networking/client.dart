@@ -14,6 +14,7 @@ import "package:meta/meta.dart";
 
 import '../constants/strings.dart';
 import '../utils/telemetry.dart';
+import '../utils/telemetry.dart';
 
 import "../utils/streaming_http_client_default.dart"
     if (dart.library.js) 'package:dart_openai/src/core/utils/streaming_http_client_web.dart'
@@ -95,6 +96,7 @@ abstract class OpenAINetworkingClient {
     http.Client? client,
   }) async {
     OpenAILogger.logStartRequest(from);
+    _OpenAITelemetry.requestMade(from, null);
 
     final uri = Uri.parse(from);
     final headers = HeadersBuilder.build();
@@ -141,6 +143,7 @@ abstract class OpenAINetworkingClient {
     required T Function(Map<String, dynamic>) onSuccess,
     http.Client? client,
   }) {
+    _OpenAITelemetry.requestMade(from, null);
     final controller = StreamController<T>();
 
     final clientForUse = client ?? _streamingHttpClient();
@@ -254,6 +257,7 @@ abstract class OpenAINetworkingClient {
     http.Client? client,
   }) async {
     OpenAILogger.logStartRequest(to);
+    _OpenAITelemetry.requestMade(to, body);
 
     final uri = Uri.parse(to);
 
@@ -309,6 +313,7 @@ abstract class OpenAINetworkingClient {
     http.Client? client,
   }) async {
     OpenAILogger.logStartRequest(to);
+    _OpenAITelemetry.requestMade(to, body);
 
     final uri = Uri.parse(to);
 
@@ -461,6 +466,7 @@ abstract class OpenAINetworkingClient {
     required Map<String, String> body,
   }) async {
     OpenAILogger.logStartRequest(to);
+    _OpenAITelemetry.requestMade(to, body);
 
     final uri = Uri.parse(to);
 
@@ -525,6 +531,7 @@ abstract class OpenAINetworkingClient {
     required File image,
   }) async {
     OpenAILogger.logStartRequest(to);
+    _OpenAITelemetry.requestMade(to, body);
 
     final httpMethod = OpenAIStrings.postMethod;
 
@@ -575,6 +582,7 @@ abstract class OpenAINetworkingClient {
     Map<String, dynamic> Function(String rawResponse)? responseMapAdapter,
   }) async {
     OpenAILogger.logStartRequest(to);
+    _OpenAITelemetry.requestMade(to, body);
 
     final uri = Uri.parse(to);
     final headers = HeadersBuilder.build();
