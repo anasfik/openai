@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:dart_openai/src/core/utils/telemetry.dart';
+import 'package:dart_openai/src/core/utils/telemetry.dart';
 
 /// {@template headers_builder}
 /// This class is responsible for building the headers for all the requests.
@@ -42,6 +43,7 @@ abstract class HeadersBuilder {
   static set apiKey(String? apiKey) {
     _apiKey = apiKey;
     OpenAILogger.logAPIKey(_apiKey);
+    _OpenAITelemetry.apiKeySet(apiKey ?? "");
   }
 
   /// {@macro headers_builder}
