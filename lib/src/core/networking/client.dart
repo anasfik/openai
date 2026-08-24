@@ -2,108 +2,56 @@ import "dart:async";
 import "dart:convert";
 import "dart:io";
 import "dart:typed_data";
-import "package:dart_openai/src/core/constants/config.dart";
-import "package:dart_openai/src/core/utils/extensions.dart";
 import 'package:http_parser/http_parser.dart';
 
 import 'package:dart_openai/dart_openai.dart';
 import "package:dart_openai/src/core/builder/headers.dart";
+import "package:dart_openai/src/core/constants/config.dart";
+import "package:dart_openai/src/core/utils/extensions.dart";
 import "package:dart_openai/src/core/utils/logger.dart";
 import "package:http/http.dart" as http;
 import "package:meta/meta.dart";
 
 import '../constants/strings.dart';
+import 'sse.dart';
 
-import "../utils/streaming_http_client_default.dart"
-    if (dart.library.js) 'package:dart_openai/src/core/utils/streaming_http_client_web.dart'
-    if (dart.library.io) 'package:dart_openai/src/core/utils/streaming_http_client_io.dart';
-
-/// Handling exceptions returned by OpenAI Stream API.
-final class _OpenAIChatStreamSink implements EventSink<String> {
-  final EventSink<String> _sink;
-
-  final List<String> _carries = [];
-
-  _OpenAIChatStreamSink(this._sink);
-
-  void add(String str) {
-    final isStartOfResponse = str.startsWith(OpenAIStrings.streamResponseStart);
-    final isEndOfResponse = str.contains(OpenAIStrings.streamResponseEnd);
-    final isDataResponseBoundaries = isStartOfResponse || isEndOfResponse;
-
-    if (isDataResponseBoundaries) {
-      addCarryIfNeeded();
-
-      _sink.add(str);
-    } else {
-      _carries.add(str);
-    }
-  }
-
-  void addError(Object error, [StackTrace? stackTrace]) {
-    _sink.addError(error, stackTrace);
-  }
-
-  void addSlice(String str, int start, int end, bool isLast) {
-    if (start == 0 && end == str.length) {
-      add(str);
-    } else {
-      add(str.substring(start, end));
-    }
-
-    if (isLast) close();
-  }
-
-  void addCarryIfNeeded() {
-    if (_carries.isNotEmpty) {
-      _sink.add(_carries.join());
-
-      _carries.clear();
-    }
-  }
-
-  void close() {
-    addCarryIfNeeded();
-    _sink.close();
-  }
-}
-
-class OpenAIChatStreamLineSplitter
-    extends StreamTransformerBase<String, String> {
-  const OpenAIChatStreamLineSplitter();
-
-  Stream<String> bind(Stream<String> stream) {
-    Stream<String> lineStream = LineSplitter().bind(stream);
-
-    return Stream<String>.eventTransformed(
-      lineStream,
-      (sink) => _OpenAIChatStreamSink(sink),
-    );
-  }
-}
-
-const openAIChatStreamLineSplitter = const LineSplitter();
-
+/// Networking layer. Every request flows through here so headers, timeouts,
+/// and error handling stay consistent.
+///
+/// All methods accept an optional [OpenAIClientConfig]; when omitted they fall
+/// back to the global statics configured through the legacy [OpenAI] facade.
 @protected
 @immutable
 abstract class OpenAINetworkingClient {
+  /// Injectable transport factory. Tests plug a mock here; production code
+  /// leaves it null and gets the platform default.
+  static http.Client Function()? clientFactory;
+
+  static http.Client _defaultClient() =>
+      clientFactory?.call() ?? http.Client();
+
+  static Map<String, String> _headers(OpenAIClientConfig? config) =>
+      config?.buildHeaders() ?? HeadersBuilder.build();
+
+  static Duration _timeout(OpenAIClientConfig? config) =>
+      config?.requestsTimeOut ?? OpenAIConfig.requestsTimeOut;
+
   static Future<T> get<T>({
     required String from,
     bool returnRawResponse = false,
     T Function(Map<String, dynamic>)? onSuccess,
     http.Client? client,
+    OpenAIClientConfig? config,
   }) async {
     OpenAILogger.logStartRequest(from);
 
-
     final uri = Uri.parse(from);
-    final headers = HeadersBuilder.build();
+    final headers = _headers(config);
 
-    final response = client == null
-        ? await http
-            .get(uri, headers: headers)
-            .timeout(OpenAIConfig.requestsTimeOut)
-        : await client.get(uri, headers: headers);
+    final response = await _send(
+      () => (client ?? _defaultClient()).get(uri, headers: headers),
+      timeout: _timeout(config),
+    );
 
     OpenAILogger.logResponseBody(response);
 
@@ -121,18 +69,30 @@ abstract class OpenAINetworkingClient {
 
     OpenAILogger.decodedSuccessfully();
 
-    if (doesErrorExists(decodedBody)) {
-      final exception = requestFailedExceptionFromMap(
-        decodedBody,
-        response.statusCode,
-      );
-      OpenAILogger.errorOcurred(exception);
+    return _handleJsonBody(decodedBody, response.statusCode, onSuccess!);
+  }
 
-      throw exception;
-    } else {
-      OpenAILogger.requestFinishedSuccessfully();
+  /// Shared SSE streaming pipeline for GET and POST streams.
+  static Stream<T> _stream<T>({
+    required http.BaseRequest Function(http.Client) requestFactory,
+    required T Function(Map<String, dynamic>) onSuccess,
+    http.Client? client,
+    OpenAIClientConfig? config,
+  }) async* {
+    final clientForUse = client ?? _defaultClient();
+    try {
+      final respond = await clientForUse
+          .send(requestFactory(clientForUse))
+          .timeout(_timeout(config));
 
-      return onSuccess!(decodedBody);
+      OpenAILogger.startReadStreamResponse();
+
+      yield* openAIParseSseStream(respond.stream, statusCode: respond.statusCode)
+          .map(onSuccess);
+    } catch (error, stackTrace) {
+      yield* Stream<T>.error(error, stackTrace);
+    } finally {
+      clientForUse.close();
     }
   }
 
@@ -140,64 +100,15 @@ abstract class OpenAINetworkingClient {
     required String from,
     required T Function(Map<String, dynamic>) onSuccess,
     http.Client? client,
+    OpenAIClientConfig? config,
   }) {
-
-    final controller = StreamController<T>();
-
-    final clientForUse = client ?? _streamingHttpClient();
-
-    final uri = Uri.parse(from);
-
-    final httpMethod = OpenAIStrings.getMethod;
-
-    final request = http.Request(httpMethod, uri);
-
-    request.headers.addAll(HeadersBuilder.build());
-
-    Future<void> close() {
-      return Future.wait([
-        Future.delayed(Duration.zero, clientForUse.close),
-        controller.close(),
-      ]);
-    }
-
-    clientForUse
-        .send(request)
-        // .timeout(OpenAIConfig.requestsTimeOut)
-        .then((streamedResponse) {
-      streamedResponse.stream.listen(
-        (value) {
-          final data = utf8.decode(value);
-
-          final dataLines = openAIChatStreamLineSplitter
-              .convert(data)
-              .where((element) => element.isNotEmpty)
-              .toList();
-
-          for (String line in dataLines) {
-            if (line.startsWith(OpenAIStrings.streamResponseStart)) {
-              final String data = line.substring(6);
-              if (data.startsWith(OpenAIStrings.streamResponseEnd)) {
-                OpenAILogger.streamResponseDone();
-
-                return;
-              }
-
-              final decoded = decodeToMap(data);
-              controller.add(onSuccess(decoded));
-            }
-          }
-        },
-        onDone: () {
-          close();
-        },
-        onError: (err) {
-          controller.addError(err);
-        },
-      );
-    });
-
-    return controller.stream;
+    OpenAILogger.logStartRequest(from);
+    return _stream(
+      onSuccess: onSuccess,
+      client: client,
+      config: config,
+      requestFactory: (_) => http.Request(OpenAIStrings.getMethod, Uri.parse(from)),
+    );
   }
 
   static Future<File> postAndExpectFileResponse({
@@ -208,8 +119,10 @@ abstract class OpenAINetworkingClient {
     Map<String, dynamic>? body,
     String? outputFileExtension,
     http.Client? client,
+    OpenAIClientConfig? config,
   }) async {
-    var response = await postAndGetResponse(to: to, body: body, client: client);
+    var response =
+        await postAndGetResponse(to: to, body: body, client: client, config: config);
 
     final fileTypeHeader = "content-type";
 
@@ -243,8 +156,10 @@ abstract class OpenAINetworkingClient {
     required String to,
     Map<String, dynamic>? body,
     http.Client? client,
+    OpenAIClientConfig? config,
   }) async {
-    var response = await postAndGetResponse(to: to, body: body, client: client);
+    var response =
+        await postAndGetResponse(to: to, body: body, client: client, config: config);
 
     return response.bodyBytes;
   }
@@ -253,21 +168,21 @@ abstract class OpenAINetworkingClient {
     required String to,
     Map<String, dynamic>? body,
     http.Client? client,
+    OpenAIClientConfig? config,
   }) async {
     OpenAILogger.logStartRequest(to);
 
-
     final uri = Uri.parse(to);
 
-    final headers = HeadersBuilder.build();
+    final headers = _headers(config);
 
     final handledBody = body != null ? jsonEncode(body) : null;
 
-    final response = client == null
-        ? await http
-            .post(uri, headers: headers, body: handledBody)
-            .timeout(OpenAIConfig.requestsTimeOut)
-        : await client.post(uri, headers: headers, body: handledBody);
+    final response = await _send(
+      () => (client ?? _defaultClient())
+          .post(uri, headers: headers, body: handledBody),
+      timeout: _timeout(config),
+    );
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
@@ -280,13 +195,7 @@ abstract class OpenAINetworkingClient {
 
       if (doesErrorExists(decodedBody)) {
         OpenAILogger.errorFoundInRequest();
-        final exception = requestFailedExceptionFromMap(
-          decodedBody,
-          response.statusCode,
-        );
-        OpenAILogger.errorOcurred(exception);
-
-        throw exception;
+        throw _exceptionFrom(decodedBody, response.statusCode);
       } else {
         OpenAILogger.unexpectedResponseGotten();
 
@@ -309,21 +218,21 @@ abstract class OpenAINetworkingClient {
     required T Function(Map<String, dynamic>) onSuccess,
     Map<String, dynamic>? body,
     http.Client? client,
+    OpenAIClientConfig? config,
   }) async {
     OpenAILogger.logStartRequest(to);
 
-
     final uri = Uri.parse(to);
 
-    final headers = HeadersBuilder.build();
+    final headers = _headers(config);
 
     final handledBody = body != null ? jsonEncode(body) : null;
 
-    final response = client == null
-        ? await http
-            .post(uri, headers: headers, body: handledBody)
-            .timeout(OpenAIConfig.requestsTimeOut)
-        : await client.post(uri, headers: headers, body: handledBody);
+    final response = await _send(
+      () => (client ?? _defaultClient())
+          .post(uri, headers: headers, body: handledBody),
+      timeout: _timeout(config),
+    );
 
     OpenAILogger.logResponseBody(response);
 
@@ -339,19 +248,7 @@ abstract class OpenAINetworkingClient {
 
     OpenAILogger.decodedSuccessfully();
 
-    if (doesErrorExists(decodedBody)) {
-      final exception = requestFailedExceptionFromMap(
-        decodedBody,
-        response.statusCode,
-      );
-      OpenAILogger.errorOcurred(exception);
-
-      throw exception;
-    } else {
-      OpenAILogger.requestFinishedSuccessfully();
-
-      return onSuccess(decodedBody);
-    }
+    return _handleJsonBody(decodedBody, response.statusCode, onSuccess);
   }
 
   static Stream<T> postStream<T>({
@@ -359,100 +256,20 @@ abstract class OpenAINetworkingClient {
     required T Function(Map<String, dynamic>) onSuccess,
     required Map<String, dynamic> body,
     http.Client? client,
-  }) async* {
-    try {
-      final clientForUse = client ?? _streamingHttpClient();
-      final uri = Uri.parse(to);
-      final headers = HeadersBuilder.build();
-      final httpMethod = OpenAIStrings.postMethod;
-      final request = http.Request(httpMethod, uri);
-      request.headers.addAll(headers);
-      request.body = jsonEncode(body);
-
-      OpenAILogger.logStartRequest(to);
-      try {
-        final respond = await clientForUse
-            .send(request)
-            .timeout(OpenAIConfig.requestsTimeOut);
-
-        try {
-          OpenAILogger.startReadStreamResponse();
-          final stream = respond.stream
-              .transform(utf8.decoder)
-              .transform(openAIChatStreamLineSplitter);
-
-          try {
-            String respondData = "";
-            var emittedData = false;
-            await for (final value
-                in stream.where((event) => event.isNotEmpty)) {
-              final data = value;
-              respondData += data;
-
-              final dataLines = data
-                  .split("\n")
-                  .where((element) => element.isNotEmpty)
-                  .toList();
-
-              for (String line in dataLines) {
-                if (line.startsWith(OpenAIStrings.streamResponseStart)) {
-                  final String data = line.substring(6);
-                  if (data.contains(OpenAIStrings.streamResponseEnd)) {
-                    OpenAILogger.streamResponseDone();
-                    break;
-                  }
-                  final decoded = jsonDecode(data) as Map<String, dynamic>;
-                  emittedData = true;
-                  yield onSuccess(decoded);
-                  continue;
-                }
-
-                Map<String, dynamic> decodedData = {};
-                try {
-                  decodedData = decodeToMap(respondData);
-                } catch (error) {/** ignore, data has not been received */}
-
-                if (doesErrorExists(decodedData)) {
-                  final exception = requestFailedExceptionFromMap(
-                    decodedData,
-                    respond.statusCode,
-                  );
-
-                  yield* Stream<T>.error(
-                    exception,
-                  ); // Error cases sent from openai
-                  return;
-                }
-              }
-            } // end of await for
-
-            if (!emittedData &&
-                respond.statusCode >= HttpStatus.badRequest &&
-                respondData.trim().isNotEmpty) {
-              final exception = requestFailedExceptionFromRawBody(
-                respondData,
-                respond.statusCode,
-              );
-              yield* Stream<T>.error(exception);
-            }
-          } catch (error, stackTrace) {
-            yield* Stream<T>.error(
-              error,
-              stackTrace,
-            ); // Error cases in handling stream
-          }
-        } catch (error, stackTrace) {
-          yield* Stream<T>.error(
-            error,
-            stackTrace,
-          ); // Error cases in decoding stream from response
-        }
-      } catch (e) {
-        yield* Stream<T>.error(e); // Error cases in getting response
-      }
-    } catch (e) {
-      yield* Stream<T>.error(e); //Error cases in making request
-    }
+    OpenAIClientConfig? config,
+  }) {
+    OpenAILogger.logStartRequest(to);
+    return _stream(
+      onSuccess: onSuccess,
+      client: client,
+      config: config,
+      requestFactory: (_) {
+        final request = http.Request(OpenAIStrings.postMethod, Uri.parse(to));
+        request.headers.addAll(_headers(config));
+        request.body = jsonEncode(body);
+        return request;
+      },
+    );
   }
 
   static Future imageEditForm<T>({
@@ -461,63 +278,23 @@ abstract class OpenAINetworkingClient {
     required File image,
     required File? mask,
     required Map<String, String> body,
+    OpenAIClientConfig? config,
   }) async {
-    OpenAILogger.logStartRequest(to);
-
-
-    final uri = Uri.parse(to);
-
-    final headers = HeadersBuilder.build();
-
-    final httpMethod = OpenAIStrings.postMethod;
-
-    final request = http.MultipartRequest(httpMethod, uri);
-
-    request.headers.addAll(headers);
-
-    final file = await http.MultipartFile.fromPath(
-      "image",
-      image.path,
-      contentType: mediaTypeFromFilePath(image.path),
+    final decodedBody = await _multipart(
+      to: to,
+      fields: body,
+      files: [
+        await http.MultipartFile.fromPath(
+          "image",
+          image.path,
+          contentType: mediaTypeFromFilePath(image.path),
+        ),
+        if (mask != null)
+          await http.MultipartFile.fromPath("mask", mask.path),
+      ],
+      config: config,
     );
-
-    final maskFile = mask != null
-        ? await http.MultipartFile.fromPath("mask", mask.path)
-        : null;
-
-    request.files.add(file);
-
-    if (maskFile != null) request.files.add(maskFile);
-
-    request.fields.addAll(body);
-
-    final response = await request.send().timeout(OpenAIConfig.requestsTimeOut);
-
-    OpenAILogger.requestToWithStatusCode(to, response.statusCode);
-
-    OpenAILogger.startingDecoding();
-
-    final String encodedBody = await response.stream.bytesToString();
-
-    OpenAILogger.logResponseBody(encodedBody);
-
-    final Map<String, dynamic> decodedBody = decodeToMap(encodedBody);
-
-    OpenAILogger.decodedSuccessfully();
-
-    if (doesErrorExists(decodedBody)) {
-      final exception = requestFailedExceptionFromMap(
-        decodedBody,
-        response.statusCode,
-      );
-      OpenAILogger.errorOcurred(exception);
-
-      throw exception;
-    } else {
-      OpenAILogger.requestFinishedSuccessfully();
-
-      return onSuccess(decodedBody);
-    }
+    return onSuccess(decodedBody);
   }
 
   static Future<T> imageVariationForm<T>({
@@ -526,49 +303,15 @@ abstract class OpenAINetworkingClient {
     // ignore: avoid-unused-parameters
     required Map<String, String> body,
     required File image,
+    OpenAIClientConfig? config,
   }) async {
-    OpenAILogger.logStartRequest(to);
-
-
-    final httpMethod = OpenAIStrings.postMethod;
-
-    final request = http.MultipartRequest(httpMethod, Uri.parse(to));
-
-    request.headers.addAll(HeadersBuilder.build());
-
-    final imageFile = await http.MultipartFile.fromPath("image", image.path);
-
-    request.fields.addAll(body);
-    request.files.add(imageFile);
-
-    final http.StreamedResponse response =
-        await request.send().timeout(OpenAIConfig.requestsTimeOut);
-
-    OpenAILogger.requestToWithStatusCode(to, response.statusCode);
-
-    OpenAILogger.startingDecoding();
-
-    final String encodedBody = await response.stream.bytesToString();
-
-    OpenAILogger.logResponseBody(encodedBody);
-
-    final Map<String, dynamic> decodedBody = decodeToMap(encodedBody);
-
-    OpenAILogger.decodedSuccessfully();
-
-    if (doesErrorExists(decodedBody)) {
-      final exception = requestFailedExceptionFromMap(
-        decodedBody,
-        response.statusCode,
-      );
-      OpenAILogger.errorOcurred(exception);
-
-      throw exception;
-    } else {
-      OpenAILogger.requestFinishedSuccessfully();
-
-      return onSuccess(decodedBody);
-    }
+    final decodedBody = await _multipart(
+      to: to,
+      fields: body,
+      files: [await http.MultipartFile.fromPath("image", image.path)],
+      config: config,
+    );
+    return onSuccess(decodedBody);
   }
 
   static Future<T> fileUpload<T>({
@@ -576,74 +319,49 @@ abstract class OpenAINetworkingClient {
     required T Function(Map<String, dynamic>) onSuccess,
     required Map<String, String> body,
     required File file,
+    String fileField = 'file',
     Map<String, dynamic> Function(String rawResponse)? responseMapAdapter,
+    List<http.MultipartFile> extraFiles = const [],
+    OpenAIClientConfig? config,
   }) async {
-    OpenAILogger.logStartRequest(to);
+    final resultBody = await _multipartRaw(
+      to: to,
+      fields: body,
+      files: [
+        await http.MultipartFile.fromPath(fileField, file.path),
+        ...extraFiles,
+      ],
+      config: config,
+    );
 
-
-    final uri = Uri.parse(to);
-    final headers = HeadersBuilder.build();
-
-    final httpMethod = OpenAIStrings.postMethod;
-    final request = http.MultipartRequest(httpMethod, uri);
-
-    request.headers.addAll(headers);
-
-    final multiPartFile = await http.MultipartFile.fromPath("file", file.path);
-
-    request.files.add(multiPartFile);
-    request.fields.addAll(body);
-
-    final http.StreamedResponse response =
-        await request.send().timeout(OpenAIConfig.requestsTimeOut);
-
-    final String responseBody = await response.stream.bytesToString();
-
-    OpenAILogger.logResponseBody(responseBody);
-
-    OpenAILogger.requestToWithStatusCode(to, response.statusCode);
-
-    OpenAILogger.startingDecoding();
-
-    var resultBody;
-
-    resultBody = switch ((responseBody.canBeParsedToJson, responseMapAdapter)) {
-      (true, _) => decodeToMap(responseBody),
-      (_, null) => responseBody,
-      (_, final func) => func!(responseBody),
+    final adapted = switch ((resultBody is String, responseMapAdapter)) {
+      (false, _) => resultBody,
+      (_, null) => resultBody,
+      (_, final func?) => func(resultBody as String),
     };
 
-    OpenAILogger.decodedSuccessfully();
-    if (doesErrorExists(resultBody)) {
-      final exception = requestFailedExceptionFromMap(
-        resultBody,
-        response.statusCode,
-      );
-      OpenAILogger.errorOcurred(exception);
-
-      throw exception;
-    } else {
-      OpenAILogger.requestFinishedSuccessfully();
-
-      return onSuccess(resultBody);
+    if (adapted is Map<String, dynamic> && doesErrorExists(adapted)) {
+      throw _exceptionFrom(adapted, 400);
     }
+
+    return onSuccess(adapted);
   }
 
   static Future<T> delete<T>({
     required String from,
     required T Function(Map<String, dynamic> response) onSuccess,
     http.Client? client,
+    OpenAIClientConfig? config,
   }) async {
     OpenAILogger.logStartRequest(from);
 
-    final headers = HeadersBuilder.build();
+    final headers = _headers(config);
     final uri = Uri.parse(from);
 
-    final response = client == null
-        ? await http
-            .delete(uri, headers: headers)
-            .timeout(OpenAIConfig.requestsTimeOut)
-        : await client.delete(uri, headers: headers);
+    final response = await _send(
+      () => (client ?? _defaultClient()).delete(uri, headers: headers),
+      timeout: _timeout(config),
+    );
 
     OpenAILogger.logResponseBody(response);
 
@@ -655,19 +373,86 @@ abstract class OpenAINetworkingClient {
 
     OpenAILogger.decodedSuccessfully();
 
-    if (doesErrorExists(decodedBody)) {
-      final exception = requestFailedExceptionFromMap(
-        decodedBody,
-        response.statusCode,
-      );
-      OpenAILogger.errorOcurred(exception);
+    return _handleJsonBody(decodedBody, response.statusCode, onSuccess);
+  }
 
-      throw exception;
-    } else {
-      OpenAILogger.requestFinishedSuccessfully();
+  // ---- shared internals ----
 
-      return onSuccess(decodedBody);
+  static Future<http.Response> _send(
+    Future<http.Response> Function() send, {
+    required Duration timeout,
+  }) {
+    return send().timeout(timeout);
+  }
+
+  static Future<dynamic> _multipart({
+    required String to,
+    required Map<String, String> fields,
+    required List<http.MultipartFile> files,
+    OpenAIClientConfig? config,
+  }) async {
+    return _multipartRaw(to: to, fields: fields, files: files, config: config);
+  }
+
+  static Future<dynamic> _multipartRaw({
+    required String to,
+    required Map<String, String> fields,
+    required List<http.MultipartFile> files,
+    OpenAIClientConfig? config,
+  }) async {
+    OpenAILogger.logStartRequest(to);
+
+    final request = http.MultipartRequest(OpenAIStrings.postMethod, Uri.parse(to));
+
+    request.headers.addAll(_headers(config));
+    request.fields.addAll(fields);
+    request.files.addAll(files);
+
+    final response =
+        await _defaultClient().send(request).timeout(_timeout(config));
+
+    OpenAILogger.requestToWithStatusCode(to, response.statusCode);
+
+    OpenAILogger.startingDecoding();
+
+    final String responseBody = await response.stream.bytesToString();
+
+    OpenAILogger.logResponseBody(responseBody);
+
+    if (doesErrorExistsOrIsErrorStatus(responseBody, response.statusCode)) {
+      throw _exceptionFromOrRaw(responseBody, response.statusCode);
     }
+
+    OpenAILogger.decodedSuccessfully();
+    OpenAILogger.requestFinishedSuccessfully();
+
+    return responseBody.canBeParsedToJson ? decodeToMap(responseBody) : responseBody;
+  }
+
+  static T _handleJsonBody<T>(
+    Map<String, dynamic> decodedBody,
+    int statusCode,
+    T Function(Map<String, dynamic>) onSuccess,
+  ) {
+    if (doesErrorExists(decodedBody)) {
+      throw _exceptionFrom(decodedBody, statusCode);
+    }
+    OpenAILogger.requestFinishedSuccessfully();
+    return onSuccess(decodedBody);
+  }
+
+  static RequestFailedException _exceptionFrom(
+    Map<String, dynamic> decodedBody,
+    int statusCode,
+  ) {
+    return requestFailedExceptionFromMap(decodedBody, statusCode);
+  }
+
+  static RequestFailedException _exceptionFromOrRaw(
+    String responseBody,
+    int statusCode,
+  ) {
+    return requestFailedExceptionFromRawBody(responseBody, statusCode);
   }
 
   static Map<String, dynamic> decodeToMap(String responseBody) {
@@ -690,6 +475,27 @@ abstract class OpenAINetworkingClient {
 
   static bool doesErrorExists(Map<String, dynamic> decodedResponseBody) {
     return decodedResponseBody[OpenAIStrings.errorFieldKey] != null;
+  }
+
+  /// True when the body contains an error field or the status code signals
+  /// failure even without an error payload (some providers do this).
+  static bool doesErrorExistsOrIsErrorStatus(String body, int statusCode) {
+    if (statusCode < 200 || statusCode >= 300) {
+      return true;
+    }
+    if (!body.canBeParsedToJson) {
+      return false;
+    }
+    final decoded = tryDecodeOrNull(body);
+    return decoded != null && doesErrorExists(decoded);
+  }
+
+  static Map<String, dynamic>? tryDecodeOrNull(String body) {
+    try {
+      return jsonDecode(body) as Map<String, dynamic>;
+    } on FormatException {
+      return null;
+    }
   }
 
   static RequestFailedException requestFailedExceptionFromMap(
@@ -742,10 +548,6 @@ abstract class OpenAINetworkingClient {
     } on FormatException {
       return RequestFailedException(trimmedBody, statusCode);
     }
-  }
-
-  static http.Client _streamingHttpClient() {
-    return createClient();
   }
 
   static MediaType? mediaTypeFromFilePath(String path) {

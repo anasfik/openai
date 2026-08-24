@@ -180,3 +180,75 @@ class OutputTokensDetails {
         reasoningTokens: reasoningTokens ?? this.reasoningTokens,
       );
 }
+
+extension BatchModelParsing on OpenAiBatchModel {
+  static OpenAiBatchModel fromMap(Map<String, dynamic> map) {
+    return OpenAiBatchModel(
+      id: map['id'] as String? ?? '',
+      object: map['object'] as String? ?? 'batch',
+      endpoint: map['endpoint'] as String? ?? '',
+      model: map['model'] as String? ?? '',
+      errors: map['errors'] as Map<String, dynamic>? ?? {},
+      inputFileId: map['input_file_id'] as String? ?? '',
+      completionWindow: map['completion_window'] as String? ?? '',
+      status: map['status'] as String? ?? '',
+      outputFileId: map['output_file_id'] as String? ?? '',
+      errorFileId: map['error_file_id'] as String? ?? '',
+      createdAt: map['created_at'] as int?,
+      inProgressAt: map['in_progress_at'] as int?,
+      expiresAt: map['expires_at'] as int?,
+      finalizingAt: map['finalizing_at'] as int?,
+      completedAt: map['completed_at'] as int?,
+      failedAt: map['failed_at'] as int?,
+      expiredAt: map['expired_at'] as int?,
+      cancellingAt: map['cancelling_at'] as int?,
+      cancelledAt: map['cancelled_at'] as int?,
+      requestCounts: map['request_counts'] is Map<String, dynamic>
+          ? RequestCountsParsing.fromMap(
+              map['request_counts'] as Map<String, dynamic>)
+          : RequestCounts(total: 0, completed: 0, failed: 0),
+      usage: map['usage'] is Map<String, dynamic>
+          ? UsageParsing.fromMap(map['usage'] as Map<String, dynamic>)
+          : Usage(
+              inputTokens: 0,
+              inputTokensDetails:
+                  InputTokensDetails(cachedTokens: 0),
+              outputTokens: 0,
+              outputTokensDetails:
+                  OutputTokensDetails(reasoningTokens: 0),
+              totalTokens: 0,
+            ),
+      metadata: map['metadata'] as Map<String, dynamic>? ?? {},
+    );
+  }
+}
+
+extension RequestCountsParsing on RequestCounts {
+  static RequestCounts fromMap(Map<String, dynamic> map) {
+    return RequestCounts(
+      total: map['total'] as int? ?? 0,
+      completed: map['completed'] as int? ?? 0,
+      failed: map['failed'] as int? ?? 0,
+    );
+  }
+}
+
+extension UsageParsing on Usage {
+  static Usage fromMap(Map<String, dynamic> map) {
+    final inputDetails = map['input_tokens_details'];
+    final outputDetails = map['output_tokens_details'];
+    return Usage(
+      inputTokens: map['input_tokens'] as int? ?? 0,
+      inputTokensDetails: InputTokensDetails(
+        cachedTokens:
+            inputDetails is Map<String, dynamic> ? inputDetails['cached_tokens'] as int? ?? 0 : 0,
+      ),
+      outputTokens: map['output_tokens'] as int? ?? 0,
+      outputTokensDetails: OutputTokensDetails(
+        reasoningTokens:
+            outputDetails is Map<String, dynamic> ? outputDetails['reasoning_tokens'] as int? ?? 0 : 0,
+      ),
+      totalTokens: map['total_tokens'] as int? ?? 0,
+    );
+  }
+}

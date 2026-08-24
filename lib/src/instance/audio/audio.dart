@@ -29,9 +29,11 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.audio;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_audio}
-  OpenAIAudio() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIAudio([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Creates a transcription for a given audio file.
@@ -77,7 +79,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   }) async {
     return await OpenAINetworkingClient.fileUpload(
       file: file,
-      to: BaseApiUrlBuilder.build(endpoint + "/transcriptions"),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint + "/transcriptions"),
       body: {
         "model": model,
         if (prompt != null) "prompt": prompt,
@@ -102,7 +104,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
       },
       responseMapAdapter: (res) {
         return {"text": res};
-      },
+      }, config: _config,
     );
   }
 
@@ -140,7 +142,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   }) async {
     return await OpenAINetworkingClient.fileUpload(
       file: file,
-      to: BaseApiUrlBuilder.build(endpoint + "/translations"),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint + "/translations"),
       body: {
         "model": model,
         if (prompt != null) "prompt": prompt,
@@ -160,7 +162,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         } catch (e) {}
 
         return {"text": res};
-      },
+      }, config: _config,
     );
   }
 
@@ -178,7 +180,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     _validateSpeechVoiceForModel(model: model, voice: voice);
 
     return await OpenAINetworkingClient.postAndExpectFileResponse(
-      to: BaseApiUrlBuilder.build(endpoint + "/speech"),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint + "/speech"),
       body: {
         "model": model,
         "input": input,
@@ -194,7 +196,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
           ? responseFormat.name
           : OpenAIAudioSpeechResponseFormat.mp3.name,
       outputFileName: outputFileName,
-      outputDirectory: outputDirectory,
+      outputDirectory: outputDirectory, config: _config,
     );
   }
 
@@ -212,7 +214,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     _validateSpeechVoiceForModel(model: model, voice: voice);
 
     return await OpenAINetworkingClient.postAndGetBytes(
-      to: BaseApiUrlBuilder.build(endpoint + "/speech"),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint + "/speech"),
       body: {
         "model": model,
         "input": input,
@@ -220,7 +222,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         if (instructions != null) "instructions": instructions,
         if (responseFormat != null) "response_format": responseFormat.name,
         if (speed != null) "speed": speed,
-      },
+      }, config: _config,
     );
   }
 

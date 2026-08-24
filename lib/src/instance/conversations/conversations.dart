@@ -6,6 +6,7 @@ import 'package:dart_openai/src/core/models/conversation/conversation_items_resp
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:meta/meta.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 @immutable
 @protected
@@ -13,9 +14,11 @@ class OpenAIConversations extends OpenAIConversationsBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.conversations;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_conversations}
-  OpenAIConversations() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIConversations([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   @override
@@ -24,7 +27,7 @@ class OpenAIConversations extends OpenAIConversationsBase {
     Map<String, dynamic>? metadata,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIConversation>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         if (items != null) 'items': items,
         if (metadata != null) 'metadata': metadata,
@@ -32,7 +35,7 @@ class OpenAIConversations extends OpenAIConversationsBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIConversation.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -40,11 +43,11 @@ class OpenAIConversations extends OpenAIConversationsBase {
     required String conversationId,
   }) async {
     return await OpenAINetworkingClient.get<OpenAIConversation>(
-      from: BaseApiUrlBuilder.build(endpoint, conversationId),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, conversationId),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIConversation.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -53,14 +56,14 @@ class OpenAIConversations extends OpenAIConversationsBase {
     required Map<String, dynamic> metadata,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIConversation>(
-      to: BaseApiUrlBuilder.build(endpoint, conversationId),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint, conversationId),
       body: {
         'metadata': metadata,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIConversation.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -68,12 +71,12 @@ class OpenAIConversations extends OpenAIConversationsBase {
     required String conversationId,
   }) async {
     await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.build(endpoint, conversationId),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, conversationId),
       onSuccess: (Map<String, dynamic> response) {
         final deleted = response["deleted"];
 
         return deleted is bool && deleted;
-      },
+      }, config: _config,
     );
   }
 
@@ -99,7 +102,7 @@ class OpenAIConversations extends OpenAIConversationsBase {
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: itemsEndpoint,
         id: "$conversationId/items",
-        query: queryParams,
+        query: queryParams, config: _config,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIConversationItemsResponse.fromMap(response);
@@ -119,7 +122,7 @@ class OpenAIConversations extends OpenAIConversationsBase {
         id: conversationId + "/items",
         query: {
           if (include != null) 'include': include.join(","),
-        },
+        }, config: _config,
       ),
       body: {
         'items': items,
@@ -142,11 +145,11 @@ class OpenAIConversations extends OpenAIConversationsBase {
         id: "$conversationId/items/$itemId",
         query: {
           if (include != null) 'include': include.join(","),
-        },
+        }, config: _config,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return response;
-      },
+      }, config: _config,
     );
   }
 
@@ -156,15 +159,12 @@ class OpenAIConversations extends OpenAIConversationsBase {
     required String itemId,
   }) async {
     OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.build(
-        endpoint,
-        "$conversationId/items/$itemId",
-      ),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, "$conversationId/items/$itemId"),
       onSuccess: (Map<String, dynamic> response) {
         final deleted = response["deleted"];
 
         return deleted is bool && deleted;
-      },
+      }, config: _config,
     );
   }
 }

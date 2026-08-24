@@ -11,14 +11,17 @@ import 'package:dart_openai/src/core/models/evals/evals_list.dart';
 import 'package:dart_openai/src/core/models/evals/req_data_source_config.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 class OpenAIEvals implements OpenAIEvalsBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.evals;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_embedding}
-  OpenAIEvals() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIEvals([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   @override
@@ -32,14 +35,14 @@ class OpenAIEvals implements OpenAIEvalsBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEval.fromMap(response);
       },
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         'data_source_config': dataSourceConfig.toMap(),
         'testing_criteria': testingCriteria,
         if (metadata != null) 'metadata': metadata,
         if (name != null) 'name': name,
       },
-    );
+      config: _config);
   }
 
   @override
@@ -50,8 +53,8 @@ class OpenAIEvals implements OpenAIEvalsBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEval.fromMap(response);
       },
-      from: BaseApiUrlBuilder.build(endpoint, evalId),
-    );
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, evalId),
+      config: _config);
   }
 
   @override
@@ -64,12 +67,12 @@ class OpenAIEvals implements OpenAIEvalsBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEval.fromMap(response);
       },
-      to: BaseApiUrlBuilder.build(endpoint, evalId),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint, evalId),
       body: {
         if (metadata != null) 'metadata': metadata,
         if (name != null) 'name': name,
       },
-    );
+      config: _config);
   }
 
   @override
@@ -77,8 +80,8 @@ class OpenAIEvals implements OpenAIEvalsBase {
     required String evalId,
   }) async {
     await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.build(endpoint, evalId),
-      onSuccess: (_) {},
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, evalId),
+      onSuccess: (_) {}, config: _config,
     );
   }
 
@@ -100,7 +103,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
           if (limit != null) 'limit': limit.toString(),
           if (order != null) 'order': order,
           if (orderBy != null) 'order_by': orderBy,
-        },
+        }, config: _config,
       ),
     );
   }
@@ -122,7 +125,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
           if (after != null) 'after': after,
           if (limit != null) 'limit': limit.toString(),
           if (order != null) 'order': order,
-        },
+        }, config: _config,
       ),
     );
   }
@@ -136,8 +139,8 @@ class OpenAIEvals implements OpenAIEvalsBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEvalRun.fromMap(response);
       },
-      from: BaseApiUrlBuilder.build(endpoint, '$evalId/runs/$runId'),
-    );
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, '$evalId/runs/$runId'),
+      config: _config);
   }
 
   @override
@@ -151,13 +154,13 @@ class OpenAIEvals implements OpenAIEvalsBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEvalRun.fromMap(response);
       },
-      to: BaseApiUrlBuilder.build(endpoint, '$evalId/runs'),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint, '$evalId/runs'),
       body: {
         'data_source': dataSource.toMap(),
         if (metadata != null) 'metadata': metadata,
         if (name != null) 'name': name,
       },
-    );
+      config: _config);
   }
 
   @override
@@ -169,8 +172,8 @@ class OpenAIEvals implements OpenAIEvalsBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEvalRun.fromMap(response);
       },
-      to: BaseApiUrlBuilder.build(endpoint, '$evalId/runs/$runId'),
-    );
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint, '$evalId/runs/$runId'),
+      config: _config);
   }
 
   @override
@@ -179,8 +182,8 @@ class OpenAIEvals implements OpenAIEvalsBase {
     required String runId,
   }) async {
     await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.build(endpoint, '$evalId/runs/$runId'),
-      onSuccess: (_) {},
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, '$evalId/runs/$runId'),
+      onSuccess: (_) {}, config: _config,
     );
   }
 
@@ -194,11 +197,8 @@ class OpenAIEvals implements OpenAIEvalsBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEvalRunOutputItem.fromMap(response);
       },
-      from: BaseApiUrlBuilder.build(
-        endpoint,
-        '$evalId/runs/$runId/output_items/$outputItemIdn',
-      ),
-    );
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, '$evalId/runs/$runId/output_items/$outputItemIdn'),
+      config: _config);
   }
 
   @override
@@ -221,7 +221,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
           if (limit != null) 'limit': limit.toString(),
           if (order != null) 'order': order,
           if (status != null) 'status': status,
-        },
+        }, config: _config,
       ),
     );
   }

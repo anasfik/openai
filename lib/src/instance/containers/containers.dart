@@ -5,8 +5,15 @@ import 'package:dart_openai/src/core/models/containers/container.dart';
 import 'package:dart_openai/src/core/models/containers/containers_list.dart';
 import 'package:dart_openai/src/core/models/containers/expires_after.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 class OpenAIContainers extends OpenAIContainersBase {
+
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
+  OpenAIContainers([this._config]);
+
   @override
   String get endpoint => OpenAIStrings.endpoints.containers;
 
@@ -17,7 +24,7 @@ class OpenAIContainers extends OpenAIContainersBase {
     List<String>? fileIds,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIContainer>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         'name': name,
         if (expiresAfter != null) 'expires_after': expiresAfter.toMap(),
@@ -26,7 +33,7 @@ class OpenAIContainers extends OpenAIContainersBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIContainer.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -42,7 +49,7 @@ class OpenAIContainers extends OpenAIContainersBase {
           if (after != null) 'after': after,
           if (limit != null) 'limit': limit.toString(),
           if (order != null) 'order': order,
-        },
+        }, config: _config,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIContainerList.fromMap(response);
@@ -55,11 +62,11 @@ class OpenAIContainers extends OpenAIContainersBase {
     required String containerId,
   }) async {
     return await OpenAINetworkingClient.get<OpenAIContainer>(
-      from: BaseApiUrlBuilder.build(endpoint, containerId),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, containerId),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIContainer.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -67,14 +74,14 @@ class OpenAIContainers extends OpenAIContainersBase {
     required String containerId,
   }) async {
     return await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.build(endpoint, containerId),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, containerId),
       onSuccess: (response) {
         final deleted = response["deleted"] == true;
 
         if (deleted) {
           return;
         }
-      },
+      }, config: _config,
     );
   }
 }

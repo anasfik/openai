@@ -46,6 +46,30 @@ class OpenAIApisEndpoints {
   /// none.
   final moderation = "/moderations";
 
+  /// Batch processing.
+  final batch = "/batches";
+
+  /// Uploads (multipart upload sessions).
+  final uploads = "/uploads";
+
+  /// Fine-tuning (new API).
+  final fineTuning = "/fine_tuning";
+
+  /// Videos.
+  final videos = "/videos";
+
+  /// Realtime sessions and client secrets (REST part).
+  final realtime = "/realtime";
+
+  /// Skills.
+  final skills = "/skills";
+
+  /// Content provenance checks.
+  final contentProvenanceChecks = "/content_provenance_checks";
+
+  /// Organization-level administration endpoints root.
+  final organization = "/organization";
+
   /// {@macro openai_endpoints}
   static const OpenAIApisEndpoints _instance = OpenAIApisEndpoints._();
 

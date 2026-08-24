@@ -20,3 +20,18 @@ class OpenAIUploadModel {
     required this.status,
   });
 }
+
+extension UploadModelParsing on OpenAIUploadModel {
+  static OpenAIUploadModel fromMap(Map<String, dynamic> map) {
+    return OpenAIUploadModel(
+      bytes: map['bytes'] as int? ?? 0,
+      createdAt: map['created_at'] as int? ?? 0,
+      expiresAt: map['expires_at'] as int? ?? 0,
+      file: map['file'],
+      filename: map['filename'] as String? ?? '',
+      id: map['id'] as String? ?? '',
+      purpose: map['purpose'] as String? ?? '',
+      status: map['status'] as String? ?? '',
+    );
+  }
+}

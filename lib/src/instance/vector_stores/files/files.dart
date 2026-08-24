@@ -5,8 +5,15 @@ import 'package:dart_openai/src/core/models/vector_stores/vector_store_file_list
 import 'package:dart_openai/src/core/models/vector_stores/vectore_store_file.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/base/vector_stores/files/files.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
+
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
+  OpenAIVectorStoreFiles([this._config]);
+
   @override
   String get endpoint => OpenAIStrings.endpoints.vectorStores;
 
@@ -18,10 +25,7 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
     OpenAIVectorStoreChunkingStrategy? chunckingStrategy,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIVectorStoreFileModel>(
-      to: BaseApiUrlBuilder.build(
-        endpoint,
-        "$vectorStoreId/files",
-      ),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/files"),
       body: {
         "file_id": fileId,
         if (attributes != null) "attributes": attributes,
@@ -31,7 +35,7 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIVectorStoreFileModel.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -40,14 +44,11 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
     required String vectorStoreId,
   }) async {
     return await OpenAINetworkingClient.get<OpenAIVectorStoreFileModel>(
-      from: BaseApiUrlBuilder.build(
-        endpoint,
-        "$vectorStoreId/files/$fileId",
-      ),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/files/$fileId"),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIVectorStoreFileModel.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -66,7 +67,7 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
           if (before != null) "before": before,
           if (limit != null) "limit": limit.toString(),
           if (order != null) "order": order,
-        },
+        }, config: _config,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIVectorStoreFileListModel.fromMap(response);
@@ -80,11 +81,8 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
     required String vectorStoreId,
   }) async {
     return await OpenAINetworkingClient.get(
-      from: BaseApiUrlBuilder.build(
-        endpoint,
-        "$vectorStoreId/files/$fileId/content",
-      ),
-      returnRawResponse: true,
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/files/$fileId/content"),
+      returnRawResponse: true, config: _config,
     );
   }
 
@@ -95,17 +93,14 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
     required Map<String, dynamic> attributes,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIVectorStoreFileModel>(
-      to: BaseApiUrlBuilder.build(
-        endpoint,
-        "$vectorStoreId/files/$fileId",
-      ),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/files/$fileId"),
       body: {
         "attributes": attributes,
       },
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIVectorStoreFileModel.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -114,11 +109,8 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
     required String vectorStoreId,
   }) async {
     return await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.build(
-        endpoint,
-        "$vectorStoreId/files/$fileId",
-      ),
-      onSuccess: (_) => {},
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/files/$fileId"),
+      onSuccess: (_) => {}, config: _config,
     );
   }
 }

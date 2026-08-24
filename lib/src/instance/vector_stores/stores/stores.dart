@@ -5,6 +5,12 @@ import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/base/vector_stores/stores/stores.dart';
 
 class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
+
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
+  OpenAIVectorStoresStores([this._config]);
+
   @override
   String get endpoint => OpenAIStrings.endpoints.vectorStores;
 
@@ -18,7 +24,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
     String? description,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIVectorStoreModel>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         if (chunkingStrategy != null)
           'chunking_strategy': chunkingStrategy.toMap(),
@@ -31,7 +37,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIVectorStoreModel.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -49,7 +55,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
           if (before != null) 'before': before,
           if (limit != null) 'limit': limit.toString(),
           if (order != null) 'order': order,
-        },
+        }, config: _config,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIVectorStoreListModel.fromMap(response);
@@ -62,13 +68,11 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
     required String vectorStoreId,
   }) async {
     return await OpenAINetworkingClient.get<OpenAIVectorStoreModel>(
-      from: BaseApiUrlBuilder.build(
-        '$endpoint/$vectorStoreId',
-      ),
+      from: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$vectorStoreId'),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIVectorStoreModel.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -79,9 +83,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
     String? name,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIVectorStoreModel>(
-      to: BaseApiUrlBuilder.build(
-        '$endpoint/$vectorStoreId',
-      ),
+      to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$vectorStoreId'),
       body: {
         if (expiresAfter != null) 'expires_after': expiresAfter.toMap(),
         if (metadata != null) 'metadata': metadata,
@@ -90,7 +92,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIVectorStoreModel.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -98,13 +100,11 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
     required String vectorStoreId,
   }) async {
     return await OpenAINetworkingClient.delete<void>(
-      from: BaseApiUrlBuilder.build(
-        '$endpoint/$vectorStoreId',
-      ),
+      from: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$vectorStoreId'),
       onSuccess: (Map<String, dynamic> response) {
         return;
       },
-    );
+      config: _config);
   }
 
   @override
@@ -117,9 +117,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
     bool? rewriteQuery,
   }) async {
     return await OpenAINetworkingClient.post<SearchVectorStoreList>(
-      to: BaseApiUrlBuilder.build(
-        '$endpoint/$vectorStoreId/search',
-      ),
+      to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$vectorStoreId/search'),
       body: {
         'query': query,
         if (filters != null) 'filters': filters.toMap(),
@@ -130,6 +128,6 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
       onSuccess: (Map<String, dynamic> response) {
         return SearchVectorStoreList.fromMap(response);
       },
-    );
+      config: _config);
   }
 }

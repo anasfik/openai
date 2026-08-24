@@ -8,6 +8,7 @@ import 'package:meta/meta.dart';
 import '../../core/base/completion.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_completion}
 /// This class is responsible for handling all the requests related to the completion in the OpenAI API such as creating a completion.
@@ -18,9 +19,11 @@ interface class OpenAICompletion implements OpenAICompletionBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.completion;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_completion}
-  OpenAICompletion() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAICompletion([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Creates a new completion and returns a [OpenAICompletionModel] object.
@@ -122,7 +125,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     );
 
     return await OpenAINetworkingClient.post<OpenAICompletionModel>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         "model": model,
         "prompt": prompt,
@@ -145,7 +148,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAICompletionModel.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   /// This function creates a completion [Stream] of [OpenAIStreamCompletionModel], which it does stream the results as they are generated.
@@ -239,7 +242,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     Map<String, dynamic>? extraParams,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamCompletionModel>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         "model": model,
         'stream': true,
@@ -263,7 +266,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIStreamCompletionModel.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   /// Creates a direct [Stream] of the completion [String] as it is generated.

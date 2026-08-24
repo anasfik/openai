@@ -9,3 +9,13 @@ class OpenAIUploadPartModel {
     required this.uploadId,
   });
 }
+
+extension UploadPartParsing on OpenAIUploadPartModel {
+  static OpenAIUploadPartModel fromMap(Map<String, dynamic> map) {
+    return OpenAIUploadPartModel(
+      createdAt: map['created_at'] as int? ?? 0,
+      id: map['id'] as String? ?? '',
+      uploadId: map['upload_id'] as String? ?? '',
+    );
+  }
+}

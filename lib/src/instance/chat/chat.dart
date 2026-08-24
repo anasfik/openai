@@ -8,6 +8,7 @@ import '../../core/models/tool/tool.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_chat}
 /// This class is responsible for handling all chat requests, such as creating a chat completion for the message(s).
@@ -16,9 +17,11 @@ interface class OpenAIChat implements OpenAIChatBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.chat;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_chat}
-  OpenAIChat() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIChat([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Creates a chat completion for the message(s).
@@ -88,7 +91,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     Map<String, dynamic>? extraParams,
   }) async {
     return await OpenAINetworkingClient.post(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         "model": model,
         "messages": messages.map((message) => message.toMap()).toList(),
@@ -113,7 +116,7 @@ interface class OpenAIChat implements OpenAIChatBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIChatCompletionModel.fromMap(response);
       },
-      client: client,
+      client: client, config: _config,
     );
   }
 
@@ -186,7 +189,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     Map<String, dynamic>? extraParams,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         "model": model,
         "stream": true,
@@ -213,7 +216,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         return OpenAIStreamChatCompletionModel.fromMap(response);
       },
       client: client,
-    );
+      config: _config);
   }
 
   @override
@@ -237,7 +240,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     Map<String, dynamic>? extraParams,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         "model": model,
         "stream": true,
@@ -262,6 +265,6 @@ interface class OpenAIChat implements OpenAIChatBase {
         return OpenAIStreamChatCompletionModel.fromMap(response);
       },
       client: client,
-    );
+      config: _config);
   }
 }

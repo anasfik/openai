@@ -8,6 +8,7 @@ import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_edits}
 /// The class that handles all the requests related to the edits in the OpenAI API.
@@ -18,9 +19,11 @@ interface class OpenAIEdits implements OpenAIEditsBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.edits;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_edits}
-  OpenAIEdits() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIEdits([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Given a [prompt] and an instruction, this method will return an edited version of the prompt.
@@ -59,7 +62,7 @@ interface class OpenAIEdits implements OpenAIEditsBase {
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIEditModel>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         "model": model,
         "instruction": instruction,
@@ -71,6 +74,6 @@ interface class OpenAIEdits implements OpenAIEditsBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEditModel.fromMap(response);
       },
-    );
+      config: _config);
   }
 }

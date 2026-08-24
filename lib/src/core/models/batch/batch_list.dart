@@ -13,3 +13,17 @@ class OpenAiBatchListModel {
     required this.hasMore,
   });
 }
+
+extension BatchListParsing on OpenAiBatchListModel {
+  static OpenAiBatchListModel fromMap(Map<String, dynamic> map) {
+    return OpenAiBatchListModel(
+      data: (map['data'] as List<dynamic>? ?? [])
+          .whereType<Map<String, dynamic>>()
+          .map(BatchModelParsing.fromMap)
+          .toList(),
+      firstId: map['first_id'] as String? ?? '',
+      lastId: map['last_id'] as String? ?? '',
+      hasMore: map['has_more'] as bool? ?? false,
+    );
+  }
+}

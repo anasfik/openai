@@ -8,6 +8,7 @@ import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_embedding}
 /// Get a vector representation of a given input that can be easily consumed by machine learning models and algorithms.
@@ -18,9 +19,11 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.embeddings;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_embedding}
-  OpenAIEmbedding() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIEmbedding([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Creates an embedding vector representing the input text.
@@ -63,7 +66,7 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEmbeddingsModel.fromMap(response);
       },
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         "model": model,
         if (input != null) "input": input,
@@ -71,6 +74,6 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
         if (dimensions != null) "dimensions": dimensions,
         if (encodingFormat != null) "encoding_format": encodingFormat.name,
       },
-    );
+      config: _config);
   }
 }

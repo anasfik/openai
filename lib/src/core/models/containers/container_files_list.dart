@@ -1,4 +1,3 @@
-import 'package:dart_openai/src/core/models/containers/container.dart';
 import 'package:dart_openai/src/core/models/containers/container_file.dart';
 
 class OpenAIContainerContainerFileListModel {

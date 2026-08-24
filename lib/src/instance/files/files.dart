@@ -12,6 +12,7 @@ import '../../core/constants/strings.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_files}
 /// This class is responsible for handling all files requests, such as uploading a file to be used across various endpoints/features.
@@ -22,9 +23,11 @@ interface class OpenAIFiles implements OpenAIFilesBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.files;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_files}
-  OpenAIFiles() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIFiles([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Upload a file that contains document(s) to be used across various endpoints/
@@ -50,7 +53,7 @@ interface class OpenAIFiles implements OpenAIFilesBase {
     OpenAIFileExpiresAfter? expiresAfter,
   }) async {
     return await OpenAINetworkingClient.fileUpload(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         "purpose": purpose,
         // if (expiresAfter != null) "expires_after": expiresAfter!.toMap(),
@@ -58,7 +61,7 @@ interface class OpenAIFiles implements OpenAIFilesBase {
       file: file,
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFileModel.fromMap(response);
-      },
+      }, config: _config,
     );
   }
 
@@ -85,12 +88,12 @@ interface class OpenAIFiles implements OpenAIFilesBase {
           if (limit != null) "limit": limit.toString(),
           if (order != null) "order": order,
           if (purpose != null) "purpose": purpose,
-        },
+        }, config: _config,
       ),
       client: client,
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFileListModel.fromMap(response);
-      },
+      }, config: _config,
     );
   }
 
@@ -110,10 +113,10 @@ interface class OpenAIFiles implements OpenAIFilesBase {
     final String fileIdEndpoint = "/$fileId";
 
     return await OpenAINetworkingClient.get(
-      from: BaseApiUrlBuilder.build(endpoint + fileIdEndpoint),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint + fileIdEndpoint),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFileModel.fromMap(response);
-      },
+      }, config: _config,
     );
   }
 
@@ -133,8 +136,8 @@ interface class OpenAIFiles implements OpenAIFilesBase {
     final String fileIdEndpoint = "/$fileId/content";
 
     return await OpenAINetworkingClient.get(
-      from: BaseApiUrlBuilder.build(endpoint + fileIdEndpoint),
-      returnRawResponse: true,
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint + fileIdEndpoint),
+      returnRawResponse: true, config: _config,
     );
   }
 
@@ -154,12 +157,12 @@ interface class OpenAIFiles implements OpenAIFilesBase {
     final String fileIdEndpoint = "/$fileId";
 
     return await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.build(endpoint + fileIdEndpoint),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint + fileIdEndpoint),
       onSuccess: (Map<String, dynamic> response) {
         final bool isDeleted = response["deleted"] as bool;
 
         return isDeleted;
-      },
+      }, config: _config,
     );
   }
 }

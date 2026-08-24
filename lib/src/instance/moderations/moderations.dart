@@ -9,6 +9,7 @@ import 'package:meta/meta.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_moderation}
 /// The class that handles all the requests related to the moderation in the OpenAI API.
@@ -19,9 +20,11 @@ interface class OpenAIModeration implements OpenAIModerationBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.moderation;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_moderation}
-  OpenAIModeration() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIModeration([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Creates a moderation request.
@@ -57,7 +60,7 @@ interface class OpenAIModeration implements OpenAIModerationBase {
         "input": input,
         if (model != null) "model": model,
       },
-      to: BaseApiUrlBuilder.build(endpoint),
-    );
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
+      config: _config);
   }
 }

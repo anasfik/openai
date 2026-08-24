@@ -5,6 +5,7 @@ import 'package:dart_openai/src/core/models/responses/responses.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:meta/meta.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 @immutable
 @protected
@@ -12,9 +13,11 @@ class OpenAIResponses extends OpenAIResponsesBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.responses;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_completion}
-  OpenAIResponses() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIResponses([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   @override
@@ -45,7 +48,7 @@ class OpenAIResponses extends OpenAIResponsesBase {
     String? truncation,
   }) async {
     return await OpenAINetworkingClient.post<OpenAiResponse>(
-      to: BaseApiUrlBuilder.build(endpoint),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         if (background != null) "background": background,
         if (conversation != null) "conversation": conversation,
@@ -76,7 +79,7 @@ class OpenAIResponses extends OpenAIResponsesBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAiResponse.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -84,14 +87,11 @@ class OpenAIResponses extends OpenAIResponsesBase {
     required String responseId,
   }) async {
     return await OpenAINetworkingClient.post<OpenAiResponse>(
-      to: BaseApiUrlBuilder.build(
-        endpoint,
-        responseId + '/cancel',
-      ),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint, responseId + '/cancel'),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAiResponse.fromMap(response);
       },
-    );
+      config: _config);
   }
 
   @override
@@ -99,12 +99,12 @@ class OpenAIResponses extends OpenAIResponsesBase {
     required String responseId,
   }) async {
     await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.build(endpoint, responseId),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, responseId),
       onSuccess: (Map<String, dynamic> response) {
         final deleted = response["deleted"];
 
         return deleted is bool && deleted;
-      },
+      }, config: _config,
     );
   }
 
@@ -124,7 +124,7 @@ class OpenAIResponses extends OpenAIResponsesBase {
           if (include_obfuscation != null)
             "include_obfuscation": include_obfuscation.toString(),
           if (startingAfter != null) "starting_after": startingAfter.toString(),
-        },
+        }, config: _config,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAiResponse.fromMap(response);
@@ -149,7 +149,7 @@ class OpenAIResponses extends OpenAIResponsesBase {
           if (include != null) "include": include.join(","),
           if (limit != null) "limit": limit.toString(),
           if (order != null) "order": order,
-        },
+        }, config: _config,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAiResponseInputItemsList.fromMap(response);
@@ -172,10 +172,7 @@ class OpenAIResponses extends OpenAIResponsesBase {
     String? truncation,
   ) async {
     return await OpenAINetworkingClient.post<int>(
-      to: BaseApiUrlBuilder.build(
-        endpoint,
-        'input_tokens',
-      ),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint, 'input_tokens'),
       body: {
         if (conversation != null) "conversation": conversation,
         if (input != null) "input": input,
@@ -193,6 +190,6 @@ class OpenAIResponses extends OpenAIResponsesBase {
       onSuccess: (Map<String, dynamic> response) {
         return int.parse(response['input_tokens']);
       },
-    );
+      config: _config);
   }
 }

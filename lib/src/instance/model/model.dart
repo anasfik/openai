@@ -7,6 +7,7 @@ import '../../core/networking/client.dart';
 import 'package:meta/meta.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_model}
 /// The class that handles all the requests related to the models in the OpenAI API.
@@ -17,9 +18,11 @@ interface class OpenAIModel implements OpenAIModelBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.models;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_model}
-  OpenAIModel() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIModel([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Lists all the models available in the OpenAI API and returns a list of [OpenAIModelModel] objects.
@@ -35,16 +38,14 @@ interface class OpenAIModel implements OpenAIModelBase {
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.get<List<OpenAIModelModel>>(
-      from: BaseApiUrlBuilder.build(
-        endpoint,
-      ),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint),
       onSuccess: (Map<String, dynamic> response) {
         final List data = response['data'];
 
         return data.map((model) => OpenAIModelModel.fromMap(model)).toList();
       },
       client: client,
-    );
+      config: _config);
   }
 
   /// Retrieves a model by it's id and returns a [OpenAIModelModel] object, if the model is not found, it will throw a [RequestFailedException].
@@ -62,12 +63,12 @@ interface class OpenAIModel implements OpenAIModelBase {
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.get<OpenAIModelModel>(
-      from: BaseApiUrlBuilder.build(endpoint, model),
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, model),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIModelModel.fromMap(response);
       },
       client: client,
-    );
+      config: _config);
   }
 
   /// Deletes a fine-tuned model, returns [true] if the model did been deleted successfully, if the model is not found, it will throw a [RequestFailedException].
@@ -86,11 +87,11 @@ interface class OpenAIModel implements OpenAIModelBase {
     final String fineTuneModelDelete = "$endpoint/$model";
 
     return await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.build(fineTuneModelDelete),
+      from: BaseApiUrlBuilder.buildFor(_config, fineTuneModelDelete),
       onSuccess: (Map<String, dynamic> response) {
         return response['deleted'];
       },
-      client: client,
+      client: client, config: _config,
     );
   }
 }

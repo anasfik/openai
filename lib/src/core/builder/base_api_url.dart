@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../config/client_config.dart';
 import '../constants/config.dart';
 
 /// This class is responsible for  building the API url for all the requests endpoints
@@ -10,12 +11,13 @@ abstract class BaseApiUrlBuilder {
   ///
   ///
   /// [endpoint] is the endpoint of the request.
-  /// if an [id] is pr =ovided, it will be added to the url as well.
+  /// if an [id] is provided, it will be added to the url as well.
   /// if a [query] is provided, it will be added to the url as well.
   @internal
-  static String build(String endpoint, [String? id, String? query]) {
-    final baseUrl = OpenAIConfig.baseUrl;
-    final version = OpenAIConfig.version;
+  static String build(String endpoint,
+      [String? id, String? query, OpenAIClientConfig? config]) {
+    final baseUrl = config?.baseUrl ?? OpenAIConfig.baseUrl;
+    final version = config?.version ?? OpenAIConfig.version;
     final usedEndpoint = _handleEndpointsStarting(endpoint);
 
     String apiLink = "$baseUrl";
@@ -31,13 +33,21 @@ abstract class BaseApiUrlBuilder {
     return apiLink;
   }
 
+  /// Same as [build], but with an explicit per-client [config].
+  @internal
+  static String buildFor(OpenAIClientConfig? config, String endpoint,
+      [String? id, String? query]) {
+    return build(endpoint, id, query, config);
+  }
+
   static String buildWithQuery({
     required String endpoint,
     required Map<String, String> query,
     String? id,
+    OpenAIClientConfig? config,
   }) {
-    final baseUrl = OpenAIConfig.baseUrl;
-    final version = OpenAIConfig.version;
+    final baseUrl = config?.baseUrl ?? OpenAIConfig.baseUrl;
+    final version = config?.version ?? OpenAIConfig.version;
     final usedEndpoint = _handleEndpointsStarting(endpoint);
 
     String apiLink = "$baseUrl";
@@ -49,7 +59,7 @@ abstract class BaseApiUrlBuilder {
     }
 
     if (query.isNotEmpty) {
-      apiLink += "?${Uri(queryParameters: query).toString()}";
+      apiLink += Uri(queryParameters: query).toString();
     }
 
     return apiLink;

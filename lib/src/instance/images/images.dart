@@ -12,6 +12,7 @@ import '../../core/constants/strings.dart';
 import '../../core/utils/logger.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_images}
 /// The class that handles all the requests related to the images in the OpenAI API.
@@ -22,9 +23,11 @@ interface class OpenAIImages implements OpenAIImagesBase {
   @override
   String get endpoint => OpenAIStrings.endpoints.images;
 
+  /// Per-client configuration; when null, global statics are used.
+  final OpenAIClientConfig? _config;
+
   /// {@macro openai_images}
-  OpenAIImages() {
-    OpenAILogger.logEndpoint(endpoint);
+  OpenAIImages([this._config]) {    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// This function creates an image based on a given prompt.
@@ -92,7 +95,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
     final String generations = "/generations";
 
     return await OpenAINetworkingClient.post(
-      to: BaseApiUrlBuilder.build(endpoint + generations),
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint + generations),
       onSuccess: (json) => OpenAIImageModel.fromMap(json),
       body: {
         if (model != null) "model": model,
@@ -108,7 +111,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (partialImages != null) "partial_images": partialImages,
         if (style != null) "style": style.name,
       },
-      client: client,
+      client: client, config: _config,
     );
   }
 
@@ -194,8 +197,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIImageModel.fromMap(response);
       },
-      to: BaseApiUrlBuilder.build(endpoint + edit),
-    );
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint + edit),
+      config: _config);
   }
 
   /// Creates a variation of a given image.
@@ -261,7 +264,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
           ),
         ];
       },
-      to: BaseApiUrlBuilder.build(endpoint + variations),
-    );
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint + variations),
+      config: _config);
   }
 }
