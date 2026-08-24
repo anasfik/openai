@@ -1,5 +1,9 @@
 # 🚀 Dart OpenAI
 
+> [!NOTE]
+> Maintained by **[Anas Fikhi](https://gwhyyy.com)** — Flutter & AI engineer. Available for contract work: [work@gwhyyy.com](mailto:work@gwhyyy.com) · [book a call](https://calendly.com/ffikhi-aanas/30min)
+
+
 <div align="center">
 
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/anasfik/openai)](https://github.com/anasfik/openai)
@@ -879,3 +883,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 [⭐ Star this repo](https://github.com/anasfik/openai) • [🐛 Report Bug](https://github.com/anasfik/openai/issues) • [💡 Request Feature](https://github.com/anasfik/openai/issues) • [📖 Documentation](https://pub.dev/documentation/dart_openai/latest/)
 
 </div>
+
+## Maintainer
+
+Built and maintained by **[Anas Fikhi](https://gwhyyy.com)** — Flutter & AI engineer.
+
+- Portfolio & case studies: <https://gwhyyy.com>
+- Contract work: <work@gwhyyy.com>
+- Book a call: <https://calendly.com/ffikhi-aanas/30min>
