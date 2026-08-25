@@ -41,6 +41,23 @@ final class OpenAIChatCompletionChoiceMessageModel {
     this.name,
   });
 
+  /// Convenience constructor for plain-text messages. Serializes to a bare
+  /// `String` content field, which is what older OpenAI-compatible providers
+  /// expect (#189).
+  factory OpenAIChatCompletionChoiceMessageModel.textContent({
+    required OpenAIChatMessageRole role,
+    required String text,
+    List<OpenAIResponseToolCall>? toolCalls,
+    String? name,
+  }) {
+    return OpenAIChatCompletionChoiceMessageModel(
+      role: role,
+      content: [OpenAIChatCompletionChoiceMessageContentItemModel.text(text)],
+      toolCalls: toolCalls,
+      name: name,
+    );
+  }
+
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionChoiceMessageModel] object.
   factory OpenAIChatCompletionChoiceMessageModel.fromMap(
     Map<String, dynamic> json,
