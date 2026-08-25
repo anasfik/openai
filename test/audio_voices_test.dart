@@ -22,6 +22,7 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/audio/voices',
           );
+          return null;
         },
       );
 
@@ -44,6 +45,7 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/audio/voice_consents/consent_1',
           );
+          return null;
         },
       );
 
@@ -68,6 +70,7 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/audio/voice_consents/consent_2',
           );
+          return null;
         },
       );
 

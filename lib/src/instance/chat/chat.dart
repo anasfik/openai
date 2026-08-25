@@ -1,14 +1,13 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
+import 'package:http/http.dart' as http;
 
 import '../../core/base/chat/chat.dart';
 import '../../core/constants/strings.dart';
 import '../../core/models/chat/chat.dart';
 import '../../core/models/tool/tool.dart';
 import '../../core/utils/logger.dart';
-
-import 'package:http/http.dart' as http;
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_chat}
 /// This class is responsible for handling all chat requests, such as creating a chat completion for the message(s).
@@ -92,28 +91,28 @@ interface class OpenAIChat implements OpenAIChatBase {
     http.Client? client,
     Map<String, dynamic>? extraParams,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
-        "model": model,
-        "messages": messages.map((message) => message.toMap()).toList(),
+        'model': model,
+        'messages': messages.map((message) => message.toMap()).toList(),
         if (tools != null)
-          "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
-        if (toolChoice != null) "tool_choice": toolChoice,
-        if (temperature != null) "temperature": temperature,
-        if (topP != null) "top_p": topP,
-        if (n != null) "n": n,
-        if (stop != null) "stop": stop,
-        if (maxTokens != null) "max_completion_tokens": maxTokens,
-        if (reasoningEffort != null) "reasoning_effort": reasoningEffort,
-        if (presencePenalty != null) "presence_penalty": presencePenalty,
-        if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
-        if (logitBias != null) "logit_bias": logitBias,
-        if (user != null) "user": user,
-        if (seed != null) "seed": seed,
-        if (responseFormat != null) "response_format": responseFormat,
-        if (logprobs != null) "logprobs": logprobs,
-        if (topLogprobs != null) "top_logprobs": topLogprobs,
+          'tools': tools.map((tool) => tool.toMap()).toList(growable: false),
+        if (toolChoice != null) 'tool_choice': toolChoice,
+        if (temperature != null) 'temperature': temperature,
+        if (topP != null) 'top_p': topP,
+        if (n != null) 'n': n,
+        if (stop != null) 'stop': stop,
+        if (maxTokens != null) 'max_completion_tokens': maxTokens,
+        if (reasoningEffort != null) 'reasoning_effort': reasoningEffort,
+        if (presencePenalty != null) 'presence_penalty': presencePenalty,
+        if (frequencyPenalty != null) 'frequency_penalty': frequencyPenalty,
+        if (logitBias != null) 'logit_bias': logitBias,
+        if (user != null) 'user': user,
+        if (seed != null) 'seed': seed,
+        if (responseFormat != null) 'response_format': responseFormat,
+        if (logprobs != null) 'logprobs': logprobs,
+        if (topLogprobs != null) 'top_logprobs': topLogprobs,
         ...?extraParams,
       },
       onSuccess: (Map<String, dynamic> response) {
@@ -183,6 +182,8 @@ interface class OpenAIChat implements OpenAIChatBase {
     stop,
     int? maxTokens,
     String? reasoningEffort,
+    bool? logprobs,
+    int? topLogprobs,
     double? presencePenalty,
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
@@ -196,26 +197,26 @@ interface class OpenAIChat implements OpenAIChatBase {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
         to: BaseApiUrlBuilder.buildFor(_config, endpoint),
         body: {
-          "model": model,
-          "stream": true,
-          "messages": messages.map((message) => message.toMap()).toList(),
+          'model': model,
+          'stream': true,
+          'messages': messages.map((message) => message.toMap()).toList(),
           if (tools != null)
-            "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
-          if (toolChoice != null) "tool_choice": toolChoice,
-          if (temperature != null) "temperature": temperature,
-          if (topP != null) "top_p": topP,
-          if (n != null) "n": n,
-          if (stop != null) "stop": stop,
-          if (maxTokens != null) "max_completion_tokens": maxTokens,
-          if (reasoningEffort != null) "reasoning_effort": reasoningEffort,
-          if (presencePenalty != null) "presence_penalty": presencePenalty,
-          if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
-          if (logitBias != null) "logit_bias": logitBias,
-          if (user != null) "user": user,
-          if (seed != null) "seed": seed,
-          if (responseFormat != null) "response_format": responseFormat,
+            'tools': tools.map((tool) => tool.toMap()).toList(growable: false),
+          if (toolChoice != null) 'tool_choice': toolChoice,
+          if (temperature != null) 'temperature': temperature,
+          if (topP != null) 'top_p': topP,
+          if (n != null) 'n': n,
+          if (stop != null) 'stop': stop,
+          if (maxTokens != null) 'max_completion_tokens': maxTokens,
+          if (reasoningEffort != null) 'reasoning_effort': reasoningEffort,
+          if (presencePenalty != null) 'presence_penalty': presencePenalty,
+          if (frequencyPenalty != null) 'frequency_penalty': frequencyPenalty,
+          if (logitBias != null) 'logit_bias': logitBias,
+          if (user != null) 'user': user,
+          if (seed != null) 'seed': seed,
+          if (responseFormat != null) 'response_format': responseFormat,
           if (streamOptions != null && streamOptions.isNotEmpty)
-            "stream_options": streamOptions,
+            'stream_options': streamOptions,
           ...?extraParams,
         },
         onSuccess: (Map<String, dynamic> response) {
@@ -237,6 +238,8 @@ interface class OpenAIChat implements OpenAIChatBase {
     stop,
     int? maxTokens,
     String? reasoningEffort,
+    bool? logprobs,
+    int? topLogprobs,
     double? presencePenalty,
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
@@ -249,24 +252,24 @@ interface class OpenAIChat implements OpenAIChatBase {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
         to: BaseApiUrlBuilder.buildFor(_config, endpoint),
         body: {
-          "model": model,
-          "stream": true,
-          "messages": messages.map((message) => message.toMap()).toList(),
+          'model': model,
+          'stream': true,
+          'messages': messages.map((message) => message.toMap()).toList(),
           if (tools != null)
-            "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
-          if (toolChoice != null) "tool_choice": toolChoice,
-          if (temperature != null) "temperature": temperature,
-          if (topP != null) "top_p": topP,
-          if (n != null) "n": n,
-          if (stop != null) "stop": stop,
-          if (maxTokens != null) "max_completion_tokens": maxTokens,
-          if (reasoningEffort != null) "reasoning_effort": reasoningEffort,
-          if (presencePenalty != null) "presence_penalty": presencePenalty,
-          if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
-          if (logitBias != null) "logit_bias": logitBias,
-          if (user != null) "user": user,
-          if (seed != null) "seed": seed,
-          if (responseFormat != null) "response_format": responseFormat,
+            'tools': tools.map((tool) => tool.toMap()).toList(growable: false),
+          if (toolChoice != null) 'tool_choice': toolChoice,
+          if (temperature != null) 'temperature': temperature,
+          if (topP != null) 'top_p': topP,
+          if (n != null) 'n': n,
+          if (stop != null) 'stop': stop,
+          if (maxTokens != null) 'max_completion_tokens': maxTokens,
+          if (reasoningEffort != null) 'reasoning_effort': reasoningEffort,
+          if (presencePenalty != null) 'presence_penalty': presencePenalty,
+          if (frequencyPenalty != null) 'frequency_penalty': frequencyPenalty,
+          if (logitBias != null) 'logit_bias': logitBias,
+          if (user != null) 'user': user,
+          if (seed != null) 'seed': seed,
+          if (responseFormat != null) 'response_format': responseFormat,
           ...?extraParams,
         },
         onSuccess: (Map<String, dynamic> response) {
@@ -282,7 +285,7 @@ interface class OpenAIChat implements OpenAIChatBase {
   Future<OpenAIChatCompletionModel> retrieve({
     required String completionId,
   }) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildFor(_config, endpoint, completionId),
       onSuccess: OpenAIChatCompletionModel.fromMap,
       config: _config,
@@ -297,7 +300,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     String? after,
     int? limit,
   }) async {
-    return await OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
+    return OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: '$endpoint/$completionId/messages',
         query: {
@@ -306,7 +309,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         },
         config: _config,
       ),
-      onSuccess: (response) => ((response['data'] as List<dynamic>? ?? []))
+      onSuccess: (response) => (response['data'] as List<dynamic>? ?? [])
           .whereType<Map<String, dynamic>>()
           .toList(),
       config: _config,

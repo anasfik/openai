@@ -1,9 +1,8 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
-import 'dart:convert';
-import 'dart:io';
 
 import '../../../dart_openai.dart';
 import '../../core/base/audio/audio.dart';
@@ -39,7 +38,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
 
   /// Creates a transcription for a given audio file.
   ///
-  /// [file] is the [File] audio which is the audio file to be transcribed.
+  /// [file] is the [OpenAIFile] audio which is the audio file to be transcribed.
   ///
   /// [model] is the model which to use for the transcription.
   ///
@@ -58,7 +57,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   /// Example:
   /// ```dart
   /// final transcription = await openai.audio.createTranscription(
-  ///  file: File("audio.mp3"),
+  ///  file: await loadOpenAIFile("audio.mp3"),
   /// model: "whisper-1",
   /// prompt: "This is a prompt",
   /// responseFormat: OpenAIAudioResponseFormat.srt,
@@ -68,7 +67,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   /// ```
   @override
   Future<OpenAITranscriptionGeneralModel> createTranscription({
-    required File file,
+    required OpenAIFile file,
     required String model,
     OpenAIAudioChunkingConfig? chunkingStrategy,
     String? language,
@@ -78,25 +77,25 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     List<OpenAIAudioTimestampGranularity>? timestampGranularities,
     List<String>? include,
   }) async {
-    return await OpenAINetworkingClient.fileUpload(
+    return OpenAINetworkingClient.fileUpload(
       file: file,
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint + "/transcriptions"),
+      to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/transcriptions'),
       body: {
-        "model": model,
-        if (prompt != null) "prompt": prompt,
-        if (responseFormat != null) "response_format": responseFormat.name,
-        if (temperature != null) "temperature": temperature.toString(),
-        if (language != null) "language": language,
+        'model': model,
+        if (prompt != null) 'prompt': prompt,
+        if (responseFormat != null) 'response_format': responseFormat.name,
+        if (temperature != null) 'temperature': temperature.toString(),
+        if (language != null) 'language': language,
         if (timestampGranularities != null)
-          "timestamp_granularities[]":
-              timestampGranularities.map((e) => e.name).join(","),
+          'timestamp_granularities[]':
+              timestampGranularities.map((e) => e.name).join(','),
         if (chunkingStrategy != null)
-          "chunking_strategy":
+          'chunking_strategy':
               chunkingStrategy.type == OpenAIAudioChunkingStrategy.auto
-                  ? "auto"
+                  ? 'auto'
                   : jsonEncode(chunkingStrategy.toMap()),
         if (include != null && include.isNotEmpty)
-          "include[]": include.join(","),
+          'include[]': include.join(','),
       },
       onSuccess: (Map<String, dynamic> response) {
         return responseFormat == OpenAIAudioResponseFormat.verbose_json
@@ -104,7 +103,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
             : OpenAITranscriptionModel.fromMap(response);
       },
       responseMapAdapter: (res) {
-        return {"text": res};
+        return {'text': res};
       },
       config: _config,
     );
@@ -112,7 +111,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
 
   /// Creates a translation for a given audio file.
   ///
-  /// [file] is the [File] audio which is the audio file to be transcribed.
+  /// [file] is the [OpenAIFile] audio which is the audio file to be transcribed.
   ///
   /// [model] is the model which to use for the transcription.
   ///
@@ -127,7 +126,7 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   /// Example:
   /// ```dart
   /// final translation = await openai.audio.createTranslation(
-  /// file: File("audio.mp3"),
+  /// file: await loadOpenAIFile("audio.mp3"),
   /// model: "whisper-1",
   /// prompt: "This is a prompt",
   /// responseFormat: OpenAIAudioResponseFormat.text,
@@ -136,23 +135,23 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   /// ```
   @override
   Future<String> createTranslation({
-    required File file,
+    required OpenAIFile file,
     required String model,
     String? prompt,
     OpenAIAudioResponseFormat? responseFormat,
     double? temperature,
   }) async {
-    return await OpenAINetworkingClient.fileUpload(
+    return OpenAINetworkingClient.fileUpload(
       file: file,
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint + "/translations"),
+      to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/translations'),
       body: {
-        "model": model,
-        if (prompt != null) "prompt": prompt,
-        if (responseFormat != null) "response_format": responseFormat.name,
-        if (temperature != null) "temperature": temperature.toString(),
+        'model': model,
+        if (prompt != null) 'prompt': prompt,
+        if (responseFormat != null) 'response_format': responseFormat.name,
+        if (temperature != null) 'temperature': temperature.toString(),
       },
       onSuccess: (Map<String, dynamic> response) {
-        return response["text"] as String;
+        return response['text'] as String;
       },
       responseMapAdapter: (res) {
         try {
@@ -163,43 +162,40 @@ interface class OpenAIAudio implements OpenAIAudioBase {
           }
         } catch (e) {}
 
-        return {"text": res};
+        return {'text': res};
       },
       config: _config,
     );
   }
 
   @override
-  Future<File> createSpeech({
+  Future<Uint8List> createSpeech({
     required String model,
     required String input,
     required OpenAIAudioVoice voice,
     String? instructions,
     OpenAIAudioSpeechResponseFormat? responseFormat,
     double? speed,
-    String outputFileName = "output",
-    Directory? outputDirectory,
+    String outputFileName = 'output',
+    String? outputDirectory,
   }) async {
     _validateSpeechVoiceForModel(model: model, voice: voice);
 
-    return await OpenAINetworkingClient.postAndExpectFileResponse(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint + "/speech"),
+    return OpenAINetworkingClient.postAndExpectBytes(
+      to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/speech'),
       body: {
-        "model": model,
-        "input": input,
-        "voice": voice.name,
-        if (instructions != null) "instructions": instructions,
-        if (responseFormat != null) "response_format": responseFormat.name,
-        if (speed != null) "speed": speed,
-      },
-      onFileResponse: (File res) {
-        return res;
+        'model': model,
+        'input': input,
+        'voice': voice.name,
+        if (instructions != null) 'instructions': instructions,
+        if (responseFormat != null) 'response_format': responseFormat.name,
+        if (speed != null) 'speed': speed,
       },
       outputFileExtension: responseFormat != null
           ? responseFormat.name
           : OpenAIAudioSpeechResponseFormat.mp3.name,
-      outputFileName: outputFileName,
       outputDirectory: outputDirectory,
+      outputFileName: outputFileName,
       config: _config,
     );
   }
@@ -212,20 +208,18 @@ interface class OpenAIAudio implements OpenAIAudioBase {
     String? instructions,
     OpenAIAudioSpeechResponseFormat? responseFormat,
     double? speed,
-    String outputFileName = "output",
-    Directory? outputDirectory,
   }) async {
     _validateSpeechVoiceForModel(model: model, voice: voice);
 
-    return await OpenAINetworkingClient.postAndGetBytes(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint + "/speech"),
+    return OpenAINetworkingClient.postAndGetBytes(
+      to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/speech'),
       body: {
-        "model": model,
-        "input": input,
-        "voice": voice.name,
-        if (instructions != null) "instructions": instructions,
-        if (responseFormat != null) "response_format": responseFormat.name,
-        if (speed != null) "speed": speed,
+        'model': model,
+        'input': input,
+        'voice': voice.name,
+        if (instructions != null) 'instructions': instructions,
+        if (responseFormat != null) 'response_format': responseFormat.name,
+        if (speed != null) 'speed': speed,
       },
       config: _config,
     );
@@ -254,9 +248,9 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   /// Returns the raw voice entries as maps, since the schema varies between
   /// providers and API versions.
   Future<List<Map<String, dynamic>>> listVoices() async {
-    return await OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint + "/voices"),
-      onSuccess: (response) => ((response['data'] as List<dynamic>? ?? []))
+    return OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
+      from: BaseApiUrlBuilder.buildFor(_config, '$endpoint/voices'),
+      onSuccess: (response) => (response['data'] as List<dynamic>? ?? [])
           .whereType<Map<String, dynamic>>()
           .toList(),
       config: _config,
@@ -267,8 +261,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   ///
   /// Returns the raw response map.
   Future<Map<String, dynamic>> listVoiceConsents() async {
-    return await OpenAINetworkingClient.get(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint + "/voice_consents"),
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(_config, '$endpoint/voice_consents'),
       onSuccess: (response) => response,
       config: _config,
     );
@@ -282,9 +276,9 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   Future<Map<String, dynamic>> getVoiceConsent({
     required String consentId,
   }) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildFor(
-          _config, endpoint + "/voice_consents/$consentId"),
+          _config, '$endpoint/voice_consents/$consentId'),
       onSuccess: (response) => response,
       config: _config,
     );
@@ -292,23 +286,23 @@ interface class OpenAIAudio implements OpenAIAudioBase {
 
   /// Uploads a consent audio file to create a voice consent.
   ///
-  /// [file] is the [File] audio recording of the consent statement.
+  /// [file] is the [OpenAIFile] audio recording of the consent statement.
   ///
   /// [fields] are optional extra multipart form fields.
   ///
   /// Example:
   /// ```dart
   /// final consent = await openai.audio.createVoiceConsent(
-  ///   file: File("consent.wav"),
+  ///   file: await loadOpenAIFile("consent.wav"),
   /// );
   /// ```
   Future<Map<String, dynamic>> createVoiceConsent({
-    required File file,
+    required OpenAIFile file,
     Map<String, String> fields = const {},
   }) async {
-    return await OpenAINetworkingClient.fileUpload(
+    return OpenAINetworkingClient.fileUpload(
       file: file,
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint + "/voice_consents"),
+      to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/voice_consents'),
       body: fields,
       fileField: 'audio',
       onSuccess: (Map<String, dynamic> response) {
@@ -326,9 +320,9 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   Future<Map<String, dynamic>> deleteVoiceConsent({
     required String consentId,
   }) async {
-    return await OpenAINetworkingClient.delete(
+    return OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.buildFor(
-          _config, endpoint + "/voice_consents/$consentId"),
+          _config, '$endpoint/voice_consents/$consentId'),
       onSuccess: (response) => response,
       config: _config,
     );

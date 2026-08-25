@@ -35,6 +35,7 @@ void main() {
           expect(body['prompt'], 'a cat surfing');
           expect(body['seconds'], '4');
           expect(body['size'], '720x1280');
+          return null;
         },
       );
 
@@ -61,6 +62,7 @@ void main() {
           expect(body.containsKey('seconds'), isFalse);
           expect(body.containsKey('size'), isFalse);
           expect(body.containsKey('input_reference'), isFalse);
+          return null;
         },
       );
 
@@ -97,6 +99,7 @@ void main() {
         assertRequest: (request) {
           expect(request.url.toString(),
               'https://api.openai.com/v1/videos?after=video_0&limit=10');
+          return null;
         },
       );
 
@@ -124,6 +127,7 @@ void main() {
           expect(request.method, 'GET');
           expect(request.url.toString(),
               'https://api.openai.com/v1/videos/video_9');
+          return null;
         },
       );
 
@@ -142,6 +146,7 @@ void main() {
           expect(request.method, 'DELETE');
           expect(request.url.toString(),
               'https://api.openai.com/v1/videos/video_3');
+          return null;
         },
       );
 
@@ -166,6 +171,7 @@ void main() {
           expect(request.url.toString(),
               'https://api.openai.com/v1/videos/video_1/remix');
           expect(decodedJsonBody(request)['prompt'], 'make it night time');
+          return null;
         },
       );
 
@@ -192,6 +198,7 @@ void main() {
           expect(request.method, 'GET');
           expect(request.url.toString(),
               'https://api.openai.com/v1/videos/video_1/content');
+          return null;
         },
       );
 

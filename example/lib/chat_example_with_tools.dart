@@ -47,7 +47,7 @@ Future<void> main() async {
 
   if (toolCalls == null ||
       toolCalls.isEmpty ||
-      toolCalls.first.function.name != "getCurrentWeather") {
+      toolCalls.first.function?.name != "getCurrentWeather") {
     print(assistantMsg1.content);
     return;
   }
@@ -55,8 +55,8 @@ Future<void> main() async {
   final funcCall = toolCalls.first.function;
 
   final weather = getCurrentWeather(
-    location: jsonDecode(funcCall.arguments)?["location"],
-    unit: jsonDecode(funcCall.arguments)?["unit"],
+    location: jsonDecode(funcCall?.arguments!)?["location"],
+    unit: jsonDecode(funcCall?.arguments!)?["unit"],
   );
 
   final toolMsg = OpenAIChatCompletionChoiceMessageModel(

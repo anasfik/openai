@@ -18,6 +18,7 @@ class OpenAIChatCompletionChoiceTopLogProbsContentModel
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'token': token,

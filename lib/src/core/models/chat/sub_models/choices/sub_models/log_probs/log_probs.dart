@@ -12,9 +12,9 @@ class OpenAIChatCompletionChoiceLogProbsModel {
     Map<String, dynamic> json,
   ) {
     return OpenAIChatCompletionChoiceLogProbsModel(
-      content: json["content"] != null
+      content: json['content'] != null
           ? List<OpenAIChatCompletionChoiceLogProbsContentModel>.from(
-              json["content"].map(
+              json['content'].map(
                 (x) =>
                     OpenAIChatCompletionChoiceLogProbsContentModel.fromMap(x),
               ),
@@ -25,7 +25,7 @@ class OpenAIChatCompletionChoiceLogProbsModel {
 
   Map<String, dynamic> toMap() {
     return {
-      "content": content.map((x) => x.toMap()).toList(),
+      'content': content.map((x) => x.toMap()).toList(),
     };
   }
 }

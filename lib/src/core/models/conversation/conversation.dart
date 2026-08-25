@@ -1,3 +1,5 @@
+import '../../utils/parse.dart';
+
 class OpenAIConversation {
   final String id;
   final DateTime createdAt;
@@ -11,10 +13,10 @@ class OpenAIConversation {
 
   factory OpenAIConversation.fromMap(Map<String, dynamic> json) =>
       OpenAIConversation(
-        id: json["id"],
+        id: json['id'],
         createdAt:
-            DateTime.fromMillisecondsSinceEpoch(json["created_at"] * 1000),
-        metadata: json["metadata"] ?? {},
+            DateTime.fromMillisecondsSinceEpoch((intOr(json['created_at']) * 1000)),
+        metadata: json['metadata'] ?? {},
       );
 
   OpenAIConversation copyWith({

@@ -55,9 +55,9 @@ void main() async {
     final call = message.toolCalls!.first;
 
     // Whether the tool call is the one we sent.
-    if (call.function.name == "sumOfTwoNumbers") {
+    if (call.function?.name == "sumOfTwoNumbers") {
       // decode the arguments from the tool call.
-      final decodedArgs = jsonDecode(call.function.arguments);
+      final decodedArgs = jsonDecode(call.function!.arguments!);
 
       final number1 = decodedArgs["number1"];
       final number2 = decodedArgs["number2"];

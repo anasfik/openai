@@ -18,5 +18,6 @@ abstract class OpenAIConversationsBase
         GetItemInterface,
         EndpointInterface {
   /// The endpoint for this API
+  @override
   String get endpoint;
 }

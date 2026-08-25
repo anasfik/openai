@@ -27,7 +27,7 @@ class OpenAIFineTuning {
     int? seed,
     Map<String, dynamic>? integrations,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, _jobs),
       body: {
         'model': model,
@@ -44,7 +44,7 @@ class OpenAIFineTuning {
 
   /// Lists fine-tuning jobs.
   Future<OpenAIFineTuningJobList> list({String? after, int? limit}) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: _jobs,
         query: {
@@ -60,7 +60,7 @@ class OpenAIFineTuning {
 
   /// Retrieves a job.
   Future<OpenAIFineTuningJob> retrieve({required String jobId}) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildFor(_config, _jobs, jobId),
       onSuccess: OpenAIFineTuningJob.fromMap,
       config: _config,
@@ -69,7 +69,7 @@ class OpenAIFineTuning {
 
   /// Cancels a job.
   Future<OpenAIFineTuningJob> cancel({required String jobId}) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, '$_jobs/$jobId/cancel'),
       onSuccess: OpenAIFineTuningJob.fromMap,
       config: _config,
@@ -78,7 +78,7 @@ class OpenAIFineTuning {
 
   /// Pauses a job.
   Future<OpenAIFineTuningJob> pause({required String jobId}) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, '$_jobs/$jobId/pause'),
       onSuccess: OpenAIFineTuningJob.fromMap,
       config: _config,
@@ -87,7 +87,7 @@ class OpenAIFineTuning {
 
   /// Resumes a paused job.
   Future<OpenAIFineTuningJob> resume({required String jobId}) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, '$_jobs/$jobId/resume'),
       onSuccess: OpenAIFineTuningJob.fromMap,
       config: _config,
@@ -100,7 +100,7 @@ class OpenAIFineTuning {
     String? after,
     int? limit,
   }) async {
-    return await OpenAINetworkingClient.get<List<OpenAIFineTuningEvent>>(
+    return OpenAINetworkingClient.get<List<OpenAIFineTuningEvent>>(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: '$_jobs/$jobId/events',
         query: {
@@ -109,7 +109,7 @@ class OpenAIFineTuning {
         },
         config: _config,
       ),
-      onSuccess: (response) => ((response['data'] as List<dynamic>? ?? []))
+      onSuccess: (response) => (response['data'] as List<dynamic>? ?? [])
           .whereType<Map<String, dynamic>>()
           .map(OpenAIFineTuningEvent.fromMap)
           .toList(),
@@ -123,7 +123,7 @@ class OpenAIFineTuning {
     String? after,
     int? limit,
   }) async {
-    return await OpenAINetworkingClient.get<List<OpenAIFineTuningCheckpoint>>(
+    return OpenAINetworkingClient.get<List<OpenAIFineTuningCheckpoint>>(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: '$_jobs/$jobId/checkpoints',
         query: {
@@ -132,7 +132,7 @@ class OpenAIFineTuning {
         },
         config: _config,
       ),
-      onSuccess: (response) => ((response['data'] as List<dynamic>? ?? []))
+      onSuccess: (response) => (response['data'] as List<dynamic>? ?? [])
           .whereType<Map<String, dynamic>>()
           .map(OpenAIFineTuningCheckpoint.fromMap)
           .toList(),

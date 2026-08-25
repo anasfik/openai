@@ -1,5 +1,5 @@
-import 'package:meta/meta.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
+import 'package:meta/meta.dart';
 
 /// {@template headers_builder}
 /// This class is responsible for building the headers for all the requests.
@@ -51,20 +51,20 @@ abstract class HeadersBuilder {
   /// If in anyhow the API key is not set, it will throw an [AssertionError] while debugging.
   @internal
   static Map<String, String> build() {
-    Map<String, String> headers = <String, String>{
+    var headers = <String, String>{
       'Content-Type': 'application/json',
     };
 
     assert(
       apiKey != null,
-      """
-      You must set the API key before making building any headers for a request.""",
+      '''
+      You must set the API key before making building any headers for a request.''',
     );
     headers = {
       ...headers,
       ..._additionalHeadersToRequests,
       if (isOrganizationSet) 'OpenAI-Organization': organization!,
-      "Authorization": "Bearer $apiKey",
+      'Authorization': 'Bearer $apiKey',
     };
 
     return headers;

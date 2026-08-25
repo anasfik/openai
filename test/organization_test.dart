@@ -30,10 +30,11 @@ void main() {
               request.url.toString(),
               'https://api.openai.com/v1/organization/projects?after=p0&limit=5',
             );
+            return null;
           });
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final page = await client.projects.list(after: 'p0', limit: 5);
 
@@ -56,11 +57,12 @@ void main() {
             'https://api.openai.com/v1/organization/projects',
           );
           expect(decodedJsonBody(request)['name'], 'New');
+          return null;
         },
       );
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final project = await client.projects.create(name: 'New');
       expect(project.id, 'proj_9');
@@ -77,11 +79,12 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/organization/projects/proj_1/archive',
           );
+          return null;
         },
       );
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final project = await client.projects.archive(projectId: 'proj_1');
       expect(project.status, 'archived');
@@ -110,10 +113,11 @@ void main() {
               request.url.toString(),
               'https://api.openai.com/v1/organization/users',
             );
+            return null;
           });
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final page = await client.users.list();
 
@@ -137,11 +141,12 @@ void main() {
           final body = decodedJsonBody(request);
           expect(body['email'], 'n@x.com');
           expect(body['role'], 'reader');
+          return null;
         },
       );
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final invite =
           await client.invites.create(email: 'n@x.com', role: 'reader');
@@ -159,11 +164,12 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/organization/invites/inv_1',
           );
+          return null;
         },
       );
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final deleted = await client.invites.delete(inviteId: 'inv_1');
       expect(deleted, isTrue);
@@ -196,10 +202,11 @@ void main() {
               'limit': '10',
               'after': 'log_0',
             });
+            return null;
           });
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final page = await client.auditLogs.list(
         effectiveAtGt: 50,
@@ -233,10 +240,11 @@ void main() {
           assertRequest: (request) {
             expect(request.url.queryParameters['start_time'], '1700000000');
             expect(request.url.queryParameters['group_by'], 'line_item');
+            return null;
           });
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final page = await client.costs.list(
         startTime: 1700000000,
@@ -264,7 +272,7 @@ void main() {
       });
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final page = await client.rateLimits.list();
 
@@ -290,11 +298,12 @@ void main() {
           final body = decodedJsonBody(request);
           expect(body['name'], 'ops');
           expect(body['scope'], 'registry.write');
+          return null;
         },
       );
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final key = await client.adminApiKeys.create(
         name: 'ops',
@@ -315,11 +324,12 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/organization/admin_api_keys/key_1',
           );
+          return null;
         },
       );
 
       final client = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       final deleted = await client.adminApiKeys.delete(keyId: 'key_1');
       expect(deleted, isTrue);
@@ -329,7 +339,7 @@ void main() {
   group('aggregator', () {
     test('exposes sub modules sharing one config', () {
       final org = OpenAIOrganization(
-        OpenAIClientConfig(apiKey: 'sk-a'),
+        const OpenAIClientConfig(apiKey: 'sk-a'),
       );
       expect(org.projects, isA<OpenAIProjects>());
       expect(org.users, isA<OpenAIOrgUsers>());

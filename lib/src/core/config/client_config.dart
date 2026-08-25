@@ -1,3 +1,6 @@
+import 'azure.dart';
+import 'retry_policy.dart';
+
 /// Per-client configuration.
 ///
 /// A [OpenAIClientConfig] is owned by an [OpenAIClient] instance. The legacy
@@ -22,6 +25,13 @@ class OpenAIClientConfig {
   /// Extra headers merged into every request.
   final Map<String, dynamic> extraHeaders;
 
+  /// Retry behavior for transient failures. Defaults to 2 total attempts.
+  final OpenAIRetryPolicy retryPolicy;
+
+  /// Azure OpenAI settings. When set, requests are rewritten to Azure's
+  /// deployment-based URLs with the api-version parameter.
+  final OpenAIAzure? azure;
+
   const OpenAIClientConfig({
     this.apiKey,
     this.organization,
@@ -29,6 +39,8 @@ class OpenAIClientConfig {
     this.version = 'v1',
     this.requestsTimeOut = const Duration(seconds: 30),
     this.extraHeaders = const {},
+    this.retryPolicy = const OpenAIRetryPolicy(),
+    this.azure,
   });
 
   /// Builds a config snapshot from the global statics used by the legacy

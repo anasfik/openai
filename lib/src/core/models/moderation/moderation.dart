@@ -36,13 +36,12 @@ final class OpenAIModerationModel {
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModerationModel] object.
   factory OpenAIModerationModel.fromMap(Map<String, dynamic> json) {
     return OpenAIModerationModel(
-      id: json['id'],
-      model: json['model'],
-      results: List<OpenAIModerationResultModel>.from(
-        json['results'].map(
-          (x) => OpenAIModerationResultModel.fromMap(x),
-        ),
-      ),
+      id: json['id']?.toString() ?? '',
+      model: json['model']?.toString() ?? '',
+      results: ((json['results'] as List?) ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(OpenAIModerationResultModel.fromMap)
+          .toList(),
     );
   }
 

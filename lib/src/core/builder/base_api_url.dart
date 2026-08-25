@@ -20,14 +20,14 @@ abstract class BaseApiUrlBuilder {
     final version = config?.version ?? OpenAIConfig.version;
     final usedEndpoint = _handleEndpointsStarting(endpoint);
 
-    String apiLink = "$baseUrl";
-    apiLink += "/$version";
-    apiLink += "$usedEndpoint";
+    var apiLink = baseUrl;
+    apiLink += '/$version';
+    apiLink += usedEndpoint;
 
     if (id != null) {
-      apiLink += "/$id";
+      apiLink += '/$id';
     } else if (query != null) {
-      apiLink += "?$query";
+      apiLink += '?$query';
     }
 
     return apiLink;
@@ -50,12 +50,12 @@ abstract class BaseApiUrlBuilder {
     final version = config?.version ?? OpenAIConfig.version;
     final usedEndpoint = _handleEndpointsStarting(endpoint);
 
-    String apiLink = "$baseUrl";
-    apiLink += "/$version";
-    apiLink += "$usedEndpoint";
+    var apiLink = baseUrl;
+    apiLink += '/$version';
+    apiLink += usedEndpoint;
 
     if (id != null && id.isNotEmpty) {
-      apiLink = apiLink + "/$id";
+      apiLink = '$apiLink/$id';
     }
 
     if (query.isNotEmpty) {
@@ -67,6 +67,6 @@ abstract class BaseApiUrlBuilder {
 
   // This is used to handle the endpoints that don't start with a slash.
   static String _handleEndpointsStarting(String endpoint) {
-    return endpoint.startsWith("/") ? endpoint : "/$endpoint";
+    return endpoint.startsWith('/') ? endpoint : '/$endpoint';
   }
 }

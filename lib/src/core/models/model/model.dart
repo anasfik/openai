@@ -24,9 +24,9 @@ final class OpenAIModelModel {
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIModelModel] object.
   factory OpenAIModelModel.fromMap(Map<String, dynamic> json) {
     return OpenAIModelModel(
-      id: json['id'],
-      ownedBy: json['owned_by'],
-      created: json['created'],
+      id: json['id']?.toString() ?? '',
+      ownedBy: json['owned_by']?.toString() ?? '',
+      created: json['created'] is int ? json['created'] as int : int.tryParse('${json['created']}'),
     );
   }
 }

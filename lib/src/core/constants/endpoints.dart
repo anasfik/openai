@@ -2,73 +2,73 @@
 /// The class holding all endpoints for the API that are used.
 /// {@endtemplate}
 class OpenAIApisEndpoints {
-  final containers = "/containers";
+  final containers = '/containers';
 
   ///
-  final vectorStores = "/vector_stores";
+  final vectorStores = '/vector_stores';
 
   ///
-  final evals = "/evals";
+  final evals = '/evals';
 
   ///
-  final conversations = "/conversations";
+  final conversations = '/conversations';
 
   ///
-  final responses = "/responses";
+  final responses = '/responses';
 
   /// none.
-  final completion = "/completions";
+  final completion = '/completions';
 
   /// none.
-  final audio = "/audio";
+  final audio = '/audio';
 
   /// none.
-  final chat = "/chat/completions";
+  final chat = '/chat/completions';
 
   /// none.
-  final edits = "/edits";
+  final edits = '/edits';
 
   /// none.
-  final embeddings = "/embeddings";
+  final embeddings = '/embeddings';
 
   /// none.
-  final files = "/files";
+  final files = '/files';
 
   /// none.
-  final fineTunes = "/fine-tunes";
+  final fineTunes = '/fine-tunes';
 
   /// none.
-  final images = "/images";
+  final images = '/images';
 
   /// none.
-  final models = "/models";
+  final models = '/models';
 
   /// none.
-  final moderation = "/moderations";
+  final moderation = '/moderations';
 
   /// Batch processing.
-  final batch = "/batches";
+  final batch = '/batches';
 
   /// Uploads (multipart upload sessions).
-  final uploads = "/uploads";
+  final uploads = '/uploads';
 
   /// Fine-tuning (new API).
-  final fineTuning = "/fine_tuning";
+  final fineTuning = '/fine_tuning';
 
   /// Videos.
-  final videos = "/videos";
+  final videos = '/videos';
 
   /// Realtime sessions and client secrets (REST part).
-  final realtime = "/realtime";
+  final realtime = '/realtime';
 
   /// Skills.
-  final skills = "/skills";
+  final skills = '/skills';
 
   /// Content provenance checks.
-  final contentProvenanceChecks = "/content_provenance_checks";
+  final contentProvenanceChecks = '/content_provenance_checks';
 
   /// Organization-level administration endpoints root.
-  final organization = "/organization";
+  final organization = '/organization';
 
   /// {@macro openai_endpoints}
   static const OpenAIApisEndpoints _instance = OpenAIApisEndpoints._();

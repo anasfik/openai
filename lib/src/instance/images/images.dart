@@ -1,18 +1,16 @@
-import 'dart:io';
 
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/enum.dart';
+import 'package:dart_openai/src/core/io/openai_file.dart';
 import 'package:dart_openai/src/core/models/image/image/image.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import '../../core/base/images/base.dart';
 import '../../core/constants/strings.dart';
-
 import '../../core/utils/logger.dart';
-
-import 'package:http/http.dart' as http;
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_images}
 /// The class that handles all the requests related to the images in the OpenAI API.
@@ -93,24 +91,24 @@ interface class OpenAIImages implements OpenAIImagesBase {
     String? user,
     http.Client? client,
   }) async {
-    final String generations = "/generations";
+    const generations = '/generations';
 
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, endpoint + generations),
-      onSuccess: (json) => OpenAIImageModel.fromMap(json),
+      onSuccess: OpenAIImageModel.fromMap,
       body: {
-        if (model != null) "model": model,
-        "prompt": prompt,
-        if (n != null) "n": n,
-        if (size != null) "size": size.value,
-        if (responseFormat != null) "response_format": responseFormat.value,
-        if (user != null) "user": user,
-        if (background != null) "background": background,
-        if (moderation != null) "moderation": moderation,
-        if (outputCompression != null) "output_compression": outputCompression,
-        if (outputFormat != null) "output_format": outputFormat.name,
-        if (partialImages != null) "partial_images": partialImages,
-        if (style != null) "style": style.name,
+        if (model != null) 'model': model,
+        'prompt': prompt,
+        if (n != null) 'n': n,
+        if (size != null) 'size': size.value,
+        if (responseFormat != null) 'response_format': responseFormat.value,
+        if (user != null) 'user': user,
+        if (background != null) 'background': background,
+        if (moderation != null) 'moderation': moderation,
+        if (outputCompression != null) 'output_compression': outputCompression,
+        if (outputFormat != null) 'output_format': outputFormat.name,
+        if (partialImages != null) 'partial_images': partialImages,
+        if (style != null) 'style': style.name,
       },
       client: client,
       config: _config,
@@ -151,7 +149,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// Example:
   ///```dart
   /// OpenAIImageModel imageEdit = await OpenAI.instance.image.edit(
-  ///  file: File(/* IMAGE PATH HERE */),
+  ///  file: await loadOpenAIFile(/* IMAGE PATH HERE */),
   ///  mask: File(/* MASK PATH HERE */),
   ///  prompt: "mask the image with a dinosaur in the image",
   ///  n: 1,
@@ -161,11 +159,11 @@ interface class OpenAIImages implements OpenAIImagesBase {
   ///```
   @override
   Future<OpenAIImageModel> edit({
-    required File image,
+    required OpenAIFile image,
     required String prompt,
     String? background,
     OpenAIImageInputFidelity? inputFidelity,
-    File? mask,
+    OpenAIFile? mask,
     String? model,
     int? n,
     int? outputCompression,
@@ -176,25 +174,25 @@ interface class OpenAIImages implements OpenAIImagesBase {
     OpenAIImageSize? size,
     String? user,
   }) async {
-    final String edit = "/edits";
+    const edit = '/edits';
 
     return await OpenAINetworkingClient.imageEditForm<OpenAIImageModel>(
         image: image,
         mask: mask,
         body: {
-          if (model != null) "model": model,
-          "prompt": prompt,
-          if (n != null) "n": n.toString(),
-          if (size != null) "size": size.value,
-          if (responseFormat != null) "response_format": responseFormat.value,
-          if (background != null) "background": background,
-          if (inputFidelity != null) "input_fidelity": inputFidelity.name,
+          if (model != null) 'model': model,
+          'prompt': prompt,
+          if (n != null) 'n': n.toString(),
+          if (size != null) 'size': size.value,
+          if (responseFormat != null) 'response_format': responseFormat.value,
+          if (background != null) 'background': background,
+          if (inputFidelity != null) 'input_fidelity': inputFidelity.name,
           if (outputCompression != null)
-            "output_compression": outputCompression.toString(),
-          if (partialImages != null) "partial_images": partialImages.toString(),
-          if (outputFormat != null) "output_format": outputFormat.name,
-          if (quality != null) "quality": quality.value,
-          if (user != null) "user": user,
+            'output_compression': outputCompression.toString(),
+          if (partialImages != null) 'partial_images': partialImages.toString(),
+          if (outputFormat != null) 'output_format': outputFormat.name,
+          if (quality != null) 'quality': quality.value,
+          if (user != null) 'user': user,
         },
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIImageModel.fromMap(response);
@@ -240,28 +238,28 @@ interface class OpenAIImages implements OpenAIImagesBase {
   /// ```
   @override
   Future<List<OpenAIImageData>> variation({
-    required File image,
+    required OpenAIFile image,
     String? model,
     int? n,
     OpenAIImageResponseFormat? responseFormat,
     OpenAIImageSize? size,
     String? user,
   }) async {
-    final String variations = "/variations";
+    const variations = '/variations';
 
-    return await OpenAINetworkingClient.imageVariationForm<
+    return OpenAINetworkingClient.imageVariationForm<
             List<OpenAIImageData>>(
         image: image,
         body: {
-          if (model != null) "model": model,
-          if (n != null) "n": n.toString(),
-          if (size != null) "size": size.value,
-          if (responseFormat != null) "response_format": responseFormat.value,
-          if (user != null) "user": user,
+          if (model != null) 'model': model,
+          if (n != null) 'n': n.toString(),
+          if (size != null) 'size': size.value,
+          if (responseFormat != null) 'response_format': responseFormat.value,
+          if (user != null) 'user': user,
         },
         onSuccess: (Map<String, dynamic> response) {
           return [
-            ...(response["data"] as List).map(
+            ...(response['data'] as List).map(
               (e) => OpenAIImageData.fromMap(e),
             ),
           ];
@@ -287,12 +285,12 @@ interface class OpenAIImages implements OpenAIImagesBase {
     return OpenAINetworkingClient.postStream<Map<String, dynamic>>(
       to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/generations'),
       body: {
-        "model": model,
-        "prompt": prompt,
-        "stream": true,
-        if (n != null) "n": n,
-        if (size != null) "size": size,
-        if (quality != null) "quality": quality,
+        'model': model,
+        'prompt': prompt,
+        'stream': true,
+        if (n != null) 'n': n,
+        if (size != null) 'size': size,
+        if (quality != null) 'quality': quality,
         ...?extraParams,
       },
       onSuccess: (event) => event,

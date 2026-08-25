@@ -42,14 +42,15 @@ final class OpenAIEmbeddingsModel {
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEmbeddingsModel] object.
   factory OpenAIEmbeddingsModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsModel(
-      data: List<OpenAIEmbeddingsDataModel>.from(
-        map['data'].map<OpenAIEmbeddingsDataModel>(
-          (x) => OpenAIEmbeddingsDataModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
-      model: map['model'] as String,
+      data: ((map['data'] as List?) ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(OpenAIEmbeddingsDataModel.fromMap)
+          .toList(),
+      model: map['model']?.toString() ?? '',
       usage: OpenAIEmbeddingsUsageModel.fromMap(
-        map['usage'] as Map<String, dynamic>,
+        map['usage'] is Map<String, dynamic>
+            ? map['usage'] as Map<String, dynamic>
+            : {},
       ),
     );
   }

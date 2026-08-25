@@ -71,130 +71,130 @@ abstract final class OpenAILogger {
 
   /// Logs that a request to an [endpoint] is being made, if the logger is active.
   static void logEndpoint(String endpoint) {
-    log("accessing endpoint: $endpoint");
+    log('accessing endpoint: $endpoint');
   }
 
   /// Logs that an api key is being set, if the logger is active.
   static void logAPIKey([String? apiKey]) {
     if (apiKey != null && isValidApiKey(apiKey)) {
       final hiddenApiKey = apiKey.replaceRange(0, apiKey.length - 10, '****');
-      log("api key set to $hiddenApiKey");
+      log('api key set to $hiddenApiKey');
     } else {
-      log("api key is set but not valid");
+      log('api key is set but not valid');
     }
   }
 
   /// simple check for api key validity
-  static isValidApiKey(String key) {
+  static bool isValidApiKey(String key) {
     return key.isNotEmpty &&
-        key.startsWith("sk-") &&
+        key.startsWith('sk-') &&
         key.length > _kValidApiKeyLength;
   }
 
   /// Logs that an baseUrl key is being set, if the logger is active.
   static void logBaseUrl([String? baseUrl]) {
     if (baseUrl != null) {
-      log("base url set to $baseUrl");
+      log('base url set to $baseUrl');
     } else {
-      log("base url is set");
+      log('base url is set');
     }
   }
 
   static void logVersion([String? version]) {
     if (version != null) {
-      log("API version set to $version");
+      log('API version set to $version');
     } else {
-      log("API version is set");
+      log('API version is set');
     }
   }
 
   /// Logs that an organization id is being set, if the logger is active.
   static void logOrganization(String? organizationId) {
-    log("organization id set to $organizationId");
+    log('organization id set to $organizationId');
   }
 
   static void logStartRequest(String from) {
-    return log("starting request to $from");
+    return log('starting request to $from');
   }
 
   static void requestToWithStatusCode(String url, int statusCode) {
-    return log("request to $url finished with status code ${statusCode}");
+    return log('request to $url finished with status code $statusCode');
   }
 
   static void startingDecoding() {
-    return log("starting decoding response body");
+    return log('starting decoding response body');
   }
 
   static void decodedSuccessfully() {
-    return log("response body decoded successfully");
+    return log('response body decoded successfully');
   }
 
   static void errorOcurred([Object? error]) {
-    return log("an error occurred, throwing exception: $error");
+    return log('an error occurred, throwing exception: $error');
   }
 
   static void requestFinishedSuccessfully() {
-    return log("request finished successfully");
+    return log('request finished successfully');
   }
 
   static void streamResponseDone() {
-    return log("stream response is done");
+    return log('stream response is done');
   }
 
   static void startReadStreamResponse() {
-    return log("Starting to reading stream response");
+    return log('Starting to reading stream response');
   }
 
   static void logIncludedHeaders(
     Map<String, dynamic> additionalHeadersToRequests,
   ) {
-    for (int index = 0;
+    for (var index = 0;
         index < additionalHeadersToRequests.entries.length;
         index++) {
       final entry = additionalHeadersToRequests.entries.elementAt(index);
-      log("header ${entry.key}:${entry.value} will be added to all requets");
+      log('header ${entry.key}:${entry.value} will be added to all requets');
     }
   }
 
   static void startingTryCheckingForError() {
-    return log("starting to check for error in the response.");
+    return log('starting to check for error in the response.');
   }
 
   static void errorFoundInRequest() {
-    return log("error found in request, throwing exception");
+    return log('error found in request, throwing exception');
   }
 
   static void unexpectedResponseGotten() {
     return log(
-      "unexpected response gotten, this means that a change is made to the api, please open an issue on github",
+      'unexpected response gotten, this means that a change is made to the api, please open an issue on github',
     );
   }
 
   static void noErrorFound() {
-    return log("Good, no error found in response.");
+    return log('Good, no error found in response.');
   }
 
   static void creatingFile(String fileName) {
-    return log("creating output file: $fileName");
+    return log('creating output file: $fileName');
   }
 
   static void fileCreatedSuccessfully(String fileName) {
-    return log("file $fileName created successfully");
+    return log('file $fileName created successfully');
   }
 
   static void writingFileContent(String fileName) {
-    return log("writing content to file $fileName");
+    return log('writing content to file $fileName');
   }
 
   static void fileContentWrittenSuccessfully(String fileName) {
-    return log("content written to file $fileName successfully");
+    return log('content written to file $fileName successfully');
   }
 
   static void requestsTimeoutChanged(Duration requestsTimeOut) {
-    return log("requests timeout changed to $requestsTimeOut");
+    return log('requests timeout changed to $requestsTimeOut');
   }
 
   static void logIsWeb(bool isWeb) {
-    return log("isWeb set to $isWeb");
+    return log('isWeb set to $isWeb');
   }
 }

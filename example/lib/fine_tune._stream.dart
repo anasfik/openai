@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dart_openai/dart_openai.dart';
 
 import 'env/env.dart';
+import 'package:dart_openai/src/core/io/file_helpers.dart';
 
 void main() async {
   // Set the OpenAI API key from the .env file.
@@ -12,7 +13,7 @@ void main() async {
 // Upload an example File
   OpenAIFileModel file = await OpenAI.instance.file.upload(
     purpose: 'fine-tune',
-    file: jsonLFileExample(),
+    file: await loadOpenAIFile(jsonLFileExample().path),
   );
 
   // Creating a fine-tune job.

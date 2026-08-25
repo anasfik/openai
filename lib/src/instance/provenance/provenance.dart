@@ -13,7 +13,7 @@ class OpenAIProvenance {
 
   /// Creates a content provenance check with a flexible body.
   Future<Map<String, dynamic>> create(Map<String, dynamic> body) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, _endpoint),
       body: body,
       onSuccess: (response) => response,

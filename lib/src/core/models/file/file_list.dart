@@ -14,7 +14,7 @@ class OpenAIFileListModel {
   });
 
   factory OpenAIFileListModel.fromMap(Map<String, dynamic> map) {
-    final List filesList = map["data"];
+    final List filesList = map['data'];
 
     final data = filesList.map((e) => OpenAIFileModel.fromMap(e)).toList();
 

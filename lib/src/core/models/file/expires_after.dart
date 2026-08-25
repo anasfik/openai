@@ -9,8 +9,8 @@ class OpenAIFileExpiresAfter {
 
   Map<String, dynamic> toMap() {
     return {
-      "anchor": anchor,
-      "seconds": seconds,
+      'anchor': anchor,
+      'seconds': seconds,
     };
   }
 }

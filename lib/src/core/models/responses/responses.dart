@@ -1,3 +1,5 @@
+import '../../utils/parse.dart';
+
 class OpenAiResponse {
   final bool background;
   final OpenAiResponseConversation? conversation;
@@ -21,7 +23,7 @@ class OpenAiResponse {
   final String? serviceTier;
   final OpenAiResponseStatus status;
 
-  final num temperature;
+  final num? temperature;
   final OpenAiResponseText? text;
   final toolChoice;
   final List tools;
@@ -45,7 +47,7 @@ class OpenAiResponse {
     required this.previousResponseId,
     required this.reasoning,
     required this.store,
-    required this.temperature,
+    this.temperature,
     required this.text,
     required this.toolChoice,
     required this.tools,
@@ -65,55 +67,55 @@ class OpenAiResponse {
 
   factory OpenAiResponse.fromMap(Map<String, dynamic> json) {
     return OpenAiResponse(
-      id: json["id"],
-      createdAt: DateTime.fromMillisecondsSinceEpoch(json["created_at"] * 1000),
+      id: json['id']?.toString() ?? '',
+      createdAt: DateTime.fromMillisecondsSinceEpoch((intOr(json['created_at']) * 1000)),
       status: OpenAiResponseStatus.values.firstWhere(
-        (e) => e.name.toLowerCase() == json["status"].toLowerCase(),
+        (e) => e.name.toLowerCase() == '${json['status']}'.toLowerCase(),
         orElse: () => OpenAiResponseStatus.failed,
       ),
-      error: json["error"] == null
-          ? null
-          : OpenAiResponseError.fromMap(json["error"]),
-      incompleteDetails: json["incomplete_details"] == null
-          ? null
-          : OpenAiResponseIncompleteDetails.fromMap(json["incomplete_details"]),
-      instructions: json["instructions"] == null ? null : json["instructions"],
-      maxOutputTokens: json["max_output_tokens"],
-      model: json["model"],
-      output: json["output"],
-      parallelToolCalls: json["parallel_tool_calls"],
-      previousResponseId: json["previous_response_id"],
-      reasoning: json["reasoning"] == null
-          ? null
-          : OpenAiResponseReasoning.fromMap(json["reasoning"]),
-      store: json["store"],
-      temperature: json["temperature"],
-      text: json["text"] == null
-          ? null
-          : OpenAiResponseText.fromMap(json["text"]),
-      toolChoice: json["tool_choice"],
-      tools: List.from(json["tools"] ?? []),
-      topP: json["top_p"],
+      error: json['error'] is Map<String, dynamic>
+          ? OpenAiResponseError.fromMap(json['error'])
+          : null,
+      incompleteDetails: json['incomplete_details'] is Map<String, dynamic>
+          ? OpenAiResponseIncompleteDetails.fromMap(json['incomplete_details'])
+          : null,
+      instructions: json['instructions']?.toString() ?? '',
+      maxOutputTokens: json['max_output_tokens'],
+      model: json['model']?.toString() ?? '',
+      output: json['output'],
+      parallelToolCalls: boolOr(json['parallel_tool_calls']),
+      previousResponseId: json['previous_response_id']?.toString(),
+      reasoning: json['reasoning'] is Map<String, dynamic>
+          ? OpenAiResponseReasoning.fromMap(json['reasoning'])
+          : null,
+      store: boolOr(json['store']),
+      temperature: json['temperature'],
+      text: json['text'] is Map<String, dynamic>
+          ? OpenAiResponseText.fromMap(json['text'])
+          : null,
+      toolChoice: json['tool_choice'],
+      tools: List.from(json['tools'] ?? []),
+      topP: json['top_p'],
       truncation: OpenAiResponseTruncation.values.firstWhere(
-        (e) => e.name.toLowerCase() == json["truncation"].toLowerCase(),
+        (e) => e.name.toLowerCase() == '${json['truncation']}'.toLowerCase(),
         orElse: () => OpenAiResponseTruncation.disabled,
       ),
-      usage: json["usage"] == null
-          ? null
-          : OpenAiResponseUsage.fromMap(json["usage"]),
-      metadata: json["metadata"] != null
-          ? Map<String, dynamic>.from(json["metadata"] ?? {})
+      usage: json['usage'] is Map<String, dynamic>
+          ? OpenAiResponseUsage.fromMap(json['usage'])
           : null,
-      background: json["background"] ?? false,
-      conversation: json["conversation"] == null
-          ? null
-          : OpenAiResponseConversation.fromMap(json["conversation"]),
-      maxToolCalls: json["max_tool_calls"],
-      prompt: json["prompt"],
-      promptCacheKey: json["prompt_cache_key"],
-      safetyIdentifier: json["safety_identifier"],
-      serviceTier: json["service_tier"],
-      topLogprobs: json["top_logprobs"],
+      metadata: json['metadata'] != null
+          ? Map<String, dynamic>.from(json['metadata'] ?? {})
+          : null,
+      background: json['background'] ?? false,
+      conversation: json['conversation'] is Map<String, dynamic>
+          ? OpenAiResponseConversation.fromMap(json['conversation'])
+          : null,
+      maxToolCalls: json['max_tool_calls'],
+      prompt: json['prompt'],
+      promptCacheKey: json['prompt_cache_key'],
+      safetyIdentifier: json['safety_identifier'],
+      serviceTier: json['service_tier'],
+      topLogprobs: json['top_logprobs'],
     );
   }
 }
@@ -150,19 +152,19 @@ class OpenAiResponseUsage {
 
   factory OpenAiResponseUsage.fromMap(Map<String, dynamic> json) {
     return OpenAiResponseUsage(
-      inputTokens: json["input_tokens"],
-      inputTokensDetails: json["input_tokens_details"] == null
+      inputTokens: json['input_tokens'],
+      inputTokensDetails: json['input_tokens_details'] == null
           ? null
           : OpenAiResponseUsageInputTokenDetails.fromMap(
-              json["input_tokens_details"],
+              json['input_tokens_details'],
             ),
-      outputTokens: json["output_tokens"],
-      outputTokensDetails: json["output_tokens_details"] == null
+      outputTokens: json['output_tokens'],
+      outputTokensDetails: json['output_tokens_details'] == null
           ? null
           : OpenAiResponseUsageOutputTokensDetails.fromMap(
-              json["output_tokens_details"],
+              json['output_tokens_details'],
             ),
-      totalTokens: json["total_tokens"],
+      totalTokens: json['total_tokens'],
     );
   }
 }
@@ -185,7 +187,7 @@ class OpenAiResponseUsageInputTokenDetails {
     Map<String, dynamic> json,
   ) =>
       OpenAiResponseUsageInputTokenDetails(
-        cachedTokens: json["cached_tokens"],
+        cachedTokens: json['cached_tokens'],
       );
 }
 
@@ -207,7 +209,7 @@ class OpenAiResponseUsageOutputTokensDetails {
     Map<String, dynamic> json,
   ) =>
       OpenAiResponseUsageOutputTokensDetails(
-        reasoningTokens: json["reasoning_tokens"],
+        reasoningTokens: json['reasoning_tokens'],
       );
 }
 
@@ -223,8 +225,8 @@ class OpenAiResponseText {
 
   factory OpenAiResponseText.fromMap(Map<String, dynamic> json) =>
       OpenAiResponseText(
-        format: json["format"] ?? {},
-        verbosity: json["verbosity"],
+        format: json['format'] ?? {},
+        verbosity: json['verbosity'],
       );
 
   OpenAiResponseText copyWith({
@@ -266,8 +268,8 @@ class OpenAiResponseReasoning {
 
   factory OpenAiResponseReasoning.fromMap(Map<String, dynamic> json) =>
       OpenAiResponseReasoning(
-        effort: json["effort"],
-        summary: json["summary"],
+        effort: json['effort'],
+        summary: json['summary'],
       );
 }
 
@@ -287,7 +289,7 @@ class OpenAiResponseIncompleteDetails {
 
   factory OpenAiResponseIncompleteDetails.fromMap(Map<String, dynamic> json) =>
       OpenAiResponseIncompleteDetails(
-        reason: json["reason"],
+        reason: json['reason'],
       );
 }
 
@@ -307,7 +309,7 @@ class OpenAiResponseConversation {
 
   factory OpenAiResponseConversation.fromMap(Map<String, dynamic> json) =>
       OpenAiResponseConversation(
-        conversationId: json["id"],
+        conversationId: json['id'],
       );
 }
 
@@ -331,8 +333,8 @@ class OpenAiResponseError {
 
   factory OpenAiResponseError.fromMap(Map<String, dynamic> json) =>
       OpenAiResponseError(
-        message: json["message"],
-        code: json["code"],
+        message: json['message']?.toString(),
+        code: json['code']?.toString(),
       );
 }
 
@@ -358,21 +360,21 @@ class OpenAiResponseInputItemsList {
 
   factory OpenAiResponseInputItemsList.fromMap(Map<String, dynamic> json) {
     return OpenAiResponseInputItemsList(
-      object: json["object"],
-      data: json["data"],
-      hasMore: json["has_more"] ?? false,
-      firstId: json["first_id"],
-      lastId: json["last_id"],
+      object: json['object'],
+      data: json['data'],
+      hasMore: json['has_more'] ?? false,
+      firstId: json['first_id'],
+      lastId: json['last_id'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      "object": object,
-      "data": data.map((item) => item.toMap()).toList(),
-      "has_more": hasMore,
-      "first_id": firstId,
-      "last_id": lastId,
+      'object': object,
+      'data': data.map((item) => item.toMap()).toList(),
+      'has_more': hasMore,
+      'first_id': firstId,
+      'last_id': lastId,
     };
   }
 }

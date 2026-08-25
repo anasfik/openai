@@ -1,6 +1,6 @@
-import '../../../models/fine_tune/fine_tune.dart';
-
 import 'package:http/http.dart' as http;
+
+import '../../../models/fine_tune/fine_tune.dart';
 
 abstract class CreateInterface {
   Future<OpenAIFineTuneModel> create({

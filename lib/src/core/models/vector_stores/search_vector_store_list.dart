@@ -15,13 +15,13 @@ class SearchVectorStoreList {
 
   factory SearchVectorStoreList.fromMap(Map<String, dynamic> json) =>
       SearchVectorStoreList(
-        searchQuery: json["search_query"],
+        searchQuery: json['search_query'],
         data: List<Map<String, dynamic>>.from(
-          json["data"].map(
+          json['data'].map(
             (x) => Map<String, dynamic>.from(x),
           ),
         ),
-        hasMore: json["has_more"],
-        nextPage: json["next_page"],
+        hasMore: json['has_more'],
+        nextPage: json['next_page'],
       );
 }

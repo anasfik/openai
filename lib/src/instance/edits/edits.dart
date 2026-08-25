@@ -1,4 +1,6 @@
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/models/edit/edit.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import '../../core/base/edits/edits.dart';
@@ -6,9 +8,6 @@ import '../../core/builder/base_api_url.dart';
 import '../../core/constants/strings.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
-
-import 'package:http/http.dart' as http;
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_edits}
 /// The class that handles all the requests related to the edits in the OpenAI API.
@@ -62,15 +61,15 @@ interface class OpenAIEdits implements OpenAIEditsBase {
     double? topP,
     http.Client? client,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIEditModel>(
+    return OpenAINetworkingClient.post<OpenAIEditModel>(
         to: BaseApiUrlBuilder.buildFor(_config, endpoint),
         body: {
-          "model": model,
-          "instruction": instruction,
-          if (input != null) "input": input,
-          if (n != null) "n": n,
-          if (temperature != null) "temperature": temperature,
-          if (topP != null) "top_p": topP,
+          'model': model,
+          'instruction': instruction,
+          if (input != null) 'input': input,
+          if (n != null) 'n': n,
+          if (temperature != null) 'temperature': temperature,
+          if (topP != null) 'top_p': topP,
         },
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIEditModel.fromMap(response);

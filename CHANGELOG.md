@@ -1,3 +1,60 @@
+# 8.0.0
+
+## Web support (the headline)
+
+- **The package now compiles and runs on Flutter Web.** Every unconditional
+  `dart:io` import is gone from `lib/`; file uploads are handled through a
+  platform-neutral `OpenAIFile(bytes:, fileName:)` type, and disk helpers are
+  conditionally imported. A web compile smoke test runs in CI.
+
+## Resilience
+
+- **Automatic retries** (`OpenAIRetryPolicy`, on by default): GET/DELETE retry
+  on transient failures (408/429/5xx, connection errors); POST retries only on
+  429/5xx. Exponential backoff with jitter; server `Retry-After` wins.
+  Disable with `maxRetries: 1`.
+- **Stream idle watchdog**: a stalled SSE connection now fails with a typed
+  `StreamTimedOutException` instead of hanging forever.
+- **Rate-limit visibility**: `x-ratelimit-*` headers are parsed after every
+  request into `OpenAIResponseMeta.lastRateLimit`.
+
+## Robustness
+
+- Malformed or drifted API payloads no longer crash parsing: all major models
+  tolerate missing/null/wrong-typed fields (covered by a fuzz test suite).
+- Unknown vector-store chunking strategies and eval data-source types fall
+  back instead of throwing `UnimplementedError`.
+- Tool-call arguments sent as JSON objects by compatible providers are
+  normalized to strings (#217).
+- Non-JSON error bodies on any verb surface as `RequestFailedException`.
+
+## Azure OpenAI (#142)
+
+```dart
+final azure = OpenAIClient(
+  apiKey: '<key>',
+  azure: const OpenAIAzure(
+    resource: 'my-resource',
+    apiVersion: '2024-10-21',
+    deployments: {'gpt-4o': 'gpt4o-prod'},
+  ),
+);
+```
+
+Requests are rewritten to `/openai/deployments/{deployment}/...?api-version=`
+transparently.
+
+## Breaking changes from 7.x
+
+- File-taking methods now require `OpenAIFile` instead of `dart:io` `File`.
+  Use `await loadOpenAIFile('path')` on native platforms or construct
+  `OpenAIFile(bytes: ..., fileName: ...)` anywhere.
+- `audio.createSpeech` returns `Uint8List` bytes (optionally writing to disk
+  when `outputDirectory`/`outputFileName` are provided as strings).
+- Interfaces synced with implementations; stale abstract members removed.
+
+## Full changelog of 7.0.0 features below (unchanged)
+
 # 7.0.0
 
 ## Breaking / architecture

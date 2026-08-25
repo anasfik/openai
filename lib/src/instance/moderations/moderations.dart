@@ -1,15 +1,13 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/moderation/moderation.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
-
-import '../../core/base/moderations/base.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
+import '../../core/base/moderations/base.dart';
 import '../../core/utils/logger.dart';
-
-import 'package:http/http.dart' as http;
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_moderation}
 /// The class that handles all the requests related to the moderation in the OpenAI API.
@@ -53,13 +51,13 @@ interface class OpenAIModeration implements OpenAIModerationBase {
     String? model,
     http.Client? client,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIModerationModel>(
+    return OpenAINetworkingClient.post<OpenAIModerationModel>(
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIModerationModel.fromMap(response);
         },
         body: {
-          "input": input,
-          if (model != null) "model": model,
+          'input': input,
+          if (model != null) 'model': model,
         },
         to: BaseApiUrlBuilder.buildFor(_config, endpoint),
         config: _config);

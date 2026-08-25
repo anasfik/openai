@@ -1,5 +1,6 @@
 import 'package:dart_openai/src/core/base/evals/evals.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/evals/eval.dart';
 import 'package:dart_openai/src/core/models/evals/eval_run.dart';
@@ -11,7 +12,6 @@ import 'package:dart_openai/src/core/models/evals/evals_list.dart';
 import 'package:dart_openai/src/core/models/evals/req_data_source_config.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 class OpenAIEvals implements OpenAIEvalsBase {
   @override
@@ -32,7 +32,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
     Map<String, dynamic>? metadata,
     String? name,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIEval>(
+    return OpenAINetworkingClient.post<OpenAIEval>(
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIEval.fromMap(response);
         },
@@ -50,7 +50,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
   Future<OpenAIEval> get({
     required String evalId,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIEval>(
+    return OpenAINetworkingClient.get<OpenAIEval>(
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIEval.fromMap(response);
         },
@@ -64,7 +64,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
     Map<String, dynamic>? metadata,
     String? name,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIEval>(
+    return OpenAINetworkingClient.post<OpenAIEval>(
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIEval.fromMap(response);
         },
@@ -94,7 +94,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
     String? order,
     String? orderBy,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIEvalsList>(
+    return OpenAINetworkingClient.get<OpenAIEvalsList>(
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEvalsList.fromMap(response);
       },
@@ -118,7 +118,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
     int? limit,
     String? order,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIEvalRunsList>(
+    return OpenAINetworkingClient.get<OpenAIEvalRunsList>(
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEvalRunsList.fromMap(response);
       },
@@ -139,7 +139,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
     required String evalId,
     required String runId,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIEvalRun>(
+    return OpenAINetworkingClient.get<OpenAIEvalRun>(
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIEvalRun.fromMap(response);
         },
@@ -155,7 +155,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
     Map<String, dynamic>? metadata,
     String? name,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIEvalRun>(
+    return OpenAINetworkingClient.post<OpenAIEvalRun>(
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIEvalRun.fromMap(response);
         },
@@ -173,7 +173,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
     required String evalId,
     required String runId,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIEvalRun>(
+    return OpenAINetworkingClient.post<OpenAIEvalRun>(
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIEvalRun.fromMap(response);
         },
@@ -201,7 +201,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
     required String outputItemIdn,
     required String runId,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIEvalRunOutputItem>(
+    return OpenAINetworkingClient.get<OpenAIEvalRunOutputItem>(
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIEvalRunOutputItem.fromMap(response);
         },
@@ -219,7 +219,7 @@ class OpenAIEvals implements OpenAIEvalsBase {
     String? order,
     String? status,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIEvalRunOutputItemsList>(
+    return OpenAINetworkingClient.get<OpenAIEvalRunOutputItemsList>(
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIEvalRunOutputItemsList.fromMap(response);
       },

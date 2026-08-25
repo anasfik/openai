@@ -1,8 +1,8 @@
 import 'package:dart_openai/dart_openai.dart';
+import 'package:dart_openai/src/core/base/vector_stores/stores/stores.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
-import 'package:dart_openai/src/core/base/vector_stores/stores/stores.dart';
 
 class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
   /// Per-client configuration; when null, global statics are used.
@@ -22,7 +22,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
     String? name,
     String? description,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIVectorStoreModel>(
+    return OpenAINetworkingClient.post<OpenAIVectorStoreModel>(
         to: BaseApiUrlBuilder.buildFor(_config, endpoint),
         body: {
           if (chunkingStrategy != null)
@@ -46,7 +46,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
     int? limit,
     String? order,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIVectorStoreListModel>(
+    return OpenAINetworkingClient.get<OpenAIVectorStoreListModel>(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: endpoint,
         query: {
@@ -67,7 +67,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
   Future<OpenAIVectorStoreModel> get({
     required String vectorStoreId,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIVectorStoreModel>(
+    return OpenAINetworkingClient.get<OpenAIVectorStoreModel>(
         from: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$vectorStoreId'),
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIVectorStoreModel.fromMap(response);
@@ -82,7 +82,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
     Map<String, dynamic>? metadata,
     String? name,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIVectorStoreModel>(
+    return OpenAINetworkingClient.post<OpenAIVectorStoreModel>(
         to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$vectorStoreId'),
         body: {
           if (expiresAfter != null) 'expires_after': expiresAfter.toMap(),
@@ -99,7 +99,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
   Future<void> delete({
     required String vectorStoreId,
   }) async {
-    return await OpenAINetworkingClient.delete<void>(
+    return OpenAINetworkingClient.delete<void>(
         from: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$vectorStoreId'),
         onSuccess: (Map<String, dynamic> response) {
           return;
@@ -116,7 +116,7 @@ class OpenAIVectorStoresStores implements OpenAIVectorStoresStoresBase {
     OpenAIVectorStoresRankingOptions? rankingOptions,
     bool? rewriteQuery,
   }) async {
-    return await OpenAINetworkingClient.post<SearchVectorStoreList>(
+    return OpenAINetworkingClient.post<SearchVectorStoreList>(
         to: BaseApiUrlBuilder.buildFor(
             _config, '$endpoint/$vectorStoreId/search'),
         body: {

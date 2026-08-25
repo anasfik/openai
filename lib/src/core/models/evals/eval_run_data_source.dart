@@ -73,8 +73,9 @@ class EvalRunDataSource {
               Map<String, dynamic>.from(map['sampling_params'] ?? {}),
         );
       default:
-        throw UnimplementedError(
-          'EvalRunDataSource type ${map['type']} is not implemented',
+        // Unknown type: preserve raw payload instead of crashing.
+        return EvalRunDataSource.jsonl(
+          source: Map<String, dynamic>.from(map['source'] ?? {}),
         );
     }
   }
@@ -88,9 +89,7 @@ class EvalRunDataSource {
       case 'responses':
         return (this as ResponsesRunDataSource).toJson();
       default:
-        throw UnimplementedError(
-          'EvalRunDataSource type $type is not implemented',
-        );
+        return {'type': type};
     }
   }
 }

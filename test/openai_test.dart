@@ -2,15 +2,15 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:developer' as dev;
+import 'dart:io';
+
 import 'package:collection/collection.dart';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:dart_openai/src/core/builder/headers.dart';
 import 'package:dart_openai/src/core/constants/config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
-import 'package:dart_openai/src/core/models/file/file_list.dart';
-import 'package:dart_openai/src/core/models/model/sub_models/permission.dart';
+import 'package:dart_openai/src/core/io/file_helpers.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
@@ -23,11 +23,12 @@ void main() async {
   }
 
   final exampleImageFile = await getFileFromUrl(
-    "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png",
+    'https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png',
   );
 
-  final imageFileExample = await exampleImageFile;
-  final maskFileExample = await exampleImageFile;
+  final imageFileExample =
+      await loadOpenAIFile(exampleImageFile.path);
+  final maskFileExample = imageFileExample;
 
   String? fileIdFromFilesApi;
 
@@ -51,15 +52,15 @@ void main() async {
     });
 
     test('test setting organization', () {
-      OpenAI.organization = "YOUR ORGANIZATION";
-      expect(OpenAI.organization, "YOUR ORGANIZATION");
+      OpenAI.organization = 'YOUR ORGANIZATION';
+      expect(OpenAI.organization, 'YOUR ORGANIZATION');
 
       // I don't have an actual organization, so I will make it null again.
       // ! If you have a real organization, comment the following line.
       OpenAI.organization = null;
     });
-    test("Changing base URL", () {
-      final urlChange = "https://something.com";
+    test('Changing base URL', () {
+      const urlChange = 'https://something.com';
       OpenAI.baseUrl = urlChange;
       expect(OpenAI.baseUrl, urlChange);
 
@@ -67,7 +68,7 @@ void main() async {
       OpenAI.baseUrl = OpenAIStrings.defaultBaseUrl;
     });
 
-    test("switching showing logs", () {
+    test('switching showing logs', () {
       OpenAI.showLogs = true;
       expect(OpenAILogger.isActive, isTrue);
 
@@ -75,22 +76,22 @@ void main() async {
       expect(OpenAILogger.isActive, isFalse);
     });
 
-    test("Add Extra headers to all requests", () {
+    test('Add Extra headers to all requests', () {
       OpenAI.includeHeaders({
-        "x-openai-test": "test",
+        'x-openai-test': 'test',
       });
 
-      expect(HeadersBuilder.build(), containsPair("x-openai-test", "test"));
+      expect(HeadersBuilder.build(), containsPair('x-openai-test', 'test'));
     });
 
-    test("requests timeout", () {
-      final tS = 10;
+    test('requests timeout', () {
+      const tS = 10;
 
-      OpenAIConfig.requestsTimeOut = Duration(seconds: tS);
+      OpenAIConfig.requestsTimeOut = const Duration(seconds: tS);
 
       expect(
         OpenAIConfig.requestsTimeOut.inMilliseconds,
-        Duration(seconds: tS).inMilliseconds,
+        const Duration(seconds: tS).inMilliseconds,
       );
 
       //! return to the default timeout.
@@ -127,7 +128,7 @@ void main() async {
 
           modelExampleId = models
               .firstWhereOrNull(
-                (element) => element.id.contains("gpt-3"),
+                (element) => element.id.contains('gpt-3'),
               )!
               .id;
         }
@@ -137,7 +138,7 @@ void main() async {
     test('retrieve a model', () async {
       assert(
         modelExampleId != null,
-        "please set a model id that is not null, or let the previous test run first to get a model id example",
+        'please set a model id that is not null, or let the previous test run first to get a model id example',
       );
 
       final model = await OpenAI.instance.model.retrieve(modelExampleId!);
@@ -150,10 +151,10 @@ void main() async {
 
   group('completions', () {
     test('create', () async {
-      final OpenAICompletionModel completion =
+      final completion =
           await OpenAI.instance.completion.create(
-        model: "davinci-002",
-        prompt: "Dart tests are made to ensure that a function w",
+        model: 'davinci-002',
+        prompt: 'Dart tests are made to ensure that a function w',
         maxTokens: 5,
         temperature: 0.9,
         topP: 1,
@@ -170,10 +171,10 @@ void main() async {
     });
 
     test('create with a stream', () async {
-      final Stream<OpenAIStreamCompletionModel> completionStream =
+      final completionStream =
           OpenAI.instance.completion.createStream(
-        model: "davinci-002",
-        prompt: "Dart tests are made to ensure that a function w",
+        model: 'davinci-002',
+        prompt: 'Dart tests are made to ensure that a function w',
         maxTokens: 5,
         temperature: 0.9,
         topP: 1,
@@ -188,7 +189,7 @@ void main() async {
 
       completionStream.listen(
         (event) {
-          var val = event.choices.first.text;
+          final val = event.choices.first.text;
 
           expect(val, isA<String>());
         },
@@ -203,14 +204,14 @@ void main() async {
 
   group('chat (chatGPT)', () {
     test('create', () async {
-      final OpenAIChatCompletionModel chatCompletion =
+      final chatCompletion =
           await OpenAI.instance.chat.create(
-        model: "gpt-3.5-turbo",
+        model: 'gpt-3.5-turbo',
         messages: [
           OpenAIChatCompletionChoiceMessageModel(
             content: [
               OpenAIChatCompletionChoiceMessageContentItemModel.text(
-                "Hello, how are you?",
+                'Hello, how are you?',
               ),
             ],
             role: OpenAIChatMessageRole.user,
@@ -245,18 +246,18 @@ void main() async {
       () async {
         void sendEmail({required String to, required String message}) {
           dev.log(
-            "mock Action: the message: $message is sent to $to successfully.",
+            'mock Action: the message: $message is sent to $to successfully.',
           );
         }
 
-        final OpenAIChatCompletionModel chatCompletion =
+        final chatCompletion =
             await OpenAI.instance.chat.create(
-          model: "gpt-3.5-turbo",
+          model: 'gpt-3.5-turbo',
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
               content: [
                 OpenAIChatCompletionChoiceMessageContentItemModel.text(
-                  "Send an email to John asking about Marrakech weather",
+                  'Send an email to John asking about Marrakech weather',
                 ),
               ],
               role: OpenAIChatMessageRole.user,
@@ -264,22 +265,22 @@ void main() async {
           ],
           tools: [
             OpenAIFunctionModel.withParameters(
-              name: "sendEmail",
+              name: 'sendEmail',
               description:
-                  "sends the given email message to the a specific person",
+                  'sends the given email message to the a specific person',
               parameters: [
                 OpenAIFunctionProperty.string(
-                  name: "to",
-                  description: "the name of the message receiver",
+                  name: 'to',
+                  description: 'the name of the message receiver',
                 ),
                 OpenAIFunctionProperty.string(
-                  name: "message",
-                  description: "the message to be sent",
+                  name: 'message',
+                  description: 'the message to be sent',
                 ),
               ],
             ),
           ].map((function) {
-            return OpenAIToolModel(type: "function", function: function);
+            return OpenAIToolModel(type: 'function', function: function);
           }).toList(),
         );
 
@@ -287,7 +288,7 @@ void main() async {
 
         if (toolCalls == null || toolCalls.isEmpty) {
           print(
-            "weither this happens from the API or the package, the test for this function should not show this.",
+            'weither this happens from the API or the package, the test for this function should not show this.',
           );
 
           return;
@@ -299,29 +300,29 @@ void main() async {
         expect(funcCall, isNotNull);
 
         final decodedArgs =
-            jsonDecode(funcCall.arguments) as Map<String, dynamic>;
+            jsonDecode(funcCall!.arguments!) as Map<String, dynamic>;
 
-        expect(decodedArgs["to"], isNotNull);
-        expect(decodedArgs["message"], isNotNull);
+        expect(decodedArgs['to'], isNotNull);
+        expect(decodedArgs['message'], isNotNull);
 
         sendEmail(
-          message: decodedArgs["message"],
-          to: decodedArgs["to"],
+          message: decodedArgs['message'],
+          to: decodedArgs['to'],
         );
       },
     );
 
     test('create with a stream', () async {
       final chatStream = OpenAI.instance.chat.createStream(
-        model: "gpt-3.5-turbo",
+        model: 'gpt-3.5-turbo',
         streamOptions: {
-          "include_usage": true,
+          'include_usage': true,
         },
         messages: [
           OpenAIChatCompletionChoiceMessageModel(
             content: [
               OpenAIChatCompletionChoiceMessageContentItemModel.text(
-                "Hello, how are you?",
+                'Hello, how are you?',
               ),
             ],
             role: OpenAIChatMessageRole.user,
@@ -357,15 +358,15 @@ void main() async {
 
   group('images', () {
     test('create', () async {
-      final OpenAIImageModel image = await OpenAI.instance.image.create(
-        prompt: "A dog is walking down the street.",
+      final image = await OpenAI.instance.image.create(
+        prompt: 'A dog is walking down the street.',
       );
 
       expect(image, isA<OpenAIImageModel>());
       expect(image.data.first.url, isA<String>());
     });
-    test("edits", () async {
-      final OpenAIImageModel imageEdited = await OpenAI.instance.image.edit(
+    test('edits', () async {
+      final imageEdited = await OpenAI.instance.image.edit(
         prompt: 'mask the image with color red',
         image: imageFileExample,
         mask: maskFileExample,
@@ -373,8 +374,8 @@ void main() async {
       expect(imageEdited, isA<OpenAIImageModel>());
       expect(imageEdited.data.first.url, isA<String>());
     });
-    test("variation", () async {
-      final List<OpenAIImageData> variation =
+    test('variation', () async {
+      final variation =
           await OpenAI.instance.image.variation(
         image: imageFileExample,
       );
@@ -386,10 +387,10 @@ void main() async {
 
   group('embeddings', () {
     test('create', () async {
-      final OpenAIEmbeddingsModel embedding =
+      final embedding =
           await OpenAI.instance.embedding.create(
-        model: "text-embedding-ada-002",
-        input: "This is a sample text",
+        model: 'text-embedding-ada-002',
+        input: 'This is a sample text',
       );
       expect(embedding, isA<OpenAIEmbeddingsModel>());
       expect(embedding.data.first, isA<OpenAIEmbeddingsDataModel>());
@@ -397,10 +398,10 @@ void main() async {
     });
 
     test('create with smaller dimensions', () async {
-      final OpenAIEmbeddingsModel embedding =
+      final embedding =
           await OpenAI.instance.embedding.create(
-        model: "text-embedding-3-large",
-        input: "This is a sample text",
+        model: 'text-embedding-3-large',
+        input: 'This is a sample text',
         dimensions: 1000,
       );
       expect(embedding, isA<OpenAIEmbeddingsModel>());
@@ -411,15 +412,15 @@ void main() async {
   });
 
   group('audio', () {
-    test("create transcription", () async {
+    test('create transcription', () async {
       final audioExampleFile = await getFileFromUrl(
-        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
-        fileExtension: "mp3",
+        'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
+        fileExtension: 'mp3',
       );
 
       final transcription = await OpenAI.instance.audio.createTranscription(
-        file: audioExampleFile,
-        model: "whisper-1",
+        file: await loadOpenAIFile(audioExampleFile.path),
+        model: 'whisper-1',
         responseFormat: OpenAIAudioResponseFormat.json,
       );
 
@@ -430,15 +431,15 @@ void main() async {
       }
     });
 
-    test("create transcription with timestamp granularity", () async {
+    test('create transcription with timestamp granularity', () async {
       final audioExampleFile = await getFileFromUrl(
-        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
-        fileExtension: "mp3",
+        'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
+        fileExtension: 'mp3',
       );
 
       final transcription = await OpenAI.instance.audio.createTranscription(
-        file: audioExampleFile,
-        model: "whisper-1",
+        file: await loadOpenAIFile(audioExampleFile.path),
+        model: 'whisper-1',
         responseFormat: OpenAIAudioResponseFormat.verbose_json,
         timestampGranularities: [OpenAIAudioTimestampGranularity.word],
       );
@@ -451,32 +452,32 @@ void main() async {
         expect(transcription.text, isA<String?>());
       }
     });
-    test("create translation", () async {
+    test('create translation', () async {
       final audioExampleFile = await getFileFromUrl(
-        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
-        fileExtension: "mp3",
+        'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
+        fileExtension: 'mp3',
       );
 
       final translation = await OpenAI.instance.audio.createTranslation(
-        file: audioExampleFile,
-        model: "whisper-1",
+        file: await loadOpenAIFile(audioExampleFile.path),
+        model: 'whisper-1',
       );
 
       expect(translation, isA<String>());
     });
 
-    test("create transcription with auto chunking strategy", () async {
+    test('create transcription with auto chunking strategy', () async {
       // Arrange
       final audioExampleFile = await getFileFromUrl(
-        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
-        fileExtension: "mp3",
+        'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
+        fileExtension: 'mp3',
       );
       final chunkingStrategy = OpenAIAudioChunkingConfig.auto();
 
       // Act
       final transcription = await OpenAI.instance.audio.createTranscription(
-        file: audioExampleFile,
-        model: "whisper-1",
+        file: await loadOpenAIFile(audioExampleFile.path),
+        model: 'whisper-1',
         chunkingStrategy: chunkingStrategy,
       );
       if (transcription is OpenAITranscriptionVerboseModel) {
@@ -486,11 +487,11 @@ void main() async {
       }
     });
 
-    test("create transcription with server VAD chunking strategy", () async {
+    test('create transcription with server VAD chunking strategy', () async {
       // Arrange
       final audioExampleFile = await getFileFromUrl(
-        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
-        fileExtension: "mp3",
+        'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
+        fileExtension: 'mp3',
       );
       final chunkingStrategy = OpenAIAudioChunkingConfig.serverVad(
         prefixPaddingMs: 200,
@@ -500,8 +501,8 @@ void main() async {
 
       // Act
       final transcription = await OpenAI.instance.audio.createTranscription(
-        file: audioExampleFile,
-        model: "whisper-1",
+        file: await loadOpenAIFile(audioExampleFile.path),
+        model: 'whisper-1',
         chunkingStrategy: chunkingStrategy,
       );
 
@@ -512,37 +513,37 @@ void main() async {
       }
     });
 
-    test("create translation with auto chunking strategy", () async {
+    test('create translation with auto chunking strategy', () async {
       // Arrange
       final audioExampleFile = await getFileFromUrl(
-        "https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3",
-        fileExtension: "mp3",
+        'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
+        fileExtension: 'mp3',
       );
       final chunkingStrategy = OpenAIAudioChunkingConfig.auto();
 
       // Act
       final translation = await OpenAI.instance.audio.createTranslation(
-        file: audioExampleFile,
-        model: "whisper-1",
+        file: await loadOpenAIFile(audioExampleFile.path),
+        model: 'whisper-1',
       );
 
       expect(translation, isA<String>());
     });
   });
 
-  group("files", () {
-    test("upload", () async {
-      final OpenAIFileModel file = await OpenAI.instance.file.upload(
-        file: jsonLFileExample(),
-        purpose: "fine-tune",
+  group('files', () {
+    test('upload', () async {
+      final file = await OpenAI.instance.file.upload(
+        file: await loadOpenAIFile(jsonLFileExample().path),
+        purpose: 'fine-tune',
       );
 
       expect(file, isA<OpenAIFileModel>());
       expect(file.id, isA<String>());
       expect(file.id, isNotNull);
     });
-    test("list", () async {
-      OpenAIFileListModel files = await OpenAI.instance.file.list();
+    test('list', () async {
+      final files = await OpenAI.instance.file.list();
 
       if (files.data.isNotEmpty) {
         expect(files.data.first, isA<OpenAIFileModel>());
@@ -551,26 +552,26 @@ void main() async {
 
         // get the id of the file that we uploaded in the previous test.
         fileIdFromFilesApi = files.data
-            .firstWhere((element) => element.fileName.contains("example.jsonl"))
+            .firstWhere((element) => element.fileName.contains('example.jsonl'))
             .id;
         fileToDelete = files.data.last.id;
       }
     });
 
-    test("retrive", () async {
+    test('retrive', () async {
       assert(
         fileIdFromFilesApi != null,
-        "please set a file id that is not null, or let the previous test run first to get a file id example (if it does exists)",
+        'please set a file id that is not null, or let the previous test run first to get a file id example (if it does exists)',
       );
 
-      final OpenAIFileModel file =
+      final file =
           await OpenAI.instance.file.retrieve(fileIdFromFilesApi!);
 
       expect(file, isA<OpenAIFileModel>());
       expect(file.id, isA<String>());
       expect(file.id, isNotNull);
     });
-    test("retrieve content", () async {
+    test('retrieve content', () async {
       final content =
           await OpenAI.instance.file.retrieveContent(fileIdFromFilesApi!);
       expect(content, isNotNull);
@@ -654,9 +655,9 @@ void main() async {
 
   group('moderations', () {
     test('create', () async {
-      final OpenAIModerationModel moderation =
+      final moderation =
           await OpenAI.instance.moderation.create(
-        input: "I hate you",
+        input: 'I hate you',
       );
 
       expect(moderation, isA<OpenAIModerationModel>());
@@ -666,11 +667,11 @@ void main() async {
 }
 
 File jsonLFileExample() {
-  final file = File("example.jsonl");
+  final file = File('example.jsonl');
   file.writeAsStringSync(
     jsonEncode({
-      "prompt": "<prompt text>",
-      "completion": "<ideal generated text>",
+      'prompt': '<prompt text>',
+      'completion': '<ideal generated text>',
     }),
   );
 
@@ -683,7 +684,7 @@ Future<File> getFileFromUrl(
 }) async {
   final response = await http.get(Uri.parse(networkUrl));
   final uniqueImageName = DateTime.now().microsecondsSinceEpoch;
-  final file = File("$uniqueImageName.$fileExtension");
+  final file = File('$uniqueImageName.$fileExtension');
   await file.writeAsBytes(response.bodyBytes);
 
   return file;

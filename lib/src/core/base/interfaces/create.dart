@@ -1,6 +1,6 @@
-import '../../models/completion/completion.dart';
-
 import 'package:http/http.dart' as http;
+
+import '../../models/completion/completion.dart';
 
 abstract class CreateInterface {
   Future<OpenAICompletionModel> create({

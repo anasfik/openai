@@ -22,7 +22,7 @@ class OpenAIBatch implements OpenAIBatchBase {
     Map<String, dynamic>? metadata,
     OpenAIBatchoutputExpiresAfter? outputExpiresAfter,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, OpenAIStrings.endpoints.batch),
       body: {
         'completion_window': completionWindow,
@@ -44,7 +44,7 @@ class OpenAIBatch implements OpenAIBatchBase {
   Future<OpenAiBatchModel> get({
     required String batchId,
   }) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildFor(
           _config, OpenAIStrings.endpoints.batch, batchId),
       onSuccess: BatchModelParsing.fromMap,
@@ -62,7 +62,7 @@ class OpenAIBatch implements OpenAIBatchBase {
       if (after != null) 'after': after,
       if (limit != null) 'limit': limit.toString(),
     };
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: OpenAIStrings.endpoints.batch,
         query: query,
@@ -77,7 +77,7 @@ class OpenAIBatch implements OpenAIBatchBase {
   Future<OpenAiBatchModel> cancel({
     required String batchId,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(
           _config, '${OpenAIStrings.endpoints.batch}/$batchId/cancel'),
       onSuccess: BatchModelParsing.fromMap,

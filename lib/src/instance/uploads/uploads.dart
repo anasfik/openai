@@ -1,9 +1,9 @@
-import 'dart:io';
 
 import 'package:dart_openai/src/core/base/uploads/uploads.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
+import 'package:dart_openai/src/core/io/openai_file.dart';
 import 'package:dart_openai/src/core/models/uploads/expires_after.dart';
 import 'package:dart_openai/src/core/models/uploads/upload_part.dart';
 import 'package:dart_openai/src/core/models/uploads/uploads.dart';
@@ -24,7 +24,7 @@ class OpenAIUploads implements OpenAIUploadsBase {
     required String purpose,
     OpenAIUploadExpiresAfter? expiresAfter,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
         'bytes': bytes,
@@ -45,14 +45,14 @@ class OpenAIUploads implements OpenAIUploadsBase {
   @override
   Future<OpenAIUploadPartModel> addPart({
     required String uploadId,
-    required File data,
+    required OpenAIFile data,
   }) async {
-    return await OpenAINetworkingClient.fileUpload(
+    return OpenAINetworkingClient.fileUpload(
       to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$uploadId/parts'),
       body: {},
       file: data,
       fileField: 'data',
-      onSuccess: (map) => UploadPartParsing.fromMap(map),
+      onSuccess: UploadPartParsing.fromMap,
       config: _config,
     );
   }
@@ -63,7 +63,7 @@ class OpenAIUploads implements OpenAIUploadsBase {
     required List<String> partIds,
     String? md5,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$uploadId/complete'),
       body: {
         'part_ids': partIds,
@@ -78,7 +78,7 @@ class OpenAIUploads implements OpenAIUploadsBase {
   Future<OpenAIUploadModel> cancel({
     required String uploadId,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$uploadId/cancel'),
       onSuccess: UploadModelParsing.fromMap,
       config: _config,

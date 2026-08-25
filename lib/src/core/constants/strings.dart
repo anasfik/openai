@@ -24,10 +24,10 @@ abstract class OpenAIStrings {
   static const postMethod = 'POST';
 
   /// The identifier and initial value to exclude for stream responses (SSE).
-  static const streamResponseStart = "data: ";
+  static const streamResponseStart = 'data: ';
 
   /// The identifier and final value to exclude for stream responses (SSE).
-  static const streamResponseEnd = "[DONE]";
+  static const streamResponseEnd = '[DONE]';
 
   /// The name of the error field a failed response will have.
   static const errorFieldKey = 'error';

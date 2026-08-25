@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import '../../../utils/parse.dart';
 
 /// {@template openai_embeddings_usage_model}
 /// This class is used to represent the usage of an OpenAI embeddings.
@@ -31,8 +32,8 @@ final class OpenAIEmbeddingsUsageModel {
   /// {@endtemplate}
   factory OpenAIEmbeddingsUsageModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsUsageModel(
-      promptTokens: map['prompt_tokens'] as int,
-      totalTokens: map['total_tokens'] as int,
+      promptTokens: intOr(map['prompt_tokens']),
+      totalTokens: intOr(map['total_tokens']),
     );
   }
 

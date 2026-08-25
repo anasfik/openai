@@ -1,11 +1,11 @@
+import 'package:dart_openai/src/core/base/vector_stores/batch/batch.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/vector_stores/chunking_strategy.dart';
 import 'package:dart_openai/src/core/models/vector_stores/vectore_store_batch.dart';
 import 'package:dart_openai/src/core/models/vector_stores/vectore_store_batch_list.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
-import 'package:dart_openai/src/core/base/vector_stores/batch/batch.dart';
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
   /// Per-client configuration; when null, global statics are used.
@@ -21,9 +21,9 @@ class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
     required String batchId,
     required String vectorStoreId,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIVectorStoreBatchModel>(
+    return OpenAINetworkingClient.post<OpenAIVectorStoreBatchModel>(
         to: BaseApiUrlBuilder.buildFor(
-            _config, endpoint, "$vectorStoreId/file_batches/$batchId/cancel"),
+            _config, endpoint, '$vectorStoreId/file_batches/$batchId/cancel'),
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIVectorStoreBatchModel.fromMap(response);
         },
@@ -37,14 +37,14 @@ class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
     Map<String, dynamic>? attributes,
     OpenAIVectorStoreChunkingStrategy? chunkingStrategy,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIVectorStoreBatchModel>(
+    return OpenAINetworkingClient.post<OpenAIVectorStoreBatchModel>(
         to: BaseApiUrlBuilder.buildFor(
-            _config, endpoint, "$vectorStoreId/file_batches"),
+            _config, endpoint, '$vectorStoreId/file_batches'),
         body: {
-          if (fileIds != null) "file_ids": fileIds,
-          if (attributes != null) "attributes": attributes,
+          if (fileIds != null) 'file_ids': fileIds,
+          if (attributes != null) 'attributes': attributes,
           if (chunkingStrategy != null)
-            "chunking_strategy": chunkingStrategy.toMap(),
+            'chunking_strategy': chunkingStrategy.toMap(),
         },
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIVectorStoreBatchModel.fromMap(response);
@@ -57,9 +57,9 @@ class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
     required String batchId,
     required String vectorStoreId,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIVectorStoreBatchModel>(
+    return OpenAINetworkingClient.get<OpenAIVectorStoreBatchModel>(
         from: BaseApiUrlBuilder.buildFor(
-            _config, endpoint, "$vectorStoreId/file_batches/$batchId"),
+            _config, endpoint, '$vectorStoreId/file_batches/$batchId'),
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIVectorStoreBatchModel.fromMap(response);
         },
@@ -76,15 +76,15 @@ class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
     int? limit,
     String? order,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIVectorStoreBatchListModel>(
+    return OpenAINetworkingClient.get<OpenAIVectorStoreBatchListModel>(
       from: BaseApiUrlBuilder.buildWithQuery(
-        endpoint: endpoint + "/$vectorStoreId/file_batches/$batchId/files",
+        endpoint: '$endpoint/$vectorStoreId/file_batches/$batchId/files',
         query: {
-          if (after != null) "after": after,
-          if (before != null) "before": before,
-          if (filter != null) "filter": filter,
-          if (limit != null) "limit": limit.toString(),
-          if (order != null) "order": order,
+          if (after != null) 'after': after,
+          if (before != null) 'before': before,
+          if (filter != null) 'filter': filter,
+          if (limit != null) 'limit': limit.toString(),
+          if (order != null) 'order': order,
         },
         config: _config,
       ),

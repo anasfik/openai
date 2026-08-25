@@ -29,7 +29,7 @@ mixin class OpenAIMessageDynamicContentFromFieldAdapter {
 
   static List<OpenAIChatCompletionChoiceMessageContentItemModel>
       _listOfContentItemsFrom(List listOfContentsItems) {
-    return (listOfContentsItems).map(
+    return listOfContentsItems.map(
       (item) {
         if (item is! Map) {
           throw Exception('Invalid content item, please report this issue.');

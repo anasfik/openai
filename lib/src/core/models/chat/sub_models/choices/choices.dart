@@ -53,10 +53,10 @@ final class OpenAIChatCompletionChoiceModel {
   /// This method used to convert the [OpenAIChatCompletionChoiceModel] to a [Map<String, dynamic>] object.
   Map<String, dynamic> toMap() {
     return {
-      "index": index,
-      "message": message.toMap(),
-      "finish_reason": finishReason,
-      "logprobs": logprobs?.toMap(),
+      'index': index,
+      'message': message.toMap(),
+      'finish_reason': finishReason,
+      'logprobs': logprobs?.toMap(),
     };
   }
 

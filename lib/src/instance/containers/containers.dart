@@ -1,11 +1,11 @@
 import 'package:dart_openai/src/core/base/container/containers/containers.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/containers/container.dart';
 import 'package:dart_openai/src/core/models/containers/containers_list.dart';
 import 'package:dart_openai/src/core/models/containers/expires_after.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 class OpenAIContainers extends OpenAIContainersBase {
   /// Per-client configuration; when null, global statics are used.
@@ -22,7 +22,7 @@ class OpenAIContainers extends OpenAIContainersBase {
     OpenAIContainerExpiresAfter? expiresAfter,
     List<String>? fileIds,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAIContainer>(
+    return OpenAINetworkingClient.post<OpenAIContainer>(
         to: BaseApiUrlBuilder.buildFor(_config, endpoint),
         body: {
           'name': name,
@@ -41,7 +41,7 @@ class OpenAIContainers extends OpenAIContainersBase {
     int? limit,
     String? order,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIContainerList>(
+    return OpenAINetworkingClient.get<OpenAIContainerList>(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: endpoint,
         query: {
@@ -61,7 +61,7 @@ class OpenAIContainers extends OpenAIContainersBase {
   Future<OpenAIContainer> get({
     required String containerId,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIContainer>(
+    return OpenAINetworkingClient.get<OpenAIContainer>(
         from: BaseApiUrlBuilder.buildFor(_config, endpoint, containerId),
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIContainer.fromMap(response);
@@ -73,10 +73,10 @@ class OpenAIContainers extends OpenAIContainersBase {
   Future<void> delete({
     required String containerId,
   }) async {
-    return await OpenAINetworkingClient.delete(
+    return OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.buildFor(_config, endpoint, containerId),
       onSuccess: (response) {
-        final deleted = response["deleted"] == true;
+        final deleted = response['deleted'] == true;
 
         if (deleted) {
           return;

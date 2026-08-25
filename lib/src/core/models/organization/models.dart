@@ -196,3 +196,123 @@ class AdminApiKey {
     );
   }
 }
+
+class OrgSpendLimit {
+  final String id;
+  final double? hardLimitUsd;
+  final double? softLimitUsd;
+
+  OrgSpendLimit({
+    required this.id,
+    this.hardLimitUsd,
+    this.softLimitUsd,
+  });
+
+  factory OrgSpendLimit.fromMap(Map<String, dynamic> map) {
+    return OrgSpendLimit(
+      id: map['id'] as String? ?? '',
+      hardLimitUsd: (map['hard_limit_usd'] as num?)?.toDouble(),
+      softLimitUsd: (map['soft_limit_usd'] as num?)?.toDouble(),
+    );
+  }
+}
+
+class OrgSpendAlert {
+  final String id;
+  final String? projectId;
+  final String? teamId;
+  final double? thresholdUsd;
+
+  OrgSpendAlert({
+    required this.id,
+    this.projectId,
+    this.teamId,
+    this.thresholdUsd,
+  });
+
+  factory OrgSpendAlert.fromMap(Map<String, dynamic> map) {
+    return OrgSpendAlert(
+      id: map['id'] as String? ?? '',
+      projectId: map['project_id'] as String?,
+      teamId: map['team_id'] as String?,
+      thresholdUsd: (map['threshold_usd'] as num?)?.toDouble(),
+    );
+  }
+}
+
+class OrgGroup {
+  final String id;
+  final String name;
+  final String? description;
+
+  OrgGroup({
+    required this.id,
+    required this.name,
+    this.description,
+  });
+
+  factory OrgGroup.fromMap(Map<String, dynamic> map) {
+    return OrgGroup(
+      id: map['id'] as String? ?? '',
+      name: map['name'] as String? ?? '',
+      description: map['description'] as String?,
+    );
+  }
+}
+
+class OrgServiceAccount {
+  final String id;
+  final String name;
+  final String role;
+  final Map<String, dynamic> apiKey;
+
+  OrgServiceAccount({
+    required this.id,
+    required this.name,
+    required this.role,
+    required this.apiKey,
+  });
+
+  factory OrgServiceAccount.fromMap(Map<String, dynamic> map) {
+    return OrgServiceAccount(
+      id: map['id'] as String? ?? '',
+      name: map['name'] as String? ?? '',
+      role: map['role'] as String? ?? '',
+      apiKey: map['api_key'] as Map<String, dynamic>? ?? {},
+    );
+  }
+}
+
+class DataRetentionConfig {
+  final String id;
+  final int retentionWindowDays;
+
+  DataRetentionConfig({
+    required this.id,
+    required this.retentionWindowDays,
+  });
+
+  factory DataRetentionConfig.fromMap(Map<String, dynamic> map) {
+    return DataRetentionConfig(
+      id: map['id'] as String? ?? '',
+      retentionWindowDays: (map['retention_window_days'] as num?)?.toInt() ?? 0,
+    );
+  }
+}
+
+class OrgRole {
+  final String id;
+  final String name;
+
+  OrgRole({
+    required this.id,
+    required this.name,
+  });
+
+  factory OrgRole.fromMap(Map<String, dynamic> map) {
+    return OrgRole(
+      id: map['id'] as String? ?? '',
+      name: map['name'] as String? ?? '',
+    );
+  }
+}

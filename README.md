@@ -6,7 +6,7 @@
 [![Tests](https://img.shields.io/github/actions/workflow/status/anasfik/openai/dart.yml?label=tests)](https://github.com/anasfik/openai/actions)
 [![License](https://img.shields.io/github/license/anasfik/openai)](./LICENSE)
 
-Unofficial Dart/Flutter SDK for the OpenAI API. Typed clients for every major API surface: Responses, Chat Completions, Realtime, Videos, Batch, Fine-tuning, Vector Stores, Evals and more. Works on all platforms, including Flutter Web.
+Unofficial Dart/Flutter SDK for the OpenAI API. Typed clients for every major API surface: Responses, Chat Completions, Realtime, Videos, Batch, Fine-tuning, Vector Stores, Evals, Administration and more. Compiles and runs on every platform: Android, iOS, macOS, Linux, Windows, web, and server-side Dart.
 
 Maintained by [Anas Fikhi](https://gwhyyy.com) ([@anasfik](https://github.com/anasfik)).
 
@@ -14,7 +14,7 @@ Maintained by [Anas Fikhi](https://gwhyyy.com) ([@anasfik](https://github.com/an
 
 ```yaml
 dependencies:
-  dart_openai: ^7.0.0
+  dart_openai: ^8.0.0
 ```
 
 ```bash
@@ -129,6 +129,61 @@ Images emit partial results as they render (`createStream`), and stored completi
 
 Not planned: Assistants v1 and Threads (superseded by the Responses API), ChatKit.
 
+## Resilience
+
+Requests retry automatically on transient failures (connection errors, HTTP 408/429/5xx). GET requests always retry; POST retries only on rate limits and server errors. Backoff is exponential with jitter and the server's `Retry-After` header takes precedence.
+
+```dart
+// Default policy: 2 total attempts.
+final client = OpenAIClient(apiKey: 'sk-...');
+
+// Custom:
+final aggressive = OpenAIClient(
+  apiKey: 'sk-...',
+  retryPolicy: const OpenAIRetryPolicy(maxAttempts: 4),
+);
+```
+
+Streaming has an idle watchdog: a connection that stops delivering bytes fails with `StreamTimedOutException` after the request timeout instead of hanging forever. After any call, quota is observable:
+
+```dart
+await client.model.list();
+print(OpenAIResponseMeta.lastRateLimit?.remainingRequests);
+```
+
+## Azure OpenAI
+
+```dart
+final azure = OpenAIClient(
+  apiKey: '<azure-key>',
+  azure: const OpenAIAzure(
+    resource: 'my-resource',
+    apiVersion: '2024-10-21',
+    deployments: {'gpt-4o': 'gpt4o-prod'},
+  ),
+);
+
+// model is rewritten to your deployment automatically:
+await azure.chat.create(model: 'gpt-4o', messages: messages);
+```
+
+## Files on every platform
+
+Upload APIs take a platform-neutral file type — no `dart:io`, so the same code runs on web:
+
+```dart
+// From disk (native):
+final file = await loadOpenAIFile('training.jsonl');
+await client.file.upload(file: file, purpose: 'fine-tune');
+
+// From memory (anywhere, including web):
+await client.file.uploadBytes(
+  bytes: utf8.encode(jsonl),
+  fileName: 'training.jsonl',
+  purpose: 'fine-tune',
+);
+```
+
 ## Error handling
 
 All failures throw typed exceptions you can catch precisely:
@@ -155,7 +210,7 @@ Global facade equivalents: `OpenAI.apiKey`, `OpenAI.organization`, `OpenAI.baseU
 
 Reasoning models (o-series, GPT-5 family): pass `reasoningEffort: 'low'` and use `maxTokens`, which maps to `max_completion_tokens`. Incompatible sampling parameters are rejected by the API; use `extraParams` to pass anything not yet modeled.
 
-## Migrating from 6.x
+## Migrating from 6.x / 7.x
 
 Nothing breaks if you used the global facade. To adopt per-client instances, replace global configuration with construction:
 
@@ -169,11 +224,13 @@ final client = OpenAIClient(apiKey: 'sk-...');
 await client.chat.create(...);
 ```
 
+8.0.0 replaces `dart:io File` parameters with the platform-neutral `OpenAIFile` type (`await loadOpenAIFile(path)` on native, `OpenAIFile(bytes:, fileName:)` anywhere), and `audio.createSpeech` now returns bytes.
+
 Full list of changes: [CHANGELOG.md](./CHANGELOG.md).
 
 ## Testing
 
-The test suite runs entirely against mocked HTTP. No API keys required:
+The suite runs entirely against mocked HTTP — request shapes, SSE decoding, malformed-payload fuzzing, retry behavior. No API keys required:
 
 ```bash
 dart test

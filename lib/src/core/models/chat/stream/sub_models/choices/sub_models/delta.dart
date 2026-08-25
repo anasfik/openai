@@ -61,15 +61,15 @@ final class OpenAIStreamChatCompletionChoiceDeltaModel {
   /// This method used to convert the [OpenAIChatCompletionChoiceMessageModel] to a [Map<String, dynamic>] object.
   Map<String, dynamic> toMap() {
     return {
-      "role": role?.name,
-      "content": content,
-      "tool_calls": toolCalls?.map((toolCall) => toolCall.toMap()).toList(),
+      'role': role?.name,
+      'content': content,
+      'tool_calls': toolCalls?.map((toolCall) => toolCall.toMap()).toList(),
     };
   }
 
   @override
   String toString() {
-    String str = 'OpenAIChatCompletionChoiceMessageModel('
+    var str = 'OpenAIChatCompletionChoiceMessageModel('
         'role: $role, '
         'content: $content, ';
     if (toolCalls != null) {

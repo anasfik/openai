@@ -1,4 +1,6 @@
+import 'package:dart_openai/src/core/config/azure.dart';
 import 'package:dart_openai/src/core/config/client_config.dart';
+import 'package:dart_openai/src/core/config/retry_policy.dart';
 import 'package:dart_openai/src/instance/audio/audio.dart';
 import 'package:dart_openai/src/instance/batch/batch.dart';
 import 'package:dart_openai/src/instance/chat/chat.dart';
@@ -18,11 +20,11 @@ import 'package:dart_openai/src/instance/moderations/moderations.dart';
 import 'package:dart_openai/src/instance/organization/organization.dart';
 import 'package:dart_openai/src/instance/provenance/provenance.dart';
 import 'package:dart_openai/src/instance/realtime/realtime.dart';
-import 'package:dart_openai/src/instance/skills/skills.dart';
-import 'package:dart_openai/src/instance/videos/videos.dart';
 import 'package:dart_openai/src/instance/responses/responses.dart';
+import 'package:dart_openai/src/instance/skills/skills.dart';
 import 'package:dart_openai/src/instance/uploads/uploads.dart';
 import 'package:dart_openai/src/instance/vector_stores/vector_stores.dart';
+import 'package:dart_openai/src/instance/videos/videos.dart';
 
 /// An isolated OpenAI API client.
 ///
@@ -51,6 +53,8 @@ class OpenAIClient {
     String? version,
     Duration? requestsTimeOut,
     Map<String, dynamic>? extraHeaders,
+    OpenAIRetryPolicy? retryPolicy,
+    OpenAIAzure? azure,
   }) : config = OpenAIClientConfig(
           apiKey: apiKey,
           organization: organization,
@@ -58,6 +62,8 @@ class OpenAIClient {
           version: version ?? 'v1',
           requestsTimeOut: requestsTimeOut ?? const Duration(seconds: 30),
           extraHeaders: extraHeaders ?? const {},
+          retryPolicy: retryPolicy ?? const OpenAIRetryPolicy(),
+          azure: azure,
         );
 
   /// Creates a client from an existing [OpenAIClientConfig].

@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:dart_openai/dart_openai.dart';
-import 'package:dart_openai/src/core/enum.dart';
-import 'package:dart_openai/src/core/models/chat/sub_models/choices/sub_models/sub_models/content.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/instance/audio/audio.dart';
 import 'package:http/http.dart' as http;

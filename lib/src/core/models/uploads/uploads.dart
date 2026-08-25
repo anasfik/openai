@@ -28,10 +28,10 @@ extension UploadModelParsing on OpenAIUploadModel {
       createdAt: map['created_at'] as int? ?? 0,
       expiresAt: map['expires_at'] as int? ?? 0,
       file: map['file'],
-      filename: map['filename'] as String? ?? '',
-      id: map['id'] as String? ?? '',
-      purpose: map['purpose'] as String? ?? '',
-      status: map['status'] as String? ?? '',
+      filename: map['filename']?.toString() ??  '',
+      id: map['id']?.toString() ??  '',
+      purpose: map['purpose']?.toString() ??  '',
+      status: map['status']?.toString() ??  '',
     );
   }
 }

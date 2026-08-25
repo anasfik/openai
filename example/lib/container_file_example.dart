@@ -3,13 +3,14 @@ import 'dart:io';
 
 import 'package:dart_openai/dart_openai.dart';
 import 'package:example/env/env.dart';
+import 'package:dart_openai/src/core/io/file_helpers.dart';
 
 void main() async {
   OpenAI.apiKey = Env.apiKey;
   final containerId = "cntr_691dc7f1316881908fcff33d04ba4a9603f8e5842a00c1cc";
 
   final containerFile = await OpenAI.instance.container.containerFiles.create(
-    file: jsonLFileExample(),
+    file: await loadOpenAIFile(jsonLFileExample().path),
     containerId: containerId,
   );
 

@@ -21,7 +21,7 @@ class OpenAIRealtime {
     String? instructions,
     Map<String, dynamic> extra = const {},
   }) async {
-    return await _postSession(
+    return _postSession(
       to: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/sessions'),
       body: {
         if (model != null) 'model': model,
@@ -38,7 +38,7 @@ class OpenAIRealtime {
   Future<OpenAIRealtimeSession> createTranscriptionSession({
     Map<String, dynamic> extra = const {},
   }) async {
-    return await _postSession(
+    return _postSession(
       to: BaseApiUrlBuilder.buildFor(
           _config, '$_endpoint/transcription_sessions'),
       body: {...extra},
@@ -51,7 +51,7 @@ class OpenAIRealtime {
     required Map<String, dynamic> session,
     Map<String, dynamic> extra = const {},
   }) async {
-    return await _postSession(
+    return _postSession(
       to: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/client_secrets'),
       body: {'session': session, ...extra},
     );
@@ -63,7 +63,7 @@ class OpenAIRealtime {
     required Map<String, dynamic> session,
     Map<String, dynamic> extra = const {},
   }) async {
-    return await _postSession(
+    return _postSession(
       to: BaseApiUrlBuilder.buildFor(
         _config,
         '$_endpoint/translations/client_secrets',
@@ -76,10 +76,61 @@ class OpenAIRealtime {
     required String to,
     required Map<String, dynamic> body,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: to,
       body: body,
       onSuccess: OpenAIRealtimeSession.fromMap,
+      config: _config,
+    );
+  }
+
+  String _callEndpoint(String callId) => '$_endpoint/calls/$callId';
+
+  /// Accepts an incoming SIP call with an SDP answer
+  /// (`POST /realtime/calls/{call_id}/accept`). Raw response map.
+  Future<Map<String, dynamic>> acceptCall({
+    required String callId,
+    required String sdp,
+    String type = 'sdp',
+  }) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, '${_callEndpoint(callId)}/accept'),
+      body: {'type': type, 'sdp': sdp},
+      onSuccess: (response) => response,
+      config: _config,
+    );
+  }
+
+  /// Rejects an incoming SIP call (`POST /realtime/calls/{call_id}/reject`).
+  /// Raw response map.
+  Future<Map<String, dynamic>> rejectCall({required String callId}) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, '${_callEndpoint(callId)}/reject'),
+      onSuccess: (response) => response,
+      config: _config,
+    );
+  }
+
+  /// Hangs up a SIP call (`DELETE /realtime/calls/{call_id}`).
+  /// Raw response map.
+  Future<Map<String, dynamic>> hangupCall({required String callId}) async {
+    return OpenAINetworkingClient.delete(
+      from: BaseApiUrlBuilder.buildFor(_config, _callEndpoint(callId)),
+      onSuccess: (response) => response,
+      config: _config,
+    );
+  }
+
+  /// Refers a SIP call to another target
+  /// (`POST /realtime/calls/{call_id}/refer`). Raw response map.
+  Future<Map<String, dynamic>> referCall({
+    required String callId,
+    required String target,
+  }) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, '${_callEndpoint(callId)}/refer'),
+      body: {'target': target},
+      onSuccess: (response) => response,
       config: _config,
     );
   }

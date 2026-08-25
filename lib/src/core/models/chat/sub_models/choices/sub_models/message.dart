@@ -88,17 +88,17 @@ final class OpenAIChatCompletionChoiceMessageModel {
     }();
 
     return {
-      "role": role.name,
-      "content": content_,
+      'role': role.name,
+      'content': content_,
       if (toolCalls != null && role == OpenAIChatMessageRole.assistant)
-        "tool_calls": toolCalls!.map((toolCall) => toolCall.toMap()).toList(),
-      if (name != null) "name": name,
+        'tool_calls': toolCalls!.map((toolCall) => toolCall.toMap()).toList(),
+      if (name != null) 'name': name,
     };
   }
 
   @override
   String toString() {
-    String str = 'OpenAIChatCompletionChoiceMessageModel('
+    var str = 'OpenAIChatCompletionChoiceMessageModel('
         'role: $role, '
         'content: $content, ';
 
@@ -127,8 +127,8 @@ final class OpenAIChatCompletionChoiceMessageModel {
     required String toolCallId,
   }) {
     return RequestFunctionMessage(
-      content: this.content,
-      role: this.role,
+      content: content,
+      role: role,
       toolCallId: toolCallId,
     );
   }
@@ -152,9 +152,9 @@ base class RequestFunctionMessage
   @override
   Map<String, dynamic> toMap() {
     return {
-      "role": role.name,
-      "content": content?.map((toolCall) => toolCall.toMap()).toList(),
-      "tool_call_id": toolCallId,
+      'role': role.name,
+      'content': content?.map((toolCall) => toolCall.toMap()).toList(),
+      'tool_call_id': toolCallId,
     };
   }
 

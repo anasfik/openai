@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 
 import 'sub_models/usage.dart';
+import '../../../utils/parse.dart';
 
 export 'sub_models/choices/choices.dart';
 export 'sub_models/usage.dart';
@@ -51,15 +52,14 @@ final class OpenAIStreamChatCompletionModel {
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIStreamChatCompletionModel] object.
   factory OpenAIStreamChatCompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAIStreamChatCompletionModel(
-      id: json['id'],
-      created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
-      choices: (json['choices'] as List)
-          .map(
-            (choice) => OpenAIStreamChatCompletionChoiceModel.fromMap(choice),
-          )
+      id: json['id']?.toString() ?? '',
+      created: DateTime.fromMillisecondsSinceEpoch(intOr(json['created']) * 1000),
+      choices: (json['choices'] as List? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(OpenAIStreamChatCompletionChoiceModel.fromMap)
           .toList(),
-      systemFingerprint: json['system_fingerprint'],
-      usage: json['usage'] != null
+      systemFingerprint: json['system_fingerprint']?.toString(),
+      usage: json['usage'] is Map<String, dynamic>
           ? OpenAIStreamChatCompletionUsageModel.fromMap(json['usage'])
           : null,
     );
@@ -74,7 +74,7 @@ final class OpenAIStreamChatCompletionModel {
 
   @override
   bool operator ==(Object other) {
-    const ListEquality listEquals = ListEquality();
+    const listEquals = ListEquality();
     if (identical(this, other)) return true;
 
     return other is OpenAIStreamChatCompletionModel &&

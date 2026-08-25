@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import '../constants/strings.dart';
 import '../exceptions/request_failure.dart';
-import '../utils/logger.dart';
 import '../utils/extensions.dart';
+import '../utils/logger.dart';
 
 /// Single SSE decoder used by every streaming endpoint.
 ///

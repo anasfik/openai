@@ -50,7 +50,7 @@ final class OpenAIStreamCompletionModel {
   factory OpenAIStreamCompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAIStreamCompletionModel(
       id: json['id'],
-      created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
+      created: DateTime.fromMillisecondsSinceEpoch(((json['created'] ?? 0) * 1000)),
       choices: (json['choices'] as List)
           .map((e) => OpenAIStreamCompletionModelChoice.fromMap(e))
           .toList(),

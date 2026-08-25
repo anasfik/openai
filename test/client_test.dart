@@ -1,7 +1,5 @@
 import 'package:dart_openai/dart_openai.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
-import 'package:dart_openai/src/core/models/batch/batch.dart';
-import 'package:dart_openai/src/core/models/uploads/uploads.dart';
 import 'package:test/test.dart';
 
 import 'helpers/mock_client.dart';
@@ -85,6 +83,7 @@ void main() {
           final body = decodedJsonBody(request);
           expect(body['completion_window'], '24h');
           expect(body['input_file_id'], 'file-1');
+          return null;
         },
       );
 
@@ -112,6 +111,7 @@ void main() {
           },
           assertRequest: (request) {
             expect(request.url.queryParameters, {'after': 'b2', 'limit': '10'});
+            return null;
           });
 
       final client = OpenAIClient(apiKey: 'sk-a');
@@ -124,12 +124,12 @@ void main() {
       OpenAINetworkingClient.clientFactory = () => mock;
       mock.expectJson(
         body: {'id': 'batch_abc', 'status': 'cancelling'},
-        statusCode: 200,
         assertRequest: (request) {
           expect(
             request.url.toString(),
             'https://api.openai.com/v1/batches/batch_abc/cancel',
           );
+          return null;
         },
       );
 
@@ -155,6 +155,7 @@ void main() {
             final body = decodedJsonBody(request);
             expect(body['mime_type'], 'application/jsonl');
             expect(body['purpose'], 'fine-tune');
+            return null;
           });
 
       final client = OpenAIClient(apiKey: 'sk-a');
@@ -178,6 +179,7 @@ void main() {
           assertRequest: (request) {
             expect(request.url.toString(),
                 'https://api.openai.com/v1/uploads/upload_1/cancel');
+            return null;
           });
 
       final client = OpenAIClient(apiKey: 'sk-a');
@@ -190,6 +192,13 @@ void main() {
     test('non-2xx with error json throws RequestFailedException', () async {
       final mock = MockClient();
       OpenAINetworkingClient.clientFactory = () => mock;
+      // Default policy retries POST/GET once on 429: script both attempts.
+      mock.expectJson(
+        statusCode: 429,
+        body: {
+          'error': {'message': 'Rate limit reached', 'type': 'rate_limit'}
+        },
+      );
       mock.expectJson(
         statusCode: 429,
         body: {

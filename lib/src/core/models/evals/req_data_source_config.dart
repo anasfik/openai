@@ -12,7 +12,6 @@ class RequestDatatSourceConfig {
     bool? includeSampleSchema,
   }) {
     return RequestCustomDataSourceConfig(
-      type: "custom",
       itemSchema: itemSchema,
       includeSampleSchema: includeSampleSchema,
     );
@@ -22,7 +21,6 @@ class RequestDatatSourceConfig {
     required Map<String, dynamic> metadata,
   }) {
     return RequestLogsDataSourceConfig(
-      type: "logs",
       metadata: metadata,
     );
   }
@@ -30,7 +28,7 @@ class RequestDatatSourceConfig {
   @mustBeOverridden
   Map<String, dynamic> toMap() {
     return {
-      "type": type,
+      'type': type,
     };
   }
 }
@@ -42,16 +40,16 @@ class RequestCustomDataSourceConfig extends RequestDatatSourceConfig {
   RequestCustomDataSourceConfig({
     required this.itemSchema,
     required this.includeSampleSchema,
-    super.type = "custom",
+    super.type = 'custom',
   });
 
   @override
   Map<String, dynamic> toMap() {
     return {
-      "type": type,
-      "item_schema": itemSchema,
+      'type': type,
+      'item_schema': itemSchema,
       if (includeSampleSchema != null)
-        "include_sample_schema": includeSampleSchema,
+        'include_sample_schema': includeSampleSchema,
     };
   }
 }
@@ -61,14 +59,14 @@ class RequestLogsDataSourceConfig extends RequestDatatSourceConfig {
 
   RequestLogsDataSourceConfig({
     required this.metadata,
-    super.type = "logs",
+    super.type = 'logs',
   });
 
   @override
   Map<String, dynamic> toMap() {
     return {
-      "type": type,
-      "metadata": metadata,
+      'type': type,
+      'metadata': metadata,
     };
   }
 }

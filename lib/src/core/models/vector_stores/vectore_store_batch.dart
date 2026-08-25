@@ -1,26 +1,26 @@
 import 'package:dart_openai/src/core/models/vector_stores/file_counts.dart';
 
 enum OpenAIVectorStoreBatchStatus {
-  inProgress("in_progress"),
-  completed("completed"),
-  cancelled("cancelled"),
-  failed("failed");
+  inProgress('in_progress'),
+  completed('completed'),
+  cancelled('cancelled'),
+  failed('failed');
 
   final String value;
   const OpenAIVectorStoreBatchStatus(this.value);
 
-  static fromValue(String value) {
+  static OpenAIVectorStoreBatchStatus fromValue(String value) {
     switch (value) {
-      case "in_progress":
+      case 'in_progress':
         return OpenAIVectorStoreBatchStatus.inProgress;
-      case "completed":
+      case 'completed':
         return OpenAIVectorStoreBatchStatus.completed;
-      case "cancelled":
+      case 'cancelled':
         return OpenAIVectorStoreBatchStatus.cancelled;
-      case "failed":
+      case 'failed':
         return OpenAIVectorStoreBatchStatus.failed;
       default:
-        throw Exception("Unknown OpenAIVectorStoreBatchStatus value: $value");
+        throw Exception('Unknown OpenAIVectorStoreBatchStatus value: $value');
     }
   }
 }

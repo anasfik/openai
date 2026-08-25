@@ -9,14 +9,12 @@ class DatatSourceConfig {
 
   static DatatSourceConfig custom({required Map<String, dynamic> schema}) {
     return CustomDataSourceConfig(
-      type: "custom",
       schema: schema,
     );
   }
 
   static DatatSourceConfig logs({required Map<String, dynamic> schema}) {
     return LogsDataSourceConfig(
-      type: "logs",
       schema: schema,
     );
   }
@@ -32,8 +30,10 @@ class DatatSourceConfig {
 
         return LogsDataSourceConfig(schema: schema, metadata: metadata);
       default:
-        throw UnimplementedError(
-          'DataSourceConfig type $type is not implemented',
+        // Unknown provider-added type: keep raw fields instead of crashing.
+        return CustomDataSourceConfig(
+          type: type?.toString() ?? 'custom',
+          schema: schema,
         );
     }
   }
@@ -42,13 +42,13 @@ class DatatSourceConfig {
 class CustomDataSourceConfig extends DatatSourceConfig {
   CustomDataSourceConfig({
     required super.schema,
-    super.type = "custom",
+    super.type = 'custom',
   });
 
   Map<String, dynamic> toMap() {
     return {
-      "type": type,
-      "schema": schema,
+      'type': type,
+      'schema': schema,
     };
   }
 }
@@ -58,15 +58,15 @@ class LogsDataSourceConfig extends DatatSourceConfig {
 
   LogsDataSourceConfig({
     required super.schema,
-    super.type = "logs",
+    super.type = 'logs',
     this.metadata = const {},
   });
 
   Map<String, dynamic> toMap() {
     return {
-      "type": type,
-      "schema": schema,
-      "metadata": metadata,
+      'type': type,
+      'schema': schema,
+      'metadata': metadata,
     };
   }
 }

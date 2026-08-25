@@ -29,11 +29,11 @@ final class OpenAIEmbeddingsDataModel {
   factory OpenAIEmbeddingsDataModel.fromMap(Map<String, dynamic> map) {
     return OpenAIEmbeddingsDataModel(
       embeddings: List<double>.from(
-        (map['embedding'] as List).map(
+        (map['embedding'] as List? ?? const []).map(
           (e) => e is double ? e : (e as num).toDouble(),
         ),
       ),
-      index: map['index'] as int,
+      index: map['index'] is int ? map['index'] as int : 0,
     );
   }
 

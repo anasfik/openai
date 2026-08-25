@@ -1,12 +1,12 @@
 import 'package:collection/collection.dart';
-import "package:meta/meta.dart";
+import 'package:meta/meta.dart';
 
 import 'sub_models/choice.dart';
 import 'sub_models/usage.dart';
 
+export 'stream/completion.dart';
 export 'sub_models/choice.dart';
 export 'sub_models/usage.dart';
-export 'stream/completion.dart';
 
 /// {@template openai_completion_model}
 /// This represents the response from a completion request by the [OpenAICompletion] methods.
@@ -65,7 +65,7 @@ final class OpenAICompletionModel {
   factory OpenAICompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAICompletionModel(
       id: json['id'],
-      created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
+      created: DateTime.fromMillisecondsSinceEpoch(((json['created'] ?? 0) * 1000)),
       model: json['model'],
       choices: (json['choices'] as List)
           .map((i) => OpenAICompletionModelChoice.fromMap(i))

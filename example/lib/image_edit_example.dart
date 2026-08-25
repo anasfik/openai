@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dart_openai/dart_openai.dart';
 import 'package:example/env/env.dart';
+import 'package:dart_openai/src/core/io/file_helpers.dart';
 
 void main() async {
   OpenAI.apiKey = Env.apiKey;
@@ -10,7 +11,7 @@ void main() async {
   try {
     final response = await OpenAI.instance.image.edit(
       model: "gpt-image-1", // Make sure to specify the model
-      image: File("eagle.png"),
+      image: await loadOpenAIFile("eagle.png"),
       prompt: 'mask the image with color red',
       n: 1,
       //  responseFormat: OpenAIImageResponseFormat.b64Json,

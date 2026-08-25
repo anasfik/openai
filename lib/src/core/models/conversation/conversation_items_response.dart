@@ -24,7 +24,7 @@ class OpenAIConversationItemsResponse {
 
   /// Creates a new [OpenAIConversationItemsResponse] from a JSON map.
   factory OpenAIConversationItemsResponse.fromMap(Map<String, dynamic> json) {
-    final data = json["data"];
+    final data = json['data'];
 
     return OpenAIConversationItemsResponse(
       data: data,

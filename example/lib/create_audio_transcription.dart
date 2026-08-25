@@ -6,6 +6,7 @@ import 'env/env.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
+import 'package:dart_openai/src/core/io/file_helpers.dart';
 
 Future<void> main() async {
 // Set the OpenAI API key from the .env file.
@@ -17,7 +18,7 @@ Future<void> main() async {
 // create the audio transcription.
   final transcription = await OpenAI.instance.audio.createTranscription(
     model: "whisper-1",
-    file: await getFileFromUrl(textAudioFile),
+    file: await loadOpenAIFile((await getFileFromUrl(textAudioFile)).path),
     include: ["logprobs"],
     responseFormat: OpenAIAudioResponseFormat.verbose_json,
     language: "en",

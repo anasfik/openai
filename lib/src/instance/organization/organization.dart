@@ -11,7 +11,14 @@ class OpenAIOrganization {
         auditLogs = OpenAIAuditLogs(config),
         costs = OpenAICosts(config),
         rateLimits = OpenAIRateLimits(config),
-        adminApiKeys = OpenAIAdminApiKeys(config);
+        adminApiKeys = OpenAIAdminApiKeys(config),
+        usage = OpenAIUsage(config),
+        spendLimits = OpenAISpendLimits(config),
+        certificates = OpenAICertificates(config),
+        groups = OpenAIGroups(config),
+        serviceAccounts = OpenAIServiceAccounts(config),
+        dataRetention = OpenAIDataRetention(config),
+        roles = OpenAIRoles(config);
 
   final OpenAIProjects projects;
 
@@ -26,6 +33,20 @@ class OpenAIOrganization {
   final OpenAIRateLimits rateLimits;
 
   final OpenAIAdminApiKeys adminApiKeys;
+
+  final OpenAIUsage usage;
+
+  final OpenAISpendLimits spendLimits;
+
+  final OpenAICertificates certificates;
+
+  final OpenAIGroups groups;
+
+  final OpenAIServiceAccounts serviceAccounts;
+
+  final OpenAIDataRetention dataRetention;
+
+  final OpenAIRoles roles;
 }
 
 class OpenAIProjects {
@@ -36,7 +57,7 @@ class OpenAIProjects {
   String get _endpoint => 'organization/projects';
 
   Future<OpenAIOrgPage<OrgProject>> list({String? after, int? limit}) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: _endpoint,
         query: {
@@ -51,7 +72,7 @@ class OpenAIProjects {
   }
 
   Future<OrgProject> create({required String name}) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, _endpoint),
       body: {'name': name},
       onSuccess: OrgProject.fromMap,
@@ -60,7 +81,7 @@ class OpenAIProjects {
   }
 
   Future<OrgProject> retrieve({required String projectId}) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildFor(_config, _endpoint, projectId),
       onSuccess: OrgProject.fromMap,
       config: _config,
@@ -68,9 +89,37 @@ class OpenAIProjects {
   }
 
   Future<OrgProject> archive({required String projectId}) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/$projectId/archive'),
       onSuccess: OrgProject.fromMap,
+      config: _config,
+    );
+  }
+
+  /// Model permissions for a project. Payload schema is loose; raw map.
+  Future<Map<String, dynamic>> modelPermissions({
+    required String projectId,
+  }) async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(
+        _config,
+        '$_endpoint/$projectId/model_permissions',
+      ),
+      onSuccess: (map) => map,
+      config: _config,
+    );
+  }
+
+  /// Hosted tool permissions for a project. Payload schema is loose; raw map.
+  Future<Map<String, dynamic>> hostedToolPermissions({
+    required String projectId,
+  }) async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(
+        _config,
+        '$_endpoint/$projectId/hosted_tool_permissions',
+      ),
+      onSuccess: (map) => map,
       config: _config,
     );
   }
@@ -88,7 +137,7 @@ class OpenAIOrgUsers {
     String? email,
     int? limit,
   }) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: _endpoint,
         query: {
@@ -104,7 +153,7 @@ class OpenAIOrgUsers {
   }
 
   Future<OrgUser> retrieve({required String userId}) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildFor(_config, _endpoint, userId),
       onSuccess: OrgUser.fromMap,
       config: _config,
@@ -123,7 +172,7 @@ class OpenAIInvites {
     String? after,
     int? limit,
   }) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: _endpoint,
         query: {
@@ -141,7 +190,7 @@ class OpenAIInvites {
     required String email,
     required String role,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, _endpoint),
       body: {'email': email, 'role': role},
       onSuccess: OrgInvite.fromMap,
@@ -150,7 +199,7 @@ class OpenAIInvites {
   }
 
   Future<bool> delete({required String inviteId}) async {
-    return await OpenAINetworkingClient.delete(
+    return OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.buildFor(_config, _endpoint, inviteId),
       onSuccess: (map) => map['deleted'] as bool? ?? true,
       config: _config,
@@ -174,7 +223,7 @@ class OpenAIAuditLogs {
     // ponytail: event_types/group_by joined as comma string since
     // buildWithQuery takes Map<String, String>; switch to raw Uri when
     // repeated params are needed.
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: 'organization/audit_logs',
         query: {
@@ -206,7 +255,7 @@ class OpenAICosts {
     String? after,
     List<String>? groupBy,
   }) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: 'organization/costs',
         query: {
@@ -234,7 +283,7 @@ class OpenAIRateLimits {
     int? limit,
     String? after,
   }) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: 'organization/rate_limits',
         query: {
@@ -260,7 +309,7 @@ class OpenAIAdminApiKeys {
     int? limit,
     String? after,
   }) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: _endpoint,
         query: {
@@ -278,7 +327,7 @@ class OpenAIAdminApiKeys {
     required String name,
     String? scope,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, _endpoint),
       body: {
         'name': name,
@@ -290,9 +339,448 @@ class OpenAIAdminApiKeys {
   }
 
   Future<bool> delete({required String keyId}) async {
-    return await OpenAINetworkingClient.delete(
+    return OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.buildFor(_config, _endpoint, keyId),
       onSuccess: (map) => map['deleted'] as bool? ?? true,
+      config: _config,
+    );
+  }
+}
+
+class OpenAIUsage {
+  final OpenAIClientConfig? _config;
+
+  OpenAIUsage(this._config);
+
+  /// Usage report buckets for one of: completions, embeddings, moderations,
+  /// images, audio_speeches, audio_transcriptions, vector_stores,
+  /// code_interpreter_sessions, file_search_calls, web_search_calls.
+  Future<List<Map<String, dynamic>>> usage({
+    required String kind,
+    required int startTime,
+    int? endTime,
+    int? bucketWidth,
+    List<String>? projectIds,
+    List<String>? groupBy,
+    String? after,
+    int? limit,
+  }) async {
+    // ponytail: project_ids/group_by joined as comma string since
+    // buildWithQuery takes Map<String, String>; raw Uri when repeated
+    // params are needed.
+    return OpenAINetworkingClient
+        .get<List<Map<String, dynamic>>>(
+      from: BaseApiUrlBuilder.buildWithQuery(
+        endpoint: 'organization/usage/$kind',
+        query: {
+          'start_time': startTime.toString(),
+          if (endTime != null) 'end_time': endTime.toString(),
+          if (bucketWidth != null) 'bucket_width': bucketWidth.toString(),
+          if (projectIds != null && projectIds.isNotEmpty)
+            'project_ids': projectIds.join(','),
+          if (groupBy != null && groupBy.isNotEmpty)
+            'group_by': groupBy.join(','),
+          if (after != null) 'after': after,
+          if (limit != null) 'limit': limit.toString(),
+        },
+        config: _config,
+      ),
+      onSuccess: (map) => (map['data'] as List<dynamic>? ?? [])
+          .whereType<Map<String, dynamic>>()
+          .toList(),
+      config: _config,
+    );
+  }
+}
+
+class OpenAISpendLimits {
+  final OpenAIClientConfig? _config;
+
+  OpenAISpendLimits(this._config);
+
+  String get _endpoint => 'organization/spend_limit';
+
+  Future<OrgSpendLimit> get() async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(_config, _endpoint),
+      onSuccess: OrgSpendLimit.fromMap,
+      config: _config,
+    );
+  }
+
+  Future<OrgSpendLimit> update({
+    double? hardLimitUsd,
+    double? softLimitUsd,
+  }) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, _endpoint),
+      body: {
+        if (hardLimitUsd != null) 'hard_limit_usd': hardLimitUsd,
+        if (softLimitUsd != null) 'soft_limit_usd': softLimitUsd,
+      },
+      onSuccess: OrgSpendLimit.fromMap,
+      config: _config,
+    );
+  }
+
+  /// Spend alerts.
+
+  Future<OpenAIOrgPage<OrgSpendAlert>> listAlerts() async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/alerts'),
+      onSuccess: (map) => OpenAIOrgPage.fromMap(map, OrgSpendAlert.fromMap),
+      config: _config,
+    );
+  }
+
+  Future<OrgSpendAlert> createAlert({
+    required double thresholdUsd,
+    String? projectId,
+    String? teamId,
+  }) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/alerts'),
+      body: {
+        'threshold_usd': thresholdUsd,
+        if (projectId != null) 'project_id': projectId,
+        if (teamId != null) 'team_id': teamId,
+      },
+      onSuccess: OrgSpendAlert.fromMap,
+      config: _config,
+    );
+  }
+
+  Future<bool> deleteAlert({required String alertId}) async {
+    return OpenAINetworkingClient.delete(
+      from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/alerts', alertId),
+      onSuccess: (map) => map['deleted'] as bool? ?? true,
+      config: _config,
+    );
+  }
+}
+
+class OpenAICertificates {
+  final OpenAIClientConfig? _config;
+
+  OpenAICertificates(this._config);
+
+  String get _endpoint => 'organization/certificates';
+
+  /// Payload schema is loose; raw page of maps.
+  Future<OpenAIOrgPage<Map<String, dynamic>>> list({
+    String? after,
+    int? limit,
+  }) async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildWithQuery(
+        endpoint: _endpoint,
+        query: {
+          if (after != null) 'after': after,
+          if (limit != null) 'limit': limit.toString(),
+        },
+        config: _config,
+      ),
+      onSuccess: (map) => OpenAIOrgPage.fromMap(map, (m) => m),
+      config: _config,
+    );
+  }
+
+  Future<Map<String, dynamic>> create({
+    required String name,
+    required String certificate,
+    String? purpose,
+  }) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, _endpoint),
+      body: {
+        'name': name,
+        'certificate': certificate,
+        if (purpose != null) 'purpose': purpose,
+      },
+      onSuccess: (map) => map,
+      config: _config,
+    );
+  }
+
+  Future<bool> delete({required String certificateId}) async {
+    return OpenAINetworkingClient.delete(
+      from: BaseApiUrlBuilder.buildFor(_config, _endpoint, certificateId),
+      onSuccess: (map) => map['deleted'] as bool? ?? true,
+      config: _config,
+    );
+  }
+
+  Future<Map<String, dynamic>> activate({required List<String> ids}) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/activate'),
+      body: {'certificate_ids': ids},
+      onSuccess: (map) => map,
+      config: _config,
+    );
+  }
+
+  Future<Map<String, dynamic>> deactivate({required List<String> ids}) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/deactivate'),
+      body: {'certificate_ids': ids},
+      onSuccess: (map) => map,
+      config: _config,
+    );
+  }
+}
+
+class OpenAIGroups {
+  final OpenAIClientConfig? _config;
+
+  OpenAIGroups(this._config);
+
+  String get _endpoint => 'organization/groups';
+
+  Future<OpenAIOrgPage<OrgGroup>> list({String? after, int? limit}) async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildWithQuery(
+        endpoint: _endpoint,
+        query: {
+          if (after != null) 'after': after,
+          if (limit != null) 'limit': limit.toString(),
+        },
+        config: _config,
+      ),
+      onSuccess: (map) => OpenAIOrgPage.fromMap(map, OrgGroup.fromMap),
+      config: _config,
+    );
+  }
+
+  Future<OrgGroup> create({
+    required String name,
+    String? description,
+  }) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, _endpoint),
+      body: {
+        'name': name,
+        if (description != null) 'description': description,
+      },
+      onSuccess: OrgGroup.fromMap,
+      config: _config,
+    );
+  }
+
+  /// Update via POST (no PATCH in the networking layer).
+  Future<OrgGroup> update({
+    required String groupId,
+    String? name,
+    String? description,
+  }) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, _endpoint, groupId),
+      body: {
+        if (name != null) 'name': name,
+        if (description != null) 'description': description,
+      },
+      onSuccess: OrgGroup.fromMap,
+      config: _config,
+    );
+  }
+
+  Future<bool> delete({required String groupId}) async {
+    return OpenAINetworkingClient.delete(
+      from: BaseApiUrlBuilder.buildFor(_config, _endpoint, groupId),
+      onSuccess: (map) => map['deleted'] as bool? ?? true,
+      config: _config,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> listUsers({required String groupId}) async {
+    return OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
+      from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/$groupId/users'),
+      onSuccess: (map) => (map['data'] as List<dynamic>? ?? [])
+          .whereType<Map<String, dynamic>>()
+          .toList(),
+      config: _config,
+    );
+  }
+
+  Future<bool> addUsers({
+    required String groupId,
+    required List<String> userIds,
+  }) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/$groupId/users'),
+      body: {'user_ids': userIds},
+      onSuccess: (map) => true,
+      config: _config,
+    );
+  }
+
+  Future<bool> removeUser({
+    required String groupId,
+    required String userId,
+  }) async {
+    return OpenAINetworkingClient.delete(
+      from:
+          BaseApiUrlBuilder.buildFor(_config, '$_endpoint/$groupId/users', userId),
+      onSuccess: (map) => map['deleted'] as bool? ?? true,
+      config: _config,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> listRoles({required String groupId}) async {
+    return OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
+      from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/$groupId/roles'),
+      onSuccess: (map) => (map['data'] as List<dynamic>? ?? [])
+          .whereType<Map<String, dynamic>>()
+          .toList(),
+      config: _config,
+    );
+  }
+}
+
+class OpenAIServiceAccounts {
+  final OpenAIClientConfig? _config;
+
+  OpenAIServiceAccounts(this._config);
+
+  String _base(String projectId) =>
+      'organization/projects/$projectId/service_accounts';
+
+  Future<OpenAIOrgPage<OrgServiceAccount>> list({
+    required String projectId,
+    String? after,
+    int? limit,
+  }) async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildWithQuery(
+        endpoint: _base(projectId),
+        query: {
+          if (after != null) 'after': after,
+          if (limit != null) 'limit': limit.toString(),
+        },
+        config: _config,
+      ),
+      onSuccess: (map) =>
+          OpenAIOrgPage.fromMap(map, OrgServiceAccount.fromMap),
+      config: _config,
+    );
+  }
+
+  Future<OrgServiceAccount> create({
+    required String projectId,
+    required String name,
+    required String role,
+  }) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, _base(projectId)),
+      body: {'name': name, 'role': role},
+      onSuccess: OrgServiceAccount.fromMap,
+      config: _config,
+    );
+  }
+
+  Future<bool> delete({
+    required String projectId,
+    required String serviceAccountId,
+  }) async {
+    return OpenAINetworkingClient.delete(
+      from: BaseApiUrlBuilder.buildFor(
+        _config,
+        _base(projectId),
+        serviceAccountId,
+      ),
+      onSuccess: (map) => map['deleted'] as bool? ?? true,
+      config: _config,
+    );
+  }
+
+  Future<bool> deleteApiKey({
+    required String projectId,
+    required String serviceAccountId,
+    required String apiKeyId,
+  }) async {
+    return OpenAINetworkingClient.delete(
+      from: BaseApiUrlBuilder.buildFor(
+        _config,
+        '${_base(projectId)}/$serviceAccountId/api_keys',
+        apiKeyId,
+      ),
+      onSuccess: (map) => map['deleted'] as bool? ?? true,
+      config: _config,
+    );
+  }
+}
+
+class OpenAIDataRetention {
+  final OpenAIClientConfig? _config;
+
+  OpenAIDataRetention(this._config);
+
+  String get _endpoint => 'organization/data_retention';
+
+  Future<DataRetentionConfig> get() async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(_config, _endpoint),
+      onSuccess: DataRetentionConfig.fromMap,
+      config: _config,
+    );
+  }
+
+  Future<DataRetentionConfig> update({required int retentionWindowDays}) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(_config, _endpoint),
+      body: {'retention_window_days': retentionWindowDays},
+      onSuccess: DataRetentionConfig.fromMap,
+      config: _config,
+    );
+  }
+
+  Future<DataRetentionConfig> getForProject({
+    required String projectId,
+  }) async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(
+        _config,
+        'organization/projects/$projectId/data_retention',
+      ),
+      onSuccess: DataRetentionConfig.fromMap,
+      config: _config,
+    );
+  }
+
+  Future<DataRetentionConfig> updateForProject({
+    required String projectId,
+    required int retentionWindowDays,
+  }) async {
+    return OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(
+        _config,
+        'organization/projects/$projectId/data_retention',
+      ),
+      body: {'retention_window_days': retentionWindowDays},
+      onSuccess: DataRetentionConfig.fromMap,
+      config: _config,
+    );
+  }
+}
+
+class OpenAIRoles {
+  final OpenAIClientConfig? _config;
+
+  OpenAIRoles(this._config);
+
+  String get _endpoint => 'organization/roles';
+
+  Future<OpenAIOrgPage<OrgRole>> list() async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(_config, _endpoint),
+      onSuccess: (map) => OpenAIOrgPage.fromMap(map, OrgRole.fromMap),
+      config: _config,
+    );
+  }
+
+  Future<OrgRole> retrieve({required String roleId}) async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(_config, _endpoint, roleId),
+      onSuccess: OrgRole.fromMap,
       config: _config,
     );
   }

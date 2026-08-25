@@ -1,13 +1,13 @@
 import 'package:dart_openai/src/core/base/model/base.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/models/model/model.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
+import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
+
 import '../../core/builder/base_api_url.dart';
 import '../../core/constants/strings.dart';
 import '../../core/networking/client.dart';
-import 'package:meta/meta.dart';
-
-import 'package:http/http.dart' as http;
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_model}
 /// The class that handles all the requests related to the models in the OpenAI API.
@@ -38,7 +38,7 @@ interface class OpenAIModel implements OpenAIModelBase {
   Future<List<OpenAIModelModel>> list({
     http.Client? client,
   }) async {
-    return await OpenAINetworkingClient.get<List<OpenAIModelModel>>(
+    return OpenAINetworkingClient.get<List<OpenAIModelModel>>(
         from: BaseApiUrlBuilder.buildFor(_config, endpoint),
         onSuccess: (Map<String, dynamic> response) {
           final List data = response['data'];
@@ -63,7 +63,7 @@ interface class OpenAIModel implements OpenAIModelBase {
     String model, {
     http.Client? client,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAIModelModel>(
+    return OpenAINetworkingClient.get<OpenAIModelModel>(
         from: BaseApiUrlBuilder.buildFor(_config, endpoint, model),
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIModelModel.fromMap(response);
@@ -85,9 +85,9 @@ interface class OpenAIModel implements OpenAIModelBase {
     String model, {
     http.Client? client,
   }) async {
-    final String fineTuneModelDelete = "$endpoint/$model";
+    final fineTuneModelDelete = '$endpoint/$model';
 
-    return await OpenAINetworkingClient.delete(
+    return OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.buildFor(_config, fineTuneModelDelete),
       onSuccess: (Map<String, dynamic> response) {
         return response['deleted'];

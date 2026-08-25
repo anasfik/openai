@@ -26,8 +26,7 @@ class OpenAIVectorStoresSearchFilter {
   }
 
   Map<String, dynamic> toMap() {
-    throw UnimplementedError(
-        'toMap() must be implemented in subclasses of OpenAIVectorStoresSearchFilter');
+    return {'type': type};
   }
 }
 
@@ -42,6 +41,7 @@ class ComparisonOpenAIVectorStoresSearchFilter
     required this.value,
   });
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'type': type,
@@ -60,6 +60,7 @@ class CompoundOpenAIVectorStoresSearchFilter
     required this.filters,
   });
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'type': type,
@@ -69,7 +70,7 @@ class CompoundOpenAIVectorStoresSearchFilter
         } else if (filter is CompoundOpenAIVectorStoresSearchFilter) {
           return filter.toMap();
         } else {
-          throw Exception('Unknown filter type');
+          return filter.toMap();
         }
       }).toList(),
     };

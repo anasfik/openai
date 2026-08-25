@@ -1,14 +1,15 @@
 import 'package:dart_openai/src/instance/batch/batch.dart';
 import 'package:dart_openai/src/instance/containers/container.dart';
 import 'package:dart_openai/src/instance/conversations/conversations.dart';
+import 'package:dart_openai/src/instance/edits/edits.dart';
 import 'package:dart_openai/src/instance/evals/evals.dart';
 import 'package:dart_openai/src/instance/graders/graders.dart';
+import 'package:dart_openai/src/instance/moderations/moderations.dart';
 import 'package:dart_openai/src/instance/responses/responses.dart';
 import 'package:dart_openai/src/instance/uploads/uploads.dart';
 import 'package:dart_openai/src/instance/vector_stores/vector_stores.dart';
 import 'package:meta/meta.dart';
-import 'package:dart_openai/src/instance/edits/edits.dart';
-import 'package:dart_openai/src/instance/moderations/moderations.dart';
+
 import '../core/base/openai_client/base.dart';
 import '../core/builder/headers.dart';
 import '../core/constants/config.dart';
@@ -40,11 +41,11 @@ final class OpenAI extends OpenAIClientBase {
   /// A [MissingApiKeyException] will be thrown, if the API key is not set.
   static OpenAI get instance {
     if (_internalApiKey == null) {
-      throw MissingApiKeyException("""
+      throw MissingApiKeyException('''
       You must set the api key before accessing the instance of this class.
       Example:
       OpenAI.apiKey = "Your API Key";
-      """);
+      ''');
     }
 
     return _instance;

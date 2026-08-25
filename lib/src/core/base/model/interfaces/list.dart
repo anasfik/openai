@@ -1,6 +1,6 @@
-import '../../../models/model/model.dart';
+import 'package:http/http.dart' as http;
 
-import "package:http/http.dart" as http;
+import '../../../models/model/model.dart';
 
 abstract class ListInterface {
   Future<List<OpenAIModelModel>> list({

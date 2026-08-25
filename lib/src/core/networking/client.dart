@@ -1,16 +1,16 @@
-import "dart:async";
-import "dart:convert";
-import "dart:io";
-import "dart:typed_data";
-import 'package:http_parser/http_parser.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dart_openai/dart_openai.dart';
-import "package:dart_openai/src/core/builder/headers.dart";
-import "package:dart_openai/src/core/constants/config.dart";
-import "package:dart_openai/src/core/utils/extensions.dart";
-import "package:dart_openai/src/core/utils/logger.dart";
-import "package:http/http.dart" as http;
-import "package:meta/meta.dart";
+import 'package:dart_openai/src/core/builder/headers.dart';
+import 'package:dart_openai/src/core/constants/config.dart';
+import 'package:dart_openai/src/core/io/file_helpers.dart';
+import 'package:dart_openai/src/core/utils/extensions.dart';
+import 'package:dart_openai/src/core/utils/logger.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:meta/meta.dart';
 
 import '../constants/strings.dart';
 import 'sse.dart';
@@ -50,6 +50,8 @@ abstract class OpenAINetworkingClient {
     final response = await _send(
       () => (client ?? _defaultClient()).get(uri, headers: headers),
       timeout: _timeout(config),
+      method: 'GET',
+      config: config,
     );
 
     OpenAILogger.logResponseBody(response);
@@ -61,10 +63,13 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.requestToWithStatusCode(from, response.statusCode);
     OpenAILogger.startingDecoding();
 
-    final utf8decoder = Utf8Decoder();
+    const utf8decoder = Utf8Decoder();
 
     final convertedBody = utf8decoder.convert(response.bodyBytes);
-    final Map<String, dynamic> decodedBody = decodeToMap(convertedBody);
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw requestFailedExceptionFromRawBody(convertedBody, response.statusCode);
+    }
+    final decodedBody = decodeToMap(convertedBody);
 
     OpenAILogger.decodedSuccessfully();
 
@@ -112,45 +117,33 @@ abstract class OpenAINetworkingClient {
     );
   }
 
-  static Future<File> postAndExpectFileResponse({
+  /// Posts a JSON body expecting binary content (audio, images).
+  ///
+  /// Returns the raw bytes. When [outputDirectory] and [outputFileName] are
+  /// provided on a native platform, the bytes are also written to disk.
+  static Future<Uint8List> postAndExpectBytes({
     required String to,
-    required File Function(File fileRes) onFileResponse,
-    required String outputFileName,
-    required Directory? outputDirectory,
     Map<String, dynamic>? body,
+    String? outputDirectory,
+    String? outputFileName,
     String? outputFileExtension,
     http.Client? client,
     OpenAIClientConfig? config,
   }) async {
-    var response = await postAndGetResponse(
-        to: to, body: body, client: client, config: config);
+    final response =
+        await postAndGetResponse(to: to, body: body, client: client, config: config);
 
-    final fileTypeHeader = "content-type";
+    if (outputDirectory != null && outputFileName != null) {
+      final extension =
+          outputFileExtension ?? response.headers['content-type']?.split('/').last ?? 'mp3';
+      await saveOpenAIBytes(
+        bytes: response.bodyBytes,
+        outputDirectory: outputDirectory,
+        outputFileName: '$outputFileName.$extension',
+      );
+    }
 
-    final fileExtensionFromBodyResponseFormat = outputFileExtension ??
-        response.headers[fileTypeHeader]?.split("/").last ??
-        "mp3";
-
-    final fileName = outputFileName + "." + fileExtensionFromBodyResponseFormat;
-
-    File file = File(
-      "${outputDirectory != null ? outputDirectory.path : ''}" + "/" + fileName,
-    );
-
-    OpenAILogger.creatingFile(fileName);
-
-    await file.create();
-    OpenAILogger.fileCreatedSuccessfully(fileName);
-    OpenAILogger.writingFileContent(fileName);
-
-    file = await file.writeAsBytes(
-      response.bodyBytes,
-      mode: FileMode.write,
-    );
-
-    OpenAILogger.fileContentWrittenSuccessfully(fileName);
-
-    return onFileResponse(file);
+    return response.bodyBytes;
   }
 
   static Future<Uint8List> postAndGetBytes({
@@ -159,7 +152,7 @@ abstract class OpenAINetworkingClient {
     http.Client? client,
     OpenAIClientConfig? config,
   }) async {
-    var response = await postAndGetResponse(
+    final response = await postAndGetResponse(
         to: to, body: body, client: client, config: config);
 
     return response.bodyBytes;
@@ -183,6 +176,8 @@ abstract class OpenAINetworkingClient {
       () => (client ?? _defaultClient())
           .post(uri, headers: headers, body: handledBody),
       timeout: _timeout(config),
+      method: 'POST',
+      config: config,
     );
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
@@ -201,7 +196,7 @@ abstract class OpenAINetworkingClient {
         OpenAILogger.unexpectedResponseGotten();
 
         throw OpenAIUnexpectedException(
-          "Expected file response, but got non-error json response",
+          'Expected file response, but got non-error json response',
           response.body,
         );
       }
@@ -223,16 +218,26 @@ abstract class OpenAINetworkingClient {
   }) async {
     OpenAILogger.logStartRequest(to);
 
-    final uri = Uri.parse(to);
+    var uri = Uri.parse(to);
+    var effectiveBody = body;
+
+    if (config?.azure != null && body != null) {
+      final (rewrittenUri, rewrittenBody) = openAIAzureRewrite(
+          uri: uri, body: body, config: config!);
+      uri = rewrittenUri;
+      effectiveBody = rewrittenBody;
+    }
 
     final headers = _headers(config);
 
-    final handledBody = body != null ? jsonEncode(body) : null;
+    final handledBody = effectiveBody != null ? jsonEncode(effectiveBody) : null;
 
     final response = await _send(
       () => (client ?? _defaultClient())
           .post(uri, headers: headers, body: handledBody),
       timeout: _timeout(config),
+      method: 'POST',
+      config: config,
     );
 
     OpenAILogger.logResponseBody(response);
@@ -241,11 +246,13 @@ abstract class OpenAINetworkingClient {
 
     OpenAILogger.startingDecoding();
 
-    Utf8Decoder utf8decoder = Utf8Decoder();
+    const utf8decoder = Utf8Decoder();
 
     final convertedBody = utf8decoder.convert(response.bodyBytes);
-
-    final Map<String, dynamic> decodedBody = decodeToMap(convertedBody);
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw requestFailedExceptionFromRawBody(convertedBody, response.statusCode);
+    }
+    final decodedBody = decodeToMap(convertedBody);
 
     OpenAILogger.decodedSuccessfully();
 
@@ -265,9 +272,17 @@ abstract class OpenAINetworkingClient {
       client: client,
       config: config,
       requestFactory: (_) {
-        final request = http.Request(OpenAIStrings.postMethod, Uri.parse(to));
+        var streamUri = Uri.parse(to);
+        var streamBody = body;
+        if (config?.azure != null) {
+          final (u, b) =
+              openAIAzureRewrite(uri: streamUri, body: streamBody, config: config!);
+          streamUri = u;
+          streamBody = b;
+        }
+        final request = http.Request(OpenAIStrings.postMethod, streamUri);
         request.headers.addAll(_headers(config));
-        request.body = jsonEncode(body);
+        request.body = jsonEncode(streamBody);
         return request;
       },
     );
@@ -276,8 +291,8 @@ abstract class OpenAINetworkingClient {
   static Future imageEditForm<T>({
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
-    required File image,
-    required File? mask,
+    required OpenAIFile image,
+    OpenAIFile? mask,
     required Map<String, String> body,
     OpenAIClientConfig? config,
   }) async {
@@ -285,12 +300,8 @@ abstract class OpenAINetworkingClient {
       to: to,
       fields: body,
       files: [
-        await http.MultipartFile.fromPath(
-          "image",
-          image.path,
-          contentType: mediaTypeFromFilePath(image.path),
-        ),
-        if (mask != null) await http.MultipartFile.fromPath("mask", mask.path),
+        multipartFromOpenAIFile('image', image),
+        if (mask != null) multipartFromOpenAIFile('mask', mask),
       ],
       config: config,
     );
@@ -302,13 +313,13 @@ abstract class OpenAINetworkingClient {
     required T Function(Map<String, dynamic>) onSuccess,
     // ignore: avoid-unused-parameters
     required Map<String, String> body,
-    required File image,
+    required OpenAIFile image,
     OpenAIClientConfig? config,
   }) async {
     final decodedBody = await _multipart(
       to: to,
       fields: body,
-      files: [await http.MultipartFile.fromPath("image", image.path)],
+      files: [multipartFromOpenAIFile('image', image)],
       config: config,
     );
     return onSuccess(decodedBody);
@@ -318,27 +329,18 @@ abstract class OpenAINetworkingClient {
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
     required Map<String, String> body,
-    File? file,
-    List<int>? fileBytes,
-    String fileName = 'upload.bin',
+    OpenAIFile? file,
     String fileField = 'file',
     Map<String, dynamic> Function(String rawResponse)? responseMapAdapter,
     List<http.MultipartFile> extraFiles = const [],
     OpenAIClientConfig? config,
   }) async {
-    assert(
-      (file != null) != (fileBytes != null),
-      'Provide either file or fileBytes, not both.',
-    );
+    assert(file != null || extraFiles.isNotEmpty, 'Provide a file to upload.');
     final resultBody = await _multipartRaw(
       to: to,
       fields: body,
       files: [
-        if (file != null)
-          await http.MultipartFile.fromPath(fileField, file.path)
-        else if (fileBytes != null)
-          http.MultipartFile.fromBytes(fileField, fileBytes,
-              filename: fileName),
+        if (file != null) multipartFromOpenAIFile(fileField, file),
         ...extraFiles,
       ],
       config: config,
@@ -371,6 +373,8 @@ abstract class OpenAINetworkingClient {
     final response = await _send(
       () => (client ?? _defaultClient()).delete(uri, headers: headers),
       timeout: _timeout(config),
+      method: 'DELETE',
+      config: config,
     );
 
     OpenAILogger.logResponseBody(response);
@@ -379,7 +383,10 @@ abstract class OpenAINetworkingClient {
 
     OpenAILogger.startingDecoding();
 
-    final Map<String, dynamic> decodedBody = decodeToMap(response.body);
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw requestFailedExceptionFromRawBody(response.body, response.statusCode);
+    }
+    final decodedBody = decodeToMap(response.body);
 
     OpenAILogger.decodedSuccessfully();
 
@@ -391,8 +398,73 @@ abstract class OpenAINetworkingClient {
   static Future<http.Response> _send(
     Future<http.Response> Function() send, {
     required Duration timeout,
-  }) {
-    return send().timeout(timeout);
+    required String method,
+    OpenAIClientConfig? config,
+  }) async {
+    final policy = config?.retryPolicy ?? const OpenAIRetryPolicy();
+    var attempt = 0;
+    while (true) {
+      attempt += 1;
+      int? statusCode;
+      int? retryAfterSecs;
+      try {
+        final response = await send().timeout(timeout);
+        statusCode = response.statusCode;
+        OpenAIResponseMeta.record(response.headers);
+        if (!policy.shouldRetry(
+            method: method,
+            statusCode: statusCode,
+            responseReceived: true,
+            attempt: attempt)) {
+          return response;
+        }
+        retryAfterSecs =
+            int.tryParse(response.headers['retry-after'] ?? '');
+      } catch (error) {
+        // Connection-level failure: nothing received, always retriable.
+        if (!policy.shouldRetry(
+            method: method,
+            responseReceived: false,
+            attempt: attempt)) {
+          rethrow;
+        }
+      }
+      await Future<void>.delayed(policy.delayFor(attempt, retryAfterSeconds: retryAfterSecs));
+    }
+  }
+
+  static Future<http.StreamedResponse> _sendMultipart(
+    http.BaseRequest Function() requestFactory, {
+    required Duration timeout,
+    OpenAIClientConfig? config,
+  }) async {
+    final policy = config?.retryPolicy ?? const OpenAIRetryPolicy();
+    var attempt = 0;
+    while (true) {
+      attempt += 1;
+      int? statusCode;
+      int? retryAfterSecs;
+      try {
+        final response =
+            await _defaultClient().send(requestFactory()).timeout(timeout);
+        statusCode = response.statusCode;
+        OpenAIResponseMeta.record(response.headers);
+        if (!policy.shouldRetry(
+            method: 'POST',
+            statusCode: statusCode,
+            responseReceived: true,
+            attempt: attempt)) {
+          return response;
+        }
+        retryAfterSecs = int.tryParse(response.headers['retry-after'] ?? '');
+      } catch (_) {
+        if (!policy.shouldRetry(
+            method: 'POST', responseReceived: false, attempt: attempt)) {
+          rethrow;
+        }
+      }
+      await Future<void>.delayed(policy.delayFor(attempt, retryAfterSeconds: retryAfterSecs));
+    }
   }
 
   static Future<dynamic> _multipart({
@@ -419,14 +491,24 @@ abstract class OpenAINetworkingClient {
     request.fields.addAll(fields);
     request.files.addAll(files);
 
-    final response =
-        await _defaultClient().send(request).timeout(_timeout(config));
+    final response = await _sendMultipart(
+      () {
+        final retryRequest =
+            http.MultipartRequest(OpenAIStrings.postMethod, Uri.parse(to));
+        retryRequest.headers.addAll(_headers(config));
+        retryRequest.fields.addAll(fields);
+        retryRequest.files.addAll(files);
+        return retryRequest;
+      },
+      timeout: _timeout(config),
+      config: config,
+    );
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
     OpenAILogger.startingDecoding();
 
-    final String responseBody = await response.stream.bytesToString();
+    final responseBody = await response.stream.bytesToString();
 
     OpenAILogger.logResponseBody(responseBody);
 
@@ -562,23 +644,36 @@ abstract class OpenAINetworkingClient {
       return RequestFailedException(trimmedBody, statusCode);
     }
   }
+}
 
-  static MediaType? mediaTypeFromFilePath(String path) {
-    final extension = path.split('.').last.toLowerCase();
-    switch (extension) {
-      case 'png':
-        return MediaType('image', 'png');
-      case 'jpg':
-      case 'jpeg':
-        return MediaType('image', 'jpeg');
-      case 'gif':
-        return MediaType('image', 'gif');
-      case 'bmp':
-        return MediaType('image', 'bmp');
-      case 'webp':
-        return MediaType('image', 'webp');
-      default:
-        return null;
-    }
+/// Builds a multipart part from an [OpenAIFile] using platform-neutral bytes.
+http.MultipartFile multipartFromOpenAIFile(String field, OpenAIFile file) {
+  return http.MultipartFile.fromBytes(
+    field,
+    file.bytes,
+    filename: file.fileName,
+    contentType: file.contentType != null
+        ? MediaType.parse(file.contentType!)
+        : mediaTypeFromFileName(file.fileName),
+  );
+}
+
+/// Infers a MIME type from a file extension. Pure string logic, web-safe.
+MediaType? mediaTypeFromFileName(String fileName) {
+  final extension = fileName.split('.').last.toLowerCase();
+  switch (extension) {
+    case 'png':
+      return MediaType('image', 'png');
+    case 'jpg':
+    case 'jpeg':
+      return MediaType('image', 'jpeg');
+    case 'gif':
+      return MediaType('image', 'gif');
+    case 'bmp':
+      return MediaType('image', 'bmp');
+    case 'webp':
+      return MediaType('image', 'webp');
+    default:
+      return null;
   }
 }

@@ -1,3 +1,6 @@
+import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
+import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/graders/grader.dart';
 import 'package:dart_openai/src/core/models/graders/label_model_grader.dart';
 import 'package:dart_openai/src/core/models/graders/multi_grader.dart';
@@ -5,9 +8,6 @@ import 'package:dart_openai/src/core/models/graders/python_grader.dart';
 import 'package:dart_openai/src/core/models/graders/score_model_grader.dart';
 import 'package:dart_openai/src/core/models/graders/string_check_grader.dart';
 import 'package:dart_openai/src/core/models/graders/text_similarity_grader.dart';
-import 'package:dart_openai/src/core/builder/base_api_url.dart';
-import 'package:dart_openai/src/core/config/client_config.dart';
-import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 
 class OpenAIGraders {
@@ -120,7 +120,7 @@ class OpenAIGraders {
     Map<String, dynamic>? item,
     OpenAIClientConfig? config,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(config ?? _config,
           '${OpenAIStrings.endpoints.fineTuning}/alpha/graders/run'),
       body: {
@@ -140,7 +140,7 @@ class OpenAIGraders {
     required OpenAiGeneralGrader grader,
     OpenAIClientConfig? config,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(config ?? _config,
           '${OpenAIStrings.endpoints.fineTuning}/alpha/graders/validate'),
       body: {'grader': grader.toMap()},

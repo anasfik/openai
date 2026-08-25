@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dart_openai/dart_openai.dart';
 
 import 'env/env.dart';
+import 'package:dart_openai/src/core/io/file_helpers.dart';
 
 Future<void> main() async {
   // Set the OpenAI API key from the .env file.
@@ -12,7 +13,7 @@ Future<void> main() async {
   // Creates the Image Variation
   final imageVariations = await OpenAI.instance.image.variation(
     model: "dall-e-2",
-    image: File("dart.png"),
+    image: await loadOpenAIFile("dart.png"),
     n: 4,
     size: OpenAIImageSize.size512,
     responseFormat: OpenAIImageResponseFormat.url,

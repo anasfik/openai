@@ -3,10 +3,11 @@ import 'package:meta/meta.dart';
 
 import 'sub_models/choices/choices.dart';
 import 'sub_models/usage.dart';
+import '../../utils/parse.dart';
 
-export 'sub_models/usage.dart';
-export 'sub_models/choices/choices.dart';
 export 'stream/chat.dart';
+export 'sub_models/choices/choices.dart';
+export 'sub_models/usage.dart';
 
 /// {@template openai_chat_completion_model}
 /// This class represents the chat completion response model of the OpenAI API, which is used and get returned while using the [OpenAIChat] methods.
@@ -55,24 +56,26 @@ final class OpenAIChatCompletionModel {
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIChatCompletionModel] object.
   factory OpenAIChatCompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAIChatCompletionModel(
-      id: json['id'],
-      created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
-      choices: (json['choices'] as List)
-          .map((choice) => OpenAIChatCompletionChoiceModel.fromMap(choice))
+      id: json['id']?.toString() ?? '',
+      created: DateTime.fromMillisecondsSinceEpoch(intOr(json['created']) * 1000),
+      choices: (json['choices'] as List? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(OpenAIChatCompletionChoiceModel.fromMap)
           .toList(),
-      usage: OpenAIChatCompletionUsageModel.fromMap(json['usage']),
-      systemFingerprint: json['system_fingerprint'],
+      usage: OpenAIChatCompletionUsageModel.fromMap(
+          json['usage'] is Map<String, dynamic> ? json['usage'] : {}),
+      systemFingerprint: json['system_fingerprint']?.toString(),
     );
   }
 
   /// This is used to convert a [OpenAIChatCompletionModel] object to a [Map<String, dynamic>] object.
   Map<String, dynamic> toMap() {
     return {
-      "id": id,
-      "created": created.millisecondsSinceEpoch,
-      "choices": choices.map((e) => e.toMap()).toList(),
-      "usage": usage.toMap(),
-      "system_fingerprint": systemFingerprint,
+      'id': id,
+      'created': created.millisecondsSinceEpoch,
+      'choices': choices.map((e) => e.toMap()).toList(),
+      'usage': usage.toMap(),
+      'system_fingerprint': systemFingerprint,
     };
   }
 
@@ -83,7 +86,7 @@ final class OpenAIChatCompletionModel {
 
   @override
   bool operator ==(Object other) {
-    const ListEquality listEquals = ListEquality();
+    const listEquals = ListEquality();
     if (identical(this, other)) return true;
 
     return other is OpenAIChatCompletionModel &&

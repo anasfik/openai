@@ -1,63 +1,39 @@
+include: package:lints/recommended.yaml
+
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
 
 linter:
   rules:
-
-analyzer:
-  plugins:
-    - dart_code_metrics
-
-dart_code_metrics:
-  extends:
-    - ... # configures the list of preset configurations
-  metrics:
-    cyclomatic-complexity: 20
-    lines-of-code: 100
-    maximum-nesting-level: 4
-    number-of-parameters: 4
-
-  rules:
-    - avoid-dynamic
-    - avoid-redundant-async
-    - avoid-passing-async-when-sync-expected
-    - avoid-redundant-async
-    - avoid-unnecessary-type-assertions
-    - avoid-unnecessary-type-casts
-    - avoid-unrelated-type-assertions
-    - avoid-unused-parameters
-    - avoid-nested-conditional-expressions
-    - newline-before-return
-    - no-boolean-literal-compare
-    - no-empty-block
-    - prefer-trailing-comma
-    - prefer-conditional-expressions
-    - no-equal-then-else
-    - prefer-moving-to-variable
-    - avoid-duplicate-exports
-    - avoid-dynamic
-    - avoid-late-keyword
-    - avoid-nested-conditional-expressions
-    - avoid-unnecessary-type-assertions
-    - avoid-unnecessary-type-casts
-    - member-ordering
-    - no-magic-number
-    - prefer-trailing-comma
-    - always-remove-listener
-    - avoid-border-all
-    - avoid-expanded-as-spacer
-    - avoid-wrapping-in-padding
-    - prefer-const-border-radius
-    - prefer-correct-edge-insets-constructor
-    - prefer-single-widget-per-file
-
-  #   - arguments-ordering:
-  #       child-last: true
-  #   - prefer-match-file-name  rules-exclude:
-  #   - ... # configures the list of files that should be ignored by rules
-  # anti-patterns:
-  #   - ... # configures the list of anti-patterns
-
-  exclude:
-    - "example/**"
-    - "build/**"
-    - "**/*.g.dart"
-    - "**/*.freezed.dart"
+    - always_declare_return_types
+    - annotate_overrides
+    - avoid_empty_else
+    - avoid_printing_in_production
+    - avoid_redundant_argument_values
+    - avoid_relative_lib_imports
+    - avoid_slow_async_io
+    - avoid_type_to_string
+    - cancel_subscriptions
+    - cascade_invocations
+    - close_sinks
+    - collection_methods_unrelated_type
+    - combinators_ordering
+    - conditional_uri_does_not_exist
+    - directives_ordering
+    - no_adjacent_strings_in_list
+    - no_duplicate_case_values
+    - omit_local_variable_types
+    - only_throw_errors
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_final_locals
+    - prefer_single_quotes
+    - secure_pubspec_urls
+    - test_types_in_equals
+    - throw_in_finally
+    - unawaited_futures
+    - unnecessary_await_in_return
+    - unnecessary_lambdas
+    - unnecessary_parenthesis
+    - unnecessary_string_interpolations

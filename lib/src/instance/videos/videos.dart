@@ -1,6 +1,7 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
+import 'package:dart_openai/src/core/io/openai_file.dart';
 import 'package:dart_openai/src/core/models/videos/models.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 
@@ -25,7 +26,7 @@ class OpenAIVideos {
     String? size,
     String? inputReference,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, _endpoint),
       body: {
         'model': model,
@@ -41,7 +42,7 @@ class OpenAIVideos {
 
   /// Lists video jobs.
   Future<OpenAIVideoList> list({String? after, int? limit}) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: _endpoint,
         query: {
@@ -57,7 +58,7 @@ class OpenAIVideos {
 
   /// Retrieves a video job.
   Future<OpenAIVideoModel> retrieve({required String videoId}) async {
-    return await OpenAINetworkingClient.get(
+    return OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildFor(_config, _endpoint, videoId),
       onSuccess: OpenAIVideoModel.fromMap,
       config: _config,
@@ -66,7 +67,7 @@ class OpenAIVideos {
 
   /// Deletes a video job.
   Future<OpenAIVideoModel> delete({required String videoId}) async {
-    return await OpenAINetworkingClient.delete(
+    return OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.buildFor(_config, _endpoint, videoId),
       onSuccess: OpenAIVideoModel.fromMap,
       config: _config,
@@ -78,7 +79,7 @@ class OpenAIVideos {
     required String videoId,
     required String prompt,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/$videoId/remix'),
       body: {'prompt': prompt},
       onSuccess: OpenAIVideoModel.fromMap,
@@ -91,9 +92,88 @@ class OpenAIVideos {
   /// Returns the raw response body as a base64 string of the MP4 bytes;
   /// decode with `base64.decode(...)` to obtain the file bytes.
   Future<String> downloadContent({required String videoId}) async {
-    return await OpenAINetworkingClient.get<String>(
+    return OpenAINetworkingClient.get<String>(
       from: BaseApiUrlBuilder.buildFor(_config, _endpoint, '$videoId/content'),
       returnRawResponse: true,
+      config: _config,
+    );
+  }
+
+  /// Edits an existing video with a prompt, uploading the source video as a
+  /// multipart file (`POST /videos/edits`).
+  Future<OpenAIVideoModel> createEdit({
+    required String model,
+    required String prompt,
+    required OpenAIFile video,
+    String? seconds,
+    String? size,
+  }) async {
+    return OpenAINetworkingClient.fileUpload<OpenAIVideoModel>(
+      to: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/edits'),
+      body: {
+        'model': model,
+        'prompt': prompt,
+        if (seconds != null) 'seconds': seconds,
+        if (size != null) 'size': size,
+      },
+      file: video,
+      fileField: 'video',
+      onSuccess: OpenAIVideoModel.fromMap,
+      config: _config,
+    );
+  }
+
+  /// Extends a video with a new prompt, uploading the source video as a
+  /// multipart file (`POST /videos/extensions`).
+  Future<OpenAIVideoModel> createExtension({
+    required String prompt,
+    required OpenAIFile video,
+    String? seconds,
+    String? size,
+  }) async {
+    return OpenAINetworkingClient.fileUpload<OpenAIVideoModel>(
+      to: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/extensions'),
+      body: {
+        'prompt': prompt,
+        if (seconds != null) 'seconds': seconds,
+        if (size != null) 'size': size,
+      },
+      file: video,
+      fileField: 'video',
+      onSuccess: OpenAIVideoModel.fromMap,
+      config: _config,
+    );
+  }
+
+  /// Lists video characters (`GET /videos/characters`). Raw response map.
+  Future<Map<String, dynamic>> listCharacters() async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/characters'),
+      onSuccess: (response) => response,
+      config: _config,
+    );
+  }
+
+  /// Retrieves a video character (`GET /videos/characters/{id}`).
+  /// Raw response map.
+  Future<Map<String, dynamic>> retrieveCharacter({
+    required String characterId,
+  }) async {
+    return OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/characters', characterId),
+      onSuccess: (response) => response,
+      config: _config,
+    );
+  }
+
+  /// Deletes a video character (`DELETE /videos/characters/{id}`).
+  /// Raw response map.
+  Future<Map<String, dynamic>> deleteCharacter({
+    required String characterId,
+  }) async {
+    return OpenAINetworkingClient.delete(
+      from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/characters', characterId),
+      onSuccess: (response) => response,
       config: _config,
     );
   }

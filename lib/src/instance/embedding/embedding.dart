@@ -1,14 +1,13 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/models/embedding/embedding.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import '../../core/base/embeddings/base.dart';
 import '../../core/constants/strings.dart';
 import '../../core/networking/client.dart';
 import '../../core/utils/logger.dart';
-
-import 'package:http/http.dart' as http;
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_embedding}
 /// Get a vector representation of a given input that can be easily consumed by machine learning models and algorithms.
@@ -60,20 +59,20 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
   }) async {
     assert(
       input is String || input is List<String>,
-      "The input field should be a String, or a List<String>",
+      'The input field should be a String, or a List<String>',
     );
 
-    return await OpenAINetworkingClient.post<OpenAIEmbeddingsModel>(
+    return OpenAINetworkingClient.post<OpenAIEmbeddingsModel>(
         onSuccess: (Map<String, dynamic> response) {
           return OpenAIEmbeddingsModel.fromMap(response);
         },
         to: BaseApiUrlBuilder.buildFor(_config, endpoint),
         body: {
-          "model": model,
-          if (input != null) "input": input,
-          if (user != null) "user": user,
-          if (dimensions != null) "dimensions": dimensions,
-          if (encodingFormat != null) "encoding_format": encodingFormat.name,
+          'model': model,
+          if (input != null) 'input': input,
+          if (user != null) 'user': user,
+          if (dimensions != null) 'dimensions': dimensions,
+          if (encodingFormat != null) 'encoding_format': encodingFormat.name,
         },
         config: _config);
   }

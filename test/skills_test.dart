@@ -33,6 +33,7 @@ void main() {
         assertRequest: (request) {
           expect(request.method, 'GET');
           expect(request.url.toString(), 'https://api.openai.com/v1/skills');
+          return null;
         },
       );
 
@@ -55,6 +56,7 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/skills/skill_9',
           );
+          return null;
         },
       );
 
@@ -75,6 +77,7 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/skills/skill_3',
           );
+          return null;
         },
       );
 
@@ -97,6 +100,7 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/skills/skill_5/content',
           );
+          return null;
         },
       );
 
@@ -120,6 +124,7 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/skills/skill_7/versions',
           );
+          return null;
         },
       );
 
@@ -139,6 +144,7 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/skills/skill_7/versions/3',
           );
+          return null;
         },
       );
 
@@ -165,6 +171,7 @@ void main() {
           expect(body['input'], 'some text');
           expect(body['nested'], {'a': 1});
           expect(body['items'], [1, 2, 3]);
+          return null;
         },
       );
 

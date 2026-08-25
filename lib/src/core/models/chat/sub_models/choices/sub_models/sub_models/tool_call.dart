@@ -13,7 +13,7 @@ class OpenAIResponseToolCall {
   final String? type;
 
   /// The function of the tool call.
-  final OpenAIResponseFunction function;
+  final OpenAIResponseFunction? function;
 
   /// Weither the tool call have an id.
   bool get haveId => id != null;
@@ -28,7 +28,7 @@ class OpenAIResponseToolCall {
   OpenAIResponseToolCall({
     required this.id,
     required this.type,
-    required this.function,
+    this.function,
   });
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIResponseToolCall] object.
@@ -43,15 +43,15 @@ class OpenAIResponseToolCall {
   /// This method used to convert the [OpenAIResponseToolCall] to a [Map<String, dynamic>] object.
   Map<String, dynamic> toMap() {
     return {
-      "id": id,
-      "type": type,
-      "function": function.toMap(),
+      'id': id,
+      'type': type,
+      'function': function?.toMap(),
     };
   }
 
   @override
   String toString() {
-    return "OpenAIResponseToolCall(id: $id,type: $type,function: $function)";
+    return 'OpenAIResponseToolCall(id: $id,type: $type,function: $function)';
   }
 
   @override
@@ -68,7 +68,7 @@ class OpenAIResponseToolCall {
 class OpenAIStreamResponseToolCall extends OpenAIResponseToolCall {
   /// The index of the tool call.
 //! please fill an issue if it happen that the index is not an int in some cases.
-  final int index;
+  final int? index;
 
   @override
   int get hashCode => super.hashCode ^ index.hashCode;
@@ -78,26 +78,29 @@ class OpenAIStreamResponseToolCall extends OpenAIResponseToolCall {
     required super.id,
     required super.type,
     required super.function,
-    required this.index,
+    this.index,
   });
 
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIStreamResponseToolCall] object.
   factory OpenAIStreamResponseToolCall.fromMap(Map<String, dynamic> map) {
     return OpenAIStreamResponseToolCall(
-      id: map['id'],
-      type: map['type'],
-      function: OpenAIResponseFunction.fromMap(map['function']),
-      index: map['index'],
+      id: map['id']?.toString(),
+      type: map['type']?.toString() ?? 'function',
+      function: map['function'] is Map<String, dynamic>
+          ? OpenAIResponseFunction.fromMap(map['function'] as Map<String, dynamic>)
+          : null,
+      index: map['index'] is int ? map['index'] as int : int.tryParse('${map['index']}'),
     );
   }
 
   /// This method used to convert the [OpenAIStreamResponseToolCall] to a [Map<String, dynamic>] object.
+  @override
   Map<String, dynamic> toMap() {
     return {
-      "id": id,
-      "type": type,
-      "function": function.toMap(),
-      "index": index,
+      'id': id,
+      'type': type,
+      'function': function?.toMap(),
+      'index': index,
     };
   }
 

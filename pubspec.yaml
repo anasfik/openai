@@ -1,6 +1,6 @@
 name: dart_openai
 description: Unofficial Dart & Flutter SDK for the OpenAI API. Typed clients for Responses, Chat, Realtime, Videos, Batch, Fine-tuning, Vector Stores and more.
-version: 7.0.0
+version: 8.0.0
 homepage: https://github.com/anasfik/openai
 repository: https://github.com/anasfik/openai
 documentation: https://github.com/anasfik/openai/blob/main/README.md
@@ -10,13 +10,12 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  http: ^1.1.0
-  http_parser: ^4.0.1
-  meta: ^1.9.1
-  collection: ^1.17.2
-  fetch_client: ^1.0.2
+  http: ^1.6.0
+  http_parser: ^4.1.2
+  meta: ^1.11.0
+  collection: ^1.19.0
+  fetch_client: ^1.2.1
 
 dev_dependencies:
-  dart_code_metrics: ^4.19.2
   lints: ^3.0.0
   test: ^1.24.3

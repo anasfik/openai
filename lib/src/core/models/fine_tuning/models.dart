@@ -34,23 +34,23 @@ class OpenAIFineTuningJob {
 
   factory OpenAIFineTuningJob.fromMap(Map<String, dynamic> map) {
     return OpenAIFineTuningJob(
-      id: map['id'] as String? ?? '',
-      object: map['object'] as String? ?? 'fine_tuning.job',
-      model: map['model'] as String? ?? '',
+      id: map['id']?.toString() ??  '',
+      object: map['object']?.toString() ??  'fine_tuning.job',
+      model: map['model']?.toString() ??  '',
       createdAt: map['created_at'] as int? ?? 0,
       finishedAt: map['finished_at']?.toString(),
       fineTunedModel: map['fine_tuned_model'] as String?,
-      organizationId: map['organization_id'] as String? ?? '',
+      organizationId: map['organization_id']?.toString() ??  '',
       resultFiles: (map['result_files'] as List<dynamic>? ?? [])
           .map((e) => e is Map ? (e['id']?.toString() ?? '') : e.toString())
           .toList(),
-      status: map['status'] as String? ?? '',
+      status: map['status']?.toString() ??  '',
       hyperparameters: map['hyperparameters'] as Map<String, dynamic>? ?? {},
       trainingFile: map['training_file'] is Map
           ? ((map['training_file'] as Map)['id']?.toString() ?? '')
-          : map['training_file'] as String? ?? '',
+          : map['training_file']?.toString() ??  '',
       validationFile: map['validation_file'] is Map
-          ? ((map['validation_file'] as Map)['id']?.toString())
+          ? (map['validation_file'] as Map)['id']?.toString()
           : map['validation_file'] as String?,
       error: map['error'],
     );
@@ -91,11 +91,11 @@ class OpenAIFineTuningEvent {
 
   factory OpenAIFineTuningEvent.fromMap(Map<String, dynamic> map) {
     return OpenAIFineTuningEvent(
-      id: map['id'] as String? ?? '',
+      id: map['id']?.toString() ??  '',
       createdAt: map['created_at'] as int? ?? 0,
-      level: map['level'] as String? ?? 'info',
-      message: map['message'] as String? ?? '',
-      object: map['object'] as String? ?? 'fine_tuning.job.event',
+      level: map['level']?.toString() ??  'info',
+      message: map['message']?.toString() ??  '',
+      object: map['object']?.toString() ??  'fine_tuning.job.event',
     );
   }
 }
@@ -119,11 +119,11 @@ class OpenAIFineTuningCheckpoint {
 
   factory OpenAIFineTuningCheckpoint.fromMap(Map<String, dynamic> map) {
     return OpenAIFineTuningCheckpoint(
-      id: map['id'] as String? ?? '',
+      id: map['id']?.toString() ??  '',
       createdAt: map['created_at'] as int? ?? 0,
       fineTunedModelCheckpoint:
-          map['fine_tuned_model_checkpoint'] as String? ?? '',
-      fineTuningJobId: map['fine_tuning_job_id'] as String? ?? '',
+          map['fine_tuned_model_checkpoint']?.toString() ??  '',
+      fineTuningJobId: map['fine_tuning_job_id']?.toString() ??  '',
       metrics: map['metrics'] as Map<String, dynamic>? ?? {},
       stepNumber: map['step_number'] as int? ?? 0,
     );

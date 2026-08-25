@@ -1,15 +1,17 @@
-import 'dart:io';
+
+import 'package:dart_openai/src/core/io/openai_file.dart';
 
 import '../../../enum.dart';
 import '../../../models/image/image/image.dart';
 
+
 abstract class EditInterface {
   Future<OpenAIImageModel> edit({
-    required File image,
+    required OpenAIFile image,
     required String prompt,
     String? background,
     OpenAIImageInputFidelity? inputFidelity,
-    File? mask,
+    OpenAIFile? mask,
     String? model,
     int? n,
     int? outputCompression,

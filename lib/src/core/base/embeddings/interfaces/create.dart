@@ -1,6 +1,6 @@
-import '../../../models/embedding/embedding.dart';
-
 import 'package:http/http.dart' as http;
+
+import '../../../models/embedding/embedding.dart';
 
 abstract class CreateInterface {
   Future<OpenAIEmbeddingsModel> create({

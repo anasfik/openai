@@ -1,13 +1,12 @@
 import 'package:dart_openai/src/core/base/responses/responses.dart';
-import 'package:http/http.dart' as http;
-
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
 import 'package:dart_openai/src/core/models/responses/responses.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 @immutable
 @protected
@@ -50,35 +49,35 @@ class OpenAIResponses extends OpenAIResponsesBase {
     num? topP,
     String? truncation,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAiResponse>(
+    return OpenAINetworkingClient.post<OpenAiResponse>(
         to: BaseApiUrlBuilder.buildFor(_config, endpoint),
         body: {
-          if (background != null) "background": background,
-          if (conversation != null) "conversation": conversation,
-          if (include != null) "include": include,
-          if (input != null) "input": input,
-          if (instructions != null) "instructions": instructions,
-          if (maxOutputTokens != null) "max_output_tokens": maxOutputTokens,
-          if (maxToolCalls != null) "max_tool_calls": maxToolCalls,
-          if (metadata != null) "metadata": metadata,
-          if (model != null) "model": model,
+          if (background != null) 'background': background,
+          if (conversation != null) 'conversation': conversation,
+          if (include != null) 'include': include,
+          if (input != null) 'input': input,
+          if (instructions != null) 'instructions': instructions,
+          if (maxOutputTokens != null) 'max_output_tokens': maxOutputTokens,
+          if (maxToolCalls != null) 'max_tool_calls': maxToolCalls,
+          if (metadata != null) 'metadata': metadata,
+          if (model != null) 'model': model,
           if (parallelToolCalls != null)
-            "parallel_tool_calls": parallelToolCalls,
+            'parallel_tool_calls': parallelToolCalls,
           if (previousResponseId != null)
-            "previous_response_id": previousResponseId,
-          if (prompt != null) "prompt": prompt,
-          if (promptCacheKey != null) "prompt_cache_key": promptCacheKey,
-          if (reasoning != null) "reasoning": reasoning,
-          if (safetyIdentifier != null) "safety_identifier": safetyIdentifier,
-          if (serviceTier != null) "service_tier": serviceTier,
-          if (store != null) "store": store,
-          if (temperature != null) "temperature": temperature,
-          if (text != null) "text": text,
-          if (toolChoice != null) "tool_choice": toolChoice,
-          if (tools != null) "tools": tools,
-          if (topLogprobs != null) "top_logprobs": topLogprobs,
-          if (topP != null) "top_p": topP,
-          if (truncation != null) "truncation": truncation,
+            'previous_response_id': previousResponseId,
+          if (prompt != null) 'prompt': prompt,
+          if (promptCacheKey != null) 'prompt_cache_key': promptCacheKey,
+          if (reasoning != null) 'reasoning': reasoning,
+          if (safetyIdentifier != null) 'safety_identifier': safetyIdentifier,
+          if (serviceTier != null) 'service_tier': serviceTier,
+          if (store != null) 'store': store,
+          if (temperature != null) 'temperature': temperature,
+          if (text != null) 'text': text,
+          if (toolChoice != null) 'tool_choice': toolChoice,
+          if (tools != null) 'tools': tools,
+          if (topLogprobs != null) 'top_logprobs': topLogprobs,
+          if (topP != null) 'top_p': topP,
+          if (truncation != null) 'truncation': truncation,
         },
         onSuccess: (Map<String, dynamic> response) {
           return OpenAiResponse.fromMap(response);
@@ -90,9 +89,9 @@ class OpenAIResponses extends OpenAIResponsesBase {
   Future<OpenAiResponse> cancel({
     required String responseId,
   }) async {
-    return await OpenAINetworkingClient.post<OpenAiResponse>(
+    return OpenAINetworkingClient.post<OpenAiResponse>(
         to: BaseApiUrlBuilder.buildFor(
-            _config, endpoint, responseId + '/cancel'),
+            _config, endpoint, '$responseId/cancel'),
         onSuccess: (Map<String, dynamic> response) {
           return OpenAiResponse.fromMap(response);
         },
@@ -106,7 +105,7 @@ class OpenAIResponses extends OpenAIResponsesBase {
     await OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.buildFor(_config, endpoint, responseId),
       onSuccess: (Map<String, dynamic> response) {
-        final deleted = response["deleted"];
+        final deleted = response['deleted'];
 
         return deleted is bool && deleted;
       },
@@ -121,15 +120,15 @@ class OpenAIResponses extends OpenAIResponsesBase {
     bool? include_obfuscation,
     int? startingAfter,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAiResponse>(
+    return OpenAINetworkingClient.get<OpenAiResponse>(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: endpoint,
         id: responseId,
         query: {
-          if (include != null) "include": include.join(","),
+          if (include != null) 'include': include.join(','),
           if (include_obfuscation != null)
-            "include_obfuscation": include_obfuscation.toString(),
-          if (startingAfter != null) "starting_after": startingAfter.toString(),
+            'include_obfuscation': include_obfuscation.toString(),
+          if (startingAfter != null) 'starting_after': startingAfter.toString(),
         },
         config: _config,
       ),
@@ -147,15 +146,15 @@ class OpenAIResponses extends OpenAIResponsesBase {
     int? limit,
     String? order,
   }) async {
-    return await OpenAINetworkingClient.get<OpenAiResponseInputItemsList>(
+    return OpenAINetworkingClient.get<OpenAiResponseInputItemsList>(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: endpoint,
-        id: responseId + '/input_items',
+        id: '$responseId/input_items',
         query: {
-          if (after != null) "after": after,
-          if (include != null) "include": include.join(","),
-          if (limit != null) "limit": limit.toString(),
-          if (order != null) "order": order,
+          if (after != null) 'after': after,
+          if (include != null) 'include': include.join(','),
+          if (limit != null) 'limit': limit.toString(),
+          if (order != null) 'order': order,
         },
         config: _config,
       ),
@@ -179,22 +178,22 @@ class OpenAIResponses extends OpenAIResponsesBase {
     List? tools,
     String? truncation,
   ) async {
-    return await OpenAINetworkingClient.post<int>(
+    return OpenAINetworkingClient.post<int>(
         to: BaseApiUrlBuilder.buildFor(_config, endpoint, 'input_tokens'),
         body: {
-          if (conversation != null) "conversation": conversation,
-          if (input != null) "input": input,
-          if (instructions != null) "instructions": instructions,
-          if (model != null) "model": model,
+          if (conversation != null) 'conversation': conversation,
+          if (input != null) 'input': input,
+          if (instructions != null) 'instructions': instructions,
+          if (model != null) 'model': model,
           if (parallelToolCalls != null)
-            "parallel_tool_calls": parallelToolCalls,
+            'parallel_tool_calls': parallelToolCalls,
           if (previousResponseId != null)
-            "previous_response_id": previousResponseId,
-          if (reasoning != null) "reasoning": reasoning,
-          if (text != null) "text": text,
-          if (toolChoice != null) "tool_choice": toolChoice,
-          if (tools != null) "tools": tools,
-          if (truncation != null) "truncation": truncation,
+            'previous_response_id': previousResponseId,
+          if (reasoning != null) 'reasoning': reasoning,
+          if (text != null) 'text': text,
+          if (toolChoice != null) 'tool_choice': toolChoice,
+          if (tools != null) 'tools': tools,
+          if (truncation != null) 'truncation': truncation,
         },
         onSuccess: (Map<String, dynamic> response) {
           return int.parse(response['input_tokens']);
@@ -239,24 +238,24 @@ class OpenAIResponses extends OpenAIResponsesBase {
     return OpenAINetworkingClient.postStream<Map<String, dynamic>>(
       to: BaseApiUrlBuilder.buildFor(_config, endpoint),
       body: {
-        "stream": true,
-        if (conversation != null) "conversation": conversation,
-        if (include != null) "include": include,
-        if (input != null) "input": input,
-        if (instructions != null) "instructions": instructions,
-        if (metadata != null) "metadata": metadata,
-        if (model != null) "model": model,
-        if (parallelToolCalls != null) "parallel_tool_calls": parallelToolCalls,
+        'stream': true,
+        if (conversation != null) 'conversation': conversation,
+        if (include != null) 'include': include,
+        if (input != null) 'input': input,
+        if (instructions != null) 'instructions': instructions,
+        if (metadata != null) 'metadata': metadata,
+        if (model != null) 'model': model,
+        if (parallelToolCalls != null) 'parallel_tool_calls': parallelToolCalls,
         if (previousResponseId != null)
-          "previous_response_id": previousResponseId,
-        if (reasoning != null) "reasoning": reasoning,
-        if (store != null) "store": store,
-        if (temperature != null) "temperature": temperature,
-        if (text != null) "text": text,
-        if (toolChoice != null) "tool_choice": toolChoice,
-        if (tools != null) "tools": tools,
-        if (topP != null) "top_p": topP,
-        if (truncation != null) "truncation": truncation,
+          'previous_response_id': previousResponseId,
+        if (reasoning != null) 'reasoning': reasoning,
+        if (store != null) 'store': store,
+        if (temperature != null) 'temperature': temperature,
+        if (text != null) 'text': text,
+        if (toolChoice != null) 'tool_choice': toolChoice,
+        if (tools != null) 'tools': tools,
+        if (topP != null) 'top_p': topP,
+        if (truncation != null) 'truncation': truncation,
       },
       onSuccess: (event) => event,
       client: client,
@@ -268,9 +267,9 @@ class OpenAIResponses extends OpenAIResponsesBase {
   Future<Map<String, dynamic>> compact({
     required String responseId,
   }) async {
-    return await OpenAINetworkingClient.post(
+    return OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.buildFor(_config, endpoint, 'compact'),
-      body: {"response_id": responseId},
+      body: {'response_id': responseId},
       onSuccess: (response) => response,
       config: _config,
     );

@@ -1,14 +1,13 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
+import 'package:dart_openai/src/core/models/completion/completion.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
-import 'package:dart_openai/src/core/models/completion/completion.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import '../../core/base/completion.dart';
-
-import 'package:http/http.dart' as http;
-import 'package:dart_openai/src/core/config/client_config.dart';
 
 /// {@template openai_completion}
 /// This class is responsible for handling all the requests related to the completion in the OpenAI API such as creating a completion.
@@ -117,33 +116,33 @@ interface class OpenAICompletion implements OpenAICompletionBase {
   }) async {
     assert(
       prompt is String || prompt is List<String> || prompt == null,
-      "prompt field must be a String or List<String>",
+      'prompt field must be a String or List<String>',
     );
 
     assert(
       stop is String || stop is List<String> || stop == null,
-      "stop field must be a String or List<String>",
+      'stop field must be a String or List<String>',
     );
 
-    return await OpenAINetworkingClient.post<OpenAICompletionModel>(
+    return OpenAINetworkingClient.post<OpenAICompletionModel>(
         to: BaseApiUrlBuilder.buildFor(_config, endpoint),
         body: {
-          "model": model,
-          "prompt": prompt,
-          if (suffix != null) "suffix": suffix,
-          if (maxTokens != null) "max_tokens": maxTokens,
-          if (temperature != null) "temperature": temperature,
-          if (topP != null) "top_p": topP,
-          if (n != null) "n": n,
-          if (logprobs != null) "logprobs": logprobs,
-          if (echo != null) "echo": echo,
-          if (stop != null) "stop": stop,
-          if (presencePenalty != null) "presence_penalty": presencePenalty,
-          if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
-          if (bestOf != null) "best_of": bestOf,
-          if (logitBias != null) "logit_bias": logitBias,
-          if (user != null) "user": user,
-          if (seed != null) "seed": seed,
+          'model': model,
+          'prompt': prompt,
+          if (suffix != null) 'suffix': suffix,
+          if (maxTokens != null) 'max_tokens': maxTokens,
+          if (temperature != null) 'temperature': temperature,
+          if (topP != null) 'top_p': topP,
+          if (n != null) 'n': n,
+          if (logprobs != null) 'logprobs': logprobs,
+          if (echo != null) 'echo': echo,
+          if (stop != null) 'stop': stop,
+          if (presencePenalty != null) 'presence_penalty': presencePenalty,
+          if (frequencyPenalty != null) 'frequency_penalty': frequencyPenalty,
+          if (bestOf != null) 'best_of': bestOf,
+          if (logitBias != null) 'logit_bias': logitBias,
+          if (user != null) 'user': user,
+          if (seed != null) 'seed': seed,
           ...?extraParams,
         },
         onSuccess: (Map<String, dynamic> response) {
@@ -245,23 +244,23 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     return OpenAINetworkingClient.postStream<OpenAIStreamCompletionModel>(
         to: BaseApiUrlBuilder.buildFor(_config, endpoint),
         body: {
-          "model": model,
+          'model': model,
           'stream': true,
-          if (prompt != null) "prompt": prompt,
-          if (suffix != null) "suffix": suffix,
-          if (maxTokens != null) "max_completion_tokens": maxTokens,
-          if (temperature != null) "temperature": temperature,
-          if (topP != null) "top_p": topP,
-          if (n != null) "n": n,
-          if (logprobs != null) "logprobs": logprobs,
-          if (echo != null) "echo": echo,
-          if (stop != null) "stop": stop,
-          if (presencePenalty != null) "presence_penalty": presencePenalty,
-          if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
-          if (bestOf != null) "best_of": bestOf,
-          if (logitBias != null) "logit_bias": logitBias,
-          if (user != null) "user": user,
-          if (seed != null) "seed": seed,
+          if (prompt != null) 'prompt': prompt,
+          if (suffix != null) 'suffix': suffix,
+          if (maxTokens != null) 'max_completion_tokens': maxTokens,
+          if (temperature != null) 'temperature': temperature,
+          if (topP != null) 'top_p': topP,
+          if (n != null) 'n': n,
+          if (logprobs != null) 'logprobs': logprobs,
+          if (echo != null) 'echo': echo,
+          if (stop != null) 'stop': stop,
+          if (presencePenalty != null) 'presence_penalty': presencePenalty,
+          if (frequencyPenalty != null) 'frequency_penalty': frequencyPenalty,
+          if (bestOf != null) 'best_of': bestOf,
+          if (logitBias != null) 'logit_bias': logitBias,
+          if (user != null) 'user': user,
+          if (seed != null) 'seed': seed,
           ...?extraParams,
         },
         onSuccess: (Map<String, dynamic> response) {
@@ -359,7 +358,7 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     http.Client? client,
     int? seed,
   }) {
-    Stream<OpenAIStreamCompletionModel> stream = createStream(
+    final stream = createStream(
       model: model,
       prompt: prompt,
       suffix: suffix,

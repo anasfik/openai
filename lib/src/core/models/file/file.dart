@@ -46,13 +46,14 @@ final class OpenAIFileModel {
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIFileModel] object.
   factory OpenAIFileModel.fromMap(Map<String, dynamic> map) {
     return OpenAIFileModel(
-      id: map['id'] as String,
-      bytes: map['bytes'] as int,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
-      fileName: map['filename'] as String,
-      purpose: map['purpose'] as String,
-      expiresAt: map['expires_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['expires_at'] as int)
+      id: map['id']?.toString() ?? '',
+      bytes: map['bytes'] is int ? map['bytes'] as int : 0,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(
+          (map['created_at'] is int ? map['created_at'] as int : 0) * 1000),
+      fileName: map['filename']?.toString() ?? '',
+      purpose: map['purpose']?.toString() ?? '',
+      expiresAt: map['expires_at'] is int
+          ? DateTime.fromMillisecondsSinceEpoch((map['expires_at'] as int) * 1000)
           : null,
     );
   }

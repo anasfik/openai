@@ -11,7 +11,7 @@ abstract class OpenAIConfig {
   /// {@template openai_config_default_requests_timeOut}
   /// The default maximum duration a request can take, this will be applied to all requests, defaults to 30 seconds.
   /// {@endtemplate}
-  static final defaultRequestsTimeOut = Duration(seconds: 30);
+  static const defaultRequestsTimeOut = Duration(seconds: 30);
 
   /// {@template openai_config_requests_timeOut}
   /// The maximum duration a request can take, this will be applied to all requests, defaults to 30 seconds.

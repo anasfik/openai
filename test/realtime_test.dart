@@ -35,6 +35,7 @@ void main() {
           expect(body['voice'], 'alloy');
           expect(body['instructions'], 'Be brief.');
           expect(body['modalities'], ['text', 'audio']);
+          return null;
         },
       );
 
@@ -69,6 +70,7 @@ void main() {
             'https://api.openai.com/v1/realtime/transcription_sessions',
           );
           expect(request.method, 'POST');
+          return null;
         },
       );
 
@@ -96,6 +98,7 @@ void main() {
           final body = decodedJsonBody(request);
           expect(body['session']['model'], 'gpt-realtime-mini');
           expect(body['session']['voice'], 'nova');
+          return null;
         },
       );
 
@@ -123,6 +126,7 @@ void main() {
             request.url.toString(),
             'https://api.openai.com/v1/realtime/translations/client_secrets',
           );
+          return null;
         },
       );
 

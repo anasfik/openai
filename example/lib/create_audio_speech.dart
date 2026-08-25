@@ -20,15 +20,15 @@ void main() async {
   ].join('_');
 
   // The speech request.
-  File speechFile = await OpenAI.instance.audio.createSpeech(
+  final speechBytes = await OpenAI.instance.audio.createSpeech(
     model: model,
     input: input,
     voice: voice,
     responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
-    outputDirectory: exists ? outputDir : await outputDir.create(),
+    outputDirectory: outputDir.path,
     outputFileName: fileName,
   );
 
-  // The file result.
-  print(speechFile.path);
+  // Bytes result (also written to disk on native platforms).
+  print('speech bytes: ${speechBytes.length}');
 }

@@ -1,6 +1,6 @@
-import '../../../models/moderation/moderation.dart';
-
 import 'package:http/http.dart' as http;
+
+import '../../../models/moderation/moderation.dart';
 
 abstract class CreateInterface {
   Future<OpenAIModerationModel> create({
