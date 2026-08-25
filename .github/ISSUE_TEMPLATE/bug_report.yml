@@ -1,0 +1,47 @@
+name: Bug report
+description: Report something that does not work as documented.
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Expected vs actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: Smallest runnable snippet that shows the problem.
+      render: dart
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: dart_openai version
+      placeholder: 7.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Android
+        - iOS
+        - macOS
+        - Linux
+        - Windows
+        - Web
+        - Server (Dart)
+    validations:
+      required: true
+  - type: textarea
+    id: provider
+    attributes:
+      label: Provider and model
+      description: e.g. OpenAI gpt-4o, DeepSeek, LM Studio. Include the error body if relevant.
+    validations:
+      required: false

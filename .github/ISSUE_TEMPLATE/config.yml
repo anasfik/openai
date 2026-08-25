@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and discussions
+    url: https://github.com/anasfik/openai/discussions
+    about: Ask usage questions here instead of opening an issue.

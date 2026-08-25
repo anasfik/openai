@@ -1,952 +1,196 @@
-# 🚀 Dart OpenAI
+# dart_openai
 
-> [!NOTE]
-> Maintained by **[Anas Fikhi](https://gwhyyy.com)** — Flutter & AI engineer. Available for contract work: [work@gwhyyy.com](mailto:work@gwhyyy.com) · [book a call](https://calendly.com/ffikhi-aanas/30min)
-
-
-<div align="center">
-
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/anasfik/openai)](https://github.com/anasfik/openai)
-[![GitHub contributors](https://img.shields.io/github/contributors/anasfik/openai)](https://github.com/anasfik/openai/graphs/contributors)
-[![GitHub Repo stars](https://img.shields.io/github/stars/anasfik/openai?style=social)](https://github.com/anasfik/openai)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/anasfik/openai/dart.yml?label=tests)](https://github.com/anasfik/openai/actions)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/anasfik/openai/release.yml?label=build)](https://github.com/anasfik/openai/actions)
-[![GitHub](https://img.shields.io/github/license/anasfik/openai)](https://github.com/anasfik/openai/blob/main/LICENSE)
 [![Pub Version](https://img.shields.io/pub/v/dart_openai)](https://pub.dev/packages/dart_openai)
 [![Pub Likes](https://img.shields.io/pub/likes/dart_openai)](https://pub.dev/packages/dart_openai)
 [![Pub Points](https://img.shields.io/pub/points/dart_openai)](https://pub.dev/packages/dart_openai)
-[![Pub Popularity](https://img.shields.io/pub/popularity/dart_openai)](https://pub.dev/packages/dart_openai)
+[![Tests](https://img.shields.io/github/actions/workflow/status/anasfik/openai/dart.yml?label=tests)](https://github.com/anasfik/openai/actions)
+[![License](https://img.shields.io/github/license/anasfik/openai)](./LICENSE)
 
-**A comprehensive Dart/Flutter client for OpenAI's powerful AI models**
+Unofficial Dart/Flutter SDK for the OpenAI API. Typed clients for every major API surface: Responses, Chat Completions, Realtime, Videos, Batch, Fine-tuning, Vector Stores, Evals and more. Works on all platforms, including Flutter Web.
 
-[Quick Start](#-quick-start) • [Documentation](#-documentation) • [Examples](#-examples) • [API Coverage](#-api-coverage) • [Contributing](#-contributing)
+Maintained by [Anas Fikhi](https://gwhyyy.com) ([@anasfik](https://github.com/anasfik)).
 
-</div>
-
----
-
-## ✨ Overview
-
-Dart OpenAI is an **unofficial** but comprehensive client package that allows developers to easily integrate OpenAI's state-of-the-art AI models into their Dart/Flutter applications. The package provides simple, intuitive methods for making requests to OpenAI's various APIs, including GPT models, DALL-E image generation, Whisper audio processing, and more.
-
-> **⚠️ Note**: This is an **unofficial** package. OpenAI does not have an official Dart library.
-
-### 🎯 Key Features
-
-- 🚀 **Easy Integration** - Simple, intuitive API that mirrors OpenAI's documentation
-- 🔐 **Secure Authentication** - One-time setup, use anywhere in your application
-- 📡 **Streaming Support** - Real-time streaming for completions, chat, and fine-tune events
-- 🛠️ **Developer Friendly** - Comprehensive error handling and logging
-- 📚 **Rich Examples** - Ready-to-use examples for every implemented feature
-- 🎨 **Modern UI Support** - Optimized for Flutter applications
-- 🔄 **Custom APIs** - Additional custom endpoints for enhanced functionality
-
----
-
-## 🚀 Quick Start
-
-### Installation
-
-Add the package to your `pubspec.yaml`:
+## Installation
 
 ```yaml
 dependencies:
-  dart_openai: 
+  dart_openai: ^7.0.0
 ```
 
-### Basic Setup
+```bash
+dart pub get
+```
+
+## Quickstart
 
 ```dart
 import 'package:dart_openai/dart_openai.dart';
 
-void main() {
-  // Set your API key
-  OpenAI.apiKey = "your-api-key-here";
-  
-  // Optional: Set organization ID
-  OpenAI.organization = "your-org-id";
-  
-  // Optional: Configure timeout
-  OpenAI.requestsTimeOut = Duration(seconds: 60);
-  
-  // Optional: Enable logging
-  OpenAI.showLogs = true;
-  
-  runApp(MyApp());
+Future<void> main() async {
+  final client = OpenAIClient(apiKey: Platform.environment['OPENAI_API_KEY']!);
+
+  final completion = await client.chat.create(
+    model: 'gpt-4o',
+    messages: [
+      const OpenAIChatCompletionChoiceMessageModel(
+        role: OpenAIChatMessageRole.user,
+        content: 'Say hello in five words.',
+      ),
+    ],
+  );
+
+  print(completion.choices.first.message.content);
 }
 ```
 
-### Multiple Clients & Compatible Providers
+Prefer the global facade? It still works:
 
 ```dart
-// Isolated client — no global state.
-final openai = OpenAIClient(apiKey: 'sk-...');
+OpenAI.apiKey = 'sk-...';
+await OpenAI.instance.chat.create(model: 'gpt-4o', messages: [...]);
+```
 
-// Azure OpenAI or compatible gateways (DeepSeek, LM Studio, ...):
+## Multiple clients and compatible providers
+
+Every `OpenAIClient` owns its configuration. Run several accounts, Azure resources, or OpenAI-compatible providers side by side without global state:
+
+```dart
+final production = OpenAIClient(apiKey: 'sk-prod');
+
 final deepseek = OpenAIClient(
   apiKey: 'ds-...',
   baseUrl: 'https://api.deepseek.com',
-  extraHeaders: {'X-Title': 'my-app'},
 );
 
-// Both can be used simultaneously:
-final a = await openai.chat.create(model: 'gpt-4o', messages: [...]);
-final b = await deepseek.chat.create(model: 'deepseek-chat', messages: [...]);
+final localLlama = OpenAIClient(
+  apiKey: 'not-needed',
+  baseUrl: 'http://localhost:1234/v1',
+);
 ```
 
-### Streaming
+Works with any provider that implements the OpenAI wire format: DeepSeek, LM Studio, Ollama, Groq, Together, Azure OpenAI gateways, and others.
+
+## Streaming
+
+One SSE engine backs every streaming endpoint. It closes on `[DONE]`, never duplicates events, and surfaces errors as exceptions instead of swallowing them.
+
+Responses API events:
 
 ```dart
-final stream = openai.responses.createStream(
+final events = client.responses.createStream(
   model: 'gpt-4o',
-  input: 'Tell me a story',
+  input: 'Write a haiku about databases.',
 );
 
-await for (final event in stream) {
+await for (final event in events) {
   if (event['type'] == 'response.output_text.delta') {
     stdout.write(event['delta']);
   }
 }
 ```
 
-### Your First API Call
+Chat Completions deltas:
 
 ```dart
-// Simple chat completion
-final chatCompletion = await OpenAI.instance.chat.create(
-  model: "gpt-3.5-turbo",
-  messages: [
-    OpenAIChatCompletionChoiceMessageModel(
-      role: OpenAIChatMessageRole.user,
-      content: "Hello, how are you?",
-    ),
-  ],
-);
+final chunks = client.chat.createStream(model: 'gpt-4o', messages: messages);
 
-print(chatCompletion.choices.first.message.content);
-```
-
----
-
-## 📊 API Coverage
-
-| API | Status | Access |
-|-----|--------|--------|
-| **Responses** (incl. streaming) | ✅ Complete | `client.responses` |
-| **Conversations** | ✅ Complete | `client.conversations` |
-| **Chat Completions** (incl. stored completions, reasoning params) | ✅ Complete | `client.chat` |
-| **Completions** (legacy) | ✅ Complete | `client.completion` |
-| **Edits** (deprecated by OpenAI) | ✅ Complete | `client.edit` |
-| **Audio** (speech, transcription, translation, voices, consents) | ✅ Complete | `client.audio` |
-| **Images** (incl. streaming partials) | ✅ Complete | `client.image` |
-| **Embeddings** | ✅ Complete | `client.embedding` |
-| **Files** (incl. byte uploads) | ✅ Complete | `client.file` |
-| **Uploads** (multipart sessions) | ✅ Complete | `client.uploads` |
-| **Batch** | ✅ Complete | `client.batch` |
-| **Models** / **Moderation** | ✅ Complete | `client.model` / `client.moderation` |
-| **Vector Stores** (+files, +batches) | ✅ Complete | `client.vectorStores` |
-| **Containers** (+files) | ✅ Complete | `client.container` |
-| **Evals** | ✅ Complete | `client.evals` |
-| **Graders** (incl. run/validate) | ✅ Complete | `client.graders` |
-| **Fine-tuning** (new `/fine_tuning` API) | ✅ Complete | `client.fineTuning` |
-| **Fine-tunes** (legacy) | ⚠️ Deprecated | `client.fineTune` |
-| **Videos** | ✅ Complete | `client.videos` |
-| **Realtime** (REST sessions & client secrets) | ✅ Complete | `client.realtime` |
-| **Skills** | ✅ Complete | `client.skills` |
-| **Content Provenance Checks** | ✅ Complete | `client.provenance` |
-| **Administration** (projects, users, invites, audit logs, costs, rate limits, API keys) | ✅ Core complete | `client.organization` |
-| Realtime WebSocket client | 🗓️ planned | separate package consideration |
-
---------------|--------|----------| --------------|
-| **📋 [Responses](#-responses)** | ✅ Complete | All |  11-08-2025 17:33:39 |
-| **💭 [Conversations](#-conversations)** | ✅ Complete | All | 11-08-2025 17:38:56 |
-| **🎵 [Audio](#-audio)** | ✅ Complete | All | 11-08-2025 17:42:54 |
-| **🎬 [Videos](#-videos)** | 🗓️ planned | - ||
-| **🎨 [Images](#-images)** | ✅ Complete | All |  11-08-2025 17:53:45 |
-| **🎨 [Images Streaaming](#-images-streaaming)** | 🗓️ planned | - ||
-| **📊 [Embeddings](#-embeddings)** | ✅ Complete | All |  11-08-2025 17:56:30 |
-| **⚖️ [Evals](#️-evals)** | ✅ Complete | All |  11-08-2025 21:04:36 |
-| **🔧 [Fine-tuning](#-fine-tuning)** | 🧩 70% Complete | missing newer endpoints ||
-| **📊 [Graders](#-graders)** | ✅ Complete | All |  11-08-2025 21:46:48 |
-| **📦 [Batch](#-batch)** | 🗓️ planned | - ||
-| **📁 [Files](#-files)** | ✅ Complete | All | 11-08-2025 21:51:34|
-| **📤 [Uploads](#-uploads)** | 🗓️ planned | - ||
-| **🤖 [Models](#-models)** | ✅ Complete | All | 11-08-2025 21:53:13 |
-| **🛡️ [Moderation](#️-moderation)** | ✅ Complete | All |  11-08-2025 21:54:01 |
-| **🗃️ [Vector Stores](#️-vector-stores)** | ✅ Complete | All | 11-19-2025 12:24:15 |
-| **💬 ChatKit** | ❌ Not planned  | Beta feature ||
-| **📦 [Containers](#containers)** | ✅ Complete | All | 11-19-2025 12:24:15 |
-| **🕛 [Real-time](#-real-time)** | 🗓️ planned  | - ||
-| **💬 [Chat Completions](#-chat-completions)** | ✅ Complete | excluding stream functionality ||
-| **🤖 Assistants** | ❌ Not planned | beta feature ||
-| **🤖 [Administration](#-administration)** | 🗓️ planned | - ||
-| **📝 Completions (Legacy)** | ✅ Complete | All ||
-| **✏️ Edits (Legacy)** | ✅ Complete | All ||
-
----
-
-## 📚 Documentation
-
-### Core APIs
-
-#### 📋 Responses
-
-```dart
-// Create response
-OpenAiResponse response = await OpenAI.instance.responses.create(
-  input: "Your input text here",  
-  model: "gpt-4",
-);
-
-// Get response
-OpenAiResponse response = await OpenAI.instance.responses.get(
-  responseId: "response-id-here",
-  startingAfter: 0, 
-);
-
-// Delete response
-await OpenAI.instance.responses.delete(
-  responseId: "response-id-here",
-);
-
-// Cancel response
-OpenAiResponse response = await OpenAI.instance.responses.cancel(
-  responseId: "response-id-here",
-);
-
-// list input items
-OpenAiResponseInputItemsList response = await OpenAI.instance.responses.listInputItems(
-  responseId: "response-id-here",
-  limit: 10, 
-);
-
-
-// Get input token counts
-int inputTokens = await OpenAI.instance.responses.getInputTokenCounts(
-  model: "gpt-5",
-  input: "Your input text here",
-);
-```
-
-#### 💭 Conversations
-
-```dart
-// Create conversation
-OpenAIConversation conversation = await OpenAI.instance.conversations.create(
-  items: [{
-    "type": "message",
-    "role": "user",
-    "content": "Hello!",
-  }],
-  metadata: {
-    "key": "value",
-    "another_key": "another_value",
-  },
-);
-
-
-// Get conversation
-OpenAIConversation conversation = await OpenAI.instance.conversations.get(
-  conversationId: "conversation-id-here",
-);
-
-// Update conversation
-OpenAIConversation updatedConversation = await OpenAI.instance.conversations.update(
-  conversationId: "conversation-id",
-  metadata: {
-    "key": "new_value",
-  },
-);
-
-// Delete conversation
- await OpenAI.instance.conversations.delete(
-  conversationId: "conversation-id-here",
-);
-
-// list items
-OpenAIConversationItemsResponse itemsList = await OpenAI.instance.conversations.listItems(
-  conversationId: "conversation-id-here",
-  limit: 10, 
-);
-
-// Create item
-OpenAIConversationItem item = await OpenAI.instance.conversations.createItems(
-  conversationId: "conversation-id-here",
-  items: [
-    // ...
-  ],
-);
-
-// get item
-OpenAIConversationItem item = await OpenAI.instance.conversations.getItem(
-  conversationId: "conversation-id-here",
-  itemId: "item-id-here",
-);
-
-// delete item
-await OpenAI.instance.conversations.deleteItem(
-  conversationId: "conversation-id-here",
-  itemId: "item-id-here",
-);
-```
-
-#### 🎵 Audio
-
-```dart
-// Create speech
-File speechFile = await OpenAI.instance.audio.createSpeech(
-  model: "tts-1",
-  input: "Text to convert to speech",
-  voice: OpenAIAudioVoice.fable,
-  responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
-  outputDirectory: "/path/to/output/directory",
-  outputFileName: "output_speech.mp3",
-);
-
-// Create speech as bytes (useful on web or when you do not want a temp file)
-Uint8List speechBytes = await OpenAI.instance.audio.createSpeechBytes(
-  model: "tts-1",
-  input: "Text to convert to speech",
-  voice: OpenAIAudioVoice.fable,
-  responseFormat: OpenAIAudioSpeechResponseFormat.mp3,
-);
-
-// Note: tts-1 and tts-1-hd only support alloy, ash, coral, echo, fable,
-// nova, onyx, sage, and shimmer. Use gpt-4o-mini-tts for newer voices
-// such as ballad, verse, marin, and cedar.
-
-
-// Transcribe audio
-OpenAITranscriptionGeneralModel transcription = await OpenAI.instance.audio.createTranscription(
-  model: "whisper-1",
-  file: File("path/to/audio.mp3"),
-  include: ["logprobs"],
-  responseFormat: OpenAIAudioResponseFormat.verbose_json,
-  language: "en",
-  prompt: "This is a sample prompt to guide transcription",
-);
-// Handling different transcription response formats
-if (transcription is OpenAITranscriptionModel) {
-  print(transcription.logprobs);
-  print(transcription.text);
-  print(transcription.usage);
-} else if (transcription is OpenAITranscriptionVerboseModel) {
-  // print the transcription.
-  print(transcription.text);
-  print(transcription.segments?.map((e) => e.end));
-}
-
-// Create Translation
-final translationText = await OpenAI.instance.audio.createTranslation(
-  file: File("path/to/audio.mp3"),
-  model: "whisper-1",
-  prompt: "use unusual english words",
-  responseFormat: OpenAIAudioResponseFormat.json,
-);
-
-```
-
-#### 🎬 Videos
-
-// (To be implemented)
-
-#### 🎨 Images
-
-```dart
-// Generate image
-OpenAIImageModel image = await OpenAI.instance.image.create(
-  model: "dall-e-3",
-  prompt: "image of a cat in a spaceship",
-  responseFormat: OpenAIImageResponseFormat.url,
-  size: OpenAIImageSize.size1024,
-  quality: OpenAIImageQuality.standard,
-  style: OpenAIImageStyle.vivid,
-);
-
-// Edit image
-OpenAIImageModel imageEdit = await OpenAI.instance.image.edit(
-  prompt: 'A fantasy landscape with mountains and a river',
-  image: File("path/to/image.png"),
-  size: OpenAIImageSize.size1024,
-  responseFormat: OpenAIImageResponseFormat.b64Json,
-);
-
-// Create variation
-List<OpenAIImageModel> imageVariation = await OpenAI.instance.image.variation(
-  model: "dall-e-2",
-  image: File("path/to/image.png"),
-  size: OpenAIImageSize.size512,
-  responseFormat: OpenAIImageResponseFormat.url,
-);
-```
-
-#### 🎨 Images Streaaming
-
-// (To be implemented)
-
-#### 📊 Embeddings
-
-```dart
-OpenAIEmbeddingsModel embedding = await OpenAI.instance.embedding.create(
-  model: "text-embedding-ada-002",
-  input: "This is a sample text",
-);
-```
-
-#### ⚖️ Evals
-
-```dart
-// Create eval
-OpenAIEval eval = await OpenAI.instance.evals.create(
-  dataSourceConfig: RequestDatatSourceConfig.logs(),
-);
-
-// Get eval
-OpenAIEval eval = await OpenAI.instance.evals.get(
-  evalId: "eval-id-here",
-);
-
-// Update eval
-OpenAIEval updatedEval = await OpenAI.instance.evals.update(
-  evalId: "eval-id-here",
-  metadata: {
-    "key": "new_value",
-  },
-);
-
-// Delete eval
- await OpenAI.instance.evals.delete(
-  evalId: "eval-id-here",
-);
-
-// List evals
-OpenAIEvalsList evalsList = await OpenAI.instance.evals.list(
-  limit: 10, 
-);
-
-// Get eval runs.
-OpenAIEvalRunsList evalRuns = await OpenAI.instance.evals.getRuns(
-  evalId: "eval-id-here",
-  limit: 3, 
-);
-
-// Get Eval run
-OpenAIEvalRun evalRun = await OpenAI.instance.evals.getRun(
-  evalId: "eval-id-here",
-  runId: "run-id-here",
-);
-
-// Create run
-OpenAIEvalRun createdRun = await OpenAI.instance.evals.createRun(
-  evalId: "eval-id-here",
-  dataSource: EvalRunDataSource.jsonl(),
-);
-
-// Cancel run
-OpenAIEvalRun canceledRun = await OpenAI.instance.evals.cancel(
-  evalId: "eval-id-here",
-  runId: "run-id-here",
-);
-
-// Delete run
- await OpenAI.instance.evals.deleteRun(
-  evalId: "eval-id-here",
-  runId: "run-id-here",
-);
-
-// Get output item of eval run.
-OpenAIEvalRunOutputItem outputItem = await OpenAI.instance.evals.getEvalRunOutputItem(
-  evalId: "eval-id-here",
-  runId: "run-id-here",
-  outputItemIdn: "item-id-here",
-);
-
-// Get eval run output items.
-OpenAIEvalRunOutputItemsList outputItems = await OpenAI.instance.evals.getEvalRunOutputItems(
-  evalId: "eval-id-here",
-  runId: "run-id-here",
-  limit: 10,
-);
-```
-
-#### 🔧 Fine-tuning
-
-// (To be implemented)
-
-#### 📊 Graders
-
-```dart
-
-// graders
-final grader = OpenAIGraders.stringCheckGrader(...);
-final grader2 = OpenAIGraders.textSimilarityGrader(...);
-final grader3 = OpenAIGraders.scoreModelGrader(...);
-final grader4 = OpenAIGraders.labelModelGrader(...);
-final grader5 = OpenAIGraders.pythonGrader(...);
-final grader6 = OpenAIGraders.multiGrader(...);
-
-// Run grader
-final grader = await OpenAI.instance.graders.runGrader(
- grader: grader,
- modelSample: "The model output to be graded", 
-);
-
-// Validate Grader
-final isValid = OpenAI.instance.graders.validateGrader(
-  grader: grader
-);
-```
-
-#### 📦 Batch
-
-// (To be implemented)
-
-#### 📁 Files
-
-```dart
-// Upload file
-OpenAIFileModel file = await OpenAI.instance.files.upload(
-  file: File("path/to/file.jsonl"),
-  purpose: "assistants",
-);
-
-// List files
-List<OpenAIFileModel> files = await OpenAI.instance.files.list(
-  limit: 10,
-);
-
-// Retrieve file
-OpenAIFileModel file = await OpenAI.instance.files.retrieve(
-   "file_id" 
-);
-
-// Delete file
-await OpenAI.instance.files.delete("file-id-here");
-
-// Retrieve file content
-final content = await OpenAI.instance.files.retrieveContent(
-  "file_id"
-);
-```
-
-#### 📤 Uploads
-
-// (To be implemented)
-
-#### 🤖 Models
-
-```dart
-// List all available models
-List<OpenAIModelModel> models = await OpenAI.instance.model.list();
-
-// Retrieve specific model
-OpenAIModelModel model = await OpenAI.instance.model.retrieve("gpt-3.5-turbo");
-
-// Delete fine-tuned model
-bool deleted = await OpenAI.instance.model.delete("fine-tuned-model-id");
-```
-
-#### 🛡️ Moderation
-
-```dart
-OpenAIModerationModel moderation = await OpenAI.instance.moderation.create(
-  input: ["Text to classify for moderation"],
-  model: "omni-moderation-latest",
-);
-```
-
-#### 🗃️ Vector Stores
-
-##### Vector Stores
-
-```dart
-// Create vector store
-  OpenAIVectorStoreModel vectorStore = await OpenAI.instance.vectorStores.vectorStores.create(
-    name: "example_vector_store",
-    chunkingStrategy: OpenAIVectorStoreChunkingStrategy.static(
-      chunkOverlapTokens: 300,
-      maxChunkSizeTokens: 750,
-    ),
-    expiresAfter: OpenAIVectorStoreExpiresAfter(
-      anchor: "last_active_at",
-      days: 1,
-    ),
-  ); 
-
-  // List vector stores
- OpenAIVectorStoreListModel allVEctorStores = await OpenAI.instance.vectorStores.vectorStores.list(limit: 30);
-
- // Get vector store
- final firstVectorStoreAsync = await OpenAI.instance.vectorStores.vectorStores.get(
-   vectorStoreId: "vector_store_id",
- );
-
-// Modify vector store
-final updatedVectorStore = await OpenAI.instance.vectorStores.vectorStores.modify(
-  vectorStoreId: "vector_store_id",
-  name: "updated_vector_store_name",
-);
-
-// Delete vector store
-await OpenAI.instance.vectorStores.vectorStores.delete(
-  vectorStoreId: "vector_store_id",
-);
-
-// search in vector store
-final searchVEctorStoreResult = await OpenAI.instance.vectorStores.vectorStores.search(
-   vectorStoreId: updatedVectorStore.id,
-   query: "example",
-   maxNumResults: 10,
-   filters: OpenAIVectorStoresSearchFilter.comparison(
-     type: "eq",
-     key: "metadata.example_key",
-     value: "example_value",
-   ),
-   rankingOptions: OpenAIVectorStoresRankingOptions(
-     ranker: "none",
-     scoreThreshold: 0,
-   ),
-);
-
-```
-
-##### Vector store files
-
-```dart
-
-// Create vector store file
-final createdVectorStoreFile = await OpenAI.instance.vectorStores.vectorStoresFiles.create(
-  vectorStoreId: "vector_store_id",
-  fileId: "file_id",
-  attributes: {
-    "chapter": "Chapter 1",
-  },
-  chunckingStrategy: OpenAIVectorStoreChunkingStrategy.static(
-    chunkOverlapTokens: 300,
-    maxChunkSizeTokens: 750,
-  ),
-);
-
-// List vector store files
-final vectorStoreFiles = await OpenAI.instance.vectorStores.vectorStoresFiles.list(
-  vectoreStoreId: "vector_store_id",
-  limit: 60,
-);
-
-// Get vector store file
-final vectorStoreFile = await OpenAI.instance.vectorStores.vectorStoresFiles.get(
-  fileId: "file_id",
-  vectorStoreId: "vector_store_id",
-);
-
-// Get vector store file content
-final vectorStoreFileContent = await OpenAI.instance.vectorStores.vectorStoresFiles.getContent(
-  fileId: "file_id",
-  vectorStoreId: "vector_store_id",
-);
-
-// Update vector store file
-final updatedVectorStoreFile = await OpenAI.instance.vectorStores.vectorStoresFiles.update(
-  fileId: "file_id",
-  vectorStoreId: "vector_store_id",
-  attributes: {
-    "chapter": "Updated Chapter 1",
-  },
-);
-
-// Delete vector store file
-await OpenAI.instance.vectorStores.vectorStoresFiles.delete(
-  fileId: "file_id",
-  vectorStoreId: "vector_store_id",
-);
-
-```
-
-##### Vector store file batches
-
-```dart
-
-// Create vector store file batch
-final vectoreStoreFileBatch = await OpenAI.instance.vectorStores.vectorStoreFileBatch.create(
-  vectorStoreId: "vector_store_id",
-  chunkingStrategy: OpenAIVectorStoreChunkingStrategy.static(
-    chunkOverlapTokens: 200,
-    maxChunkSizeTokens: 550,
-  ),
-  attributes: {
-    "batch_name": "My First Batch",
-  },
-  fileIds: ["file-abc123", "file-def456"],
-);
-
-// Get vector store file batch
-final batch = await OpenAI.instance.vectorStores.vectorStoreFileBatch.get(
-  batchId: "batch_id",
-  vectorStoreId: "vector_store_id",
-);
-
-// Cancel vector store file batch
-final cancelledBatch = await OpenAI.instance.vectorStores.vectorStoreFileBatch.cancel(
-  batchId: "batch_id",
-  vectorStoreId: "vector_store_id",
-);
-
-// List vector store files in a batch
-final vectorStoreBatchFiles = await OpenAI.instance.vectorStores.vectorStoreFileBatch.list(
-  vectorStoreId: "vector_store_id",
-  batchId: 'batch_id',
-);
-
-```
-
-#### 📦 Containers
-
-##### Containers
-
-```dart
-// Create container
-final container = await OpenAI.instance.container.containers.create(
-  name: "my special container",
-);
-
-// List containers
-final containers = await OpenAI.instance.container.containers.list(
-  limit: 20,
-);
-
-// Get container
-final firstContainer = await OpenAI.instance.container.containers.get(
-  containerId: "container_id",
-);
-
-// Delete container
-await OpenAI.instance.container.containers.delete(
-  containerId: "container_id",
-);
-
-```
-
-##### Container Files
-
-```dart
-// Create container file
-final containerFile = await OpenAI.instance.container.containerFiles.create(
-  file: File("path/to/file"),
-  containerId: "container_id",
-);
-
-// Get container file
-final gotContainerFile = await OpenAI.instance.container.containerFiles.get(
-  containerId: "container_id",
-  fileId: "file_id",
-);
-
-// Get container file content
-final gotContainerFileContent =
-    await OpenAI.instance.container.containerFiles.getContent(
-  containerId: "container_id",
-  fileId: "file_id",
-);
-
-// List container files
-final allContainerFiles = await OpenAI.instance.container.containerFiles.list(
-  containerId: "container_id",
-  limit: 20,
-);
-
-// Delete container file
-await OpenAI.instance.container.containerFiles.delete(
-  fileId: "file_id",
-  containerId: "container_id",
-);
-
-```
-
-
-#### 🕛 Real-time
-
-// (To be implemented)
-
-#### 💬 Chat Completions
-
-```dart
-// Basic chat completion
-OpenAIChatCompletionModel chat = await OpenAI.instance.chat.create(
-  model: "gpt-3.5-turbo",
-  messages: [
-    OpenAIChatCompletionChoiceMessageModel(
-      role: OpenAIChatMessageRole.user,
-      content: "Hello, how can you help me?",
-    ),
-  ],
-  temperature: 0.7,
-  maxTokens: 150,
-);
-
-// Streaming chat completion
-Stream<OpenAIStreamChatCompletionModel> chatStream = OpenAI.instance.chat.createStream(
-  model: "gpt-3.5-turbo",
-  messages: [
-    OpenAIChatCompletionChoiceMessageModel(
-      role: OpenAIChatMessageRole.user,
-      content: "Tell me a story",
-    ),
-  ],
-);
-
-chatStream.listen((event) {
-  print(event.choices.first.delta.content);
-});
-```
-
-#### 🤖 Administration
-
-// (To be implemented)
-
----
-
-
-## 🔧 Configuration
-
-### Environment Variables
-
-```dart
-// Using envied package
-@Envied(path: ".env")
-abstract class Env {
-  @EnviedField(varName: 'OPEN_AI_API_KEY')
-  static const apiKey = _Env.apiKey;
-}
-
-void main() {
-  OpenAI.apiKey = Env.apiKey;
-  runApp(MyApp());
+await for (final chunk in chunks) {
+  stdout.write(chunk.choices.first.delta?.content);
 }
 ```
 
-### Custom Configuration
+Images emit partial results as they render (`createStream`), and stored completions support retrieval and listing.
 
-```dart
-void main() {
-  // Set API key
-  OpenAI.apiKey = "your-api-key";
-  
-  // Set organization (optional)
-  OpenAI.organization = "your-org-id";
-  
-  // Set custom base URL (optional)
-  OpenAI.baseUrl = "https://api.openai.com/v1";
-  
-  // Set request timeout (optional)
-  OpenAI.requestsTimeOut = Duration(seconds: 60);
-  
-  // Enable logging (optional)
-  OpenAI.showLogs = true;
-  OpenAI.showResponsesLogs = true;
-  
-  runApp(MyApp());
-}
-```
+## API coverage
 
----
+| API | Accessor |
+|---|---|
+| Responses (incl. streaming, compact) | `client.responses` |
+| Chat Completions (tools, vision, reasoning params, stored completions) | `client.chat` |
+| Conversations | `client.conversations` |
+| Audio (speech, transcription, translation, voices, consents) | `client.audio` |
+| Images (generation, edit, variation, streaming partials) | `client.image` |
+| Embeddings | `client.embedding` |
+| Files (incl. byte uploads) | `client.file` |
+| Uploads (multipart sessions) | `client.uploads` |
+| Batch | `client.batch` |
+| Vector Stores (+ files, + file batches) | `client.vectorStores` |
+| Containers (+ files) | `client.container` |
+| Models / Moderation | `client.model` / `client.moderation` |
+| Evals | `client.evals` |
+| Graders (incl. run and validate) | `client.graders` |
+| Fine-tuning jobs (current API) | `client.fineTuning` |
+| Videos (generate, remix, download) | `client.videos` |
+| Realtime sessions and client secrets | `client.realtime` |
+| Skills | `client.skills` |
+| Content provenance checks | `client.provenance` |
+| Administration (projects, users, invites, audit logs, costs, rate limits, API keys) | `client.organization` |
+| Completions and Edits (legacy) | `client.completion` / `client.edit` |
 
-## 🚨 Error Handling
+Not planned: Assistants v1 and Threads (superseded by the Responses API), ChatKit.
+
+## Error handling
+
+All failures throw typed exceptions you can catch precisely:
 
 ```dart
 try {
-  final chat = await OpenAI.instance.chat.create(
-    model: "gpt-3.5-turbo",
-    messages: [
-      OpenAIChatCompletionChoiceMessageModel(
-        role: OpenAIChatMessageRole.user,
-        content: "Hello",
-      ),
-    ],
-  );
+  await client.chat.create(model: 'gpt-4o', messages: messages);
 } on RequestFailedException catch (e) {
-  print("Request failed: ${e.message}");
-  print("Status code: ${e.statusCode}");
+  // Non-2xx from the API: e.message, e.statusCode
 } on MissingApiKeyException catch (e) {
-  print("API key not set: ${e.message}");
-} on UnexpectedException catch (e) {
-  print("Unexpected error: ${e.message}");
+  // No key configured for this client
+} on OpenAIUnexpectedException catch (e) {
+  // Malformed response that is not an API error payload
 }
 ```
 
----
+Error payloads are normalized across providers. Whether a provider returns `{"error": {"message": ...}}`, a bare string error, or an HTML error page, you get a `RequestFailedException` with the body preserved.
 
-## 🤝 Contributing
+## Configuration
 
-We welcome contributions! Here's how you can help:
+Per-client options: `apiKey`, `organization`, `baseUrl`, `version`, `requestsTimeOut`, `extraHeaders`.
 
-### 🐛 Bug Reports
+Global facade equivalents: `OpenAI.apiKey`, `OpenAI.organization`, `OpenAI.baseUrl`, `OpenAI.requestsTimeOut`, plus `OpenAI.showLogs` and `OpenAI.showResponsesLogs` for request debugging.
 
-- Use [GitHub Issues](https://github.com/anasfik/openai/issues) to report bugs
-- Include reproduction steps and environment details
+Reasoning models (o-series, GPT-5 family): pass `reasoningEffort: 'low'` and use `maxTokens`, which maps to `max_completion_tokens`. Incompatible sampling parameters are rejected by the API; use `extraParams` to pass anything not yet modeled.
 
-### 💡 Feature Requests
+## Migrating from 6.x
 
-- Suggest new features via [GitHub Issues](https://github.com/anasfik/openai/issues)
-- Check existing issues before creating new ones
+Nothing breaks if you used the global facade. To adopt per-client instances, replace global configuration with construction:
 
-### 🔧 Code Contributions
+```dart
+// Before (still supported)
+OpenAI.apiKey = 'sk-...';
+await OpenAI.instance.chat.create(...);
 
-- Fork the repository
-- Create a feature branch
-- Make your changes
-- Add tests if applicable
-- Submit a pull request
+// After
+final client = OpenAIClient(apiKey: 'sk-...');
+await client.chat.create(...);
+```
 
-### 📚 Documentation
+Full list of changes: [CHANGELOG.md](./CHANGELOG.md).
 
-- Help improve documentation
-- Add examples for missing features
-- Fix typos and improve clarity
+## Testing
 
-### 💰 Sponsoring
+The test suite runs entirely against mocked HTTP. No API keys required:
 
-- [Sponsor the project](https://github.com/sponsors/anasfik)
-- Help maintain and improve the package
+```bash
+dart test
+```
 
----
+Live integration tests run only when `OPEN_AI_API_KEY` is present in the environment.
 
-## 📜 License
+## Contributing
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Bug reports and feature requests go through [GitHub Issues](https://github.com/anasfik/openai/issues). Pull requests welcome: keep diffs focused, add or update tests for changed behavior, and follow the existing module layout (`lib/src/instance/<module>/` with models under `lib/src/core/models/<module>/`). Commit messages use [Conventional Commits](https://www.conventionalcommits.org).
 
----
+## License
 
-## 🙏 Acknowledgments
+MIT. See [LICENSE](./LICENSE).
 
-- **OpenAI** for providing the amazing AI models and APIs
-- **Contributors** who help maintain and improve this package
-- **Sponsors** who support the project financially
-- **Community** for feedback and suggestions
+## Support
 
----
-
-## 📞 Support
-
-- 📖 [Full Documentation](https://pub.dev/documentation/dart_openai/latest/)
-- 🐛 [Report Issues](https://github.com/anasfik/openai/issues)
-- 💬 [Discussions](https://github.com/anasfik/openai/discussions)
-- 📧 [Contact](https://github.com/anasfik)
-
----
-
-<div align="center">
-
-
-**Made with ❤️ by the Dart OpenAI community**
-
-[⭐ Star this repo](https://github.com/anasfik/openai) • [🐛 Report Bug](https://github.com/anasfik/openai/issues) • [💡 Request Feature](https://github.com/anasfik/openai/issues) • [📖 Documentation](https://pub.dev/documentation/dart_openai/latest/)
-
-</div>
-
-## Maintainer
-
-Built and maintained by **[Anas Fikhi](https://gwhyyy.com)** — Flutter & AI engineer.
-
-- Portfolio & case studies: <https://gwhyyy.com>
-- Contract work: <work@gwhyyy.com>
-- Book a call: <https://calendly.com/ffikhi-aanas/30min>
+- Documentation: [pub.dev/documentation/dart_openai](https://pub.dev/documentation/dart_openai/latest/)
+- Issues: [github.com/anasfik/openai/issues](https://github.com/anasfik/openai/issues)
+- Sponsor: [github.com/sponsors/anasfik](https://github.com/sponsors/anasfik)
