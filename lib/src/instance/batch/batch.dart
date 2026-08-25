@@ -78,8 +78,8 @@ class OpenAIBatch implements OpenAIBatchBase {
     required String batchId,
   }) async {
     return await OpenAINetworkingClient.post(
-      to: BaseApiUrlBuilder.buildFor(_config,
-          '${OpenAIStrings.endpoints.batch}/$batchId/cancel'),
+      to: BaseApiUrlBuilder.buildFor(
+          _config, '${OpenAIStrings.endpoints.batch}/$batchId/cancel'),
       onSuccess: BatchModelParsing.fromMap,
       config: _config,
     );

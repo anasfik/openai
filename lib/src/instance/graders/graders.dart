@@ -5,9 +5,16 @@ import 'package:dart_openai/src/core/models/graders/python_grader.dart';
 import 'package:dart_openai/src/core/models/graders/score_model_grader.dart';
 import 'package:dart_openai/src/core/models/graders/string_check_grader.dart';
 import 'package:dart_openai/src/core/models/graders/text_similarity_grader.dart';
-import 'package:meta/meta.dart';
+import 'package:dart_openai/src/core/builder/base_api_url.dart';
+import 'package:dart_openai/src/core/config/client_config.dart';
+import 'package:dart_openai/src/core/constants/strings.dart';
+import 'package:dart_openai/src/core/networking/client.dart';
 
 class OpenAIGraders {
+  final OpenAIClientConfig? _config;
+
+  OpenAIGraders([OpenAIClientConfig? config]) : _config = config;
+
   static StringCheckGrader stringCheckGrader({
     required String input,
     required String name,
@@ -104,28 +111,41 @@ class OpenAIGraders {
     );
   }
 
-  /// beta methods, planned to implement only if/when they are stable.
-  @protected
-  @internal
-  @sealed
-  Future runGrader({
-    // ignore: avoid-unused-parameters
+  /// Runs a grader against a model sample.
+  ///
+  /// POST /fine_tuning/alpha/graders/run
+  Future<Map<String, dynamic>> runGrader({
     required OpenAiGeneralGrader grader,
-    // ignore: avoid-unused-parameters
     required String modelSample,
-    // ignore: avoid-unused-parameters
     Map<String, dynamic>? item,
+    OpenAIClientConfig? config,
   }) async {
-    throw UnimplementedError();
+    return await OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(config ?? _config,
+          '${OpenAIStrings.endpoints.fineTuning}/alpha/graders/run'),
+      body: {
+        'grader': grader.toMap(),
+        'model_sample': modelSample,
+        if (item != null) 'item': item,
+      },
+      onSuccess: (response) => response,
+      config: config ?? _config,
+    );
   }
 
-  @protected
-  @internal
-  @sealed
-  Future validateGrader({
-    // ignore: avoid-unused-parameters
+  /// Validates a grader definition without running it.
+  ///
+  /// POST /fine_tuning/alpha/graders/validate
+  Future<Map<String, dynamic>> validateGrader({
     required OpenAiGeneralGrader grader,
+    OpenAIClientConfig? config,
   }) async {
-    throw UnimplementedError();
+    return await OpenAINetworkingClient.post(
+      to: BaseApiUrlBuilder.buildFor(config ?? _config,
+          '${OpenAIStrings.endpoints.fineTuning}/alpha/graders/validate'),
+      body: {'grader': grader.toMap()},
+      onSuccess: (response) => response,
+      config: config ?? _config,
+    );
   }
 }

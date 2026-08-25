@@ -21,7 +21,8 @@ interface class OpenAIChat implements OpenAIChatBase {
   final OpenAIClientConfig? _config;
 
   /// {@macro openai_chat}
-  OpenAIChat([this._config]) {    OpenAILogger.logEndpoint(endpoint);
+  OpenAIChat([this._config]) {
+    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Creates a chat completion for the message(s).
@@ -79,6 +80,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     int? n,
     stop,
     int? maxTokens,
+    String? reasoningEffort,
     double? presencePenalty,
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
@@ -103,6 +105,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (n != null) "n": n,
         if (stop != null) "stop": stop,
         if (maxTokens != null) "max_completion_tokens": maxTokens,
+        if (reasoningEffort != null) "reasoning_effort": reasoningEffort,
         if (presencePenalty != null) "presence_penalty": presencePenalty,
         if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
         if (logitBias != null) "logit_bias": logitBias,
@@ -116,7 +119,8 @@ interface class OpenAIChat implements OpenAIChatBase {
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIChatCompletionModel.fromMap(response);
       },
-      client: client, config: _config,
+      client: client,
+      config: _config,
     );
   }
 
@@ -178,6 +182,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     int? n,
     stop,
     int? maxTokens,
+    String? reasoningEffort,
     double? presencePenalty,
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
@@ -189,34 +194,35 @@ interface class OpenAIChat implements OpenAIChatBase {
     Map<String, dynamic>? extraParams,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
-      body: {
-        "model": model,
-        "stream": true,
-        "messages": messages.map((message) => message.toMap()).toList(),
-        if (tools != null)
-          "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
-        if (toolChoice != null) "tool_choice": toolChoice,
-        if (temperature != null) "temperature": temperature,
-        if (topP != null) "top_p": topP,
-        if (n != null) "n": n,
-        if (stop != null) "stop": stop,
-        if (maxTokens != null) "max_completion_tokens": maxTokens,
-        if (presencePenalty != null) "presence_penalty": presencePenalty,
-        if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
-        if (logitBias != null) "logit_bias": logitBias,
-        if (user != null) "user": user,
-        if (seed != null) "seed": seed,
-        if (responseFormat != null) "response_format": responseFormat,
-        if (streamOptions != null && streamOptions.isNotEmpty) "stream_options": streamOptions,
-        ...?extraParams,
-
-      },
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIStreamChatCompletionModel.fromMap(response);
-      },
-      client: client,
-      config: _config);
+        to: BaseApiUrlBuilder.buildFor(_config, endpoint),
+        body: {
+          "model": model,
+          "stream": true,
+          "messages": messages.map((message) => message.toMap()).toList(),
+          if (tools != null)
+            "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
+          if (toolChoice != null) "tool_choice": toolChoice,
+          if (temperature != null) "temperature": temperature,
+          if (topP != null) "top_p": topP,
+          if (n != null) "n": n,
+          if (stop != null) "stop": stop,
+          if (maxTokens != null) "max_completion_tokens": maxTokens,
+          if (reasoningEffort != null) "reasoning_effort": reasoningEffort,
+          if (presencePenalty != null) "presence_penalty": presencePenalty,
+          if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
+          if (logitBias != null) "logit_bias": logitBias,
+          if (user != null) "user": user,
+          if (seed != null) "seed": seed,
+          if (responseFormat != null) "response_format": responseFormat,
+          if (streamOptions != null && streamOptions.isNotEmpty)
+            "stream_options": streamOptions,
+          ...?extraParams,
+        },
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIStreamChatCompletionModel.fromMap(response);
+        },
+        client: client,
+        config: _config);
   }
 
   @override
@@ -230,6 +236,7 @@ interface class OpenAIChat implements OpenAIChatBase {
     int? n,
     stop,
     int? maxTokens,
+    String? reasoningEffort,
     double? presencePenalty,
     double? frequencyPenalty,
     Map<String, dynamic>? logitBias,
@@ -240,31 +247,69 @@ interface class OpenAIChat implements OpenAIChatBase {
     Map<String, dynamic>? extraParams,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamChatCompletionModel>(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
-      body: {
-        "model": model,
-        "stream": true,
-        "messages": messages.map((message) => message.toMap()).toList(),
-        if (tools != null)
-          "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
-        if (toolChoice != null) "tool_choice": toolChoice,
-        if (temperature != null) "temperature": temperature,
-        if (topP != null) "top_p": topP,
-        if (n != null) "n": n,
-        if (stop != null) "stop": stop,
-        if (maxTokens != null) "max_completion_tokens": maxTokens,
-        if (presencePenalty != null) "presence_penalty": presencePenalty,
-        if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
-        if (logitBias != null) "logit_bias": logitBias,
-        if (user != null) "user": user,
-        if (seed != null) "seed": seed,
-        if (responseFormat != null) "response_format": responseFormat,
-        ...?extraParams,
-      },
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIStreamChatCompletionModel.fromMap(response);
-      },
-      client: client,
-      config: _config);
+        to: BaseApiUrlBuilder.buildFor(_config, endpoint),
+        body: {
+          "model": model,
+          "stream": true,
+          "messages": messages.map((message) => message.toMap()).toList(),
+          if (tools != null)
+            "tools": tools.map((tool) => tool.toMap()).toList(growable: false),
+          if (toolChoice != null) "tool_choice": toolChoice,
+          if (temperature != null) "temperature": temperature,
+          if (topP != null) "top_p": topP,
+          if (n != null) "n": n,
+          if (stop != null) "stop": stop,
+          if (maxTokens != null) "max_completion_tokens": maxTokens,
+          if (reasoningEffort != null) "reasoning_effort": reasoningEffort,
+          if (presencePenalty != null) "presence_penalty": presencePenalty,
+          if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
+          if (logitBias != null) "logit_bias": logitBias,
+          if (user != null) "user": user,
+          if (seed != null) "seed": seed,
+          if (responseFormat != null) "response_format": responseFormat,
+          ...?extraParams,
+        },
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIStreamChatCompletionModel.fromMap(response);
+        },
+        client: client,
+        config: _config);
+  }
+
+  /// Retrieves a stored chat completion by id.
+  ///
+  /// GET /chat/completions/{completion_id}
+  Future<OpenAIChatCompletionModel> retrieve({
+    required String completionId,
+  }) async {
+    return await OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint, completionId),
+      onSuccess: OpenAIChatCompletionModel.fromMap,
+      config: _config,
+    );
+  }
+
+  /// Lists the messages of a stored chat completion.
+  ///
+  /// GET /chat/completions/{completion_id}/messages
+  Future<List<Map<String, dynamic>>> listMessages({
+    required String completionId,
+    String? after,
+    int? limit,
+  }) async {
+    return await OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
+      from: BaseApiUrlBuilder.buildWithQuery(
+        endpoint: '$endpoint/$completionId/messages',
+        query: {
+          if (after != null) 'after': after,
+          if (limit != null) 'limit': limit.toString(),
+        },
+        config: _config,
+      ),
+      onSuccess: (response) => ((response['data'] as List<dynamic>? ?? []))
+          .whereType<Map<String, dynamic>>()
+          .toList(),
+      config: _config,
+    );
   }
 }

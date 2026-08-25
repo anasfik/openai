@@ -3,7 +3,10 @@ enum OpenAIImageSize {
   size512,
   size1024,
   size1792Horizontal,
-  size1792Vertical;
+  size1792Vertical,
+  size1536Horizontal,
+  size1536Vertical,
+  auto;
 
   String get value {
     switch (this) {
@@ -17,6 +20,12 @@ enum OpenAIImageSize {
         return "1792x1024";
       case OpenAIImageSize.size1792Vertical:
         return "1024x1792";
+      case OpenAIImageSize.size1536Horizontal:
+        return "1536x1024";
+      case OpenAIImageSize.size1536Vertical:
+        return "1024x1536";
+      case OpenAIImageSize.auto:
+        return "auto";
     }
   }
 
@@ -32,6 +41,12 @@ enum OpenAIImageSize {
         return OpenAIImageSize.size1792Horizontal;
       case "1024x1792":
         return OpenAIImageSize.size1792Vertical;
+      case "1536x1024":
+        return OpenAIImageSize.size1536Horizontal;
+      case "1024x1536":
+        return OpenAIImageSize.size1536Vertical;
+      case "auto":
+        return OpenAIImageSize.auto;
       default:
         throw ArgumentError("Invalid value for OpenAIImageSize: $value");
     }

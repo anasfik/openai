@@ -65,7 +65,8 @@ class MockClient extends http.BaseClient {
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     requests.add(request);
     if (_queue.isEmpty) {
-      fail('MockClient received an unexpected request: ${request.method} ${request.url}');
+      fail(
+          'MockClient received an unexpected request: ${request.method} ${request.url}');
     }
     final scripted = _queue.removeAt(0);
     final assertion = scripted.assertRequest;

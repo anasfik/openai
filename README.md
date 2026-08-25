@@ -76,6 +76,39 @@ void main() {
 }
 ```
 
+### Multiple Clients & Compatible Providers
+
+```dart
+// Isolated client — no global state.
+final openai = OpenAIClient(apiKey: 'sk-...');
+
+// Azure OpenAI or compatible gateways (DeepSeek, LM Studio, ...):
+final deepseek = OpenAIClient(
+  apiKey: 'ds-...',
+  baseUrl: 'https://api.deepseek.com',
+  extraHeaders: {'X-Title': 'my-app'},
+);
+
+// Both can be used simultaneously:
+final a = await openai.chat.create(model: 'gpt-4o', messages: [...]);
+final b = await deepseek.chat.create(model: 'deepseek-chat', messages: [...]);
+```
+
+### Streaming
+
+```dart
+final stream = openai.responses.createStream(
+  model: 'gpt-4o',
+  input: 'Tell me a story',
+);
+
+await for (final event in stream) {
+  if (event['type'] == 'response.output_text.delta') {
+    stdout.write(event['delta']);
+  }
+}
+```
+
 ### Your First API Call
 
 ```dart
@@ -95,10 +128,36 @@ print(chatCompletion.choices.first.message.content);
 
 ---
 
-## 📊 API Coverage (2025)
+## 📊 API Coverage
 
-| API feature | Status | Details | Last Updated |
-|--------------|--------|----------| --------------|
+| API | Status | Access |
+|-----|--------|--------|
+| **Responses** (incl. streaming) | ✅ Complete | `client.responses` |
+| **Conversations** | ✅ Complete | `client.conversations` |
+| **Chat Completions** (incl. stored completions, reasoning params) | ✅ Complete | `client.chat` |
+| **Completions** (legacy) | ✅ Complete | `client.completion` |
+| **Edits** (deprecated by OpenAI) | ✅ Complete | `client.edit` |
+| **Audio** (speech, transcription, translation, voices, consents) | ✅ Complete | `client.audio` |
+| **Images** (incl. streaming partials) | ✅ Complete | `client.image` |
+| **Embeddings** | ✅ Complete | `client.embedding` |
+| **Files** (incl. byte uploads) | ✅ Complete | `client.file` |
+| **Uploads** (multipart sessions) | ✅ Complete | `client.uploads` |
+| **Batch** | ✅ Complete | `client.batch` |
+| **Models** / **Moderation** | ✅ Complete | `client.model` / `client.moderation` |
+| **Vector Stores** (+files, +batches) | ✅ Complete | `client.vectorStores` |
+| **Containers** (+files) | ✅ Complete | `client.container` |
+| **Evals** | ✅ Complete | `client.evals` |
+| **Graders** (incl. run/validate) | ✅ Complete | `client.graders` |
+| **Fine-tuning** (new `/fine_tuning` API) | ✅ Complete | `client.fineTuning` |
+| **Fine-tunes** (legacy) | ⚠️ Deprecated | `client.fineTune` |
+| **Videos** | ✅ Complete | `client.videos` |
+| **Realtime** (REST sessions & client secrets) | ✅ Complete | `client.realtime` |
+| **Skills** | ✅ Complete | `client.skills` |
+| **Content Provenance Checks** | ✅ Complete | `client.provenance` |
+| **Administration** (projects, users, invites, audit logs, costs, rate limits, API keys) | ✅ Core complete | `client.organization` |
+| Realtime WebSocket client | 🗓️ planned | separate package consideration |
+
+--------------|--------|----------| --------------|
 | **📋 [Responses](#-responses)** | ✅ Complete | All |  11-08-2025 17:33:39 |
 | **💭 [Conversations](#-conversations)** | ✅ Complete | All | 11-08-2025 17:38:56 |
 | **🎵 [Audio](#-audio)** | ✅ Complete | All | 11-08-2025 17:42:54 |

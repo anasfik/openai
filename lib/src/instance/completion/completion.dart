@@ -23,7 +23,8 @@ interface class OpenAICompletion implements OpenAICompletionBase {
   final OpenAIClientConfig? _config;
 
   /// {@macro openai_completion}
-  OpenAICompletion([this._config]) {    OpenAILogger.logEndpoint(endpoint);
+  OpenAICompletion([this._config]) {
+    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Creates a new completion and returns a [OpenAICompletionModel] object.
@@ -125,30 +126,30 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     );
 
     return await OpenAINetworkingClient.post<OpenAICompletionModel>(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
-      body: {
-        "model": model,
-        "prompt": prompt,
-        if (suffix != null) "suffix": suffix,
-        if (maxTokens != null) "max_tokens": maxTokens,
-        if (temperature != null) "temperature": temperature,
-        if (topP != null) "top_p": topP,
-        if (n != null) "n": n,
-        if (logprobs != null) "logprobs": logprobs,
-        if (echo != null) "echo": echo,
-        if (stop != null) "stop": stop,
-        if (presencePenalty != null) "presence_penalty": presencePenalty,
-        if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
-        if (bestOf != null) "best_of": bestOf,
-        if (logitBias != null) "logit_bias": logitBias,
-        if (user != null) "user": user,
-        if (seed != null) "seed": seed,
-        ...?extraParams,
-      },
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAICompletionModel.fromMap(response);
-      },
-      config: _config);
+        to: BaseApiUrlBuilder.buildFor(_config, endpoint),
+        body: {
+          "model": model,
+          "prompt": prompt,
+          if (suffix != null) "suffix": suffix,
+          if (maxTokens != null) "max_tokens": maxTokens,
+          if (temperature != null) "temperature": temperature,
+          if (topP != null) "top_p": topP,
+          if (n != null) "n": n,
+          if (logprobs != null) "logprobs": logprobs,
+          if (echo != null) "echo": echo,
+          if (stop != null) "stop": stop,
+          if (presencePenalty != null) "presence_penalty": presencePenalty,
+          if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
+          if (bestOf != null) "best_of": bestOf,
+          if (logitBias != null) "logit_bias": logitBias,
+          if (user != null) "user": user,
+          if (seed != null) "seed": seed,
+          ...?extraParams,
+        },
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAICompletionModel.fromMap(response);
+        },
+        config: _config);
   }
 
   /// This function creates a completion [Stream] of [OpenAIStreamCompletionModel], which it does stream the results as they are generated.
@@ -242,31 +243,31 @@ interface class OpenAICompletion implements OpenAICompletionBase {
     Map<String, dynamic>? extraParams,
   }) {
     return OpenAINetworkingClient.postStream<OpenAIStreamCompletionModel>(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
-      body: {
-        "model": model,
-        'stream': true,
-        if (prompt != null) "prompt": prompt,
-        if (suffix != null) "suffix": suffix,
-        if (maxTokens != null) "max_completion_tokens": maxTokens,
-        if (temperature != null) "temperature": temperature,
-        if (topP != null) "top_p": topP,
-        if (n != null) "n": n,
-        if (logprobs != null) "logprobs": logprobs,
-        if (echo != null) "echo": echo,
-        if (stop != null) "stop": stop,
-        if (presencePenalty != null) "presence_penalty": presencePenalty,
-        if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
-        if (bestOf != null) "best_of": bestOf,
-        if (logitBias != null) "logit_bias": logitBias,
-        if (user != null) "user": user,
-        if (seed != null) "seed": seed,
-        ...?extraParams,
-      },
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIStreamCompletionModel.fromMap(response);
-      },
-      config: _config);
+        to: BaseApiUrlBuilder.buildFor(_config, endpoint),
+        body: {
+          "model": model,
+          'stream': true,
+          if (prompt != null) "prompt": prompt,
+          if (suffix != null) "suffix": suffix,
+          if (maxTokens != null) "max_completion_tokens": maxTokens,
+          if (temperature != null) "temperature": temperature,
+          if (topP != null) "top_p": topP,
+          if (n != null) "n": n,
+          if (logprobs != null) "logprobs": logprobs,
+          if (echo != null) "echo": echo,
+          if (stop != null) "stop": stop,
+          if (presencePenalty != null) "presence_penalty": presencePenalty,
+          if (frequencyPenalty != null) "frequency_penalty": frequencyPenalty,
+          if (bestOf != null) "best_of": bestOf,
+          if (logitBias != null) "logit_bias": logitBias,
+          if (user != null) "user": user,
+          if (seed != null) "seed": seed,
+          ...?extraParams,
+        },
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIStreamCompletionModel.fromMap(response);
+        },
+        config: _config);
   }
 
   /// Creates a direct [Stream] of the completion [String] as it is generated.

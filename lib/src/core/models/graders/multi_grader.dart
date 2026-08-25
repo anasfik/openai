@@ -12,4 +12,11 @@ class MultiGrader extends OpenAiGeneralGrader {
     required this.name,
     required this.type,
   });
+  @override
+  Map<String, dynamic> toMap() => {
+        'type': type,
+        'name': name,
+        'calculate_output': calculateOutput,
+        'graders': graders.map((g) => g.toMap()).toList(),
+      };
 }

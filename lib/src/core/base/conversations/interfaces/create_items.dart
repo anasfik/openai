@@ -5,11 +5,11 @@ import 'package:dart_openai/src/core/models/conversation/conversation_items_resp
 /// {@endtemplate}
 abstract class CreateItemsInterface {
   /// Creates new items in a conversation.
-  /// 
+  ///
   /// [conversationId] - The ID of the conversation.
   /// [items] - List of items to create.
   /// [include] - Optional list of fields to include in the response.
-  /// 
+  ///
   /// Returns an [OpenAIConversationItemsResponse] with the created items.
   Future<OpenAIConversationItemsResponse> createItems({
     required String conversationId,

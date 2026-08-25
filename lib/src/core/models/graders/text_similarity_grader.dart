@@ -14,4 +14,12 @@ class TextSimilarityGrader extends OpenAiGeneralGrader {
     required this.reference,
     required this.type,
   });
+  @override
+  Map<String, dynamic> toMap() => {
+        'type': type,
+        'name': name,
+        'input': input,
+        'reference': reference,
+        'evaluation_metric': evaluationMetric,
+      };
 }

@@ -27,7 +27,8 @@ interface class OpenAIFiles implements OpenAIFilesBase {
   final OpenAIClientConfig? _config;
 
   /// {@macro openai_files}
-  OpenAIFiles([this._config]) {    OpenAILogger.logEndpoint(endpoint);
+  OpenAIFiles([this._config]) {
+    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Upload a file that contains document(s) to be used across various endpoints/
@@ -61,7 +62,27 @@ interface class OpenAIFiles implements OpenAIFilesBase {
       file: file,
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFileModel.fromMap(response);
-      }, config: _config,
+      },
+      config: _config,
+    );
+  }
+
+  /// Uploads a file directly from in-memory bytes (#164).
+  ///
+  /// [fileName] is sent as the multipart filename so the API can infer the
+  /// file type; include the extension (e.g. `training.jsonl`).
+  Future<OpenAIFileModel> uploadBytes({
+    required List<int> bytes,
+    required String fileName,
+    required String purpose,
+  }) async {
+    return await OpenAINetworkingClient.fileUpload(
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
+      body: {"purpose": purpose},
+      fileBytes: bytes,
+      fileName: fileName,
+      onSuccess: OpenAIFileModel.fromMap,
+      config: _config,
     );
   }
 
@@ -88,12 +109,14 @@ interface class OpenAIFiles implements OpenAIFilesBase {
           if (limit != null) "limit": limit.toString(),
           if (order != null) "order": order,
           if (purpose != null) "purpose": purpose,
-        }, config: _config,
+        },
+        config: _config,
       ),
       client: client,
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFileListModel.fromMap(response);
-      }, config: _config,
+      },
+      config: _config,
     );
   }
 
@@ -116,7 +139,8 @@ interface class OpenAIFiles implements OpenAIFilesBase {
       from: BaseApiUrlBuilder.buildFor(_config, endpoint + fileIdEndpoint),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIFileModel.fromMap(response);
-      }, config: _config,
+      },
+      config: _config,
     );
   }
 
@@ -137,7 +161,8 @@ interface class OpenAIFiles implements OpenAIFilesBase {
 
     return await OpenAINetworkingClient.get(
       from: BaseApiUrlBuilder.buildFor(_config, endpoint + fileIdEndpoint),
-      returnRawResponse: true, config: _config,
+      returnRawResponse: true,
+      config: _config,
     );
   }
 
@@ -162,7 +187,8 @@ interface class OpenAIFiles implements OpenAIFilesBase {
         final bool isDeleted = response["deleted"] as bool;
 
         return isDeleted;
-      }, config: _config,
+      },
+      config: _config,
     );
   }
 }

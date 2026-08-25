@@ -27,8 +27,7 @@ abstract class OpenAINetworkingClient {
   /// leaves it null and gets the platform default.
   static http.Client Function()? clientFactory;
 
-  static http.Client _defaultClient() =>
-      clientFactory?.call() ?? http.Client();
+  static http.Client _defaultClient() => clientFactory?.call() ?? http.Client();
 
   static Map<String, String> _headers(OpenAIClientConfig? config) =>
       config?.buildHeaders() ?? HeadersBuilder.build();
@@ -87,7 +86,8 @@ abstract class OpenAINetworkingClient {
 
       OpenAILogger.startReadStreamResponse();
 
-      yield* openAIParseSseStream(respond.stream, statusCode: respond.statusCode)
+      yield* openAIParseSseStream(respond.stream,
+              statusCode: respond.statusCode)
           .map(onSuccess);
     } catch (error, stackTrace) {
       yield* Stream<T>.error(error, stackTrace);
@@ -107,7 +107,8 @@ abstract class OpenAINetworkingClient {
       onSuccess: onSuccess,
       client: client,
       config: config,
-      requestFactory: (_) => http.Request(OpenAIStrings.getMethod, Uri.parse(from)),
+      requestFactory: (_) =>
+          http.Request(OpenAIStrings.getMethod, Uri.parse(from)),
     );
   }
 
@@ -121,8 +122,8 @@ abstract class OpenAINetworkingClient {
     http.Client? client,
     OpenAIClientConfig? config,
   }) async {
-    var response =
-        await postAndGetResponse(to: to, body: body, client: client, config: config);
+    var response = await postAndGetResponse(
+        to: to, body: body, client: client, config: config);
 
     final fileTypeHeader = "content-type";
 
@@ -158,8 +159,8 @@ abstract class OpenAINetworkingClient {
     http.Client? client,
     OpenAIClientConfig? config,
   }) async {
-    var response =
-        await postAndGetResponse(to: to, body: body, client: client, config: config);
+    var response = await postAndGetResponse(
+        to: to, body: body, client: client, config: config);
 
     return response.bodyBytes;
   }
@@ -289,8 +290,7 @@ abstract class OpenAINetworkingClient {
           image.path,
           contentType: mediaTypeFromFilePath(image.path),
         ),
-        if (mask != null)
-          await http.MultipartFile.fromPath("mask", mask.path),
+        if (mask != null) await http.MultipartFile.fromPath("mask", mask.path),
       ],
       config: config,
     );
@@ -318,17 +318,27 @@ abstract class OpenAINetworkingClient {
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
     required Map<String, String> body,
-    required File file,
+    File? file,
+    List<int>? fileBytes,
+    String fileName = 'upload.bin',
     String fileField = 'file',
     Map<String, dynamic> Function(String rawResponse)? responseMapAdapter,
     List<http.MultipartFile> extraFiles = const [],
     OpenAIClientConfig? config,
   }) async {
+    assert(
+      (file != null) != (fileBytes != null),
+      'Provide either file or fileBytes, not both.',
+    );
     final resultBody = await _multipartRaw(
       to: to,
       fields: body,
       files: [
-        await http.MultipartFile.fromPath(fileField, file.path),
+        if (file != null)
+          await http.MultipartFile.fromPath(fileField, file.path)
+        else if (fileBytes != null)
+          http.MultipartFile.fromBytes(fileField, fileBytes,
+              filename: fileName),
         ...extraFiles,
       ],
       config: config,
@@ -402,7 +412,8 @@ abstract class OpenAINetworkingClient {
   }) async {
     OpenAILogger.logStartRequest(to);
 
-    final request = http.MultipartRequest(OpenAIStrings.postMethod, Uri.parse(to));
+    final request =
+        http.MultipartRequest(OpenAIStrings.postMethod, Uri.parse(to));
 
     request.headers.addAll(_headers(config));
     request.fields.addAll(fields);
@@ -426,7 +437,9 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.decodedSuccessfully();
     OpenAILogger.requestFinishedSuccessfully();
 
-    return responseBody.canBeParsedToJson ? decodeToMap(responseBody) : responseBody;
+    return responseBody.canBeParsedToJson
+        ? decodeToMap(responseBody)
+        : responseBody;
   }
 
   static T _handleJsonBody<T>(

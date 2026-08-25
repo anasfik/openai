@@ -23,7 +23,8 @@ interface class OpenAIEdits implements OpenAIEditsBase {
   final OpenAIClientConfig? _config;
 
   /// {@macro openai_edits}
-  OpenAIEdits([this._config]) {    OpenAILogger.logEndpoint(endpoint);
+  OpenAIEdits([this._config]) {
+    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Given a [prompt] and an instruction, this method will return an edited version of the prompt.
@@ -62,18 +63,18 @@ interface class OpenAIEdits implements OpenAIEditsBase {
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIEditModel>(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
-      body: {
-        "model": model,
-        "instruction": instruction,
-        if (input != null) "input": input,
-        if (n != null) "n": n,
-        if (temperature != null) "temperature": temperature,
-        if (topP != null) "top_p": topP,
-      },
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIEditModel.fromMap(response);
-      },
-      config: _config);
+        to: BaseApiUrlBuilder.buildFor(_config, endpoint),
+        body: {
+          "model": model,
+          "instruction": instruction,
+          if (input != null) "input": input,
+          if (n != null) "n": n,
+          if (temperature != null) "temperature": temperature,
+          if (topP != null) "top_p": topP,
+        },
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIEditModel.fromMap(response);
+        },
+        config: _config);
   }
 }

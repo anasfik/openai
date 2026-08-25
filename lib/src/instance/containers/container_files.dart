@@ -9,7 +9,6 @@ import 'package:dart_openai/src/core/networking/client.dart';
 import 'package:dart_openai/src/core/config/client_config.dart';
 
 class OpenAIContainerFiles extends OpenAIContainerFilesBase {
-
   /// Per-client configuration; when null, global statics are used.
   final OpenAIClientConfig? _config;
 
@@ -32,7 +31,8 @@ class OpenAIContainerFiles extends OpenAIContainerFilesBase {
       file: file,
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIContainerContainerFile.fromMap(response);
-      }, config: _config,
+      },
+      config: _config,
     );
   }
 
@@ -50,11 +50,13 @@ class OpenAIContainerFiles extends OpenAIContainerFilesBase {
           if (after != null) "after": after,
           if (limit != null) "limit": limit.toString(),
           if (order != null) "order": order,
-        }, config: _config,
+        },
+        config: _config,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIContainerContainerFileListModel.fromMap(response);
-      }, config: _config,
+      },
+      config: _config,
     );
   }
 
@@ -64,10 +66,12 @@ class OpenAIContainerFiles extends OpenAIContainerFilesBase {
     required String containerId,
   }) async {
     return await OpenAINetworkingClient.get(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint + "/$containerId/files/$fileId"),
+      from: BaseApiUrlBuilder.buildFor(
+          _config, endpoint + "/$containerId/files/$fileId"),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIContainerContainerFile.fromMap(response);
-      }, config: _config,
+      },
+      config: _config,
     );
   }
 
@@ -77,8 +81,10 @@ class OpenAIContainerFiles extends OpenAIContainerFilesBase {
     required String containerId,
   }) async {
     return await OpenAINetworkingClient.get(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint + "/$containerId/files/$fileId/content"),
-      returnRawResponse: true, config: _config,
+      from: BaseApiUrlBuilder.buildFor(
+          _config, endpoint + "/$containerId/files/$fileId/content"),
+      returnRawResponse: true,
+      config: _config,
     );
   }
 
@@ -88,14 +94,16 @@ class OpenAIContainerFiles extends OpenAIContainerFilesBase {
     required String containerId,
   }) async {
     return await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint + "/$containerId/files/$fileId"),
+      from: BaseApiUrlBuilder.buildFor(
+          _config, endpoint + "/$containerId/files/$fileId"),
       onSuccess: (Map<String, dynamic> response) {
         final deleted = response["deleted"] == true;
 
         if (deleted) {
           return;
         }
-      }, config: _config,
+      },
+      config: _config,
     );
   }
 }

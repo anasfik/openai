@@ -24,7 +24,8 @@ interface class OpenAIModeration implements OpenAIModerationBase {
   final OpenAIClientConfig? _config;
 
   /// {@macro openai_moderation}
-  OpenAIModeration([this._config]) {    OpenAILogger.logEndpoint(endpoint);
+  OpenAIModeration([this._config]) {
+    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Creates a moderation request.
@@ -48,19 +49,19 @@ interface class OpenAIModeration implements OpenAIModerationBase {
   /// ```
   @override
   Future<OpenAIModerationModel> create({
-    required  input,
+    required input,
     String? model,
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIModerationModel>(
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIModerationModel.fromMap(response);
-      },
-      body: {
-        "input": input,
-        if (model != null) "model": model,
-      },
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
-      config: _config);
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIModerationModel.fromMap(response);
+        },
+        body: {
+          "input": input,
+          if (model != null) "model": model,
+        },
+        to: BaseApiUrlBuilder.buildFor(_config, endpoint),
+        config: _config);
   }
 }

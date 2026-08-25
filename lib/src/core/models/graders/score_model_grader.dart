@@ -16,4 +16,13 @@ class ScoreModelGrader extends OpenAiGeneralGrader {
     required this.samplingParams,
     required this.type,
   });
+  @override
+  Map<String, dynamic> toMap() => {
+        'type': type,
+        'name': name,
+        'model': model,
+        'input': input,
+        'range': range,
+        'sampling_params': samplingParams,
+      };
 }

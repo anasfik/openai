@@ -24,7 +24,8 @@ void main() {
       final request = mock.requests.single;
       expect(request.headers['Authorization'], 'Bearer sk-a');
       expect(request.headers['OpenAI-Organization'], 'org-1');
-      expect(request.url.toString(), 'https://api.openai.com/v1/batches/batch_1');
+      expect(
+          request.url.toString(), 'https://api.openai.com/v1/batches/batch_1');
     });
 
     test('two clients are isolated from each other', () async {
@@ -102,14 +103,16 @@ void main() {
     test('getAll builds query params', () async {
       final mock = MockClient();
       OpenAINetworkingClient.clientFactory = () => mock;
-      mock.expectJson(body: {
-        'data': [],
-        'first_id': '',
-        'last_id': '',
-        'has_more': false,
-      }, assertRequest: (request) {
-        expect(request.url.queryParameters, {'after': 'b2', 'limit': '10'});
-      });
+      mock.expectJson(
+          body: {
+            'data': [],
+            'first_id': '',
+            'last_id': '',
+            'has_more': false,
+          },
+          assertRequest: (request) {
+            expect(request.url.queryParameters, {'after': 'b2', 'limit': '10'});
+          });
 
       final client = OpenAIClient(apiKey: 'sk-a');
       final list = await client.batch.getAll(after: 'b2', limit: 10);
@@ -140,17 +143,19 @@ void main() {
     test('create posts upload session body', () async {
       final mock = MockClient();
       OpenAINetworkingClient.clientFactory = () => mock;
-      mock.expectJson(body: {
-        'id': 'upload_1',
-        'bytes': 100,
-        'filename': 'f.jsonl',
-        'purpose': 'fine-tune',
-        'status': 'pending',
-      }, assertRequest: (request) {
-        final body = decodedJsonBody(request);
-        expect(body['mime_type'], 'application/jsonl');
-        expect(body['purpose'], 'fine-tune');
-      });
+      mock.expectJson(
+          body: {
+            'id': 'upload_1',
+            'bytes': 100,
+            'filename': 'f.jsonl',
+            'purpose': 'fine-tune',
+            'status': 'pending',
+          },
+          assertRequest: (request) {
+            final body = decodedJsonBody(request);
+            expect(body['mime_type'], 'application/jsonl');
+            expect(body['purpose'], 'fine-tune');
+          });
 
       final client = OpenAIClient(apiKey: 'sk-a');
       final upload = await client.uploads.create(
@@ -165,14 +170,15 @@ void main() {
     test('cancel posts to cancel path', () async {
       final mock = MockClient();
       OpenAINetworkingClient.clientFactory = () => mock;
-      mock.expectJson(body: {
-        'id': 'upload_1',
-        'status': 'cancelled',
-      }, assertRequest: (request) {
-        expect(
-            request.url.toString(),
-            'https://api.openai.com/v1/uploads/upload_1/cancel');
-      });
+      mock.expectJson(
+          body: {
+            'id': 'upload_1',
+            'status': 'cancelled',
+          },
+          assertRequest: (request) {
+            expect(request.url.toString(),
+                'https://api.openai.com/v1/uploads/upload_1/cancel');
+          });
 
       final client = OpenAIClient(apiKey: 'sk-a');
       final upload = await client.uploads.cancel(uploadId: 'upload_1');

@@ -22,7 +22,8 @@ interface class OpenAIModel implements OpenAIModelBase {
   final OpenAIClientConfig? _config;
 
   /// {@macro openai_model}
-  OpenAIModel([this._config]) {    OpenAILogger.logEndpoint(endpoint);
+  OpenAIModel([this._config]) {
+    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Lists all the models available in the OpenAI API and returns a list of [OpenAIModelModel] objects.
@@ -38,14 +39,14 @@ interface class OpenAIModel implements OpenAIModelBase {
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.get<List<OpenAIModelModel>>(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint),
-      onSuccess: (Map<String, dynamic> response) {
-        final List data = response['data'];
+        from: BaseApiUrlBuilder.buildFor(_config, endpoint),
+        onSuccess: (Map<String, dynamic> response) {
+          final List data = response['data'];
 
-        return data.map((model) => OpenAIModelModel.fromMap(model)).toList();
-      },
-      client: client,
-      config: _config);
+          return data.map((model) => OpenAIModelModel.fromMap(model)).toList();
+        },
+        client: client,
+        config: _config);
   }
 
   /// Retrieves a model by it's id and returns a [OpenAIModelModel] object, if the model is not found, it will throw a [RequestFailedException].
@@ -63,12 +64,12 @@ interface class OpenAIModel implements OpenAIModelBase {
     http.Client? client,
   }) async {
     return await OpenAINetworkingClient.get<OpenAIModelModel>(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint, model),
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIModelModel.fromMap(response);
-      },
-      client: client,
-      config: _config);
+        from: BaseApiUrlBuilder.buildFor(_config, endpoint, model),
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIModelModel.fromMap(response);
+        },
+        client: client,
+        config: _config);
   }
 
   /// Deletes a fine-tuned model, returns [true] if the model did been deleted successfully, if the model is not found, it will throw a [RequestFailedException].
@@ -91,7 +92,8 @@ interface class OpenAIModel implements OpenAIModelBase {
       onSuccess: (Map<String, dynamic> response) {
         return response['deleted'];
       },
-      client: client, config: _config,
+      client: client,
+      config: _config,
     );
   }
 }

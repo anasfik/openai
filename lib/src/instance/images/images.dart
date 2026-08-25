@@ -27,7 +27,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
   final OpenAIClientConfig? _config;
 
   /// {@macro openai_images}
-  OpenAIImages([this._config]) {    OpenAILogger.logEndpoint(endpoint);
+  OpenAIImages([this._config]) {
+    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// This function creates an image based on a given prompt.
@@ -111,7 +112,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
         if (partialImages != null) "partial_images": partialImages,
         if (style != null) "style": style.name,
       },
-      client: client, config: _config,
+      client: client,
+      config: _config,
     );
   }
 
@@ -177,28 +179,28 @@ interface class OpenAIImages implements OpenAIImagesBase {
     final String edit = "/edits";
 
     return await OpenAINetworkingClient.imageEditForm<OpenAIImageModel>(
-      image: image,
-      mask: mask,
-      body: {
-        if (model != null) "model": model,
-        "prompt": prompt,
-        if (n != null) "n": n.toString(),
-        if (size != null) "size": size.value,
-        if (responseFormat != null) "response_format": responseFormat.value,
-        if (background != null) "background": background,
-        if (inputFidelity != null) "input_fidelity": inputFidelity.name,
-        if (outputCompression != null)
-          "output_compression": outputCompression.toString(),
-        if (partialImages != null) "partial_images": partialImages.toString(),
-        if (outputFormat != null) "output_format": outputFormat.name,
-        if (quality != null) "quality": quality.value,
-        if (user != null) "user": user,
-      },
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIImageModel.fromMap(response);
-      },
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint + edit),
-      config: _config);
+        image: image,
+        mask: mask,
+        body: {
+          if (model != null) "model": model,
+          "prompt": prompt,
+          if (n != null) "n": n.toString(),
+          if (size != null) "size": size.value,
+          if (responseFormat != null) "response_format": responseFormat.value,
+          if (background != null) "background": background,
+          if (inputFidelity != null) "input_fidelity": inputFidelity.name,
+          if (outputCompression != null)
+            "output_compression": outputCompression.toString(),
+          if (partialImages != null) "partial_images": partialImages.toString(),
+          if (outputFormat != null) "output_format": outputFormat.name,
+          if (quality != null) "quality": quality.value,
+          if (user != null) "user": user,
+        },
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIImageModel.fromMap(response);
+        },
+        to: BaseApiUrlBuilder.buildFor(_config, endpoint + edit),
+        config: _config);
   }
 
   /// Creates a variation of a given image.
@@ -248,23 +250,54 @@ interface class OpenAIImages implements OpenAIImagesBase {
     final String variations = "/variations";
 
     return await OpenAINetworkingClient.imageVariationForm<
-        List<OpenAIImageData>>(
-      image: image,
+            List<OpenAIImageData>>(
+        image: image,
+        body: {
+          if (model != null) "model": model,
+          if (n != null) "n": n.toString(),
+          if (size != null) "size": size.value,
+          if (responseFormat != null) "response_format": responseFormat.value,
+          if (user != null) "user": user,
+        },
+        onSuccess: (Map<String, dynamic> response) {
+          return [
+            ...(response["data"] as List).map(
+              (e) => OpenAIImageData.fromMap(e),
+            ),
+          ];
+        },
+        to: BaseApiUrlBuilder.buildFor(_config, endpoint + variations),
+        config: _config);
+  }
+
+  /// Creates images with streaming partial results (gpt-image-1).
+  ///
+  /// Emits decoded event maps; `type` is either
+  /// `image_generation.partial_image` (with a base64 `b64_json` field) or the
+  /// final completed event carrying the full result.
+  Stream<Map<String, dynamic>> createStream({
+    required String model,
+    required String prompt,
+    int? n,
+    String? size,
+    String? quality,
+    Map<String, dynamic>? extraParams,
+    http.Client? client,
+  }) {
+    return OpenAINetworkingClient.postStream<Map<String, dynamic>>(
+      to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/generations'),
       body: {
-        if (model != null) "model": model,
-        if (n != null) "n": n.toString(),
-        if (size != null) "size": size.value,
-        if (responseFormat != null) "response_format": responseFormat.value,
-        if (user != null) "user": user,
+        "model": model,
+        "prompt": prompt,
+        "stream": true,
+        if (n != null) "n": n,
+        if (size != null) "size": size,
+        if (quality != null) "quality": quality,
+        ...?extraParams,
       },
-      onSuccess: (Map<String, dynamic> response) {
-        return [
-          ...(response["data"] as List).map(
-            (e) => OpenAIImageData.fromMap(e),
-          ),
-        ];
-      },
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint + variations),
-      config: _config);
+      onSuccess: (event) => event,
+      client: client,
+      config: _config,
+    );
   }
 }

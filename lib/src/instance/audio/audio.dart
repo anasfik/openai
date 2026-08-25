@@ -33,7 +33,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
   final OpenAIClientConfig? _config;
 
   /// {@macro openai_audio}
-  OpenAIAudio([this._config]) {    OpenAILogger.logEndpoint(endpoint);
+  OpenAIAudio([this._config]) {
+    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Creates a transcription for a given audio file.
@@ -104,7 +105,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
       },
       responseMapAdapter: (res) {
         return {"text": res};
-      }, config: _config,
+      },
+      config: _config,
     );
   }
 
@@ -162,7 +164,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         } catch (e) {}
 
         return {"text": res};
-      }, config: _config,
+      },
+      config: _config,
     );
   }
 
@@ -196,7 +199,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
           ? responseFormat.name
           : OpenAIAudioSpeechResponseFormat.mp3.name,
       outputFileName: outputFileName,
-      outputDirectory: outputDirectory, config: _config,
+      outputDirectory: outputDirectory,
+      config: _config,
     );
   }
 
@@ -222,7 +226,8 @@ interface class OpenAIAudio implements OpenAIAudioBase {
         if (instructions != null) "instructions": instructions,
         if (responseFormat != null) "response_format": responseFormat.name,
         if (speed != null) "speed": speed,
-      }, config: _config,
+      },
+      config: _config,
     );
   }
 
@@ -242,5 +247,90 @@ interface class OpenAIAudio implements OpenAIAudioBase {
             'or switch to gpt-4o-mini-tts for newer voices such as ballad, verse, marin, or cedar.',
       );
     }
+  }
+
+  /// Lists the available voices.
+  ///
+  /// Returns the raw voice entries as maps, since the schema varies between
+  /// providers and API versions.
+  Future<List<Map<String, dynamic>>> listVoices() async {
+    return await OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint + "/voices"),
+      onSuccess: (response) => ((response['data'] as List<dynamic>? ?? []))
+          .whereType<Map<String, dynamic>>()
+          .toList(),
+      config: _config,
+    );
+  }
+
+  /// Lists the voice consents.
+  ///
+  /// Returns the raw response map.
+  Future<Map<String, dynamic>> listVoiceConsents() async {
+    return await OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(_config, endpoint + "/voice_consents"),
+      onSuccess: (response) => response,
+      config: _config,
+    );
+  }
+
+  /// Retrieves a single voice consent by id.
+  ///
+  /// [consentId] is the id of the consent to retrieve.
+  ///
+  /// Returns the raw response map.
+  Future<Map<String, dynamic>> getVoiceConsent({
+    required String consentId,
+  }) async {
+    return await OpenAINetworkingClient.get(
+      from: BaseApiUrlBuilder.buildFor(
+          _config, endpoint + "/voice_consents/$consentId"),
+      onSuccess: (response) => response,
+      config: _config,
+    );
+  }
+
+  /// Uploads a consent audio file to create a voice consent.
+  ///
+  /// [file] is the [File] audio recording of the consent statement.
+  ///
+  /// [fields] are optional extra multipart form fields.
+  ///
+  /// Example:
+  /// ```dart
+  /// final consent = await openai.audio.createVoiceConsent(
+  ///   file: File("consent.wav"),
+  /// );
+  /// ```
+  Future<Map<String, dynamic>> createVoiceConsent({
+    required File file,
+    Map<String, String> fields = const {},
+  }) async {
+    return await OpenAINetworkingClient.fileUpload(
+      file: file,
+      to: BaseApiUrlBuilder.buildFor(_config, endpoint + "/voice_consents"),
+      body: fields,
+      fileField: 'audio',
+      onSuccess: (Map<String, dynamic> response) {
+        return response;
+      },
+      config: _config,
+    );
+  }
+
+  /// Deletes a voice consent by id.
+  ///
+  /// [consentId] is the id of the consent to delete.
+  ///
+  /// Returns the raw response map.
+  Future<Map<String, dynamic>> deleteVoiceConsent({
+    required String consentId,
+  }) async {
+    return await OpenAINetworkingClient.delete(
+      from: BaseApiUrlBuilder.buildFor(
+          _config, endpoint + "/voice_consents/$consentId"),
+      onSuccess: (response) => response,
+      config: _config,
+    );
   }
 }

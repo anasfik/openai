@@ -16,4 +16,13 @@ class LabelModelGrader extends OpenAiGeneralGrader {
     required this.passingLabels,
     required this.type,
   });
+  @override
+  Map<String, dynamic> toMap() => {
+        'type': type,
+        'name': name,
+        'model': model,
+        'input': input,
+        'labels': labels,
+        'passing_labels': passingLabels,
+      };
 }

@@ -23,7 +23,8 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
   final OpenAIClientConfig? _config;
 
   /// {@macro openai_embedding}
-  OpenAIEmbedding([this._config]) {    OpenAILogger.logEndpoint(endpoint);
+  OpenAIEmbedding([this._config]) {
+    OpenAILogger.logEndpoint(endpoint);
   }
 
   /// Creates an embedding vector representing the input text.
@@ -63,17 +64,17 @@ interface class OpenAIEmbedding implements OpenAIEmbeddingBase {
     );
 
     return await OpenAINetworkingClient.post<OpenAIEmbeddingsModel>(
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIEmbeddingsModel.fromMap(response);
-      },
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint),
-      body: {
-        "model": model,
-        if (input != null) "input": input,
-        if (user != null) "user": user,
-        if (dimensions != null) "dimensions": dimensions,
-        if (encodingFormat != null) "encoding_format": encodingFormat.name,
-      },
-      config: _config);
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIEmbeddingsModel.fromMap(response);
+        },
+        to: BaseApiUrlBuilder.buildFor(_config, endpoint),
+        body: {
+          "model": model,
+          if (input != null) "input": input,
+          if (user != null) "user": user,
+          if (dimensions != null) "dimensions": dimensions,
+          if (encodingFormat != null) "encoding_format": encodingFormat.name,
+        },
+        config: _config);
   }
 }

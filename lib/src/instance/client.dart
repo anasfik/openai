@@ -10,10 +10,16 @@ import 'package:dart_openai/src/instance/embedding/embedding.dart';
 import 'package:dart_openai/src/instance/evals/evals.dart';
 import 'package:dart_openai/src/instance/files/files.dart';
 import 'package:dart_openai/src/instance/fine_tunes/fine_tunes.dart';
+import 'package:dart_openai/src/instance/fine_tuning/fine_tuning.dart';
 import 'package:dart_openai/src/instance/graders/graders.dart';
 import 'package:dart_openai/src/instance/images/images.dart';
 import 'package:dart_openai/src/instance/model/model.dart';
 import 'package:dart_openai/src/instance/moderations/moderations.dart';
+import 'package:dart_openai/src/instance/organization/organization.dart';
+import 'package:dart_openai/src/instance/provenance/provenance.dart';
+import 'package:dart_openai/src/instance/realtime/realtime.dart';
+import 'package:dart_openai/src/instance/skills/skills.dart';
+import 'package:dart_openai/src/instance/videos/videos.dart';
 import 'package:dart_openai/src/instance/responses/responses.dart';
 import 'package:dart_openai/src/instance/uploads/uploads.dart';
 import 'package:dart_openai/src/instance/vector_stores/vector_stores.dart';
@@ -90,6 +96,9 @@ class OpenAIClient {
   /// Fine-tunes endpoints (legacy API).
   OpenAIFineTunes get fineTune => OpenAIFineTunes(config);
 
+  /// Fine-tuning jobs (current API).
+  OpenAIFineTuning get fineTuning => OpenAIFineTuning(config);
+
   /// Moderations endpoints.
   OpenAIModeration get moderation => OpenAIModeration(config);
 
@@ -110,4 +119,19 @@ class OpenAIClient {
 
   /// Conversations endpoints.
   OpenAIConversations get conversations => OpenAIConversations(config);
+
+  /// Realtime REST endpoints (sessions and ephemeral client secrets).
+  OpenAIRealtime get realtime => OpenAIRealtime(config);
+
+  /// Videos endpoints.
+  OpenAIVideos get videos => OpenAIVideos(config);
+
+  /// Skills endpoints.
+  OpenAISkills get skills => OpenAISkills(config);
+
+  /// Content provenance checks.
+  OpenAIProvenance get provenance => OpenAIProvenance(config);
+
+  /// Organization administration endpoints.
+  OpenAIOrganization get organization => OpenAIOrganization(config);
 }

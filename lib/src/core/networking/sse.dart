@@ -23,7 +23,8 @@ Stream<Map<String, dynamic>> openAIParseSseStream(
   var emittedAny = false;
   Map<String, dynamic>? firstErrorPayload;
 
-  final lines = byteStream.transform(const Utf8Decoder()).transform(const LineSplitter());
+  final lines =
+      byteStream.transform(const Utf8Decoder()).transform(const LineSplitter());
 
   await for (final line in lines) {
     if (line.isEmpty || line.startsWith(':')) continue;
@@ -59,9 +60,11 @@ Stream<Map<String, dynamic>> openAIParseSseStream(
 
   final trailing = buffer.toString().trim();
   if (!emittedAny && firstErrorPayload == null && trailing.isNotEmpty) {
-    throw RequestFailedException(trailing.canBeParsedToJson
-        ? jsonEncode(_decodeOrNull(trailing) ?? trailing)
-        : trailing, statusCode ?? 0);
+    throw RequestFailedException(
+        trailing.canBeParsedToJson
+            ? jsonEncode(_decodeOrNull(trailing) ?? trailing)
+            : trailing,
+        statusCode ?? 0);
   }
 
   if (firstErrorPayload != null) {

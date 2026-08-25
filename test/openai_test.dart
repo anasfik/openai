@@ -16,6 +16,12 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 void main() async {
+  final liveApiKey = Platform.environment['OPEN_AI_API_KEY'];
+  if (liveApiKey == null || liveApiKey.isEmpty) {
+    // Live-API integration suite. Skipped locally/CI unless a key is provided.
+    return;
+  }
+
   final exampleImageFile = await getFileFromUrl(
     "https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png",
   );
@@ -39,7 +45,7 @@ void main() async {
       }
     });
     test('with setting a key', () {
-      OpenAI.apiKey = "YOUR API KEY HERE";
+      OpenAI.apiKey = liveApiKey;
 
       expect(OpenAI.instance, isA<OpenAI>());
     });

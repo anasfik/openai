@@ -211,11 +211,9 @@ extension BatchModelParsing on OpenAiBatchModel {
           ? UsageParsing.fromMap(map['usage'] as Map<String, dynamic>)
           : Usage(
               inputTokens: 0,
-              inputTokensDetails:
-                  InputTokensDetails(cachedTokens: 0),
+              inputTokensDetails: InputTokensDetails(cachedTokens: 0),
               outputTokens: 0,
-              outputTokensDetails:
-                  OutputTokensDetails(reasoningTokens: 0),
+              outputTokensDetails: OutputTokensDetails(reasoningTokens: 0),
               totalTokens: 0,
             ),
       metadata: map['metadata'] as Map<String, dynamic>? ?? {},
@@ -240,13 +238,15 @@ extension UsageParsing on Usage {
     return Usage(
       inputTokens: map['input_tokens'] as int? ?? 0,
       inputTokensDetails: InputTokensDetails(
-        cachedTokens:
-            inputDetails is Map<String, dynamic> ? inputDetails['cached_tokens'] as int? ?? 0 : 0,
+        cachedTokens: inputDetails is Map<String, dynamic>
+            ? inputDetails['cached_tokens'] as int? ?? 0
+            : 0,
       ),
       outputTokens: map['output_tokens'] as int? ?? 0,
       outputTokensDetails: OutputTokensDetails(
-        reasoningTokens:
-            outputDetails is Map<String, dynamic> ? outputDetails['reasoning_tokens'] as int? ?? 0 : 0,
+        reasoningTokens: outputDetails is Map<String, dynamic>
+            ? outputDetails['reasoning_tokens'] as int? ?? 0
+            : 0,
       ),
       totalTokens: map['total_tokens'] as int? ?? 0,
     );

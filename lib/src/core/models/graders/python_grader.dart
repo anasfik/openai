@@ -12,4 +12,11 @@ class PythonGrader extends OpenAiGeneralGrader {
     required this.source,
     required this.type,
   });
+  @override
+  Map<String, dynamic> toMap() => {
+        'type': type,
+        'name': name,
+        'image_tag': imageTag,
+        'source': source,
+      };
 }

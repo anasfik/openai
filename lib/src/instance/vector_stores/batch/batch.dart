@@ -8,7 +8,6 @@ import 'package:dart_openai/src/core/base/vector_stores/batch/batch.dart';
 import 'package:dart_openai/src/core/config/client_config.dart';
 
 class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
-
   /// Per-client configuration; when null, global statics are used.
   final OpenAIClientConfig? _config;
 
@@ -23,11 +22,12 @@ class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
     required String vectorStoreId,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIVectorStoreBatchModel>(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/file_batches/$batchId/cancel"),
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIVectorStoreBatchModel.fromMap(response);
-      },
-      config: _config);
+        to: BaseApiUrlBuilder.buildFor(
+            _config, endpoint, "$vectorStoreId/file_batches/$batchId/cancel"),
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIVectorStoreBatchModel.fromMap(response);
+        },
+        config: _config);
   }
 
   @override
@@ -38,17 +38,18 @@ class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
     OpenAIVectorStoreChunkingStrategy? chunkingStrategy,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIVectorStoreBatchModel>(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/file_batches"),
-      body: {
-        if (fileIds != null) "file_ids": fileIds,
-        if (attributes != null) "attributes": attributes,
-        if (chunkingStrategy != null)
-          "chunking_strategy": chunkingStrategy.toMap(),
-      },
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIVectorStoreBatchModel.fromMap(response);
-      },
-      config: _config);
+        to: BaseApiUrlBuilder.buildFor(
+            _config, endpoint, "$vectorStoreId/file_batches"),
+        body: {
+          if (fileIds != null) "file_ids": fileIds,
+          if (attributes != null) "attributes": attributes,
+          if (chunkingStrategy != null)
+            "chunking_strategy": chunkingStrategy.toMap(),
+        },
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIVectorStoreBatchModel.fromMap(response);
+        },
+        config: _config);
   }
 
   @override
@@ -57,11 +58,12 @@ class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
     required String vectorStoreId,
   }) async {
     return await OpenAINetworkingClient.get<OpenAIVectorStoreBatchModel>(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/file_batches/$batchId"),
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIVectorStoreBatchModel.fromMap(response);
-      },
-      config: _config);
+        from: BaseApiUrlBuilder.buildFor(
+            _config, endpoint, "$vectorStoreId/file_batches/$batchId"),
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIVectorStoreBatchModel.fromMap(response);
+        },
+        config: _config);
   }
 
   @override
@@ -83,7 +85,8 @@ class OpenAIVectorStoreBatch implements OpenAIVectorStoreBatchBase {
           if (filter != null) "filter": filter,
           if (limit != null) "limit": limit.toString(),
           if (order != null) "order": order,
-        }, config: _config,
+        },
+        config: _config,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIVectorStoreBatchListModel.fromMap(response);

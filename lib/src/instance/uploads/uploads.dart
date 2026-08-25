@@ -64,8 +64,7 @@ class OpenAIUploads implements OpenAIUploadsBase {
     String? md5,
   }) async {
     return await OpenAINetworkingClient.post(
-      to: BaseApiUrlBuilder.buildFor(
-          _config, '$endpoint/$uploadId/complete'),
+      to: BaseApiUrlBuilder.buildFor(_config, '$endpoint/$uploadId/complete'),
       body: {
         'part_ids': partIds,
         if (md5 != null) 'md5': md5,

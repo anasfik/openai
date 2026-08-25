@@ -8,7 +8,6 @@ import 'package:dart_openai/src/core/base/vector_stores/files/files.dart';
 import 'package:dart_openai/src/core/config/client_config.dart';
 
 class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
-
   /// Per-client configuration; when null, global statics are used.
   final OpenAIClientConfig? _config;
 
@@ -25,17 +24,18 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
     OpenAIVectorStoreChunkingStrategy? chunckingStrategy,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIVectorStoreFileModel>(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/files"),
-      body: {
-        "file_id": fileId,
-        if (attributes != null) "attributes": attributes,
-        if (chunckingStrategy != null)
-          "chunking_strategy": chunckingStrategy.toMap(),
-      },
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIVectorStoreFileModel.fromMap(response);
-      },
-      config: _config);
+        to: BaseApiUrlBuilder.buildFor(
+            _config, endpoint, "$vectorStoreId/files"),
+        body: {
+          "file_id": fileId,
+          if (attributes != null) "attributes": attributes,
+          if (chunckingStrategy != null)
+            "chunking_strategy": chunckingStrategy.toMap(),
+        },
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIVectorStoreFileModel.fromMap(response);
+        },
+        config: _config);
   }
 
   @override
@@ -44,11 +44,12 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
     required String vectorStoreId,
   }) async {
     return await OpenAINetworkingClient.get<OpenAIVectorStoreFileModel>(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/files/$fileId"),
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIVectorStoreFileModel.fromMap(response);
-      },
-      config: _config);
+        from: BaseApiUrlBuilder.buildFor(
+            _config, endpoint, "$vectorStoreId/files/$fileId"),
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIVectorStoreFileModel.fromMap(response);
+        },
+        config: _config);
   }
 
   @override
@@ -67,7 +68,8 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
           if (before != null) "before": before,
           if (limit != null) "limit": limit.toString(),
           if (order != null) "order": order,
-        }, config: _config,
+        },
+        config: _config,
       ),
       onSuccess: (Map<String, dynamic> response) {
         return OpenAIVectorStoreFileListModel.fromMap(response);
@@ -81,8 +83,10 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
     required String vectorStoreId,
   }) async {
     return await OpenAINetworkingClient.get(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/files/$fileId/content"),
-      returnRawResponse: true, config: _config,
+      from: BaseApiUrlBuilder.buildFor(
+          _config, endpoint, "$vectorStoreId/files/$fileId/content"),
+      returnRawResponse: true,
+      config: _config,
     );
   }
 
@@ -93,14 +97,15 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
     required Map<String, dynamic> attributes,
   }) async {
     return await OpenAINetworkingClient.post<OpenAIVectorStoreFileModel>(
-      to: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/files/$fileId"),
-      body: {
-        "attributes": attributes,
-      },
-      onSuccess: (Map<String, dynamic> response) {
-        return OpenAIVectorStoreFileModel.fromMap(response);
-      },
-      config: _config);
+        to: BaseApiUrlBuilder.buildFor(
+            _config, endpoint, "$vectorStoreId/files/$fileId"),
+        body: {
+          "attributes": attributes,
+        },
+        onSuccess: (Map<String, dynamic> response) {
+          return OpenAIVectorStoreFileModel.fromMap(response);
+        },
+        config: _config);
   }
 
   @override
@@ -109,8 +114,10 @@ class OpenAIVectorStoreFiles extends OpenAIVectorStoreFilesBase {
     required String vectorStoreId,
   }) async {
     return await OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.buildFor(_config, endpoint, "$vectorStoreId/files/$fileId"),
-      onSuccess: (_) => {}, config: _config,
+      from: BaseApiUrlBuilder.buildFor(
+          _config, endpoint, "$vectorStoreId/files/$fileId"),
+      onSuccess: (_) => {},
+      config: _config,
     );
   }
 }
