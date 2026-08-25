@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
+import '../../utils/parse.dart';
 import 'sub_models/event.dart';
 import 'sub_models/hyper_params.dart';
 import 'sub_models/training_files.dart';
-import '../../utils/parse.dart';
 
 export 'stream/fine_tun_event.dart';
 export 'sub_models/event.dart';
@@ -111,7 +111,8 @@ final class OpenAIFineTuneModel {
     return OpenAIFineTuneModel(
       id: json['id'],
       model: json['model'],
-      createdAt: DateTime.fromMillisecondsSinceEpoch((intOr(json['created_at']) * 1000)),
+      createdAt:
+          DateTime.fromMillisecondsSinceEpoch(intOr(json['created_at']) * 1000),
       events: (json['events'] as List?)
           ?.map((e) => OpenAIFineTuneEventModel.fromMap(e))
           .toList(),
@@ -126,7 +127,8 @@ final class OpenAIFineTuneModel {
       trainingFiles: (json['training_files'] as List)
           .map((e) => OpenAIFineTuneTrainingFilesModel.fromMap(e))
           .toList(),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch((intOr(json['updated_at']) * 1000)),
+      updatedAt:
+          DateTime.fromMillisecondsSinceEpoch(intOr(json['updated_at']) * 1000),
     );
   }
 

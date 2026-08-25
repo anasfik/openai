@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 /// {@template openai_chat_completion_response_function_model}
 /// This represents the response function of the [OpenAIChatCompletionChoiceMessageModel] model of the OpenAI API, which is used in the [OpenAIChat] methods.
@@ -8,7 +9,7 @@ class OpenAIResponseFunction {
   final String? name;
 
   /// The arguments of the function.
-  final arguments;
+  final String? arguments;
 
   //! Not sure if the arguments will always be a Map<String, dynamic>, if you do confirm it from OpenAI docs please open an issue.
 

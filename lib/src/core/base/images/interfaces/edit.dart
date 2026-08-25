@@ -1,9 +1,7 @@
-
 import 'package:dart_openai/src/core/io/openai_file.dart';
 
 import '../../../enum.dart';
 import '../../../models/image/image/image.dart';
-
 
 abstract class EditInterface {
   Future<OpenAIImageModel> edit({

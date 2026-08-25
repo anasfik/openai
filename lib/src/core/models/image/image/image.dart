@@ -1,8 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:dart_openai/src/core/enum.dart';
 import 'package:meta/meta.dart';
-import 'sub_models/data.dart';
+
 import '../../../utils/parse.dart';
+import 'sub_models/data.dart';
 
 export 'sub_models/data.dart';
 
@@ -73,7 +74,8 @@ final class OpenAIImageModel {
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIImageModel] object.
   factory OpenAIImageModel.fromMap(Map<String, dynamic> json) {
     return OpenAIImageModel(
-      created: DateTime.fromMillisecondsSinceEpoch(intOr(json['created']) * 1000),
+      created:
+          DateTime.fromMillisecondsSinceEpoch(intOr(json['created']) * 1000),
       data: (json['data'] as List? ?? const [])
           .whereType<Map<String, dynamic>>()
           .map(OpenAIImageData.fromMap)

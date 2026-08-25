@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 
-import 'sub_models/usage.dart';
 import '../../../utils/parse.dart';
+import 'sub_models/usage.dart';
 
 export 'sub_models/choices/choices.dart';
 export 'sub_models/usage.dart';
@@ -53,7 +53,8 @@ final class OpenAIStreamChatCompletionModel {
   factory OpenAIStreamChatCompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAIStreamChatCompletionModel(
       id: json['id']?.toString() ?? '',
-      created: DateTime.fromMillisecondsSinceEpoch(intOr(json['created']) * 1000),
+      created:
+          DateTime.fromMillisecondsSinceEpoch(intOr(json['created']) * 1000),
       choices: (json['choices'] as List? ?? const [])
           .whereType<Map<String, dynamic>>()
           .map(OpenAIStreamChatCompletionChoiceModel.fromMap)

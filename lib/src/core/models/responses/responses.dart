@@ -8,15 +8,15 @@ class OpenAiResponse {
   final String id;
   final OpenAiResponseIncompleteDetails? incompleteDetails;
   // string or array
-  final instructions;
+  final dynamic instructions;
   final int? maxOutputTokens;
   final int? maxToolCalls;
   final Map<String, dynamic>? metadata;
   final String model;
-  final output;
+  final dynamic output;
   final bool parallelToolCalls;
   final String? previousResponseId;
-  final prompt;
+  final dynamic prompt;
   final String? promptCacheKey;
   final OpenAiResponseReasoning? reasoning;
   final String? safetyIdentifier;
@@ -25,7 +25,7 @@ class OpenAiResponse {
 
   final num? temperature;
   final OpenAiResponseText? text;
-  final toolChoice;
+  final dynamic toolChoice;
   final List tools;
   final int? topLogprobs;
   final num? topP;
@@ -68,7 +68,8 @@ class OpenAiResponse {
   factory OpenAiResponse.fromMap(Map<String, dynamic> json) {
     return OpenAiResponse(
       id: json['id']?.toString() ?? '',
-      createdAt: DateTime.fromMillisecondsSinceEpoch((intOr(json['created_at']) * 1000)),
+      createdAt:
+          DateTime.fromMillisecondsSinceEpoch(intOr(json['created_at']) * 1000),
       status: OpenAiResponseStatus.values.firstWhere(
         (e) => e.name.toLowerCase() == '${json['status']}'.toLowerCase(),
         orElse: () => OpenAiResponseStatus.failed,

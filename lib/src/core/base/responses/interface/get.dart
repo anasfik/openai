@@ -1,3 +1,4 @@
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names
 import 'package:dart_openai/src/core/models/responses/responses.dart';
 
 abstract class GetInterface {
@@ -17,15 +18,15 @@ abstract class GetInterface {
   });
 
   Future<int> getInputTokenCounts(
-    conversation,
-    input,
+    dynamic conversation,
+    dynamic input,
     String? instructions,
     String? model,
     bool? parallelToolCalls,
     String? previousResponseId,
-    reasoning,
-    text,
-    toolChoice,
+    dynamic reasoning,
+    dynamic text,
+    dynamic toolChoice,
     List? tools,
     String? truncation,
   );

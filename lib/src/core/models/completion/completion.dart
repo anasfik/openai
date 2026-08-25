@@ -65,7 +65,8 @@ final class OpenAICompletionModel {
   factory OpenAICompletionModel.fromMap(Map<String, dynamic> json) {
     return OpenAICompletionModel(
       id: json['id'],
-      created: DateTime.fromMillisecondsSinceEpoch(((json['created'] ?? 0) * 1000)),
+      created:
+          DateTime.fromMillisecondsSinceEpoch((json['created'] ?? 0) * 1000),
       model: json['model'],
       choices: (json['choices'] as List)
           .map((i) => OpenAICompletionModelChoice.fromMap(i))

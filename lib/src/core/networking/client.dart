@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:dart_openai/src/core/builder/headers.dart';
 import 'package:dart_openai/src/core/constants/config.dart';
-import 'package:dart_openai/src/core/io/file_helpers.dart';
 import 'package:dart_openai/src/core/utils/extensions.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:http/http.dart' as http;
@@ -67,7 +66,8 @@ abstract class OpenAINetworkingClient {
 
     final convertedBody = utf8decoder.convert(response.bodyBytes);
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw requestFailedExceptionFromRawBody(convertedBody, response.statusCode);
+      throw requestFailedExceptionFromRawBody(
+          convertedBody, response.statusCode);
     }
     final decodedBody = decodeToMap(convertedBody);
 
@@ -130,12 +130,13 @@ abstract class OpenAINetworkingClient {
     http.Client? client,
     OpenAIClientConfig? config,
   }) async {
-    final response =
-        await postAndGetResponse(to: to, body: body, client: client, config: config);
+    final response = await postAndGetResponse(
+        to: to, body: body, client: client, config: config);
 
     if (outputDirectory != null && outputFileName != null) {
-      final extension =
-          outputFileExtension ?? response.headers['content-type']?.split('/').last ?? 'mp3';
+      final extension = outputFileExtension ??
+          response.headers['content-type']?.split('/').last ??
+          'mp3';
       await saveOpenAIBytes(
         bytes: response.bodyBytes,
         outputDirectory: outputDirectory,
@@ -222,15 +223,16 @@ abstract class OpenAINetworkingClient {
     var effectiveBody = body;
 
     if (config?.azure != null && body != null) {
-      final (rewrittenUri, rewrittenBody) = openAIAzureRewrite(
-          uri: uri, body: body, config: config!);
+      final (rewrittenUri, rewrittenBody) =
+          openAIAzureRewrite(uri: uri, body: body, config: config!);
       uri = rewrittenUri;
       effectiveBody = rewrittenBody;
     }
 
     final headers = _headers(config);
 
-    final handledBody = effectiveBody != null ? jsonEncode(effectiveBody) : null;
+    final handledBody =
+        effectiveBody != null ? jsonEncode(effectiveBody) : null;
 
     final response = await _send(
       () => (client ?? _defaultClient())
@@ -250,7 +252,8 @@ abstract class OpenAINetworkingClient {
 
     final convertedBody = utf8decoder.convert(response.bodyBytes);
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw requestFailedExceptionFromRawBody(convertedBody, response.statusCode);
+      throw requestFailedExceptionFromRawBody(
+          convertedBody, response.statusCode);
     }
     final decodedBody = decodeToMap(convertedBody);
 
@@ -275,8 +278,8 @@ abstract class OpenAINetworkingClient {
         var streamUri = Uri.parse(to);
         var streamBody = body;
         if (config?.azure != null) {
-          final (u, b) =
-              openAIAzureRewrite(uri: streamUri, body: streamBody, config: config!);
+          final (u, b) = openAIAzureRewrite(
+              uri: streamUri, body: streamBody, config: config!);
           streamUri = u;
           streamBody = b;
         }
@@ -384,7 +387,8 @@ abstract class OpenAINetworkingClient {
     OpenAILogger.startingDecoding();
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw requestFailedExceptionFromRawBody(response.body, response.statusCode);
+      throw requestFailedExceptionFromRawBody(
+          response.body, response.statusCode);
     }
     final decodedBody = decodeToMap(response.body);
 
@@ -418,18 +422,16 @@ abstract class OpenAINetworkingClient {
             attempt: attempt)) {
           return response;
         }
-        retryAfterSecs =
-            int.tryParse(response.headers['retry-after'] ?? '');
+        retryAfterSecs = int.tryParse(response.headers['retry-after'] ?? '');
       } catch (error) {
         // Connection-level failure: nothing received, always retriable.
         if (!policy.shouldRetry(
-            method: method,
-            responseReceived: false,
-            attempt: attempt)) {
+            method: method, responseReceived: false, attempt: attempt)) {
           rethrow;
         }
       }
-      await Future<void>.delayed(policy.delayFor(attempt, retryAfterSeconds: retryAfterSecs));
+      await Future<void>.delayed(
+          policy.delayFor(attempt, retryAfterSeconds: retryAfterSecs));
     }
   }
 
@@ -463,7 +465,8 @@ abstract class OpenAINetworkingClient {
           rethrow;
         }
       }
-      await Future<void>.delayed(policy.delayFor(attempt, retryAfterSeconds: retryAfterSecs));
+      await Future<void>.delayed(
+          policy.delayFor(attempt, retryAfterSeconds: retryAfterSecs));
     }
   }
 

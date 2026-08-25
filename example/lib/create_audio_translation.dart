@@ -6,7 +6,6 @@ import 'env/env.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
-import 'package:dart_openai/src/core/io/file_helpers.dart';
 
 Future<void> main() async {
 // Set the OpenAI API key from the .env file.
@@ -15,8 +14,9 @@ Future<void> main() async {
 // create the audio transcription.
   final translationText = await OpenAI.instance.audio.createTranslation(
     file: await loadOpenAIFile((await getFileFromUrl(
-        'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
-        fileExtension: "mp3")).path),
+            'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
+            fileExtension: "mp3"))
+        .path),
     model: "whisper-1",
     prompt: "use different english words",
     responseFormat: OpenAIAudioResponseFormat.json,

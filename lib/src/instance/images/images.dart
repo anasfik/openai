@@ -1,4 +1,3 @@
-
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/config/client_config.dart';
 import 'package:dart_openai/src/core/enum.dart';
@@ -247,8 +246,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }) async {
     const variations = '/variations';
 
-    return OpenAINetworkingClient.imageVariationForm<
-            List<OpenAIImageData>>(
+    return OpenAINetworkingClient.imageVariationForm<List<OpenAIImageData>>(
         image: image,
         body: {
           if (model != null) 'model': model,

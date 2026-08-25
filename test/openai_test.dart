@@ -10,7 +10,6 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:dart_openai/src/core/builder/headers.dart';
 import 'package:dart_openai/src/core/constants/config.dart';
 import 'package:dart_openai/src/core/constants/strings.dart';
-import 'package:dart_openai/src/core/io/file_helpers.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
@@ -26,16 +25,14 @@ void main() async {
     'https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png',
   );
 
-  final imageFileExample =
-      await loadOpenAIFile(exampleImageFile.path);
+  final imageFileExample = await loadOpenAIFile(exampleImageFile.path);
   final maskFileExample = imageFileExample;
 
   String? fileIdFromFilesApi;
-
-  // String? fineTuneExampleId;
-
   // ignore: unused_local_variable
   String? fileToDelete;
+
+  // String? fineTuneExampleId;
 
   group('authentication', () {
     test('without setting a key', () {
@@ -124,6 +121,7 @@ void main() async {
           expect(models.first.id, isNotNull);
           expect(models.first.id, isA<String>());
 
+          // ignore: unused_local_variable
           final someModel = models.first;
 
           modelExampleId = models
@@ -151,8 +149,7 @@ void main() async {
 
   group('completions', () {
     test('create', () async {
-      final completion =
-          await OpenAI.instance.completion.create(
+      final completion = await OpenAI.instance.completion.create(
         model: 'davinci-002',
         prompt: 'Dart tests are made to ensure that a function w',
         maxTokens: 5,
@@ -171,8 +168,7 @@ void main() async {
     });
 
     test('create with a stream', () async {
-      final completionStream =
-          OpenAI.instance.completion.createStream(
+      final completionStream = OpenAI.instance.completion.createStream(
         model: 'davinci-002',
         prompt: 'Dart tests are made to ensure that a function w',
         maxTokens: 5,
@@ -204,8 +200,7 @@ void main() async {
 
   group('chat (chatGPT)', () {
     test('create', () async {
-      final chatCompletion =
-          await OpenAI.instance.chat.create(
+      final chatCompletion = await OpenAI.instance.chat.create(
         model: 'gpt-3.5-turbo',
         messages: [
           OpenAIChatCompletionChoiceMessageModel(
@@ -250,8 +245,7 @@ void main() async {
           );
         }
 
-        final chatCompletion =
-            await OpenAI.instance.chat.create(
+        final chatCompletion = await OpenAI.instance.chat.create(
           model: 'gpt-3.5-turbo',
           messages: [
             OpenAIChatCompletionChoiceMessageModel(
@@ -375,8 +369,7 @@ void main() async {
       expect(imageEdited.data.first.url, isA<String>());
     });
     test('variation', () async {
-      final variation =
-          await OpenAI.instance.image.variation(
+      final variation = await OpenAI.instance.image.variation(
         image: imageFileExample,
       );
 
@@ -387,8 +380,7 @@ void main() async {
 
   group('embeddings', () {
     test('create', () async {
-      final embedding =
-          await OpenAI.instance.embedding.create(
+      final embedding = await OpenAI.instance.embedding.create(
         model: 'text-embedding-ada-002',
         input: 'This is a sample text',
       );
@@ -398,8 +390,7 @@ void main() async {
     });
 
     test('create with smaller dimensions', () async {
-      final embedding =
-          await OpenAI.instance.embedding.create(
+      final embedding = await OpenAI.instance.embedding.create(
         model: 'text-embedding-3-large',
         input: 'This is a sample text',
         dimensions: 1000,
@@ -472,6 +463,7 @@ void main() async {
         'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
         fileExtension: 'mp3',
       );
+      // ignore: unused_local_variable
       final chunkingStrategy = OpenAIAudioChunkingConfig.auto();
 
       // Act
@@ -493,6 +485,7 @@ void main() async {
         'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
         fileExtension: 'mp3',
       );
+      // ignore: unused_local_variable
       final chunkingStrategy = OpenAIAudioChunkingConfig.serverVad(
         prefixPaddingMs: 200,
         silenceDurationMs: 500,
@@ -519,6 +512,7 @@ void main() async {
         'https://www.cbvoiceovers.com/wp-content/uploads/2017/05/Commercial-showreel.mp3',
         fileExtension: 'mp3',
       );
+      // ignore: unused_local_variable
       final chunkingStrategy = OpenAIAudioChunkingConfig.auto();
 
       // Act
@@ -554,6 +548,7 @@ void main() async {
         fileIdFromFilesApi = files.data
             .firstWhere((element) => element.fileName.contains('example.jsonl'))
             .id;
+        // ignore: unused_local_variable
         fileToDelete = files.data.last.id;
       }
     });
@@ -564,8 +559,7 @@ void main() async {
         'please set a file id that is not null, or let the previous test run first to get a file id example (if it does exists)',
       );
 
-      final file =
-          await OpenAI.instance.file.retrieve(fileIdFromFilesApi!);
+      final file = await OpenAI.instance.file.retrieve(fileIdFromFilesApi!);
 
       expect(file, isA<OpenAIFileModel>());
       expect(file.id, isA<String>());
@@ -655,8 +649,7 @@ void main() async {
 
   group('moderations', () {
     test('create', () async {
-      final moderation =
-          await OpenAI.instance.moderation.create(
+      final moderation = await OpenAI.instance.moderation.create(
         input: 'I hate you',
       );
 
@@ -667,13 +660,11 @@ void main() async {
 }
 
 File jsonLFileExample() {
-  final file = File('example.jsonl');
-  file.writeAsStringSync(
-    jsonEncode({
+  final file = File('example.jsonl')
+    ..writeAsStringSync(jsonEncode({
       'prompt': '<prompt text>',
       'completion': '<ideal generated text>',
-    }),
-  );
+    }));
 
   return file;
 }

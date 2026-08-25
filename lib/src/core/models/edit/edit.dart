@@ -40,7 +40,8 @@ final class OpenAIEditModel {
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIEditModel] object.
   factory OpenAIEditModel.fromMap(Map<String, dynamic> json) {
     return OpenAIEditModel(
-      created: DateTime.fromMillisecondsSinceEpoch(((json['created'] ?? 0) * 1000)),
+      created:
+          DateTime.fromMillisecondsSinceEpoch((json['created'] ?? 0) * 1000),
       choices: (json['choices'] as List)
           .map((e) => OpenAIEditModelChoice.fromMap(e))
           .toList(),

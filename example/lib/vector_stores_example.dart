@@ -60,7 +60,6 @@ void main() async {
     );
 
     print(searchVEctorStoreResult);
-    return;
 
     await OpenAI.instance.vectorStores.vectorStores.delete(
       vectorStoreId: updatedVectorStore.id,

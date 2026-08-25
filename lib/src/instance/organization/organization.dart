@@ -368,8 +368,7 @@ class OpenAIUsage {
     // ponytail: project_ids/group_by joined as comma string since
     // buildWithQuery takes Map<String, String>; raw Uri when repeated
     // params are needed.
-    return OpenAINetworkingClient
-        .get<List<Map<String, dynamic>>>(
+    return OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
       from: BaseApiUrlBuilder.buildWithQuery(
         endpoint: 'organization/usage/$kind',
         query: {
@@ -591,7 +590,8 @@ class OpenAIGroups {
     );
   }
 
-  Future<List<Map<String, dynamic>>> listUsers({required String groupId}) async {
+  Future<List<Map<String, dynamic>>> listUsers(
+      {required String groupId}) async {
     return OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
       from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/$groupId/users'),
       onSuccess: (map) => (map['data'] as List<dynamic>? ?? [])
@@ -618,14 +618,15 @@ class OpenAIGroups {
     required String userId,
   }) async {
     return OpenAINetworkingClient.delete(
-      from:
-          BaseApiUrlBuilder.buildFor(_config, '$_endpoint/$groupId/users', userId),
+      from: BaseApiUrlBuilder.buildFor(
+          _config, '$_endpoint/$groupId/users', userId),
       onSuccess: (map) => map['deleted'] as bool? ?? true,
       config: _config,
     );
   }
 
-  Future<List<Map<String, dynamic>>> listRoles({required String groupId}) async {
+  Future<List<Map<String, dynamic>>> listRoles(
+      {required String groupId}) async {
     return OpenAINetworkingClient.get<List<Map<String, dynamic>>>(
       from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/$groupId/roles'),
       onSuccess: (map) => (map['data'] as List<dynamic>? ?? [])
@@ -658,8 +659,7 @@ class OpenAIServiceAccounts {
         },
         config: _config,
       ),
-      onSuccess: (map) =>
-          OpenAIOrgPage.fromMap(map, OrgServiceAccount.fromMap),
+      onSuccess: (map) => OpenAIOrgPage.fromMap(map, OrgServiceAccount.fromMap),
       config: _config,
     );
   }

@@ -53,10 +53,11 @@ Future<void> main() async {
   }
 
   final funcCall = toolCalls.first.function;
+  if (funcCall?.arguments == null) return;
 
   final weather = getCurrentWeather(
-    location: jsonDecode(funcCall?.arguments!)?["location"],
-    unit: jsonDecode(funcCall?.arguments!)?["unit"],
+    location: jsonDecode(funcCall!.arguments!)?["location"],
+    unit: jsonDecode(funcCall.arguments!)?["unit"],
   );
 
   final toolMsg = OpenAIChatCompletionChoiceMessageModel(

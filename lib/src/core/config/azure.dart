@@ -84,7 +84,11 @@ class OpenAIAzure {
     ..['api-version'] = azure.apiVersion;
 
   return (
-    uri.replace(scheme: 'https', host: azure.host, pathSegments: rewritten, queryParameters: query),
+    uri.replace(
+        scheme: 'https',
+        host: azure.host,
+        pathSegments: rewritten,
+        queryParameters: query),
     body ?? const {},
   );
 }

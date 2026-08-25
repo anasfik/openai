@@ -22,9 +22,8 @@ Future<void> saveOpenAIBytes({
   required String outputFileName,
 }) async {
   final dir = Directory(outputDirectory);
-  if (!await dir.exists()) {
-    await dir.create(recursive: true);
-  }
+  // create(recursive:) is a no-op when the directory already exists.
+  await dir.create(recursive: true);
   final target = '${dir.path}/$outputFileName';
   await File(target).writeAsBytes(bytes);
 }
@@ -47,5 +46,6 @@ String? _mediaType(String fileName) {
     'pdf': 'application/pdf',
     'txt': 'text/plain',
   };
-  return map[extension] ?? hp.MediaType.parse('application/octet-stream').toString();
+  return map[extension] ??
+      hp.MediaType.parse('application/octet-stream').toString();
 }

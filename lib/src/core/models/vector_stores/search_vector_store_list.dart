@@ -1,10 +1,10 @@
 class SearchVectorStoreList {
-  final searchQuery;
+  final dynamic searchQuery;
   // non specified type in API, maybe it accepts many data types ?
   final List<Map<String, dynamic>> data;
   final bool hasMore;
   // ?
-  final nextPage;
+  final dynamic nextPage;
 
   SearchVectorStoreList({
     required this.searchQuery,

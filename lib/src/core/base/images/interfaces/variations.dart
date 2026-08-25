@@ -1,6 +1,4 @@
-
 import '../../../../../dart_openai.dart';
-
 
 abstract class VariationInterface {
   Future<List<OpenAIImageData>> variation({

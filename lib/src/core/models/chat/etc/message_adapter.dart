@@ -5,7 +5,7 @@ mixin class OpenAIMessageDynamicContentFromFieldAdapter {
   /// This is a helper function to adapt old text-based content to the new implementation of the content that accepts a list of content types like images..
   static List<OpenAIChatCompletionChoiceMessageContentItemModel>
       dynamicContentFromField(
-    fieldData,
+    dynamic fieldData,
   ) {
     if (fieldData is String) {
       return _singleItemListFrom(fieldData);

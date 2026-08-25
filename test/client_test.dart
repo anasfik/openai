@@ -29,8 +29,9 @@ void main() {
     test('two clients are isolated from each other', () async {
       final mock = MockClient();
       OpenAINetworkingClient.clientFactory = () => mock;
-      mock.expectJson(body: {'id': 'x', 'data': []});
-      mock.expectJson(body: {'id': 'y', 'data': []});
+      mock
+        ..expectJson(body: {'id': 'x', 'data': []})
+        ..expectJson(body: {'id': 'y', 'data': []});
 
       final a = OpenAIClient(apiKey: 'sk-a');
       final b = OpenAIClient(apiKey: 'sk-b');
@@ -193,18 +194,19 @@ void main() {
       final mock = MockClient();
       OpenAINetworkingClient.clientFactory = () => mock;
       // Default policy retries POST/GET once on 429: script both attempts.
-      mock.expectJson(
-        statusCode: 429,
-        body: {
-          'error': {'message': 'Rate limit reached', 'type': 'rate_limit'}
-        },
-      );
-      mock.expectJson(
-        statusCode: 429,
-        body: {
-          'error': {'message': 'Rate limit reached', 'type': 'rate_limit'}
-        },
-      );
+      mock
+        ..expectJson(
+          statusCode: 429,
+          body: {
+            'error': {'message': 'Rate limit reached', 'type': 'rate_limit'}
+          },
+        )
+        ..expectJson(
+          statusCode: 429,
+          body: {
+            'error': {'message': 'Rate limit reached', 'type': 'rate_limit'}
+          },
+        );
 
       final client = OpenAIClient(apiKey: 'sk-a');
       await expectLater(

@@ -160,7 +160,8 @@ class OpenAIVideos {
     required String characterId,
   }) async {
     return OpenAINetworkingClient.get(
-      from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/characters', characterId),
+      from: BaseApiUrlBuilder.buildFor(
+          _config, '$_endpoint/characters', characterId),
       onSuccess: (response) => response,
       config: _config,
     );
@@ -172,7 +173,8 @@ class OpenAIVideos {
     required String characterId,
   }) async {
     return OpenAINetworkingClient.delete(
-      from: BaseApiUrlBuilder.buildFor(_config, '$_endpoint/characters', characterId),
+      from: BaseApiUrlBuilder.buildFor(
+          _config, '$_endpoint/characters', characterId),
       onSuccess: (response) => response,
       config: _config,
     );

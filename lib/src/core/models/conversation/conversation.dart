@@ -14,8 +14,8 @@ class OpenAIConversation {
   factory OpenAIConversation.fromMap(Map<String, dynamic> json) =>
       OpenAIConversation(
         id: json['id'],
-        createdAt:
-            DateTime.fromMillisecondsSinceEpoch((intOr(json['created_at']) * 1000)),
+        createdAt: DateTime.fromMillisecondsSinceEpoch(
+            intOr(json['created_at']) * 1000),
         metadata: json['metadata'] ?? {},
       );
 

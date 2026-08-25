@@ -10,12 +10,18 @@ void main() {
   test('retries GET on 503 and succeeds on second attempt', () async {
     final mock = MockClient();
     OpenAINetworkingClient.clientFactory = () => mock;
-    mock.expectRaw(body: 'boom', statusCode: 503);
-    mock.expectJson(body: {'data': [{'id': 'm1'}]});
+    mock
+      ..expectRaw(body: 'boom', statusCode: 503)
+      ..expectJson(body: {
+        'data': [
+          {'id': 'm1'}
+        ]
+      });
 
     final client = OpenAIClient(
       apiKey: 'sk-a',
-      retryPolicy: const OpenAIRetryPolicy(initialBackoff: Duration(milliseconds: 1)),
+      retryPolicy:
+          const OpenAIRetryPolicy(initialBackoff: Duration(milliseconds: 1)),
     );
 
     final models = await client.model.list();
@@ -28,9 +34,11 @@ void main() {
     OpenAINetworkingClient.clientFactory = () => mock;
     mock.expectRaw(body: 'down', statusCode: 500);
 
-    final client = OpenAIClient(apiKey: 'sk-a', retryPolicy: OpenAIRetryPolicy.none);
+    final client =
+        OpenAIClient(apiKey: 'sk-a', retryPolicy: OpenAIRetryPolicy.none);
 
-    await expectLater(client.model.list(), throwsA(isA<RequestFailedException>()));
+    await expectLater(
+        client.model.list(), throwsA(isA<RequestFailedException>()));
     expect(mock.requests.length, 1);
   });
 
@@ -39,12 +47,15 @@ void main() {
     OpenAINetworkingClient.clientFactory = () => mock;
     mock.expectJson(
       statusCode: 400,
-      body: {'error': {'message': 'bad request'}},
+      body: {
+        'error': {'message': 'bad request'}
+      },
     );
 
     final client = OpenAIClient(apiKey: 'sk-a');
 
-    await expectLater(client.model.list(), throwsA(isA<RequestFailedException>()));
+    await expectLater(
+        client.model.list(), throwsA(isA<RequestFailedException>()));
     expect(mock.requests.length, 1);
   });
 

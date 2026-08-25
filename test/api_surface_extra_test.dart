@@ -37,8 +37,8 @@ void main() {
         },
         assertRequest: (request) {
           expect(request.method, 'POST');
-          expect(request.url.toString(),
-              'https://api.openai.com/v1/videos/edits');
+          expect(
+              request.url.toString(), 'https://api.openai.com/v1/videos/edits');
           final multipart = request as http.MultipartRequest;
           expect(multipart.fields['model'], 'sora-2');
           expect(multipart.fields['prompt'], 'make it snow');
@@ -61,8 +61,7 @@ void main() {
       expect(video.status, 'queued');
     });
 
-    test('createExtension posts multipart to /v1/videos/extensions',
-        () async {
+    test('createExtension posts multipart to /v1/videos/extensions', () async {
       final mock = MockClient();
       OpenAINetworkingClient.clientFactory = () => mock;
       mock.expectJson(
@@ -131,8 +130,7 @@ void main() {
         },
       );
 
-      final character =
-          await videos().retrieveCharacter(characterId: 'char_2');
+      final character = await videos().retrieveCharacter(characterId: 'char_2');
 
       expect(character['name'], 'orion');
     });

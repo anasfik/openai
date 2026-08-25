@@ -19,8 +19,10 @@ Future<void> main() async {
   );
   await azure.chat.create(
     model: 'gpt-4o', // rewritten to deployment gpt4o-prod
-    messages: [OpenAIChatCompletionChoiceMessageModel.textContent(
-        role: OpenAIChatMessageRole.user, text: 'ping')],
+    messages: [
+      OpenAIChatCompletionChoiceMessageModel.textContent(
+          role: OpenAIChatMessageRole.user, text: 'ping')
+    ],
   );
 
   // Web-safe upload from bytes (no dart:io needed):
@@ -32,5 +34,6 @@ Future<void> main() async {
 
   // Observe rate limits after any call:
   await client.model.list();
-  print('remaining requests: ${OpenAIResponseMeta.lastRateLimit?.remainingRequests}');
+  print(
+      'remaining requests: ${OpenAIResponseMeta.lastRateLimit?.remainingRequests}');
 }

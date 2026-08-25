@@ -164,14 +164,10 @@ class OpenAIConversations extends OpenAIConversationsBase {
     required String conversationId,
     required String itemId,
   }) async {
-    OpenAINetworkingClient.delete(
+    return OpenAINetworkingClient.delete(
       from: BaseApiUrlBuilder.buildFor(
           _config, endpoint, '$conversationId/items/$itemId'),
-      onSuccess: (Map<String, dynamic> response) {
-        final deleted = response['deleted'];
-
-        return deleted is bool && deleted;
-      },
+      onSuccess: (_) {},
       config: _config,
     );
   }

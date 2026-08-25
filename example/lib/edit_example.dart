@@ -21,4 +21,3 @@ Future<void> main() async {
     print(edit.choices[index].text);
   }
 }
-

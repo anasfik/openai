@@ -160,7 +160,9 @@ interface class OpenAIAudio implements OpenAIAudioBase {
           if (decoded is Map<String, dynamic> && decoded.containsKey('text')) {
             return decoded;
           }
-        } catch (e) {}
+        } catch (_) {
+          // Not JSON: fall through to the raw-text branch below.
+        }
 
         return {'text': res};
       },

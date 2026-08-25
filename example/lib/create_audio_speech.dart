@@ -8,7 +8,7 @@ void main() async {
 
   final outputDir = Directory('speechOutput');
 
-  final exists = await outputDir.exists();
+  final _ = await outputDir.exists();
 
   final input = "I should've been strong";
   final model = "tts-1";

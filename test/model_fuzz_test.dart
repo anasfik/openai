@@ -2,9 +2,6 @@ import 'dart:convert';
 
 import 'package:dart_openai/dart_openai.dart';
 import 'package:dart_openai/src/core/models/fine_tuning/models.dart';
-import 'package:dart_openai/src/core/config/azure.dart';
-import 'package:dart_openai/src/core/models/batch/batch.dart';
-import 'package:dart_openai/src/core/models/uploads/uploads.dart';
 import 'package:test/test.dart';
 
 /// Malformed payloads must parse tolerantly or fail with a controlled
@@ -116,9 +113,9 @@ void main() {
   });
 
   test('azure rewrite maps deployment and api-version', () {
-    final config = OpenAIClientConfig(
+    const config = OpenAIClientConfig(
       apiKey: 'k',
-      azure: const OpenAIAzure(
+      azure: OpenAIAzure(
         resource: 'my-res',
         apiVersion: '2024-10-21',
         deployments: {'gpt-4o': 'gpt4o-prod'},

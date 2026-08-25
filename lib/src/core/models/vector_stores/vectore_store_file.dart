@@ -5,7 +5,7 @@ class OpenAIVectorStoreFileModel {
   final OpenAIVectorStoreChunkingStrategy? chunkingStrategy;
   final int? createdAt;
   final String id;
-  final lastError;
+  final dynamic lastError;
   final String status;
   final int usageBytes;
   final String vectorStoreId;

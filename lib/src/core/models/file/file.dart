@@ -53,7 +53,8 @@ final class OpenAIFileModel {
       fileName: map['filename']?.toString() ?? '',
       purpose: map['purpose']?.toString() ?? '',
       expiresAt: map['expires_at'] is int
-          ? DateTime.fromMillisecondsSinceEpoch((map['expires_at'] as int) * 1000)
+          ? DateTime.fromMillisecondsSinceEpoch(
+              (map['expires_at'] as int) * 1000)
           : null,
     );
   }

@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:dart_openai/dart_openai.dart';
 import 'package:example/env/env.dart';
-import 'package:dart_openai/src/core/io/file_helpers.dart';
 
 void main() async {
   OpenAI.apiKey = Env.apiKey;

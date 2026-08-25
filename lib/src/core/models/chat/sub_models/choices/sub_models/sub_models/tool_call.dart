@@ -87,9 +87,12 @@ class OpenAIStreamResponseToolCall extends OpenAIResponseToolCall {
       id: map['id']?.toString(),
       type: map['type']?.toString() ?? 'function',
       function: map['function'] is Map<String, dynamic>
-          ? OpenAIResponseFunction.fromMap(map['function'] as Map<String, dynamic>)
+          ? OpenAIResponseFunction.fromMap(
+              map['function'] as Map<String, dynamic>)
           : null,
-      index: map['index'] is int ? map['index'] as int : int.tryParse('${map['index']}'),
+      index: map['index'] is int
+          ? map['index'] as int
+          : int.tryParse('${map['index']}'),
     );
   }
 

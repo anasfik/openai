@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import '../../../../dart_openai.dart';
 
-
 abstract class CreateInterface {
   /// Creates speech audio. Returns the raw bytes; on native platforms, when
   /// [outputDirectory] and [outputFileName] are provided, the bytes are also

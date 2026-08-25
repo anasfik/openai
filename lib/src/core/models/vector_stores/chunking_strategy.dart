@@ -27,10 +27,14 @@ class OpenAIVectorStoreChunkingStrategy {
       case 'static':
         return StaticOpenAIVectorStoreChunkingStrategy(
           static: StaticOpenAIVectorStoreChunkingStrategyStatic(
-            chunkOverlapTokens:
-                (map['static'] as Map<String, dynamic>?)?['chunk_overlap_tokens'] as int? ?? 400,
-            maxChunkSizeTokens:
-                (map['static'] as Map<String, dynamic>?)?['max_chunk_size_tokens'] as int? ?? 800,
+            chunkOverlapTokens: (map['static']
+                        as Map<String, dynamic>?)?['chunk_overlap_tokens']
+                    as int? ??
+                400,
+            maxChunkSizeTokens: (map['static']
+                        as Map<String, dynamic>?)?['max_chunk_size_tokens']
+                    as int? ??
+                800,
           ),
         );
       default:

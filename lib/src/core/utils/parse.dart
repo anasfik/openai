@@ -4,13 +4,13 @@
 /// defaults instead of crashing a running app.
 library;
 
-int intOr(Object? value, [int fallback = 0]) =>
-    value is int ? value : (value is num ? value.toInt() : int.tryParse('$value') ?? fallback);
+int intOr(Object? value, [int fallback = 0]) => value is int
+    ? value
+    : (value is num ? value.toInt() : int.tryParse('$value') ?? fallback);
 
-double doubleOr(Object? value, [double fallback = 0]) =>
-    value is double
-        ? value
-        : (value is num ? value.toDouble() : double.tryParse('$value') ?? fallback);
+double doubleOr(Object? value, [double fallback = 0]) => value is double
+    ? value
+    : (value is num ? value.toDouble() : double.tryParse('$value') ?? fallback);
 
 String stringOr(Object? value, [String fallback = '']) =>
     value?.toString() ?? fallback;

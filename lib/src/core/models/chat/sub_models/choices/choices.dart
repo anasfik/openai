@@ -8,7 +8,7 @@ final class OpenAIChatCompletionChoiceModel {
   /// The [index] of the choice.
 
   //! This is dynamic because the API sometimes returns a [String] and sometimes an [int].
-  final index;
+  final dynamic index;
 
   /// The [message] of the choice.
   final OpenAIChatCompletionChoiceMessageModel message;

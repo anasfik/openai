@@ -1,3 +1,4 @@
+// ignore_for_file: hash_and_equals, non_constant_identifier_names, constant_identifier_names
 import 'package:meta/meta.dart';
 
 abstract class OpenAITranscriptionGeneralModel {}

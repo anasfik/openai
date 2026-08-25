@@ -1,4 +1,3 @@
-
 import 'package:dart_openai/src/core/io/openai_file.dart';
 
 import '../../../models/file/file.dart';

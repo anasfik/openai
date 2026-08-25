@@ -12,7 +12,7 @@ class FunctionCall {
   static const auto = FunctionCall._(value: 'auto');
 
   /// The value of the function call.
-  final value;
+  final dynamic value;
 
   @override
   int get hashCode => value.hashCode;

@@ -1,3 +1,4 @@
+// ignore_for_file: hash_and_equals
 /// {@template openai_function_property}
 /// This class is used to represent an OpenAI function property.
 /// {@endtemplate}

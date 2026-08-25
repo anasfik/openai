@@ -5,7 +5,7 @@ import 'package:dart_openai/src/core/models/vector_stores/search_vector_store_li
 abstract class SearchInterface {
   Future<SearchVectorStoreList> search({
     required String vectorStoreId,
-    required query,
+    required dynamic query,
     OpenAIVectorStoresSearchFilter? filters,
     int? maxNumResults,
     OpenAIVectorStoresRankingOptions? rankingOptions,

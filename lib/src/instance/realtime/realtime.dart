@@ -94,7 +94,8 @@ class OpenAIRealtime {
     String type = 'sdp',
   }) async {
     return OpenAINetworkingClient.post(
-      to: BaseApiUrlBuilder.buildFor(_config, '${_callEndpoint(callId)}/accept'),
+      to: BaseApiUrlBuilder.buildFor(
+          _config, '${_callEndpoint(callId)}/accept'),
       body: {'type': type, 'sdp': sdp},
       onSuccess: (response) => response,
       config: _config,
@@ -105,7 +106,8 @@ class OpenAIRealtime {
   /// Raw response map.
   Future<Map<String, dynamic>> rejectCall({required String callId}) async {
     return OpenAINetworkingClient.post(
-      to: BaseApiUrlBuilder.buildFor(_config, '${_callEndpoint(callId)}/reject'),
+      to: BaseApiUrlBuilder.buildFor(
+          _config, '${_callEndpoint(callId)}/reject'),
       onSuccess: (response) => response,
       config: _config,
     );

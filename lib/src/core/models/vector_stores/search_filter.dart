@@ -33,7 +33,7 @@ class OpenAIVectorStoresSearchFilter {
 class ComparisonOpenAIVectorStoresSearchFilter
     extends OpenAIVectorStoresSearchFilter {
   final String key;
-  final value;
+  final dynamic value;
 
   ComparisonOpenAIVectorStoresSearchFilter({
     required super.type,

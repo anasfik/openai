@@ -1,3 +1,4 @@
+// ignore_for_file: non_constant_identifier_names
 import 'package:dart_openai/src/core/base/responses/responses.dart';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/config/client_config.dart';
@@ -24,10 +25,10 @@ class OpenAIResponses extends OpenAIResponsesBase {
 
   @override
   Future<OpenAiResponse> create({
-    required input,
+    required dynamic input,
     String? model,
     bool? background,
-    conversation,
+    dynamic conversation,
     List? include,
     String? instructions,
     int? maxOutputTokens,
@@ -35,15 +36,15 @@ class OpenAIResponses extends OpenAIResponsesBase {
     Map<String, dynamic>? metadata,
     bool? parallelToolCalls,
     String? previousResponseId,
-    prompt,
+    dynamic prompt,
     String? promptCacheKey,
-    reasoning,
+    dynamic reasoning,
     String? safetyIdentifier,
     String? serviceTier,
     bool? store,
     num? temperature,
-    text,
-    toolChoice,
+    dynamic text,
+    dynamic toolChoice,
     List? tools,
     int? topLogprobs,
     num? topP,
@@ -90,8 +91,7 @@ class OpenAIResponses extends OpenAIResponsesBase {
     required String responseId,
   }) async {
     return OpenAINetworkingClient.post<OpenAiResponse>(
-        to: BaseApiUrlBuilder.buildFor(
-            _config, endpoint, '$responseId/cancel'),
+        to: BaseApiUrlBuilder.buildFor(_config, endpoint, '$responseId/cancel'),
         onSuccess: (Map<String, dynamic> response) {
           return OpenAiResponse.fromMap(response);
         },
@@ -166,15 +166,15 @@ class OpenAIResponses extends OpenAIResponsesBase {
 
   @override
   Future<int> getInputTokenCounts(
-    conversation,
-    input,
+    dynamic conversation,
+    dynamic input,
     String? instructions,
     String? model,
     bool? parallelToolCalls,
     String? previousResponseId,
-    reasoning,
-    text,
-    toolChoice,
+    dynamic reasoning,
+    dynamic text,
+    dynamic toolChoice,
     List? tools,
     String? truncation,
   ) async {
@@ -217,19 +217,19 @@ class OpenAIResponses extends OpenAIResponsesBase {
   /// }
   /// ```
   Stream<Map<String, dynamic>> createStream({
-    required input,
+    required dynamic input,
     String? model,
-    conversation,
+    dynamic conversation,
     List? include,
     String? instructions,
     Map<String, dynamic>? metadata,
     bool? parallelToolCalls,
     String? previousResponseId,
-    reasoning,
+    dynamic reasoning,
     bool? store,
     num? temperature,
-    text,
-    toolChoice,
+    dynamic text,
+    dynamic toolChoice,
     List? tools,
     num? topP,
     String? truncation,

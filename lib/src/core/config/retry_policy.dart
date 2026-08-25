@@ -47,7 +47,9 @@ class OpenAIRetryPolicy {
       return Duration(seconds: retryAfterSeconds);
     }
     var ms = initialBackoff.inMilliseconds * (1 << (attempt - 1));
-    if (jitter) ms = (ms * (0.5 + DateTime.now().microsecond % 1000 / 2000)).round();
+    if (jitter) {
+      ms = (ms * (0.5 + DateTime.now().microsecond % 1000 / 2000)).round();
+    }
     return Duration(milliseconds: ms);
   }
 
@@ -80,8 +82,9 @@ class OpenAIRateLimitInfo {
       remainingRequests: parse(h('x-ratelimit-remaining-requests')),
       limitTokens: parse(h('x-ratelimit-limit-tokens')),
       remainingTokens: parse(h('x-ratelimit-remaining-tokens')),
-      resetRequests:
-          resetSecs == null ? null : DateTime.now().add(Duration(seconds: resetSecs)),
+      resetRequests: resetSecs == null
+          ? null
+          : DateTime.now().add(Duration(seconds: resetSecs)),
     );
   }
 }

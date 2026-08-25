@@ -26,7 +26,9 @@ final class OpenAIModelModel {
     return OpenAIModelModel(
       id: json['id']?.toString() ?? '',
       ownedBy: json['owned_by']?.toString() ?? '',
-      created: json['created'] is int ? json['created'] as int : int.tryParse('${json['created']}'),
+      created: json['created'] is int
+          ? json['created'] as int
+          : int.tryParse('${json['created']}'),
     );
   }
 }

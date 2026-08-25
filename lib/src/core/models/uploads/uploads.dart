@@ -3,7 +3,7 @@ class OpenAIUploadModel {
   final int createdAt;
   final int expiresAt;
   // to remove confusion, https://platform.openai.com/docs/api-reference/uploads/object#uploads/object-file
-  final file;
+  final dynamic file;
   final String filename;
   final String id;
   final String purpose;
@@ -28,10 +28,10 @@ extension UploadModelParsing on OpenAIUploadModel {
       createdAt: map['created_at'] as int? ?? 0,
       expiresAt: map['expires_at'] as int? ?? 0,
       file: map['file'],
-      filename: map['filename']?.toString() ??  '',
-      id: map['id']?.toString() ??  '',
-      purpose: map['purpose']?.toString() ??  '',
-      status: map['status']?.toString() ??  '',
+      filename: map['filename']?.toString() ?? '',
+      id: map['id']?.toString() ?? '',
+      purpose: map['purpose']?.toString() ?? '',
+      status: map['status']?.toString() ?? '',
     );
   }
 }

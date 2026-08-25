@@ -13,51 +13,28 @@ abstract final class OpenAILogger {
   static const int _kValidApiKeyLength = 10;
 
   /// {@template openai_logger_is_active}
-  /// Whether the to show operations flow logger is active or not.
+  /// Whether to show operations flow logs at all.
   /// {@endtemplate}
-  static bool _isActive = true;
+  static bool isActive = true;
 
   /// {@template openai_logger_show_responses_logs}
-  /// Whether to show operations response bodies in logs or not.
+  /// Whether to include response bodies in logs.
   /// {@endtemplate}
-  static bool _showResponsesLogs = false;
-
-  /// {@macro openai_logger_is_active}
-  static bool get isActive => _isActive;
-
-  /// {@macro openai_logger_show_responses_logs}
-  static bool get showResponsesLogs => _showResponsesLogs;
+  static bool showResponsesLogs = false;
 
   /// Changes the logger active state.
   ///
   /// if true, the logger will log messages.
-  /// If false, the logger will not log messages.
-  ///
-  /// The default value is [true].
-  static set isActive(bool newValue) {
-    _isActive = newValue;
-  }
-
-  /// Changes the logger show responses logs state.
-  ///
-  /// if true, the logger will log responses bodies.
-  /// If false, the logger will not log responses bodies.
-  ///
-  /// The default value is [false].
-  static set showResponsesLogs(bool newValue) {
-    _showResponsesLogs = newValue;
-  }
-
   /// Logs a message, if the logger is active.
   static void log(String message, [Object? error]) {
-    if (_isActive) {
+    if (isActive) {
       dev.log(message, name: OpenAIStrings.openai, error: error);
     }
   }
 
   /// Logs the response of a request, if the logger is active.
-  static void logResponseBody(response) {
-    if (_isActive && _showResponsesLogs) {
+  static void logResponseBody(Object? response) {
+    if (isActive && showResponsesLogs) {
       if (response is Response) {
         dev.log(response.body.toString(), name: OpenAIStrings.openai);
       } else {
