@@ -24,10 +24,12 @@ dart pub get
 ## Quickstart
 
 ```dart
+import 'dart:io';
+
 import 'package:dart_openai/dart_openai.dart';
 
 Future<void> main() async {
-  final client = OpenAIClient(apiKey: Platform.environment['OPENAI_API_KEY']!);
+  final client = OpenAIClient(apiKey: Platform.environment['OPEN_AI_API_KEY']!);
 
   final completion = await client.chat.create(
     model: 'gpt-4o',
