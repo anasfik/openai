@@ -183,6 +183,11 @@ abstract class OpenAINetworkingClient {
 
     OpenAILogger.requestToWithStatusCode(to, response.statusCode);
 
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      OpenAILogger.errorFoundInRequest();
+      throw _exceptionFromOrRaw(response.body, response.statusCode);
+    }
+
     OpenAILogger.startingTryCheckingForError();
 
     final isJsonDecodedMap = tryDecodedToMap(response.body);
