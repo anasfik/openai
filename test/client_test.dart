@@ -190,6 +190,31 @@ void main() {
   });
 
   group('error handling', () {
+    test('non-2xx non-JSON binary response throws RequestFailedException',
+        () async {
+      final mock = MockClient()
+        ..expectRaw(
+          body: '<html>synthetic gateway error</html>',
+          statusCode: 502,
+          headers: const {'content-type': 'text/html'},
+        );
+      const config = OpenAIClientConfig(retryPolicy: OpenAIRetryPolicy.none);
+
+      await expectLater(
+        OpenAINetworkingClient.postAndExpectBytes(
+          to: 'https://mock.invalid/v1/audio/speech',
+          body: const {'model': 'synthetic'},
+          client: mock,
+          config: config,
+        ),
+        throwsA(isA<RequestFailedException>()
+            .having((e) => e.statusCode, 'statusCode', 502)
+            .having((e) => e.message, 'message',
+                '<html>synthetic gateway error</html>')),
+      );
+      mock.verifyNoPending();
+    });
+
     test('non-2xx with error json throws RequestFailedException', () async {
       final mock = MockClient();
       OpenAINetworkingClient.clientFactory = () => mock;
