@@ -10,6 +10,8 @@ Unofficial Dart/Flutter SDK for the OpenAI API. Typed clients for every major AP
 
 Maintained by [Anas Fikhi](https://gwhyyy.com) ([@anasfik](https://github.com/anasfik)).
 
+[Case study](https://gwhyyy.com/work/dart-openai) · [Reach out](https://gwhyyy.com/contact).
+
 ## Installation
 
 ```yaml
